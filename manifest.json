@@ -1,0 +1,30 @@
+{
+	"packageVersion": "0.1.0",
+	"sourceCommit": "f7a636e191c8a3e51084f903e9789d6645b44c06",
+	"sourceTreeDigest": "8feb16993ea89c3ae90f2637e445fba7af0c1771ebc52a5ade1ebe1d947cded7",
+	"files": {
+		".s11tnext/catalog.generated.ts": "b069f62b19879df79fe4fbc944df5f1b9e373c5e4e11617712cf2913bd274bb9",
+		".s11tnext/catalog.json": "3170268c441385ccbb59591af329841169f72d4885feddf458aa40c647a2a79e",
+		"bun.lock": "fb5ab3031d4e28058f6b0655dcef23aaf370678165c9dbc619bf6899bb0bcf50",
+		"contexts/collaboration/correction.context.toml": "f0c0e0a89fc7ca033a885afa8b105d45616d68c7432f739b250e9cfe9d282737",
+		"contexts/collaboration/reference.context.toml": "8531e1faaed461d0f9c2db107b33ee92113092ff859656e29cf5c022f5720c61",
+		"contexts/collaboration/rules.context.toml": "f46f2871862479572980ab9d25b0c2c1ba1bb059c69b975bd41163a0df589cea",
+		"contexts/collaboration/state.context.toml": "ac4529d9ae4ce9a1d89a15ec33cab08c912aa3c8634ef382c5daeb1760480d70",
+		"package.json": "33569c00bbdf1d33a5088131775a2881761ea3c41b4e941b4852dc6bc90b495f",
+		"s11tnext.config.toml": "d5a800bc7e91946fd028ae738322abd181d64fe13448177fb10cb0d9ece3d15b",
+		"src/agent/action.ts": "046f2939d980766cce6ec06dd5beb177d99015966e86332a04463ed18b7ff983",
+		"src/agent/instructions.ts": "ab5723a2195581daed539e9e71f0a0ff62028c4d30d67028e2c56bb94a6b97e0",
+		"src/agent/messages.ts": "af6dc3eecf2342f47f158d77e919341949ae13c27fb2207b5872124a5de6de60",
+		"src/agent/state.ts": "d0742ddcd4b85fe35fd50720ecbd15c46fe02b3f1a9ee83feb50a98bb16e38f2",
+		"src/contracts/index.ts": "72c33b52bc13045089ceb8d14e0acbcc31cf468490b64aaf70a2bce92da08ce5",
+		"src/contracts/state.ts": "93840fb7003fa5cab222a93f736d4be2a83a5cd81213ac7cb5cefe4879f1a131",
+		"src/index.ts": "4d91ef537d996d0ced6ac3251e687b153afde84e36e102c2c3c89f907bf92f27"
+	},
+	"coreContractVersion": 1,
+	"supportedStateSchemaVersions": [1],
+	"hostBaselineCommit": "5bf5ca556ad45a9c8a6b72f81aae85f7505e505c",
+	"environment": {
+		"bun": "1.4.4"
+	},
+	"generation": "bun run context:build"
+}

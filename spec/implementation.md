@@ -36,7 +36,7 @@ P2以降の初期課題は4群各8課題（開発4・保留4）とし、fixture�
 利用者から「exampleにてeumenesのadapterを模倣して接続する構想」との指示があり、実モデル・外部作業の接続はexampleに置いた。Eumenesの製品経路、DB、設定、bundleは変更しない。
 
 - P0: 公開契約・stack・32課題（各群開発4/保留4、21発話の長期保持を含む）・固定評価条件を用意した。live予算は未設定。
-- P1: 旧版と新coreの149出力・601比較、旧specialist64試験を合格。隔離hostの型・context・domain verifyも1,184 Bun試験/28 Vitest試験まで合格。途中の二つの環境不備（Git基準情報/書式）は修正済み。最終tgzでも同条件を再実行する。
+- P1: 旧版と新coreの149出力・601比較、旧specialist64試験を合格。隔離hostの型・context・domain verifyも1,184 Bun試験/28 Vitest試験まで合格。途中の二つの環境不備（Git基準情報/書式）は修正済み。最終tgzでも同条件を再実行し合格。導入資材の全checksum一致とWeb buildも確認した。
 - P2のcore/example: 状態schema1、出所検査、CAS、訂正の置換関係、非対応版の保持、SQLite初期migrationの再適用、receipt、再開、忘却を実装。現在のsupportedStateSchemaVersionsは[1]。Eumenes dialogueへの保存migrationと旧packageへの製品切戻し試験は未実施。
 - P3の接点: 対象版に結ぶ観測adapterを用意し、UIとPipelineで同じ契約のfixtureを検証。実rendererの画像/操作観測やlive Pipelineの試験は未実施。
 - P4のexample: 偽外部agent、依頼digestとhost権限、session/世代/質問IDの照合、利用者入力との競合、重複、結果不明、停止未確認、忘却を実装・検証。現行terminals bridgeは質問回答をunsupportedとする。
@@ -49,3 +49,12 @@ P2以降の初期課題は4群各8課題（開発4・保留4）とし、fixture�
 発話の語句・題材の辞書、正規表現による意図分類、個別例の固定返答を製品coreに追加していない。追加した決定的処理はschema、出所、版、置換関係、依頼同一性、権限、入力所有権、予算の検査に限る。具体的な発話と期待値はtest/eval/example fixtureに置いた。専用の意味判断実装という例外はない。
 
 Eumenes本体の作業ツリーは着手前と同じspec/README.mdの変更と旧計画書の削除だけで、今回の製品変更はない。接続元コードと生成指示の正本をcoreへ移した差分は、隔離hostへだけ適用する。
+
+
+## 最終確認（2026-11-04）
+
+最終配布物のpack:checkが合格。配布元commit、tgzのchecksum、候補lockfile/adapter patchのdigest、導入された資材の一致、検証件数はverification.jsonへ記録した。生成manifestは配布元の確定ソースcommitを指す。独立側のverifyは29試験を合格、評価32課題は構造検査のみ。実モデル・実renderer観測・実Claude Code・製品採用は未実施のままである。
+
+俯瞰評価では、隔離hostのGit基準情報/書式の不備を解消して互換試験を完走した。その後の差分点検で、exampleの忘却と操作を協働session内へ制限し、手入力中の観測は継続できるよう修正した。新しい証拠に応じた修正で、発話別の意味判断は追加していない。最終測定中は配布coreを変更せず、正常に進む検証を停止・再起動していない。
+
+context_compileは1回、compile_evalは1回（runId: 00000000-0000-0000-18e4-a661acd35632、評価保存済み）。

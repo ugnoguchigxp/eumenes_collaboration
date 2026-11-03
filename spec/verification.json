@@ -1,0 +1,39 @@
+{
+	"date": "2026-11-04",
+	"scope": "independent core and example host; isolated Eumenes consumption",
+	"sourceCommit": "f7a636e191c8a3e51084f903e9789d6645b44c06",
+	"coreContractVersion": 1,
+	"stateSchemaVersions": [1],
+	"hostBaselineCommit": "5bf5ca556ad45a9c8a6b72f81aae85f7505e505c",
+	"coreSourceTreeDigest": "8feb16993ea89c3ae90f2637e445fba7af0c1771ebc52a5ade1ebe1d947cded7",
+	"tgzSha256": "986fd7d1f6d5804b3e73bf63cf0e749fdccc131d1eb2e2f7fac22edc3adac7cd",
+	"candidateLockfileSha256": "2d065de813ffb7292ef89d1ecda7b0bc23a4774206176141ab57cd2cbe62958b",
+	"candidateAdapterPatchSha256": "2af0f739a76a04b862b8c08869b65d613d1589384bad16e543668f5fb046bc6e",
+	"installedResourcesMatch": true,
+	"checks": {
+		"coreVerify": "passed",
+		"coreAndExampleTests": 29,
+		"legacySpecialistTests": 64,
+		"parityOutputs": 149,
+		"parityComparisons": 601,
+		"consumerBunTests": 1184,
+		"consumerVitestTests": 28,
+		"consumerTypecheck": "passed",
+		"consumerContext": "passed",
+		"consumerWebBuild": "passed",
+		"evaluationInventory": 32,
+		"longestEvaluationTurns": 21
+	},
+	"notRun": [
+		"live model semantic evaluation",
+		"actual renderer observations and browser acceptance",
+		"live Claude Code collaboration",
+		"product dialogue migrations and rollback acceptance",
+		"product bundle adoption"
+	],
+	"apiCost": "no live calls; live cost/latency unmeasured",
+	"contextTools": {
+		"context_compile": 1,
+		"compile_eval": 1
+	}
+}
