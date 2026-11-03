@@ -19,6 +19,7 @@ test("a failed external redaction rolls back state forgetting and its revocation
 				},
 			},
 			{
+				sessionId: "s",
 				target: () => undefined,
 				grant: () => undefined,
 				epoch: () => 2,

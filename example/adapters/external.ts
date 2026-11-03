@@ -100,6 +100,7 @@ export class ExampleExternalAdapter {
 		readonly db: Database,
 		readonly port: ExternalPort,
 		readonly host: {
+			sessionId: string;
 			target: (ref: string) => ExternalTarget | undefined;
 			grant: (ref: string) => ExternalGrant | undefined;
 			epoch: (session: string) => number | undefined;
@@ -120,7 +121,11 @@ export class ExampleExternalAdapter {
 				"SELECT body FROM example_external_requests WHERE id=?",
 			)
 			.get(id);
-		return row ? JSON.parse(row.body) : null;
+		if (!row) return null;
+		const record: ExternalRecord = JSON.parse(row.body);
+		return record.request.collaborationSessionId === this.host.sessionId
+			? record
+			: null;
 	}
 	private save(record: ExternalRecord) {
 		this.db
@@ -130,6 +135,7 @@ export class ExampleExternalAdapter {
 	private target(request: ExternalRequest, requireInput = true) {
 		const target = this.host.target(request.externalSessionRef);
 		if (
+			request.collaborationSessionId !== this.host.sessionId ||
 			!target ||
 			target.externalSessionRef !== request.externalSessionRef ||
 			target.projectRef !== request.projectRef ||
@@ -317,6 +323,8 @@ export class ExampleExternalAdapter {
 		return { status };
 	}
 	forgetSources(sessionId: string, refs: ReadonlySet<string>) {
+		if (sessionId !== this.host.sessionId)
+			throw new Error("external_session_scope_invalid");
 		this.db
 			.transaction(() => {
 				const rows = this.db

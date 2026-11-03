@@ -74,6 +74,7 @@ function fixture(
 			: {}),
 	};
 	const host = {
+		sessionId: "s",
 		target: () => target,
 		grant: (ref: string) => (ref === grant.ref ? grant : undefined),
 		epoch: () => 2,
@@ -290,7 +291,9 @@ test("forgetting is scoped to its collaboration session even if local source ref
 	const f = fixture();
 	try {
 		await f.adapter.submit(f.request);
-		f.adapter.forgetSources("another-session", new Set(["u1"]));
+		expect(() =>
+			f.adapter.forgetSources("another-session", new Set(["u1"])),
+		).toThrow("external_session_scope_invalid");
 		expect(f.adapter.read("r")).toMatchObject({
 			status: "delivered",
 			request: { prompt: f.request.prompt },
@@ -318,6 +321,25 @@ test("manual input ownership blocks automated writes but does not discard progre
 			status: "completed",
 			independentlyVerified: false,
 		});
+	} finally {
+		f.db.close();
+	}
+});
+
+test("an adapter cannot read, answer, or stop another collaboration session's request", async () => {
+	const f = fixture();
+	try {
+		await f.adapter.submit(f.request);
+		const other = new ExampleExternalAdapter(f.db, f.port, {
+			...f.host,
+			sessionId: "other",
+		});
+		expect(other.read("r")).toBeNull();
+		await expect(other.stop("r")).rejects.toThrow("external_request_missing");
+		await expect(other.answer(answer)).rejects.toThrow(
+			"external_question_changed",
+		);
+		expect(f.deliveries).toHaveLength(1);
 	} finally {
 		f.db.close();
 	}
