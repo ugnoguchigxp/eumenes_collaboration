@@ -1,0 +1,293 @@
+import { createHash } from "node:crypto";
+import { mkdir, rm, cp } from "node:fs/promises";
+import { resolve, join } from "node:path";
+import { applyHostAdapter } from "./host-adapter.ts";
+import { compareHosts } from "./compare-hosts.ts";
+import {
+	coreContractVersion,
+	supportedStateSchemaVersions,
+} from "../src/index.ts";
+
+const root = resolve(import.meta.dir, "..");
+const source = resolve(process.env.EUMENES_SOURCE ?? join(root, "../eumenes"));
+const baselineCommit = "5bf5ca556ad45a9c8a6b72f81aae85f7505e505c";
+const reportDir = join(root, "reports");
+const baseline = join(root, ".work/eumenes-baseline");
+const candidate = join(root, ".work/eumenes-candidate");
+await mkdir(reportDir, { recursive: true });
+const report: {
+	baselineCommit: string;
+	steps: Array<{ name: string; exitCode: number; log: string }>;
+	[key: string]: unknown;
+} = { baselineCommit, steps: [] };
+const digest = (data: string | Uint8Array) =>
+	createHash("sha256").update(data).digest("hex");
+async function run(name: string, args: string[], cwd: string) {
+	console.log(name);
+	const proc = Bun.spawn(args, {
+		cwd,
+		stdout: "pipe",
+		stderr: "pipe",
+		env: { ...process.env, TZ: "Asia/Tokyo" },
+	});
+	const [stdout, stderr, exitCode] = await Promise.all([
+		new Response(proc.stdout).text(),
+		new Response(proc.stderr).text(),
+		proc.exited,
+	]);
+	const log = `${name}.log`;
+	await Bun.write(join(reportDir, log), stdout + stderr);
+	report.steps.push({ name, exitCode, log });
+	await Bun.write(
+		join(reportDir, "pack-check.json"),
+		JSON.stringify(report, null, 2) + "\n",
+	);
+	if (exitCode !== 0) throw new Error(`${name}_failed:see_reports/${log}`);
+	return stdout;
+}
+async function archiveTo(destination: string) {
+	await rm(destination, { recursive: true, force: true });
+	await mkdir(destination, { recursive: true });
+	const archive = Bun.spawnSync([
+		"git",
+		"-C",
+		source,
+		"archive",
+		baselineCommit,
+	]);
+	if (archive.exitCode) throw new Error("baseline_archive_failed");
+	const path = join(root, ".work/host.tar");
+	await Bun.write(path, archive.stdout);
+	await run(
+		"archive-" + destination.split("/").at(-1),
+		["tar", "-xf", path, "-C", destination],
+		root,
+	);
+	await run(
+		"git-init-" + destination.split("/").at(-1),
+		["git", "init", "-b", "main"],
+		destination,
+	);
+	await run(
+		"git-fetch-" + destination.split("/").at(-1),
+		["git", "fetch", "--depth=1", "--no-tags", source, baselineCommit],
+		destination,
+	);
+	await run(
+		"git-base-" + destination.split("/").at(-1),
+		["git", "reset", "--mixed", "FETCH_HEAD"],
+		destination,
+	);
+}
+const tests = [
+	"specialist",
+	"specialist-turn",
+	"specialist-document",
+	"specialist-memory",
+	"specialist-lifecycle",
+	"specialist-flush",
+].map((n) => `api/domains/dialogue/test/${n}.test.ts`);
+try {
+	await run("core-verify", ["bun", "run", "verify"], root);
+	const files = [
+		...new Bun.Glob("{src,contexts,.s11tnext}/**/*").scanSync({
+			cwd: root,
+			onlyFiles: true,
+			dot: true,
+		}),
+		"package.json",
+		"bun.lock",
+		"s11tnext.config.toml",
+	].sort();
+	const fileDigests = Object.fromEntries(
+		await Promise.all(
+			files.map(async (path) => [
+				path,
+				digest(new Uint8Array(await Bun.file(join(root, path)).arrayBuffer())),
+			]),
+		),
+	);
+	const commit = Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: root });
+	const manifest = {
+		packageVersion: "0.1.0",
+		sourceCommit:
+			commit.exitCode === 0 ? commit.stdout.toString().trim() : null,
+		sourceTreeDigest: digest(JSON.stringify(fileDigests)),
+		files: fileDigests,
+		coreContractVersion,
+		supportedStateSchemaVersions,
+		hostBaselineCommit: baselineCommit,
+		environment: { bun: Bun.version },
+		generation: "bun run context:build",
+	};
+	await Bun.write(
+		join(root, "manifest.json"),
+		JSON.stringify(manifest, null, "\t") + "\n",
+	);
+	await mkdir(join(root, "dist"), { recursive: true });
+	await run(
+		"pack",
+		["bun", "pm", "pack", "--destination", join(root, "dist")],
+		root,
+	);
+	const tgz = join(root, "dist/eumenes-collaboration-0.1.0.tgz");
+	report.tgzSha256 = digest(new Uint8Array(await Bun.file(tgz).arrayBuffer()));
+	const content = await run("pack-contents", ["tar", "-tzf", tgz], root);
+	const paths = content.trim().split("\n");
+	if (
+		paths.some(
+			(path) =>
+				!/^package\/(src\/|contexts\/|\.s11tnext\/|package\.json$|manifest\.json$|LICENSE$|README\.md$)/.test(
+					path,
+				),
+		)
+	)
+		throw new Error("unexpected_packed_file");
+	for (const path of [
+		"src/index.ts",
+		".s11tnext/catalog.json",
+		".s11tnext/catalog.generated.ts",
+		"manifest.json",
+	])
+		if (!paths.includes("package/" + path))
+			throw new Error("missing_packed_resource:" + path);
+	await archiveTo(baseline);
+	await run(
+		"baseline-install",
+		["bun", "install", "--frozen-lockfile"],
+		baseline,
+	);
+	await run("baseline-specialist", ["bun", "test", ...tests], baseline);
+	await archiveTo(candidate);
+	await applyHostAdapter(candidate);
+	await mkdir(join(candidate, "vendor/collaboration"), { recursive: true });
+	await cp(tgz, join(candidate, "vendor/collaboration/package.tgz"));
+	const packagePath = join(candidate, "package.json");
+	const pkg = await Bun.file(packagePath).json();
+	pkg.dependencies["eumenes-collaboration"] =
+		"file:vendor/collaboration/package.tgz";
+	await Bun.write(packagePath, JSON.stringify(pkg, null, "\t") + "\n");
+	await run("candidate-install-lock", ["bun", "install"], candidate);
+	report.lockfileSha256 = digest(
+		await Bun.file(join(candidate, "bun.lock")).text(),
+	);
+	await rm(join(candidate, "node_modules"), { recursive: true, force: true });
+	await run(
+		"candidate-install-frozen",
+		["bun", "install", "--frozen-lockfile"],
+		candidate,
+	);
+	await run(
+		"candidate-format",
+		[
+			"bun",
+			"fmt",
+			"api/domains/dialogue/service/specialist-prompt.ts",
+			"api/domains/dialogue/service/specialist-memory.ts",
+		],
+		candidate,
+	);
+	await run(
+		"candidate-context-build",
+		["bun", "run", "context:build"],
+		candidate,
+	);
+	await run("candidate-typecheck", ["bun", "run", "typecheck"], candidate);
+	await run(
+		"candidate-context-lint",
+		["bun", "run", "context:lint"],
+		candidate,
+	);
+	await run(
+		"candidate-context-check",
+		["bun", "run", "context:check"],
+		candidate,
+	);
+	// Verify the actual resolver chose the installed tarball, not a source alias.
+	await Bun.write(
+		join(candidate, "collaboration-consumption.ts"),
+		`import { collaborationInstructions,coreContractVersion } from "eumenes-collaboration";
+const path=import.meta.resolve("eumenes-collaboration");
+if(!path.includes("/node_modules/eumenes-collaboration/") || coreContractVersion!==1 || !collaborationInstructions.rules) throw new Error("package_resolution_failed");
+console.log(path);
+`,
+	);
+	report.resolvedEntry = (
+		await run(
+			"candidate-consumption",
+			["bun", "collaboration-consumption.ts"],
+			candidate,
+		)
+	).trim();
+	await run(
+		"candidate-consumption-format",
+		["bun", "fmt", "collaboration-consumption.ts"],
+		candidate,
+	);
+	report.parity = await compareHosts(baseline, candidate);
+	await run("candidate-specialist", ["bun", "test", ...tests], candidate);
+	await run(
+		"candidate-domains",
+		[
+			"bun",
+			"run",
+			"verify",
+			"--",
+			"--domain",
+			"dialogue",
+			"--domain",
+			"inference",
+			"--domain",
+			"tool-runtime",
+			"--domain",
+			"capabilities",
+			"--domain",
+			"ui-compositions",
+			"--domain",
+			"pipelines",
+		],
+		candidate,
+	);
+
+	await run("candidate-web-build", ["bun", "run", "build:web"], candidate);
+	const patch = await run(
+		"candidate-patch",
+		[
+			"git",
+			"diff",
+			"--binary",
+			"HEAD",
+			"--",
+			"api/domains/dialogue",
+			".s11tnext",
+			"package.json",
+			"bun.lock",
+		],
+		candidate,
+	);
+	report.adapterPatchSha256 = digest(patch);
+	report.generatedCatalogSha256 = digest(
+		await Bun.file(join(candidate, ".s11tnext/catalog.json")).text(),
+	);
+	await Bun.write(
+		join(root, "dist/eumenes-collaboration-0.1.0.tgz.sha256"),
+		String(report.tgzSha256) + "  eumenes-collaboration-0.1.0.tgz\n",
+	);
+	report.status = "passed";
+} catch (error) {
+	report.status = "failed";
+	report.error = String(error);
+	process.exitCode = 1;
+} finally {
+	await Bun.write(
+		join(reportDir, "pack-check.json"),
+		JSON.stringify(report, null, 2) + "\n",
+	);
+	console.log(
+		JSON.stringify({
+			status: report.status,
+			error: report.error,
+			report: join(reportDir, "pack-check.json"),
+		}),
+	);
+}

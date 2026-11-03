@@ -1,0 +1,16 @@
+{
+	"categories": {
+		"correctness": "error"
+	},
+	"plugins": ["typescript", "unicorn", "oxc"],
+	"rules": {
+		"unicorn/prefer-array-flat-map": "error"
+	},
+	"ignorePatterns": [
+		"node_modules/**",
+		".work/**",
+		"dist/**",
+		"reports/**",
+		".s11tnext/**"
+	]
+}

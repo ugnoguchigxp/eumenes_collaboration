@@ -1,0 +1,16 @@
+# exampleでの接続方針
+
+2026-11-04の利用者の追加指示を反映する。モデルと外部作業の接続例はexample/に配置し、Eumenesのadapter構造を参考にする。製品EumenesのDB・設定・端末・bundleは変更しない。固定版隔離hostへのpack:checkは配布互換の検証として残す。製品採用P6、実rendererの受入P3、実外部agentのP5は、このexampleのfixture成功で代用しない。
+
+## 接続
+
+- ModelAdapter: hostがsystem・資料・原文を構成し、schemaを渡し、モデル出力をcoreで解析する。fixtureを既定とし、Claude Agent SDKへの接続はexample専用の設定から明示的に選ぶ。モデル名・接続先・credentialをcoreへ固定しない。
+- Eumenesのinference/adapters/cloud-agents.tsを参照し、SDKのtoolsを空にし、settingSourcesを空にし、persistSessionを無効にした単発の構造化推論を使う。SDK自体をcoreの実行依存にしない。費用・推論回数・取消はexample hostが管理する。
+- WorkAdapter: schema・現在版・digest・検査・CASによる確定とreceiptをhostが所有する。coreは対象ごとの単語を解釈するコードを持たない。
+- ExternalAdapter: requestId・projectRef・externalSessionRef・generationを固定して依頼する。質問はquestionId・kind・generationと対応させる。通常質問に対する回答と権限の承認を別の型にする。既存terminalsの現行操作にない質問回答は、実接続の能力として公開しない。
+
+## 保存と評価
+
+P1合格後、出所付き状態のschemaと更新案の構造検査をcoreへ追加し、example hostがSQLiteの単一transactionで状態revision・receiptと採用する。既存Eumenesへのmigrationはこのexampleでは実施しない。意味の妥当性はfixtureの機械検査では証明せず、実モデルと人による受入の別記録を必要とする。
+
+live接続を実行する場合は、設定内にモデル識別子・正の費用上限・最大呼出し数・隔離作業先を必須にする。設定サンプルは空の値を持ち、秘密を保存しない。通常のverifyとexample試験は課金も外部送信も行わない。
