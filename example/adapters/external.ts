@@ -127,14 +127,14 @@ export class ExampleExternalAdapter {
 			.query("UPDATE example_external_requests SET body=? WHERE id=?")
 			.run(JSON.stringify(record), record.request.requestId);
 	}
-	private target(request: ExternalRequest) {
+	private target(request: ExternalRequest, requireInput = true) {
 		const target = this.host.target(request.externalSessionRef);
 		if (
 			!target ||
 			target.externalSessionRef !== request.externalSessionRef ||
 			target.projectRef !== request.projectRef ||
 			target.generation !== request.generation ||
-			target.inputOwner !== "host" ||
+			(requireInput && target.inputOwner !== "host") ||
 			this.host.epoch(request.collaborationSessionId) !== request.epoch
 		)
 			throw new Error("external_target_changed");
@@ -222,7 +222,7 @@ export class ExampleExternalAdapter {
 					record.status === "stopping"
 				)
 					return false;
-				this.target(record.request);
+				this.target(record.request, false);
 				if (event.kind === "waiting" && !event.question)
 					throw new Error("external_question_required");
 				if (event.kind === "waiting") {
@@ -316,7 +316,7 @@ export class ExampleExternalAdapter {
 			});
 		return { status };
 	}
-	forgetSources(refs: ReadonlySet<string>) {
+	forgetSources(sessionId: string, refs: ReadonlySet<string>) {
 		this.db
 			.transaction(() => {
 				const rows = this.db
@@ -326,6 +326,7 @@ export class ExampleExternalAdapter {
 					.all();
 				for (const row of rows) {
 					const record: ExternalRecord = JSON.parse(row.body);
+					if (record.request.collaborationSessionId !== sessionId) continue;
 					if (!record.request.sourceRefs.some((ref) => refs.has(ref))) continue;
 					this.save({
 						...record,

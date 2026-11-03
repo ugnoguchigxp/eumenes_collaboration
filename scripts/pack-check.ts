@@ -124,6 +124,7 @@ try {
 		join(root, "manifest.json"),
 		JSON.stringify(manifest, null, "\t") + "\n",
 	);
+	await run("manifest-format", ["bun", "fmt", "manifest.json"], root);
 	await mkdir(join(root, "dist"), { recursive: true });
 	await run(
 		"pack",
@@ -219,6 +220,21 @@ console.log(path);
 			candidate,
 		)
 	).trim();
+	const installedRoot = join(candidate, "node_modules/eumenes-collaboration");
+	const installedManifest = await Bun.file(
+		join(installedRoot, "manifest.json"),
+	).json();
+	if (installedManifest.sourceTreeDigest !== manifest.sourceTreeDigest)
+		throw new Error("installed_manifest_mismatch");
+	for (const [path, expected] of Object.entries(fileDigests)) {
+		if (path === "bun.lock" || path === "s11tnext.config.toml") continue;
+		const actual = digest(
+			new Uint8Array(await Bun.file(join(installedRoot, path)).arrayBuffer()),
+		);
+		if (actual !== expected)
+			throw new Error("installed_resource_mismatch:" + path);
+	}
+	report.installedSourceTreeDigest = installedManifest.sourceTreeDigest;
 	await run(
 		"candidate-consumption-format",
 		["bun", "fmt", "collaboration-consumption.ts"],

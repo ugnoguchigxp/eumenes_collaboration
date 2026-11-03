@@ -13,7 +13,7 @@ export function forgetCollaborationSources(
 	return store.db
 		.transaction(() => {
 			const state = store.forget(sessionId, refs, sourceRevision);
-			external.forgetSources(refs);
+			external.forgetSources(sessionId, refs);
 			return state;
 		})
 		.immediate();

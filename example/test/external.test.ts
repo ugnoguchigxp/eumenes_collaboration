@@ -238,7 +238,7 @@ test("forgotten source text is removed from pending requests and cannot return t
 	const f = fixture();
 	try {
 		await f.adapter.submit(f.request);
-		f.adapter.forgetSources(new Set(["u1"]));
+		f.adapter.forgetSources("s", new Set(["u1"]));
 		expect(f.adapter.read("r")).toMatchObject({
 			forgotten: true,
 			request: { prompt: "", sourceRefs: [] },
@@ -281,6 +281,43 @@ test("the current Eumenes terminals bridge advertises no structured answer suppo
 			question,
 		});
 		expect(await adapter.answer(answer)).toEqual({ status: "unsupported" });
+	} finally {
+		f.db.close();
+	}
+});
+
+test("forgetting is scoped to its collaboration session even if local source refs coincide", async () => {
+	const f = fixture();
+	try {
+		await f.adapter.submit(f.request);
+		f.adapter.forgetSources("another-session", new Set(["u1"]));
+		expect(f.adapter.read("r")).toMatchObject({
+			status: "delivered",
+			request: { prompt: f.request.prompt },
+		});
+	} finally {
+		f.db.close();
+	}
+});
+
+test("manual input ownership blocks automated writes but does not discard progress observations", async () => {
+	const f = fixture();
+	try {
+		await f.adapter.submit(f.request);
+		f.target.inputOwner = "user";
+		expect(
+			f.adapter.event({
+				id: "reported",
+				requestId: "r",
+				generation: 1,
+				kind: "completed",
+				report: "外部agentの報告",
+			}),
+		).toBe(true);
+		expect(f.adapter.read("r")).toMatchObject({
+			status: "completed",
+			independentlyVerified: false,
+		});
 	} finally {
 		f.db.close();
 	}

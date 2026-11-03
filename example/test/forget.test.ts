@@ -29,7 +29,12 @@ test("a failed external redaction rolls back state forgetting and its revocation
 			"r",
 			"digest",
 			JSON.stringify({
-				request: { requestId: "r", sourceRefs: ["u1"], prompt: "原文" },
+				request: {
+					requestId: "r",
+					collaborationSessionId: "s",
+					sourceRefs: ["u1"],
+					prompt: "原文",
+				},
 				status: "queued",
 				independentlyVerified: false,
 			}),
