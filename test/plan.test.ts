@@ -70,3 +70,29 @@ describe("plan budget", () => {
 		expect(budgetCheck(30, b).decision).toBe("stop");
 	});
 });
+
+describe("planSteps: 連用形 clauses (2026-11-04)", () => {
+	test("「…を調べ、…を見て、まとめて」 is three steps", () => {
+		const p = planSteps(
+			"PyPIで requests の最新版を調べ、GitHubでそのリポジトリを見て、まとめてください",
+			"r",
+		);
+		expect(p.steps.map((s) => [s.needsBrowser, s.output])).toEqual([
+			[true, "findings"],
+			[true, "findings"],
+			[false, "summary"],
+		]);
+	});
+	test("a lone first step that also says まとめ still uses the browser", () => {
+		const p = planSteps(
+			"crates.ioで serde の最新版を調べてまとめてください",
+			"r",
+		);
+		expect(p.steps).toHaveLength(1);
+		expect(p.steps[0]!.needsBrowser).toBe(true);
+	});
+	test("a list joined by 、 is not split", () => {
+		const p = planSteps("東京、大阪、名古屋の天気を調べてください", "r");
+		expect(p.steps).toHaveLength(1);
+	});
+});

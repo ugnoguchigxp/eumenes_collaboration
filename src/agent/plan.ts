@@ -28,7 +28,7 @@ export const PLAN_INFERENCE_CAP = 30;
 
 /** Where one step ends and the next begins: a clause ending in て/で followed by 、, そして, それから, 。 */
 const SPLIT =
-	/(?<=[てで])、(?:そして|それから|その後|次に)?|(?<=。)|、(?:そして|それから|その後|次に|最後に)、?/u;
+	/(?<=[てで])、(?:そして|それから|その後|次に)?|(?<=(?:調べ|探し|確認し|検索し|開き|読み|見つけ))、|(?<=。)|、(?:そして|それから|その後|次に|最後に)、?/u;
 const SUMMARY = /サマリー|まとめ|要約|summar/iu;
 const BROWSER_VERB =
 	/検索|調べ|探し|探す|開い|開く|見て|見せ|再生|表示|アクセス|クリック|ページ|サイト|動画|https?:\/\//iu;
@@ -48,7 +48,8 @@ function segments(request: string): string[] {
 export function planSteps(request: string, sourceRef: string): Plan {
 	const texts = segments(request);
 	const steps: PlanStep[] = texts.map((goal, i) => {
-		const summary = SUMMARY.test(goal) && !/再生|検索/u.test(goal);
+		// The first step always gathers something: "…を調べてまとめて" alone is a browser step, not a summary of nothing.
+		const summary = i > 0 && SUMMARY.test(goal) && !/再生|検索/u.test(goal);
 		const needsBrowser = !summary && (BROWSER_VERB.test(goal) || i === 0);
 		const keepOpen = needsBrowser && KEEP_OPEN.test(goal);
 		return {
