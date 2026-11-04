@@ -7,3 +7,10 @@ export const supportedStateSchemaVersions: readonly number[] = [1];
 export * from "./contracts/state.ts";
 export { proposeStateUpdate, forgetStateSources } from "./agent/state.ts";
 export { decideSession, type SessionDecision } from "./agent/session.ts";
+export {
+	completeBrief,
+	briefSlots,
+	type Brief,
+	type BriefInput,
+	type BriefSlot,
+} from "./agent/brief.ts";
