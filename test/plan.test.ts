@@ -95,4 +95,15 @@ describe("planSteps: 連用形 clauses (2026-11-04)", () => {
 		const p = planSteps("東京、大阪、名古屋の天気を調べてください", "r");
 		expect(p.steps).toHaveLength(1);
 	});
+	test("a step that names an article to compare against uses the browser", () => {
+		const p = planSteps(
+			"世界銀行で日本の人口を調べ、ウィキペディアの日本の記事の人口と比べて、まとめる",
+			"r",
+		);
+		expect(p.steps.map((s) => [s.needsBrowser, s.output])).toEqual([
+			[true, "findings"],
+			[true, "findings"],
+			[false, "summary"],
+		]);
+	});
 });
