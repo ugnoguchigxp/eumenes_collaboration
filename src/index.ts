@@ -14,3 +14,15 @@ export {
 	type BriefInput,
 	type BriefSlot,
 } from "./agent/brief.ts";
+export {
+	planSteps,
+	stepResultFact,
+	planBudget,
+	budgetCheck,
+	MAX_PLAN_STEPS,
+	STEP_INFERENCE_BUDGET,
+	PLAN_INFERENCE_CAP,
+	type Plan,
+	type PlanStep,
+	type PlanBudget,
+} from "./agent/plan.ts";
