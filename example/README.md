@@ -28,7 +28,7 @@ export OPENAI_API_KEY="$OPEN_AI_API_KEY"
 
 設定後は新しいログインシェルを開くか、現在のターミナルで`source ~/.zprofile`を実行する。既に動いているアプリの環境は自動更新されないため、そこから実行する検証ではログインシェルを経由する。Codexなどの既存プロセスからは`zsh -lc '<検証コマンド>'`で起動できる。アプリ内から`.zprofile`を読み込んだり、キーの値を設定ファイル・ログへ保存したりしない。
 
-Claude接続ではenvを省略すれば`ANTHROPIC_API_KEY`を継承する。OpenAI直接APIのadapterは改善計画の実装対象であり、同じく`OPENAI_API_KEY`を起動環境から読む。キーが存在しても固定モデルの通常CLIが実APIへ切り替わることはなく、実モデルの選択と費用上限は別途指定する。
+Claude接続ではenvを省略すれば`ANTHROPIC_API_KEY`を継承する。直接APIの`createApiModel`も同じく`OPENAI_API_KEY`を起動環境から読む。キーが存在しても固定モデルの通常CLIが実APIへ切り替わることはなく、実モデルの選択と費用上限は別途指定する。
 
 通常のCLIは固定モデルであり、実SDKの起動、Claude Codeへの作業依頼、製品接続先の読取りを行わない。SDKの実出力・認証・費用計測の受入は、明示したテスト設定と予算を用意した後に行う。
 
@@ -41,3 +41,5 @@ hostはExternalTarget、ExternalGrant、現在epoch、有効な出所を発行�
 利用者の端末入力中や対象世代の変更時は自動入力を拒否する。停止確認がなければunknown。外部のcompletedは報告の終了であり、independentlyVerifiedはfalseのまま。差分・試験の独立確認と利用者の受入は別工程となる。
 
 ここでのsession/世代/質問の契約はexampleのfixtureで検証している。実Claude Codeの操作品質、実rendererの表示、製品dialogueのmigrationを検証済みとは扱わない。
+
+直接APIは`adapters/api-model.ts`、永続した合計予算は`adapters/api-budget.ts`に分ける。Messages/Responses API、toolなし、自動retryなし、モデル置換なし。`decision-turn.ts`はLLMの構造化したsession/plan提案を既存ModelAdapterへ接続する。実行・更新・復旧の詳細は[0.2更新手順](../spec/upgrading-0.2.md)、結果は[品質改善記録](../spec/quality-execution-2026-11-05.md)を参照。SDK接続のfixture成功と直接APIの成功は別に記録する。

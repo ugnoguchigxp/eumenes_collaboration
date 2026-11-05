@@ -1,0 +1,38 @@
+{
+	"state-before.log": {
+		"sha256": "a6d88913c6d38599b5104855f9b2e53e457de030a89b1226dda80ffcaa217550",
+		"bytes": 3724
+	},
+	"resource-red.log": {
+		"sha256": "2dc648e3d2a89aedb2cb716041c060cb87aee0f6ef5eaa85c573a4fd773db292",
+		"bytes": 2473
+	},
+	"sdk-cleanup-red.log": {
+		"sha256": "44f919e5af4cc8c77bad4dba48ffb96e7e54a6c4f6a69f624dd2cb3bc770e873",
+		"bytes": 1159
+	},
+	"stale-answer-red.log": {
+		"sha256": "fd0f47d88dc551ca602deb34a0f3cfc9100749878876dcd9f1b2cd4bd9fbbaf7",
+		"bytes": 2053
+	},
+	"final-verify.log": {
+		"sha256": "2ebff9c89b1d22f269a049b1dc85983b578a5258e4217e51ea8fc1c1894d3505",
+		"bytes": 6955
+	},
+	"external-final.log": {
+		"sha256": "e95608adddb1aa42614830424bb9c5055e9503fc809dbb1fa4dd34f801cad0f3",
+		"bytes": 1510
+	},
+	"integration-final.log": {
+		"sha256": "f52a354c11ab13e367fec7eaab3efcaf225b01db352699f0c1f9d11bbedc7295",
+		"bytes": 2029
+	},
+	"final-audit.json": {
+		"sha256": "ef8ce9f18c4cf65ebd7a2131f98eb863938a8065c973de65218d59973db20921",
+		"bytes": 87
+	},
+	"final-pack.log": {
+		"sha256": "e9f2fd744bf22e2f73b404b432a5350355423f9b27cb0de54b3408902865d730",
+		"bytes": 733
+	}
+}

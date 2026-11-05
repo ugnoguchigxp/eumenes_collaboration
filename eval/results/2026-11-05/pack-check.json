@@ -1,0 +1,157 @@
+{
+	"baselineCommit": "5bf5ca556ad45a9c8a6b72f81aae85f7505e505c",
+	"declaredBaseline": "5bf5ca556ad45a9c8a6b72f81aae85f7505e505c",
+	"steps": [
+		{
+			"name": "core-verify",
+			"exitCode": 0,
+			"log": "core-verify.log"
+		},
+		{
+			"name": "manifest-format",
+			"exitCode": 0,
+			"log": "manifest-format.log"
+		},
+		{
+			"name": "pack",
+			"exitCode": 0,
+			"log": "pack.log"
+		},
+		{
+			"name": "pack-contents",
+			"exitCode": 0,
+			"log": "pack-contents.log"
+		},
+		{
+			"name": "archive-eumenes-baseline",
+			"exitCode": 0,
+			"log": "archive-eumenes-baseline.log"
+		},
+		{
+			"name": "git-init-eumenes-baseline",
+			"exitCode": 0,
+			"log": "git-init-eumenes-baseline.log"
+		},
+		{
+			"name": "git-fetch-eumenes-baseline",
+			"exitCode": 0,
+			"log": "git-fetch-eumenes-baseline.log"
+		},
+		{
+			"name": "git-base-eumenes-baseline",
+			"exitCode": 0,
+			"log": "git-base-eumenes-baseline.log"
+		},
+		{
+			"name": "baseline-install",
+			"exitCode": 0,
+			"log": "baseline-install.log"
+		},
+		{
+			"name": "baseline-specialist",
+			"exitCode": 0,
+			"log": "baseline-specialist.log"
+		},
+		{
+			"name": "archive-eumenes-candidate",
+			"exitCode": 0,
+			"log": "archive-eumenes-candidate.log"
+		},
+		{
+			"name": "git-init-eumenes-candidate",
+			"exitCode": 0,
+			"log": "git-init-eumenes-candidate.log"
+		},
+		{
+			"name": "git-fetch-eumenes-candidate",
+			"exitCode": 0,
+			"log": "git-fetch-eumenes-candidate.log"
+		},
+		{
+			"name": "git-base-eumenes-candidate",
+			"exitCode": 0,
+			"log": "git-base-eumenes-candidate.log"
+		},
+		{
+			"name": "candidate-install-lock",
+			"exitCode": 0,
+			"log": "candidate-install-lock.log"
+		},
+		{
+			"name": "candidate-install-frozen",
+			"exitCode": 0,
+			"log": "candidate-install-frozen.log"
+		},
+		{
+			"name": "candidate-format",
+			"exitCode": 0,
+			"log": "candidate-format.log"
+		},
+		{
+			"name": "candidate-context-build",
+			"exitCode": 0,
+			"log": "candidate-context-build.log"
+		},
+		{
+			"name": "candidate-typecheck",
+			"exitCode": 0,
+			"log": "candidate-typecheck.log"
+		},
+		{
+			"name": "candidate-context-lint",
+			"exitCode": 0,
+			"log": "candidate-context-lint.log"
+		},
+		{
+			"name": "candidate-context-check",
+			"exitCode": 0,
+			"log": "candidate-context-check.log"
+		},
+		{
+			"name": "candidate-consumption",
+			"exitCode": 0,
+			"log": "candidate-consumption.log"
+		},
+		{
+			"name": "candidate-consumption-format",
+			"exitCode": 0,
+			"log": "candidate-consumption-format.log"
+		},
+		{
+			"name": "candidate-specialist",
+			"exitCode": 0,
+			"log": "candidate-specialist.log"
+		},
+		{
+			"name": "candidate-domains",
+			"exitCode": 0,
+			"log": "candidate-domains.log"
+		},
+		{
+			"name": "candidate-web-build",
+			"exitCode": 0,
+			"log": "candidate-web-build.log"
+		},
+		{
+			"name": "candidate-patch",
+			"exitCode": 0,
+			"log": "candidate-patch.log"
+		}
+	],
+	"tgzSha256": "ed0608a75c0546f36a2b74449aee3a4903ed2e95973d34f05fcf346acca932a3",
+	"hostIntegration": {
+		"status": "run",
+		"baseline": "5bf5ca556ad45a9c8a6b72f81aae85f7505e505c",
+		"declaredBaseline": "5bf5ca556ad45a9c8a6b72f81aae85f7505e505c"
+	},
+	"lockfileSha256": "a12beb87a43045927c2fc30e8b7dcb0b65381eabe6ee6bf8f144b502417be2ed",
+	"resolvedEntry": "isolated consumer node_modules/eumenes-collaboration/src/index.ts",
+	"installedSourceTreeDigest": "91181abd50b52c2577c270e1ef1700709a4c1421aefff8d0884894045b07e646",
+	"parity": {
+		"outputs": 149,
+		"comparisons": 601
+	},
+	"adapterPatchSha256": "225dfc40e74f9a0df5ef722144f431cff95de1d3b3b651faacebf3e6790ec580",
+	"generatedCatalogSha256": "e58d8b845eec8c572f5955154d1a5ce91dfaa85e51e05cecd838cea1320d0727",
+	"status": "passed"
+}

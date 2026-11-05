@@ -1,0 +1,23 @@
+[
+	{
+		"name": "zod",
+		"version": "4.6.6",
+		"license": "MIT",
+		"licenseFile": true,
+		"noticeFile": false
+	},
+	{
+		"name": "s11tnext",
+		"version": "0.1.2",
+		"license": "Apache-2.0",
+		"licenseFile": true,
+		"noticeFile": true
+	},
+	{
+		"name": "@noble/hashes",
+		"version": "2.2.0",
+		"license": "MIT",
+		"licenseFile": true,
+		"noticeFile": false
+	}
+]

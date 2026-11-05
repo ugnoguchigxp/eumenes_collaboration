@@ -1,18 +1,24 @@
 {
-	"date": "2026-11-04",
-	"scope": "independent core and example host; isolated Eumenes consumption",
-	"sourceCommit": "f7a636e191c8a3e51084f903e9789d6645b44c06",
+	"date": "2026-11-05",
+	"scope": "independent library core and example host; isolated Eumenes package consumption; synthetic direct API validation",
+	"sourceCommit": "e5d0daf36576f95534bbd3d99fa68262e6c4c610",
+	"exampleValidationCommit": "2afaf80acfa4929d34603ad6f7f7980e8aefbff6",
+	"apiValidationCommit": "c369f244ac893028ecabdaba8345f4d06cc90217",
+	"packageVersion": "0.2.0",
 	"coreContractVersion": 1,
+	"decisionContractVersion": 1,
 	"stateSchemaVersions": [1],
 	"hostBaselineCommit": "5bf5ca556ad45a9c8a6b72f81aae85f7505e505c",
-	"coreSourceTreeDigest": "8feb16993ea89c3ae90f2637e445fba7af0c1771ebc52a5ade1ebe1d947cded7",
-	"tgzSha256": "986fd7d1f6d5804b3e73bf63cf0e749fdccc131d1eb2e2f7fac22edc3adac7cd",
-	"candidateLockfileSha256": "2d065de813ffb7292ef89d1ecda7b0bc23a4774206176141ab57cd2cbe62958b",
-	"candidateAdapterPatchSha256": "2af0f739a76a04b862b8c08869b65d613d1589384bad16e543668f5fb046bc6e",
+	"coreSourceTreeDigest": "91181abd50b52c2577c270e1ef1700709a4c1421aefff8d0884894045b07e646",
+	"tgzSha256": "ed0608a75c0546f36a2b74449aee3a4903ed2e95973d34f05fcf346acca932a3",
+	"candidateLockfileSha256": "a12beb87a43045927c2fc30e8b7dcb0b65381eabe6ee6bf8f144b502417be2ed",
+	"candidateAdapterPatchSha256": "225dfc40e74f9a0df5ef722144f431cff95de1d3b3b651faacebf3e6790ec580",
 	"installedResourcesMatch": true,
 	"checks": {
 		"coreVerify": "passed",
-		"coreAndExampleTests": 29,
+		"coreAndExampleTests": 60,
+		"expectations": 742,
+		"strictPackSteps": 27,
 		"legacySpecialistTests": 64,
 		"parityOutputs": 149,
 		"parityComparisons": 601,
@@ -21,19 +27,57 @@
 		"consumerTypecheck": "passed",
 		"consumerContext": "passed",
 		"consumerWebBuild": "passed",
+		"productionAudit": "0 vulnerabilities across 3 packages",
 		"evaluationInventory": 32,
-		"longestEvaluationTurns": 21
+		"liveSessions": 128,
+		"liveTurns": 704,
+		"decisionCases": 24,
+		"finalStateInvariantFailures": 0
 	},
+	"liveSemanticGate": {
+		"threshold": 0.9,
+		"anthropic": {
+			"baseline": 0.65625,
+			"candidate": 0.65625,
+			"passed": false
+		},
+		"openai": {
+			"baseline": 0.875,
+			"candidate": 0.90625,
+			"passed": true
+		},
+		"overall": "failed; no product acceptance inferred"
+	},
+	"apiCost": {
+		"capUsd": 10,
+		"conservativeEstimatedUsd": 3.2016775,
+		"unknownReservedUsd": 2.293756,
+		"accountedUsd": 5.4954335,
+		"baseRateEstimateKnownCallsUsd": 0.6403355,
+		"kind": "not provider invoice; all attempts included"
+	},
+	"ci": {
+		"core": "https://github.com/ugnoguchigxp/eumenes_collaboration/actions/runs/42015768897",
+		"example": "https://github.com/ugnoguchigxp/eumenes_collaboration/actions/runs/42016708172"
+	},
+	"evidence": "../eval/results/2026-11-05",
 	"notRun": [
-		"live model semantic evaluation",
 		"actual renderer observations and browser acceptance",
-		"live Claude Code collaboration",
+		"live Claude Code or other external-agent work",
 		"product dialogue migrations and rollback acceptance",
-		"product bundle adoption"
+		"product bundle adoption",
+		"human pilot and sustained usage"
 	],
-	"apiCost": "no live calls; live cost/latency unmeasured",
+	"measurementLimits": [
+		"Live candidate is c369f24; later resource/cleanup corrections did not change model instructions or request wire schemas. All128 final states replay against current contracts, but no paid rerun of later fixes.",
+		"Nominal holdout exposed in aborted transport-debugging runs; not a fresh holdout.",
+		"One repetition and cross-provider judges; not a statistically established quality improvement.",
+		"Raw browser oracle 20/24; session decisions24/24. Null plans and underspecified color-search cases require oracle calibration, not silent regrading.",
+		"Local strict pack from e5d0daf; distributed src/contexts/catalog/package/lock unchanged through2afaf80, verified with git diff. The example changes are separately covered by60 tests and CI."
+	],
 	"contextTools": {
 		"context_compile": 1,
-		"compile_eval": 1
+		"compile_eval": 1,
+		"runId": "00000000-0000-0000-18e5-1d17e87268e6"
 	}
 }

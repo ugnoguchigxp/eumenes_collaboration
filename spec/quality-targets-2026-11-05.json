@@ -9,8 +9,8 @@
 		"locator": "eumenes_collaboration",
 		"snapshot": "Hypothetical future implementation after W00-W20; baseline a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
 		"reviewed_at": "2026-11-05",
-		"stage": "Expected scenario; implementation not started",
-		"scope": "Conditional technical-only target at unchanged library weights, 30 applicable criteria, no exclusions. Assumes every specified acceptance and countercheck has passed on an immutable future snapshot. This is not a forecast or observed improvement. Current five confirmed findings remain unresolved; absence of findings in this hypothetical ledger only expresses the assumed scenario, not their withdrawal. Project Potential is not numerically forecast. Plan SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2"
+		"stage": "Historical Expected scenario at plan creation; not an observed re-evaluation",
+		"scope": "Conditional technical-only target at unchanged library weights, 30 applicable criteria, no exclusions. Assumes every specified acceptance and countercheck has passed on an immutable future snapshot. This is not a forecast or observed improvement. Current five confirmed findings remain unresolved; absence of findings in this hypothetical ledger only expresses the assumed scenario, not their withdrawal. Project Potential is not numerically forecast. Plan SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2 Historical plan source is commit9ab72d5; subsequent progress is recorded separately."
 	},
 	"scenario_conditions": [
 		"Current F01-F05 remain unresolved. The hypothetical calculation assumes all five fixes and original reproduction/acceptance checks have succeeded in a future snapshot.",
@@ -62,7 +62,7 @@
 		{
 			"id": "P01",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 architecture.boundaries; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 architecture.boundaries; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 実利用側と配布物の境界、責務の局所性、無権限実行を防ぐ検査を重要な変更・失敗条件でも確認",
 			"scope": "Plan text only; acceptance not executed. Work packages W04/W08/W10/W11/W12. This does not establish actual future capability or current High confidence."
@@ -70,7 +70,7 @@
 		{
 			"id": "P02",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 architecture.flow; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 architecture.flow; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 入力から状態・外部作用までの正常/拒否/取消/復旧で不変条件を維持",
 			"scope": "Plan text only; acceptance not executed. Work packages W01/W02/W05/W09. This does not establish actual future capability or current High confidence."
@@ -78,7 +78,7 @@
 		{
 			"id": "P03",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 architecture.fit; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 architecture.fit; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 語句分岐なしで異なる依頼を処理し、既存hostの制約と予算に適合",
 			"scope": "Plan text only; acceptance not executed. Work packages W04/W06/W13. This does not establish actual future capability or current High confidence."
@@ -86,7 +86,7 @@
 		{
 			"id": "P04",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 correctness.contracts; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 correctness.contracts; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 全公開契約の成功出力・拒否・版・状態遷移、別入口や保存後の破綻がないことを実行検証",
 			"scope": "Plan text only; acceptance not executed. Work packages W01/W02/W09/W11/W12. This does not establish actual future capability or current High confidence."
@@ -94,7 +94,7 @@
 		{
 			"id": "P05",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 correctness.edge_cases; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 correctness.edge_cases; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 件数・参照・状態・容量・置換鎖の代表的境界と不正値を検証",
 			"scope": "Plan text only; acceptance not executed. Work packages W01/W02/W03/W09. This does not establish actual future capability or current High confidence."
@@ -102,7 +102,7 @@
 		{
 			"id": "P06",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 correctness.concurrency; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 correctness.concurrency; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 実writer/host境界で競合・取消・確定前後のcrash・古い応答を検証",
 			"scope": "Plan text only; acceptance not executed. Work packages W05/W07/W09/W12. This does not establish actual future capability or current High confidence."
@@ -110,7 +110,7 @@
 		{
 			"id": "P07",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 security.access; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 security.access; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 実接続のsession/対象/権限/世代/手入力境界で、偽入力とlifecycle変化による越境を検証",
 			"scope": "Plan text only; acceptance not executed. Work packages W05/W08/W09/W12. This does not establish actual future capability or current High confidence."
@@ -118,7 +118,7 @@
 		{
 			"id": "P08",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 security.input_secrets; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 security.input_secrets; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 入力・参照・秘密・最小権限を正常/誘導/失効/ログの条件で確認",
 			"scope": "Plan text only; acceptance not executed. Work packages W03/W07/W08/W10. This does not establish actual future capability or current High confidence."
@@ -126,7 +126,7 @@
 		{
 			"id": "P09",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 security.abuse; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 security.abuse; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 過大入力・期限・予算・再試行の制約と回復を限界近傍で確認",
 			"scope": "Plan text only; acceptance not executed. Work packages W03/W07/W08/W13. This does not establish actual future capability or current High confidence."
@@ -134,7 +134,7 @@
 		{
 			"id": "P10",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 reliability.failure; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 reliability.failure; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 部分失敗で状態・権限・使用量を失わず、拒否/unknownの理由を保持",
 			"scope": "Plan text only; acceptance not executed. Work packages W01/W05/W07/W09. This does not establish actual future capability or current High confidence."
@@ -142,7 +142,7 @@
 		{
 			"id": "P11",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 reliability.recovery; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 reliability.recovery; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 実プロセス終了後に送信/回答/停止/保存を重複させず照合・再開",
 			"scope": "Plan text only; acceptance not executed. Work packages W05/W09/W12. This does not establish actual future capability or current High confidence."
@@ -150,7 +150,7 @@
 		{
 			"id": "P12",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 reliability.resilience; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 reliability.resilience; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: provider/DBの遅延・無応答・飽和でも制御された停止と資源回収",
 			"scope": "Plan text only; acceptance not executed. Work packages W03/W07/W13. This does not establish actual future capability or current High confidence."
@@ -158,7 +158,7 @@
 		{
 			"id": "P13",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 maintainability.clarity; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 maintainability.clarity; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 別担当が契約と複数経路・失敗診断を追えることを作業で確認",
 			"scope": "Plan text only; acceptance not executed. Work packages W11/W14/W18. This does not establish actual future capability or current High confidence."
@@ -166,7 +166,7 @@
 		{
 			"id": "P14",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 maintainability.change; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 maintainability.change; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 代表的な指示・契約・依存更新が局所変更で済み、回帰を検出",
 			"scope": "Plan text only; acceptance not executed. Work packages W09/W10/W11/W14. This does not establish actual future capability or current High confidence."
@@ -174,7 +174,7 @@
 		{
 			"id": "P15",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 maintainability.debt; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 maintainability.debt; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 語句パッチを除き、異なる実依頼と複数の保守変更で専用分岐が増えない",
 			"scope": "Plan text only; acceptance not executed. Work packages W04/W14/W18. This does not establish actual future capability or current High confidence."
@@ -182,7 +182,7 @@
 		{
 			"id": "P16",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 common_components.duplication; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 common_components.duplication; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 実tgz・共通指示・版付き契約が利用経路間で一貫し、移行後の旧判断の二重保守を終える",
 			"scope": "Plan text only; acceptance not executed. Work packages W10/W11/W12. This does not establish actual future capability or current High confidence."
@@ -190,7 +190,7 @@
 		{
 			"id": "P17",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 common_components.reuse; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 common_components.reuse; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 二重のruntime/writerを作らず既存接点を利用し、複数の実経路で契約を維持",
 			"scope": "Plan text only; acceptance not executed. Work packages W04/W05/W10/W12. This does not establish actual future capability or current High confidence."
@@ -198,7 +198,7 @@
 		{
 			"id": "P18",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 common_components.abstraction; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 common_components.abstraction; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 実際の利用・変更例で薄いadapterの利点と導入負担を説明",
 			"scope": "Plan text only; acceptance not executed. Work packages W11/W12/W14. This does not establish actual future capability or current High confidence."
@@ -206,7 +206,7 @@
 		{
 			"id": "P19",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 testing.risk_coverage; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 testing.risk_coverage; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 中核の境界・障害・競合・実意味品質を覆い、負の対照で検出力を実証",
 			"scope": "Plan text only; acceptance not executed. Work packages W06/W08/W09/W12. This does not establish actual future capability or current High confidence."
@@ -214,7 +214,7 @@
 		{
 			"id": "P20",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 testing.quality; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 testing.quality; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 実DB・独立の観測・負の対照で検査し、台本/再試行による成功を排除",
 			"scope": "Plan text only; acceptance not executed. Work packages W06/W09/W10. This does not establish actual future capability or current High confidence."
@@ -222,7 +222,7 @@
 		{
 			"id": "P21",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 testing.automation; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 testing.automation; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: CIと配布時の検証が実際の複数変更で機能し、意図的な回帰を検出",
 			"scope": "Plan text only; acceptance not executed. Work packages W06/W09/W10/W13. This does not establish actual future capability or current High confidence."
@@ -230,7 +230,7 @@
 		{
 			"id": "P22",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 supply_chain.dependencies; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 supply_chain.dependencies; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 到達可能性を踏まえたaudit・同期更新・互換・切戻しの実績",
 			"scope": "Plan text only; acceptance not executed. Work packages W03/W10/W18. This does not establish actual future capability or current High confidence."
@@ -238,7 +238,7 @@
 		{
 			"id": "P23",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 supply_chain.build_release; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 supply_chain.build_release; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 確定source・生成物・実tgz・導入資材・受入を結び、改変と古い資材を拒否",
 			"scope": "Plan text only; acceptance not executed. Work packages W10/W11/W12. This does not establish actual future capability or current High confidence."
@@ -246,7 +246,7 @@
 		{
 			"id": "P24",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 supply_chain.license; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 supply_chain.license; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 適用される依存・資材の由来、配布条件、NOTICE、更新責任を確認",
 			"scope": "Plan text only; acceptance not executed. Work packages W10/W14/W18. This does not establish actual future capability or current High confidence."
@@ -254,7 +254,7 @@
 		{
 			"id": "P25",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 performance.budget; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 performance.budget; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 代表的な実接続の時間・資源・費用が事前合意した予算を満たす",
 			"scope": "Plan text only; acceptance not executed. Work packages W06/W07/W13. This does not establish actual future capability or current High confidence."
@@ -262,7 +262,7 @@
 		{
 			"id": "P26",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 performance.hot_path; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 performance.hot_path; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 計測で主要な時間/容量の支配要因を特定し、対象規模に適合",
 			"scope": "Plan text only; acceptance not executed. Work packages W03/W13. This does not establish actual future capability or current High confidence."
@@ -270,7 +270,7 @@
 		{
 			"id": "P27",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 performance.measurement; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 performance.measurement; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: workload・baseline・環境を固定し、時間/メモリ/費用の回帰を再現検出",
 			"scope": "Plan text only; acceptance not executed. Work packages W06/W10/W13. This does not establish actual future capability or current High confidence."
@@ -278,7 +278,7 @@
 		{
 			"id": "P28",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 operability.signals; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 operability.signals; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 実際の拒否・unknown・停止・復旧で、秘密を漏らさず原因と次の行動を特定",
 			"scope": "Plan text only; acceptance not executed. Work packages W05/W08/W12/W14. This does not establish actual future capability or current High confidence."
@@ -286,7 +286,7 @@
 		{
 			"id": "P29",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 operability.lifecycle; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 operability.lifecycle; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 実際の導入・更新・migration・復旧・切戻し・データ保持/削除を検証",
 			"scope": "Plan text only; acceptance not executed. Work packages W10/W11/W12/W14. This does not establish actual future capability or current High confidence."
@@ -294,7 +294,7 @@
 		{
 			"id": "P30",
 			"kind": "primary_doc",
-			"locator": "spec/quality-improvement-plan-2026-11-05.md section11 operability.interaction; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
+			"locator": "spec/quality-improvement-plan-2026-11-05.md @9ab72d5 section11 operability.interaction; SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2",
 			"observed_at": "2026-11-05",
 			"observation": "Planned conditional acceptance requirement: 開発者/利用者が導入・主作業・失敗回復を実行し、変更したUIの操作性も確認",
 			"scope": "Plan text only; acceptance not executed. Work packages W11/W12/W14/W17. This does not establish actual future capability or current High confidence."

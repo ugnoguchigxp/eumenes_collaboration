@@ -1,0 +1,58 @@
+{
+	"runtime": "1.4.4",
+	"platform": "darwin",
+	"arch": "arm64",
+	"declaredLocalP95LimitMs": 200,
+	"passed": true,
+	"rows": [
+		{
+			"arm": "baseline",
+			"facts": 0,
+			"iterations": 30,
+			"p50Ms": 0.021875000000008527,
+			"p95Ms": 0.07937499999999886,
+			"rssDeltaBytes": 2916352
+		},
+		{
+			"arm": "baseline",
+			"facts": 999,
+			"iterations": 30,
+			"p50Ms": 1.6081660000000113,
+			"p95Ms": 2.9125419999999878,
+			"rssDeltaBytes": 45793328
+		},
+		{
+			"arm": "baseline",
+			"facts": 1000,
+			"iterations": 30,
+			"p50Ms": 1.4637920000000122,
+			"p95Ms": 2.234958000000006,
+			"rssDeltaBytes": -3375104
+		},
+		{
+			"arm": "candidate",
+			"facts": 0,
+			"iterations": 30,
+			"p50Ms": 0.027290999999991072,
+			"p95Ms": 0.05416700000000674,
+			"rssDeltaBytes": 131072
+		},
+		{
+			"arm": "candidate",
+			"facts": 999,
+			"iterations": 30,
+			"p50Ms": 4.245625000000018,
+			"p95Ms": 5.705624999999998,
+			"rssDeltaBytes": 1441792
+		},
+		{
+			"arm": "candidate",
+			"facts": 1000,
+			"iterations": 30,
+			"p50Ms": 4.206875000000025,
+			"p95Ms": 4.669249999999977,
+			"rssDeltaBytes": -5521408
+		}
+	],
+	"limits": "In-process state workload only; live API timing and cost reported separately. RSS deltas are process-wide, not per-request memory attribution."
+}

@@ -1,0 +1,950 @@
+{
+	"rubric_version": "1.1.0",
+	"mode": "full",
+	"depth": "deep",
+	"technical_profile": "library",
+	"assessment_kind": "current",
+	"target": {
+		"locator": "/Users/y.noguchi/Code/eumenes_collaboration",
+		"snapshot": "a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+		"reviewed_at": "2026-11-05",
+		"stage": "prototype; independent core and fixture host, P1 consumption verified; product adoption and live semantic acceptance incomplete",
+		"scope": "Full/deep current review with library profile. All principal src and example modules, state/contracts, representative tests and evaluation inventory, distribution scripts and prior same-chat/same-snapshot verification inspected. Internal Eumenes integration is the initial target; generic SDK potential considered for the next 12 months. No production changes, live model calls, real terminal input, real UI acceptance, load/OOM attack, or private-source uploads. Fixed host baseline 5bf5ca556ad45a9c8a6b72f81aae85f7505e505c. Existing verification reused because 47 source/config/test files match byte-for-byte and no reviewed source changed. External comparisons are official current docs, not comparative runtime benchmarks. Assumptions: single host writer and host-issued source/grant registries are trusted. Current scope excludes production Eumenes internals beyond the isolated consumption suite, end-user UI, and commercial/investment appraisal; no rubric dimensions declared N/A."
+	},
+	"evidence": [
+		{
+			"id": "E01",
+			"kind": "code",
+			"locator": "/Users/y.noguchi/Code/eumenes_collaboration/src/index.ts; src/agent/action.ts:1-189; src/contracts/index.ts:1-93; src/agent/instructions.ts; package.json @ a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+			"observed_at": "2026-11-05",
+			"observation": "Pure core exposes action/state/brief/session/plan contracts; state/model execution and SQLite are in example; runtime dependencies are Zod and s11tnext. Core does not own process/filesystem/network execution.",
+			"scope": "All principal core and example module boundaries traced; no claim that the product host is authority-safe in every deployment."
+		},
+		{
+			"id": "E02",
+			"kind": "code",
+			"locator": "/Users/y.noguchi/Code/eumenes_collaboration/src/contracts/state.ts:1-49; src/agent/state.ts:12-133; spec/state-contract.md @ a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+			"observed_at": "2026-11-05",
+			"observation": "Schema1 includes source/work/state versions and fact statuses; update verifies stale epoch/revision/source/work, active refs, duplicate ids and lineage cycles. Output state is not reparsed; supersession retracts prior facts regardless of the replacing fact status.",
+			"scope": "Source tracing through proposeFacts and ExampleStateStore.adopt, including positive and negative tests."
+		},
+		{
+			"id": "E03",
+			"kind": "code",
+			"locator": "/Users/y.noguchi/Code/eumenes_collaboration/example/state-store.ts:11-130; example/forget.ts:6-20; example/test/state-store.test.ts; example/test/forget.test.ts @ a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+			"observed_at": "2026-11-05",
+			"observation": "SQLite immediate transactions publish state and receipt together, keep unsupported versions, retain revocation records, roll back injected receipt/redaction failure.",
+			"scope": "Example-only writer, persistent SQLite reopen and failure fixtures; not product migration/rollback acceptance or multi-host distributed transactions."
+		},
+		{
+			"id": "E04",
+			"kind": "code",
+			"locator": "/Users/y.noguchi/Code/eumenes_collaboration/example/adapters/external.ts:1-375; example/adapters/eumenes-terminals.ts; example/test/external.test.ts @ a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+			"observed_at": "2026-11-05",
+			"observation": "Grant digest binds prompt/project/session/generation/revision; host input ownership and session boundaries checked. Permission/authentication cannot use normal answers; duplicates are not resent; completed reports remain independentlyVerified=false. Pending/queued/stopping states have no restart reconciliation.",
+			"scope": "Callbacks and registered port are trusted integration boundary; real external agent/terminal acceptance not run."
+		},
+		{
+			"id": "E05",
+			"kind": "execution",
+			"locator": "/Users/y.noguchi/.codex/visualizations/2026/11/05/01a1aac5-23cd-7411-a6e6-1f8b11ede0b0/eumenes-review/core-verify.log",
+			"observed_at": "2026-11-05",
+			"observation": "Same-chat command bun test ./test: exit 0, 36 tests; bun test ./example/test: exit 0, 21 tests; bun run verify: exit 0, 57 tests/181 expectations, type/format/lint/context checks passed, evaluation inventory32 checked but semanticEvaluation=not_run. Environment macOS arm64, Bun1.4.4; log from isolated identical snapshot.",
+			"scope": "Fixture checks prove contractual host behavior, not actual LLM meaning or UI quality; deliberately not rerun without a new source change."
+		},
+		{
+			"id": "E06",
+			"kind": "execution",
+			"locator": "/Users/y.noguchi/.codex/visualizations/2026/11/05/01a1aac5-23cd-7411-a6e6-1f8b11ede0b0/eumenes-review/pack-check.json",
+			"observed_at": "2026-11-05",
+			"observation": "EUMENES_SOURCE=/Users/y.noguchi/Code/eumenes PACK_CHECK_REQUIRE_HOST=1 bun run pack:check: exit0, status passed, 27 steps. Host baseline 5bf5ca556ad45a9c8a6b72f81aae85f7505e505c; 149outputs/601comparisons. Candidate-domain log records 1184 Bun tests passing, web build passed; installed source-tree digest matched package. No live model use.",
+			"scope": "Disposable .work/push-check-3qoekta8; generated manifest altered only that copy. Product host files/DB/config not modified. Build integrity is consistency evidence, not cryptographic publisher authentication."
+		},
+		{
+			"id": "E07",
+			"kind": "execution",
+			"locator": "/Users/y.noguchi/.codex/visualizations/2026/11/05/01a1aac5-23cd-7411-a6e6-1f8b11ede0b0/eumenes-review/probe-results.json",
+			"observed_at": "2026-11-05",
+			"observation": "bun review-probes.ts: exit0, Bun1.4.4, isolated matching sources, memory SQLite. Valid1000-fact state + valid1-fact proposal adopted with ok:true; persisted1001-fact state fails its own schema; next adopt rejects state_schema_unsupported_or_invalid.",
+			"scope": "Direct end-to-end example-store adoption reproduction; bounded1001 facts, no OOM or product DB."
+		},
+		{
+			"id": "E08",
+			"kind": "execution",
+			"locator": "/Users/y.noguchi/.codex/visualizations/2026/11/05/01a1aac5-23cd-7411-a6e6-1f8b11ede0b0/eumenes-review/probe-results.json",
+			"observed_at": "2026-11-05",
+			"observation": "Same probe: a replacement with status=rejected, sourceRefs=[a1] (active assistant), supersedes=[prior] is accepted and changes the previously confirmed prior condition to retracted.",
+			"scope": "Reproduction of status/evidence contract weakness, not a claim that a real model necessarily emits this proposal. Existing eval task structured-rejected-proposal declares retention of an earlier user decision."
+		},
+		{
+			"id": "E09",
+			"kind": "execution",
+			"locator": "/Users/y.noguchi/.codex/visualizations/2026/11/05/01a1aac5-23cd-7411-a6e6-1f8b11ede0b0/eumenes-review/probe-results.json",
+			"observed_at": "2026-11-05",
+			"observation": "Same probe: decideSession(\"これでいい？\",false) returns close/high/explicit_done. Arithmetic, translation and JSON syntax-check first steps all get browser=true/by=plan despite no explicit site/freshness.",
+			"scope": "Exported helpers currently have no production/example caller in this repo; actual downstream damage not asserted. Clear false semantic classification and conflict with declared general LLM responsibility."
+		},
+		{
+			"id": "E10",
+			"kind": "execution",
+			"locator": "/Users/y.noguchi/.codex/visualizations/2026/11/05/01a1aac5-23cd-7411-a6e6-1f8b11ede0b0/eumenes-review/crash-results.json",
+			"observed_at": "2026-11-05",
+			"observation": "bun review-crash-probe.ts: exit0. Local child processes exit17 during port.deliver and exit18 during port.stop after durable writes. Reopen real file SQLite: queued remains queued on resubmit with zero resends; stopping remains stopping on stop with zero stop calls. No live external process touched.",
+			"scope": "Actual child-process interruption, trusted fixture port; no spontaneous external completion event. Demonstrates absent reconciliation, not that avoiding automatic resend is itself wrong."
+		},
+		{
+			"id": "E11",
+			"kind": "code",
+			"locator": "/Users/y.noguchi/Code/eumenes_collaboration/src/agent/session.ts:14-89; src/agent/plan.ts:42-196; src/agent/brief.ts:13-77; git log 6ba77a5..a23dd54 @ a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+			"observed_at": "2026-11-05",
+			"observation": "Session uses normalized DONE/THANKS/PREFIX lists. Plan uses Japanese separator/summary/keep-open vocabulary and forces first-step browser. History contains several vocabulary-specific plan fixes. completeBrief only formats caller-supplied given/default/mustAsk values and does not itself choose their meaning.",
+			"scope": "Do not conflate structural brief-slot formatting with semantic intent classification. Some later browser choices are deferred to an LLM, but first-step and segmentation/output decisions are not."
+		},
+		{
+			"id": "E12",
+			"kind": "primary_doc",
+			"locator": "/Users/y.noguchi/Code/eumenes_collaboration/plan.md:purpose/LLM responsibility/P0-P6 gates; spec/state-contract.md; spec/implementation.md; eval/README.md; eval/check.ts; eval/tasks.json @ a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+			"observed_at": "2026-11-05",
+			"observation": "Target job is iterative clarification into structures/work requests with provenance, correction and preserved user changes. 32 tasks split4groups×development/holdout; all not_run. Live semantic quality, costs, latency, renderer/external acceptance and product adoption explicitly unmeasured. Verification record still refers to older29 tests.",
+			"scope": "Author goals/limits are not evidence of demand, retention or achieved live-model benefit. Some docs are historical and not current feature results."
+		},
+		{
+			"id": "E13",
+			"kind": "code",
+			"locator": "/Users/y.noguchi/Code/eumenes_collaboration/README.md; package.json; bun.lock; bunfig.toml; LICENSE; node_modules/zod/package.json; node_modules/s11tnext/package.json @ a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+			"observed_at": "2026-11-05",
+			"observation": "Bun1.4.4 pinned; Zod4.4.3, s11tnext0.1.2 exact; lockfile and package file allowlist; project MIT, Zod MIT, s11tnext Apache-2.0. No .github workflow tracked; checks available via scripts. Plan specifies coordinated dependency updates with host.",
+			"scope": "Dependencies read from current installation/lockfile; no complete legal opinion, publisher-signature audit or sustained CI history."
+		},
+		{
+			"id": "E14",
+			"kind": "execution",
+			"locator": "/Users/y.noguchi/.codex/visualizations/2026/11/05/01a1aac5-23cd-7411-a6e6-1f8b11ede0b0/eumenes-review/zod-results.json",
+			"observed_at": "2026-11-05",
+			"observation": "bun audit --production --json: exit1, Bun1.4.4, reports installed Zod4.4.3 in GHSA-mrhx-c7xc-m3w5 affected<4.6.6. bun review-zod-probe.ts: exit0; stateProposalSchema on2001 null upserts (declared max1000) rejects only after generating2002 issues,3.1ms local.",
+			"scope": "Small bounded reachability probe, not resource exhaustion. No network endpoint or attacker capability established for this library. Advisory severity not copied into product severity."
+		},
+		{
+			"id": "E15",
+			"kind": "primary_doc",
+			"locator": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5 ; https://github.com/colinhacks/zod/commit/a0ebf970f2d752e5f58527cd2942ff48be4f46bd",
+			"observed_at": "2026-11-05",
+			"observation": "Advisory published2026-10-01, updated2026-10-23 lists affected<4.6.6 and patched4.6.6. Maintainer fix states max/length/size had run after all elements; now checks before element validation. Installed src/v4/core/schemas.ts1630-1678 has the former all-element issue accumulation.",
+			"scope": "Primary advisory and maintainer patch clarify that .max is not an early allocation bound in installed version. Deployment exploitability still depends on ingress limits and hosting."
+		},
+		{
+			"id": "E16",
+			"kind": "primary_doc",
+			"locator": "https://docs.langchain.com/oss/javascript/langgraph/persistence ; https://docs.langchain.com/oss/javascript/langgraph/interrupts",
+			"observed_at": "2026-11-05",
+			"observation": "Official TypeScript docs describe checkpointers/stores and interrupt/resume with saved state.",
+			"scope": "Observed2026-11-05 current docs, no pinned competitor release or execution benchmark. Framework runtime alternative; not a drop-in replacement for this host-specific fact contract."
+		},
+		{
+			"id": "E17",
+			"kind": "primary_doc",
+			"locator": "https://ai-sdk.dev/docs/ai-sdk-core/tools-and-tool-calling",
+			"observed_at": "2026-11-05",
+			"observation": "Official current v7 docs describe schema tools and toolApproval, deprecated needsApproval, returned request/response approvals.",
+			"scope": "Observed2026-11-05. Generic model/tool/UI application alternative; project-specific provenance/forgetting integration not proven by feature docs alone."
+		},
+		{
+			"id": "E18",
+			"kind": "primary_doc",
+			"locator": "https://openai.github.io/openai-agents-js/guides/human-in-the-loop/ ; https://openai.github.io/openai-agents-js/guides/sessions/",
+			"observed_at": "2026-11-05",
+			"observation": "Official JS SDK docs describe sessions and serialized RunState interruption/approval/resume. Docs explicitly require trusted server storage and application ownership/integrity/replay checks.",
+			"scope": "Observed2026-11-05. Documentation comparison only; no claim that framework automatically supplies this exact fact/supersession/forgetting contract."
+		},
+		{
+			"id": "E19",
+			"kind": "code",
+			"locator": "/Users/y.noguchi/Code/eumenes_collaboration/example/host.ts; example/state-turn.ts; example/scenario.ts; example/adapters/model.ts; example/adapters/claude-model.ts; example/test/model.test.ts @ a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+			"observed_at": "2026-11-05",
+			"observation": "Primary path: host builds system/reference/latest-user messages; schema/model adapter returns proposal; core validates; store revalidates versions, CAS+receipt commits; restart/replay and forgetting tested. Claude adapter tools/settings/MCP/session persistence disabled; positive cost/call budgets, cancellation, busy guard and unknown-cost no-retry tested with fake SDK.",
+			"scope": "No live SDK/model/renderer accepted; SDK config is demonstrable wrapper behavior, not model compliance or actual billed-cost measurement."
+		},
+		{
+			"id": "E20",
+			"kind": "code",
+			"locator": "/Users/y.noguchi/Code/eumenes_collaboration/git log c5a05f1..a23dd54; README.md; plan.md; spec/example-host.md @ a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+			"observed_at": "2026-11-05",
+			"observation": "Single identifiable git author over2026-11-04/05; prototype delivered core/example and isolated host consumption. Explicit stage gates depend on unconfigured live budgets and unperformed P3/P5/P6 acceptance. No rollout/retention records supplied.",
+			"scope": "Short history can support prototype maintenance activity, not long-term contributor health, continued investment or user adoption."
+		},
+		{
+			"id": "E21",
+			"kind": "execution",
+			"locator": "/Users/y.noguchi/.codex/visualizations/2026/11/05/01a1aac5-23cd-7411-a6e6-1f8b11ede0b0/eumenes-review/snapshot-check.json",
+			"observed_at": "2026-11-05",
+			"observation": "47 tracked source/config/test files in the review copy match original SHA256; original git status empty and HEAD a23dd54bf1a32ae2b3b953cfd13eae9935b846b3.",
+			"scope": "Review creates only isolated probes and out-of-repo JSON/log artifacts; does not fix findings, edit original code, publish or send another chat a message."
+		}
+	],
+	"claims": [
+		{
+			"id": "C01",
+			"type": "Fact",
+			"statement": "Core contract and isolated host compatibility checks pass, but untested live semantic outcomes are distinct.",
+			"evidence_ids": ["E05", "E06", "E12"],
+			"limitations": "Same source snapshot; no conclusion about model task success."
+		},
+		{
+			"id": "C02",
+			"type": "Inference",
+			"statement": "The strongest demonstrated value is an Eumenes-specific reusable collaboration contract, rather than a proven general agent platform.",
+			"evidence_ids": ["E01", "E06", "E12", "E16", "E17", "E18"],
+			"limitations": "No user outcome comparison, retained usage or market validation supplied."
+		},
+		{
+			"id": "C03",
+			"type": "Unknown",
+			"statement": "User time saved, semantic task completion, adoption/retention and runtime p50/p95/cost remain unassessed.",
+			"evidence_ids": [],
+			"limitations": "No direct user/runtime outcome evidence supplied; do not score unknown as0."
+		},
+		{
+			"id": "C04",
+			"type": "Inference",
+			"statement": "A dedicated broad agent runtime would duplicate responsibilities already deliberately retained in the host.",
+			"evidence_ids": ["E01", "E06", "E12", "E19"],
+			"limitations": "Recommendation is conditional on existing Eumenes being the initial consumer."
+		},
+		{
+			"id": "C05",
+			"type": "Fact",
+			"statement": "The reported Zod advisory applies to the installed version and parser path; network exploitability was not established.",
+			"evidence_ids": ["E13", "E14", "E15"],
+			"limitations": "No attack-induced OOM run; product severity classified Medium in this library scope."
+		},
+		{
+			"id": "C06",
+			"type": "Assumption",
+			"statement": "The initial adoption decision concerns the existing Eumenes host and a roughly12-month horizon.",
+			"evidence_ids": [],
+			"limitations": "Inferred from repository scope; commercial positioning and actual resource commitments were not supplied."
+		}
+	],
+	"findings": [
+		{
+			"id": "F01",
+			"status": "confirmed",
+			"severity": "High",
+			"priority": "P0",
+			"priority_reason": "影響する機能を製品で信頼する前に対応する。依存と受入条件を先に確定する。",
+			"confidence": "High",
+			"title": "合成後の状態上限を検査せず、更新できない状態を正常保存する",
+			"root_cause": "Separate input schemas validate current and upserts, but merged output lacks full state-schema validation.",
+			"evidence_ids": ["E02", "E03", "E07"],
+			"condition": "Valid1000-fact saved state plus1new valid fact, no removals.",
+			"consequence": "Returns ok:true and persists1001facts; all later updates reject state_schema_unsupported_or_invalid and forgetting also cannot parse it. Data remains raw but normal API recovery fails.",
+			"counterevidence": "Remove-and-add within the same proposal can remain bounded; this workaround does not justify accepting a normal invalid add. SQLite transaction alone cannot prevent a logically invalid success.",
+			"fix": "Validate the complete candidate with the existing collaborationStateSchema before success/adoption; reject overflow with an actionable reason and preserve old state/receipt. Any semantic consolidation/removal remains LLM/user-directed, not silent truncation.",
+			"verification": "999+1 succeeds;1000+1 refuses atomically and preserves state/no receipt;1000-1+1 succeeds; next valid update and forgetting remain possible. Existing suites and pack consumption remain unchanged.",
+			"impacts": [
+				{
+					"track": "technical",
+					"dimension": "correctness",
+					"criterion": "contracts",
+					"reason": "Success output can violate the declared state contract."
+				},
+				{
+					"track": "technical",
+					"dimension": "correctness",
+					"criterion": "edge_cases",
+					"reason": "Ordinary long-lived accumulation boundary fails."
+				},
+				{
+					"track": "technical",
+					"dimension": "testing",
+					"criterion": "risk_coverage",
+					"reason": "Existing tests miss valid-input composition overflow."
+				}
+			]
+		},
+		{
+			"id": "F02",
+			"status": "confirmed",
+			"severity": "High",
+			"priority": "P0",
+			"priority_reason": "影響する機能を製品で信頼する前に対応する。依存と受入条件を先に確定する。",
+			"confidence": "High",
+			"title": "却下済み・未確定の代替案が確定条件を撤回できる",
+			"root_cause": "Retraction applies to every supersedes edge regardless of replacing status/evidence; graph validity alone does not enforce status transition contract.",
+			"evidence_ids": ["E02", "E08", "E12"],
+			"condition": "A rejected replacement references active assistant source and supersedes a confirmed user condition.",
+			"consequence": "The confirmed condition becomes retracted despite no accepted replacement; downstream work reading active conditions can lose an agreed requirement.",
+			"counterevidence": "Confirmed corrections with real user/observation evidence work and existing cycle/source checks hold. Explicit contract currently does not state the accepted/proposed edge behavior precisely, which must be resolved.",
+			"fix": "Specify supersession status semantics. Enforce that proposed/rejected alternatives cannot invalidate accepted conditions; only a status-authorized accepted replacement triggers retraction. Reuse state proposal/host evidence checks, no utterance-specific branch.",
+			"verification": "A matrix over proposed/rejected/retracted/confirmed replacement statuses and user/assistant evidence preserves prior confirmed facts until accepted; existing correction/forgetting tests continue passing.",
+			"impacts": [
+				{
+					"track": "technical",
+					"dimension": "correctness",
+					"criterion": "contracts",
+					"reason": "Proposed/rejected versus confirmed/retracted semantics fail."
+				},
+				{
+					"track": "technical",
+					"dimension": "testing",
+					"criterion": "risk_coverage",
+					"reason": "No executable rejected-alternative state transition coverage despite inventory task."
+				}
+			]
+		},
+		{
+			"id": "F03",
+			"status": "confirmed",
+			"severity": "Medium",
+			"priority": "P1",
+			"priority_reason": "次の関連リリース・製品採用より前に対処する。",
+			"confidence": "High",
+			"title": "終了・計画の意味判断が語句と固定規則へ戻っている",
+			"root_cause": "Normalizing away punctuation and matching DONE lists substitutes for intent interpretation; segmentation/output lists and unconditional first-step browser override LLM judgment.",
+			"evidence_ids": ["E09", "E11", "E12"],
+			"condition": "User asks confirmation with question punctuation or an offline calculation/translation; caller uses newly exported session/plan helpers.",
+			"consequence": "A question is closed with high confidence; first offline step is forced to browser. Vocabulary-specific maintenance grows and core violates its own declared generality. Helpers are currently not connected to example, so product impact is conditional.",
+			"counterevidence": "Some browser choices are delegated to an agent; cited explicit URLs and provided brief slots can legitimately be structural inputs. New helper callers are currently tests only.",
+			"fix": "Reuse the existing model/schema proposal path for intent/session/step/browser decisions, passing full context and available tools. Keep code to validating schema, references, allowed operations and budgets. Retain counterexamples as regressions, not new dictionary entries.",
+			"verification": "Paraphrase/question/negation/multilingual and online/offline task sets accepted through a bounded LLM evaluation; no new phrase-specific product branches; host authorization and budgets still enforced.",
+			"impacts": [
+				{
+					"track": "technical",
+					"dimension": "architecture",
+					"criterion": "fit",
+					"reason": "Fails explicit LLM-native/general-input constraint."
+				},
+				{
+					"track": "technical",
+					"dimension": "maintainability",
+					"criterion": "debt",
+					"reason": "History shows additional vocabulary branches without general resolution."
+				}
+			]
+		},
+		{
+			"id": "F04",
+			"status": "confirmed",
+			"severity": "Medium",
+			"priority": "P1",
+			"priority_reason": "次の関連リリース・製品採用より前に対処する。",
+			"confidence": "High",
+			"title": "外部処理中のプロセス終了後に状態を照合し直せない",
+			"root_cause": "No persisted attempt ownership/expiry/reconciliation transition; caught exceptions handle unknown but abrupt process exit bypasses catch.",
+			"evidence_ids": ["E04", "E10"],
+			"condition": "Example host exits after recording queued or stopping, before awaiting port response; restarts with same SQLite and no completion event.",
+			"consequence": "queued can remain ambiguous indefinitely; stopping short-circuits every later stop call, with no supported reconciliation path. Avoids duplicates but does not restore a truthful actionable state.",
+			"counterevidence": "Replayed requests are correctly not automatically resent, and explicit transport exceptions become unknown. A real host can reconcile externally, but this adapter has no entry for the missing stop/delivery result.",
+			"fix": "Use existing host job/receipt/lifecycle source of truth to reconcile interrupted attempts to unknown or observed final state; expose a safe explicit reconciliation path with attempt/generation checks. Do not blindly resend.",
+			"verification": "Abrupt child-process exit before/after external acknowledgement; reopen with same DB; repeated request never duplicates effects and stale stopping becomes externally reconcilable; old callbacks cannot overwrite new epoch.",
+			"impacts": [
+				{
+					"track": "technical",
+					"dimension": "reliability",
+					"criterion": "recovery",
+					"reason": "Crash windows preserve an unusable in-flight state rather than recoverable uncertainty."
+				},
+				{
+					"track": "technical",
+					"dimension": "testing",
+					"criterion": "risk_coverage",
+					"reason": "Reconstruction-after-throw does not cover real process exit."
+				}
+			]
+		},
+		{
+			"id": "F05",
+			"status": "confirmed",
+			"severity": "Medium",
+			"priority": "P1",
+			"priority_reason": "次の関連リリース・製品採用より前に対処する。",
+			"confidence": "High",
+			"title": "固定Zod版の配列検査が入力上限より先に大量処理する",
+			"root_cause": "Pinned vulnerable direct dependency; collection size gate runs after element parsing.",
+			"evidence_ids": ["E13", "E14", "E15"],
+			"condition": "Oversized invalid collection is passed to public schema/proposeStateUpdate.",
+			"consequence": "Zod4.4.3 is affected by known resource-consumption advisory; max1000 still walks2001bad elements and accumulates2002issues. Large-input resource growth is reachable in the library. No remote/OOM exploit demonstrated.",
+			"counterevidence": "Schemas do reject final oversized input. Host ingress/model limits may bound exposure; library itself has no network endpoint. Advisory High is therefore not assigned as project High.",
+			"fix": "Coordinate minimal patched Zod update with Eumenes (advisory patched4.6.6+) and retain host ingress byte/count limits before costly parsing. Validate actual runtime compatibility; do not merely ignore audit or weaken schemas.",
+			"verification": "Production audit no longer reports this advisory; oversize invalid array rejects before per-element issue growth; frozen install, core57tests and host601parity/pack checks pass.",
+			"impacts": [
+				{
+					"track": "technical",
+					"dimension": "security",
+					"criterion": "abuse",
+					"reason": "Declared max is not an effective early resource bound."
+				},
+				{
+					"track": "technical",
+					"dimension": "supply_chain",
+					"criterion": "dependencies",
+					"reason": "Known affected direct dependency remains fixed."
+				}
+			]
+		}
+	],
+	"tracks": {
+		"technical": {
+			"dimensions": {
+				"architecture": {
+					"criteria": {
+						"boundaries": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E04", "E19", "E06"],
+							"rationale": "Pure proposal core, explicit host execution/storage authority, only2direct runtime dependencies; actual tarball consumed by host and example.",
+							"countercheck": "Checked all core import paths and actual installed resolution; no runtime FS/DB/model SDK leaks into shipped core. Latest semantic helpers are a fit issue separately."
+						},
+						"flow": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E02", "E03", "E19"],
+							"rationale": "Primary versions, proposals, adoption and receipt flow traceable; provenance and lineage explicit. Some transitions are incorrect but ownership and intended consistency are explicit."
+						},
+						"fit": {
+							"status": "assessed",
+							"value": 1,
+							"confidence": "Medium",
+							"evidence_ids": ["E09", "E11", "E12"],
+							"rationale": "Hard-coded session/plan semantic decisions violate the declared LLM-native/general-input constraint in ordinary question/offline requests. F03."
+						}
+					}
+				},
+				"correctness": {
+					"criteria": {
+						"contracts": {
+							"status": "assessed",
+							"value": 1,
+							"confidence": "High",
+							"evidence_ids": ["E02", "E07", "E08"],
+							"rationale": "Normal inputs work but output state can violate its own schema and rejected assistant alternatives retract confirmed conditions. F01/F02."
+						},
+						"edge_cases": {
+							"status": "assessed",
+							"value": 1,
+							"confidence": "High",
+							"evidence_ids": ["E07", "E08", "E09"],
+							"rationale": "Important accumulated-state and rejection boundaries fail; question punctuation also produces a false high-confidence close."
+						},
+						"concurrency": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "High",
+							"evidence_ids": ["E03", "E05", "E19"],
+							"rationale": "Single writer, immediate transactions, stale epoch/work/source rejection, atomic receipt publication and concurrent observation changes have meaningful negative checks.",
+							"countercheck": "Injected receipt/redaction SQL failure rolled back state; stale proposals and UI/Pipeline version changes rejected. Not a distributed multi-writer guarantee."
+						}
+					}
+				},
+				"security": {
+					"criteria": {
+						"access": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "High",
+							"evidence_ids": ["E04", "E05", "E19"],
+							"rationale": "Actual cross-session, authority digest, generation/input-owner and permission/authentication negative checks enforce scoped example actions.",
+							"countercheck": "Other-session read/answer/stop fail; changed request cannot reuse grant; real host callback authorization remains a deployment condition."
+						},
+						"input_secrets": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E02", "E13", "E19"],
+							"rationale": "Strict action/state contracts and separate reference/user/system construction; credentials stay outside core; tool/MCP/settings inheritance constrained. No model injection/security guarantee from static text separation alone."
+						},
+						"abuse": {
+							"status": "assessed",
+							"value": 1,
+							"confidence": "High",
+							"evidence_ids": ["E14", "E15"],
+							"rationale": "Declared collection maxima do not bound parser error allocation in installed Zod;2001 invalid elements produce2002 errors. No remote reachability/OOM severity inferred. F05."
+						}
+					}
+				},
+				"reliability": {
+					"criteria": {
+						"failure": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E03", "E04", "E19"],
+							"rationale": "Structured refusals, transaction rollback, unknown external success and unknown-cost no-retry handle expected caught errors. Abrupt restart gaps and state integrity failures limit maturity."
+						},
+						"recovery": {
+							"status": "assessed",
+							"value": 1,
+							"confidence": "High",
+							"evidence_ids": ["E10", "E04"],
+							"rationale": "Restart preserves durable records but cannot reconcile interrupted queued/stopping attempts; stop remains stopping even on explicit retry. F04."
+						},
+						"resilience": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E19", "E04", "E05"],
+							"rationale": "Model cancellation, finite call/cost bounds and no parallel model call give basic dependency control in documented single-host use. No saturation, outage or actual cost envelope proven."
+						}
+					}
+				},
+				"maintainability": {
+					"criteria": {
+						"clarity": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E02", "E12", "E19"],
+							"rationale": "Compact modules and explicit contracts make normal behavior traceable; historical docs and counts are partly stale and claimed no lexical classification no longer matches newest source."
+						},
+						"change": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E05", "E06", "E20"],
+							"rationale": "Local modules and reproducible type/static/contract checks support changes; new helpers remain only unit-test consumers and no CI execution record exists."
+						},
+						"debt": {
+							"status": "assessed",
+							"value": 1,
+							"confidence": "Medium",
+							"evidence_ids": ["E11", "E09"],
+							"rationale": "Repeated vocabulary-specific fixes are visible in2-day history and still fail ordinary semantic cases, an unbounded maintenance axis against declared generality. F03."
+						}
+					}
+				},
+				"common_components": {
+					"criteria": {
+						"duplication": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "High",
+							"evidence_ids": ["E01", "E06", "E19"],
+							"rationale": "Single public core consumed in example and isolated Eumenes;601 parity checks constrain legacy extraction divergence.",
+							"countercheck": "Checked actual package resolution and installed resource digest. Old product implementation retained before explicit P6 migration, not claimed already deduplicated in production."
+						},
+						"reuse": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "High",
+							"evidence_ids": ["E01", "E06", "E19"],
+							"rationale": "Existing Zod/s11tnext and host version/writer/terminal callbacks reused, without introducing another runtime or DB into core.",
+							"countercheck": "Verified distribution omits example SDK/SQLite and current terminals bridge does not pretend to support in-flight answers."
+						},
+						"abstraction": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E04", "E19"],
+							"rationale": "Model/observation/external ports fit actual example/host integration and are small; multiple independent production consumers not established."
+						}
+					}
+				},
+				"testing": {
+					"criteria": {
+						"risk_coverage": {
+							"status": "assessed",
+							"value": 1,
+							"confidence": "High",
+							"evidence_ids": ["E05", "E07", "E08", "E10", "E12"],
+							"rationale": "Existing suites pass but miss important accumulated-state, rejected-supersession and crash-state failures;32 semantic tasks are inventory-only. F01/F02/F04."
+						},
+						"quality": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "High",
+							"evidence_ids": ["E03", "E05", "E06"],
+							"rationale": "Real SQLite rollback triggers, stale-version negatives, cross-session tests and independent old/new parity make meaningful assertions beyond output snapshots.",
+							"countercheck": "Falsification found untested invariants; tests are valuable structural checks, not proof of model understanding. Scores no higher than3."
+						},
+						"automation": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E05", "E06", "E13"],
+							"rationale": "Documented frozen-lock/scripted local gates and isolation are reproducible. No tracked CI/release workflow or record of automatic regression enforcement observed."
+						}
+					}
+				},
+				"supply_chain": {
+					"criteria": {
+						"dependencies": {
+							"status": "assessed",
+							"value": 1,
+							"confidence": "High",
+							"evidence_ids": ["E13", "E14", "E15"],
+							"rationale": "Provenance/exact locks known, but currently pinned direct dependency has applicable known parser resource advisory; no patched coordinated update yet. F05."
+						},
+						"build_release": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "High",
+							"evidence_ids": ["E06", "E13"],
+							"rationale": "Real tgz contents/exports/generated resources and installed digests checked against fixed host; package-only result distinguished from full acceptance.",
+							"countercheck": "27steps executed and host baseline recorded; checksums do not establish signer identity, supply chain attestation or reproducible bytes across all environments."
+						},
+						"license": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E13"],
+							"rationale": "Own MIT and direct runtime dependency MIT/Apache-2.0 identities and ownership are explicit; dependencies are separately declared instead of silently vendored. Full transitive legal assurance not claimed."
+						}
+					}
+				},
+				"performance": {
+					"criteria": {
+						"budget": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "Actual model latency/token/cost and representative concurrency envelope not measured; finite budget configuration alone is not budget compliance evidence."
+						},
+						"hot_path": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E02", "E03", "E05", "E07"],
+							"rationale": "Map/Set state processing and graph cycle walk fit bounded1000-fact small-host scope; real SQLite/core operations execute. JSON payload size and larger/long-lived workloads not benchmarked."
+						},
+						"measurement": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "No representative workload baseline, tail latency, memory/cost measurements or performance regression series; local fixture timings and3.1ms parser probe are not production measurements."
+						}
+					}
+				},
+				"operability": {
+					"criteria": {
+						"signals": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E02", "E04", "E19"],
+							"rationale": "Reason codes, receipts, versioned observations and distinction of reported versus independently verified completion expose normal state/errors. Stale pending lifecycle states still need reconciliation."
+						},
+						"lifecycle": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E03", "E06", "E12", "E13"],
+							"rationale": "Frozen install, pack/consume, fixture restart/replay/forget and unsupported-schema preservation exercised. Actual product migration/update/rollback remains an explicit uncompleted stage."
+						},
+						"interaction": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E05", "E19"],
+							"rationale": "Developer-facing schema/parse APIs, sample proposal/adoption and typed errors support a basic SDK path. Real end-user UI/accessibility and live semantic interaction not accepted."
+						}
+					}
+				}
+			}
+		},
+		"project": {
+			"dimensions": {
+				"problem": {
+					"criteria": {
+						"need": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E12", "E19"],
+							"rationale": "Concrete initial users are Eumenes developers/operators needing iterative clarification, correction and host-safe structured work. Recurrence is explicit in target workflow, not measured demand."
+						},
+						"impact": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "No measured current clarification cost, incorrect-edit rate, user time or downstream operational loss supplied."
+						},
+						"validation": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "Author plans and fixture scenarios do not establish direct repeated user/operational need evidence."
+						}
+					}
+				},
+				"solution": {
+					"criteria": {
+						"mechanism": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E02", "E03", "E06", "E19"],
+							"rationale": "Proposal/version/provenance validation and host adoption demonstrate the narrow contract mechanism; representative live LLM interpretation remains unvalidated."
+						},
+						"experience": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E05", "E06", "E19"],
+							"rationale": "Developer can use fixed stack and fixture example through package consumption; live/product deployment path is explicitly incomplete rather than implied to work."
+						},
+						"outcomes": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "No attributable real-model or user outcomes against current baseline; all32 evaluation tasks not_run."
+						}
+					}
+				},
+				"differentiation": {
+					"criteria": {
+						"alternatives": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E06", "E16", "E17", "E18"],
+							"rationale": "Credible small option for the existing Eumenes host: replaceable proposal core validated at its own public package boundary; alternative runtimes offer wider general orchestration."
+						},
+						"advantage": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "No comparable task/cost/maintenance benchmark establishes an actual advantage over host-native extraction plus generic SDKs."
+						},
+						"tradeoffs": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E06", "E12", "E16", "E17", "E18"],
+							"rationale": "Fits an existing host that wants to retain writer/queue/permissions; outside that host, consumers must supply execution/persistence/rendering that broader frameworks address."
+						}
+					}
+				},
+				"novelty": {
+					"criteria": {
+						"prior_art": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "Primitive state/prompt/receipt/checkpoint patterns are established; a distinct novel contribution of this combination has not been compared or claimed with sufficient evidence."
+						},
+						"substance": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "No experiment isolates benefit from any specifically novel component."
+						},
+						"verification": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "No reproducible prior-art benchmark or independent validation of a new contribution."
+						}
+					}
+				},
+				"adoption": {
+					"criteria": {
+						"entry": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "Fixture setup works, but product migration, operating/training/support burden and justified adoption cost are not observed."
+						},
+						"reach": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "One existing host is identifiable; actual motivated-user access or rollout evidence is absent."
+						},
+						"retention": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "No retained use or repeated realized benefit records supplied."
+						}
+					}
+				},
+				"defensibility": {
+					"criteria": {
+						"assets": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E02", "E06", "E12"],
+							"rationale": "Versioned host contracts, source-aware fixtures, evaluation inventory and consumption harness are maintainable integration/knowledge assets; not a demonstrated moat."
+						},
+						"substitution": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "No evidence that usefulness persists against an adequate generic framework or platform-native feature after integration costs."
+						},
+						"incentives": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "Maintainer exists, but sustained resource/contribution incentives not established from2-day history."
+						}
+					}
+				},
+				"execution": {
+					"criteria": {
+						"delivery": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E05", "E06", "E12", "E20"],
+							"rationale": "Declared prototype core/example and P1 consumption delivered with executed checks. P3/P5/P6 remain explicitly unfinished and are not treated as delivered."
+						},
+						"focus": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "Plan has staged exits but staffing/time/live-budget commitments are unavailable; feasibility against known resources cannot be assessed."
+						},
+						"feedback": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "Git fixes show maintenance, but user/operational feedback provenance and verified user outcomes are unavailable; commit subjects alone insufficient."
+						}
+					}
+				},
+				"timing": {
+					"criteria": {
+						"drivers": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "Current enabling SDK/runtime capabilities documented, but concrete target-user demand/current urgency not independently established."
+						},
+						"readiness": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E06", "E13", "E16", "E17", "E18"],
+							"rationale": "Required language/runtime/schema and host integration conditions are attainable; actual fixed-host consumption passes. User/product rollout readiness still unproved."
+						},
+						"window": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "Resource availability and response to platform evolution not observed; no justified competitive-window forecast."
+						}
+					}
+				},
+				"health": {
+					"criteria": {
+						"ownership": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E12", "E13", "E20"],
+							"rationale": "Identifiable maintainer and responsibility/contracts documentation provide basic ownership and knowledge location; no handover/bus-factor resilience evidence."
+						},
+						"activity": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E05", "E06", "E20"],
+							"rationale": "Prototype fixes and relevant checks are actually performed; short record supports basic current maintenance only, not sustainable long-term health."
+						},
+						"governance": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "Decision records exist, but ongoing responsibility coverage and sustained resources beyond present author not established."
+						}
+					}
+				},
+				"expansion": {
+					"criteria": {
+						"adjacency": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E02", "E06", "E12", "E19"],
+							"rationale": "Same generic versioned proposal core has credible adjacent structured/UI/Pipeline/external uses, some demonstrated as fixtures/host extraction; adjacent actual demand/pilots unknown."
+						},
+						"scalability": {
+							"status": "unknown",
+							"value": null,
+							"unknown_reason": "No broader rollout or support/resource cost measurements; portability is limited by deliberate Bun/TypeScript-first distribution."
+						},
+						"path": {
+							"status": "assessed",
+							"value": 1,
+							"confidence": "Medium",
+							"evidence_ids": ["E12", "E20"],
+							"rationale": "Sequence has specific entry/exit gates but live evaluation budget/resources are explicitly unconfigured; unresourced expansion plan not yet a feasible committed path."
+						}
+					}
+				}
+			}
+		}
+	},
+	"backlog": [
+		{
+			"reference": "F01",
+			"priority": "P0",
+			"location": "src/agent/state.ts candidate-state return; example adoption",
+			"action": "既存state schemaで合成後を再検査し原子的に拒否",
+			"dependencies": "なし",
+			"acceptance": "999/1000/1001件の追加・削除とreceipt維持",
+			"criteria": [
+				"correctness.contracts",
+				"correctness.edge_cases",
+				"testing.risk_coverage"
+			],
+			"effort": "S: existing schema reused; one update boundary and regression matrix"
+		},
+		{
+			"reference": "F02",
+			"priority": "P0",
+			"location": "src/agent/state.ts supersession pass; spec/state-contract.md",
+			"action": "statusと出所に応じた置換・撤回の契約を確定して強制",
+			"dependencies": "Fact status semantics decision; not phrase-specific intent rules",
+			"acceptance": "却下/提案は確定条件を撤回せず、採用した訂正は撤回する",
+			"criteria": ["correctness.contracts", "testing.risk_coverage"],
+			"effort": "M: contract decision plus status/source transition matrix"
+		},
+		{
+			"reference": "F05",
+			"priority": "P1",
+			"location": "package.json/bun.lock plus coordinated host dependency",
+			"action": "修正済みZodへ同期更新し入口のサイズ制限を確認",
+			"dependencies": "Host compatibility with patched version",
+			"acceptance": "audit advisory resolved, early bound,57tests/601parity/pack pass",
+			"criteria": ["security.abuse", "supply_chain.dependencies"],
+			"effort": "M: patch straightforward; host-wide package compatibility determines scope"
+		},
+		{
+			"reference": "F03",
+			"priority": "P1",
+			"location": "src/agent/session.ts and plan.ts, existing model/schema host path",
+			"action": "意味の判断をLLM提案へ戻し、schema/権限/予算検査だけ残す",
+			"dependencies": "Bounded live evaluation configuration and budget",
+			"acceptance": "言い換え・否定・疑問・多言語・offline/onlineを語句分岐なしで評価",
+			"criteria": ["architecture.fit", "maintainability.debt"],
+			"effort": "M: localized APIs but integration and semantic evaluation needed"
+		},
+		{
+			"reference": "F04",
+			"priority": "P1",
+			"location": "example/adapters/external.ts plus actual host lifecycle adapter",
+			"action": "中断した外部操作を既存host正本へ照合しunknown/finalへ復帰",
+			"dependencies": "Supported host query/reconciliation contact; generation/attempt contract",
+			"acceptance": "実プロセス終了後に停止・送信状態を重複実行せず照合可能",
+			"criteria": ["reliability.recovery", "testing.risk_coverage"],
+			"effort": "M: state transitions and fault probes; no new general runtime"
+		},
+		{
+			"reference": "E12",
+			"priority": "P1",
+			"location": "eval/, example model interface; one initial host workflow",
+			"action": "32課題の実行・採用/拒否/品質/費用/時間を測る評価を先に作る",
+			"dependencies": "User-supplied explicit model/test settings and cost cap; do not run paid calls in this review",
+			"acceptance": "固定baselineとholdoutの複数ターン比較、条件保持率・誤撤回・介入・p50/p95・費用の記録",
+			"criteria": [
+				"solution.outcomes",
+				"problem.impact",
+				"performance.budget",
+				"performance.measurement"
+			],
+			"effort": "M: fixture inventory exists; live harness and human acceptance remain"
+		},
+		{
+			"reference": "E03/E06",
+			"priority": "P2",
+			"location": "state persistence, host contracts, packaging",
+			"action": "版・権限・receipt・忘却の境界と実tgz消費試験を維持",
+			"dependencies": "Any implementation change must retain these checks",
+			"acceptance": "既存negative/rollback/601parity tests remain meaningful",
+			"criteria": [
+				"architecture.boundaries",
+				"correctness.concurrency",
+				"security.access",
+				"supply_chain.build_release"
+			],
+			"effort": "S ongoing: preserve existing tested mechanisms rather than replace wholesale"
+		}
+	],
+	"scenario_note": "No Expected numeric score calculated: proposed fixes have not been implemented/accepted, and live outcomes/adoption/performance anchors have no defensible numeric targets. Re-evaluate a new immutable snapshot after acceptance; do not assign fixed bonuses per fix."
+}
