@@ -12,7 +12,7 @@ GrokBotの`feat/collab-agent-integration`（a23dd54）はmainへfast-forwardで�
 | F04 中断後の照合不能 | attemptによる照合と古い応答の無効化を追加。送信・停止中の実プロセス終了、受付不明、忘却、遅延回答を検証。自動再送しない |
 | F05 依存と過大入力 | Zod4.6.6へ固定。JSONの2MiB・100000node・depth64を検査し、エスケープ・Unicode・循環も制限。production auditは3packageで警告0 |
 
-追加点検では、JSONエスケープの容量漏れ、合成後容量漏れ、SDK終了時の後処理失敗、遅延回答の返却値が古い成功になる問題を再現し、回帰試験を追加して修正した。部分試験→SQLite/外部接点の結合→全体verifyの順で確認。最終verifyは60試験、742 assertion。二つのSQLite接続の競合、receipt失敗のrollback、忘却と外部redactionの同時確定、HTTP取消・未完了・拒否・503・切断・過大応答も確認した。
+追加点検では、JSONエスケープの容量漏れ、合成後容量漏れ、SDK終了時の後処理失敗、遅延回答の返却値が古い成功になる問題を再現し、回帰試験を追加して修正した。部分試験→SQLite/外部接点の結合→全体verifyの順で確認。当該時点のverifyは60試験、742 assertion。後続の本文生成接続を含む最終ローカル試験は61試験、747 assertionで合格。二つのSQLite接続の競合、receipt失敗のrollback、忘却と外部redactionの同時確定、HTTP取消・未完了・拒否・503・切断・過大応答も確認した。
 
 独立配布のstrict packはe5d0dafで27段合格、149出力/601比較、旧specialist64試験、隔離hostの1184 Bun試験・28 Vitest試験・Web build合格。後続2afaf80はexampleの遅延回答だけの変更で、配布するsrc/contexts/catalog/package/lockが同一であることを確認した。最新exampleは60試験で別途検証した。CIも同じfixed install・verify・audit・strict packを実行する。[coreのCI](https://github.com/ugnoguchigxp/eumenes_collaboration/actions/runs/42015768897)、[exampleのCI](https://github.com/ugnoguchigxp/eumenes_collaboration/actions/runs/42016708172)。各runの実状態はリンク先で照合する。
 
@@ -33,7 +33,7 @@ Claude Messages APIの`claude-haiku-5-5`、OpenAI Responses APIの`gpt-6-luna`�
 
 ## 費用と時間
 
-全試行・中断・診断・事前確認を一つの永続台帳で計上した。上限10米ドル、保守的概算3.2016775ドル、費用不明45呼出しの予約2.293756ドル、合計5.4954335ドル。台帳の予約を破棄したり、不明額を0へ変更したりしていない。既知usageを基本単価で計算した参考値は0.6403355ドルだが、請求額を確認した値ではない。古い実行ではcache/reasoningの内訳を保持しておらず、後続adapterで今後の記録に対応した。
+固定32課題比較の終了時点では、全試行・中断・診断・事前確認を一つの永続台帳で計上した。上限10米ドル、保守的概算3.2016775ドル、費用不明45呼出しの予約2.293756ドル、合計5.4954335ドル。台帳の予約を破棄したり、不明額を0へ変更したりしていない。既知usageを基本単価で計算した参考値は0.6403355ドルだが、請求額を確認した値ではない。古い実行ではcache/reasoningの内訳を保持しておらず、後続adapterで今後の記録に対応した。
 
 価格根拠は[OpenAI公式](https://developers.openai.com/api/docs/pricing)と[Anthropic公式](https://platform.claude.com/docs/en/about-claude/pricing)。短い文脈の基本単価より保守的な入力0.50ドル・出力2.50ドル/100万tokenで概算し、リクエスト前にはさらに余裕を取って予約した。両APIを合わせて新しい予約が上限を超える呼出しは送信しない。
 
@@ -46,3 +46,11 @@ coreのローカル測定は各条件30回、0/999/1000fact。改善版p95は最
 非課金の確認は`bun install --frozen-lockfile`、`bun run verify`、`bun audit --production`、`EUMENES_SOURCE=<hostのGit checkout> PACK_CHECK_REQUIRE_HOST=1 bun run pack:check`。既存rawログの再集計は`bun eval/summarize.ts run-v3`。有料の実行手順と0.2移行・異常状態・unknownの復旧は[更新手順](upgrading-0.2.md)を参照する。
 
 実renderer/Pipelineの操作、実外部agent、製品dialogueのmigration・切戻し・bundle採用、他の担当者による引継ぎ、利用者の受入と継続効果は未確認。Claudeの意味合格基準も未達。計画全体の完了、製品採用、利用価値80点の証拠とはしない。技術再評価は同じrubric1.1.0/libraryで別の実測ledgerに記録し、仮定上の目標81.4とは区別する。
+
+## 独立プロジェクトに閉じた最終段階
+
+最新指示により、今回の完了条件を本repo内の技術品質80点超へ固定した。CIの追加・再実行・完了待ちは省略し、Eumenes本体への取り込みは実行していない。実製品受入・継続利用は将来工程へ残す。rubric/libraryの30技術項目・重み・基準は変えない。
+
+[Markdown小説の反復改訂](writing-pilot-2026-11-05.md)を追加。両APIが7回ずつ改稿し、実ファイル保存・再読込・版照合を通過、模擬手編集文を記号まで保持した。本文生成側への原文保持指示と、登録済み操作のnative引数schemaを再利用する接続を追加した。Lunaの人物名省略による自動採点失敗を残し、全意味条件の合格とはしない。
+
+追加試行を含む最終台帳は6.268323ドル（保守的概算3.974567＋費用不明予約2.293756）。最後のローカル検査は61試験・747 assertion、型検査・lint合格。配布src/catalog/package/lockはe5d0dafと同一で、strict packは既存の一致確認と成功結果を再利用した。再評価の算定は[品質再評価](quality-review-2026-11-05.md)にまとめる。

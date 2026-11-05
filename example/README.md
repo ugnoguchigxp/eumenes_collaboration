@@ -43,3 +43,5 @@ hostはExternalTarget、ExternalGrant、現在epoch、有効な出所を発行�
 ここでのsession/世代/質問の契約はexampleのfixtureで検証している。実Claude Codeの操作品質、実rendererの表示、製品dialogueのmigrationを検証済みとは扱わない。
 
 直接APIは`adapters/api-model.ts`、永続した合計予算は`adapters/api-budget.ts`に分ける。Messages/Responses API、toolなし、自動retryなし、モデル置換なし。`decision-turn.ts`はLLMの構造化したsession/plan提案を既存ModelAdapterへ接続する。実行・更新・復旧の詳細は[0.2更新手順](../spec/upgrading-0.2.md)、結果は[品質改善記録](../spec/quality-execution-2026-11-05.md)を参照。SDK接続のfixture成功と直接APIの成功は別に記録する。
+
+`propose`の第4引数にはhostが登録した操作の引数JSON Schemaを渡せる。モデルへnativeな構造を示して、長文を汎用JSON文字列へ二重化する費用を避ける。実行側のaction、操作引数、版・権限の検査は引き続き必要。原文保持の指示は本文生成側でも適用する。[小説試験](../spec/writing-pilot-2026-11-05.md)に反復制作の例を置いた。

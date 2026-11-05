@@ -1,0 +1,1818 @@
+{
+	"snapshot": "e28054af2d838d68419eda4a08f13028e034833f",
+	"scope": "Synthetic development pilot selected by the user; a real Markdown artifact is written after host validation. Simulated edits are not a human acceptance test.",
+	"humanAcceptance": "pending user review",
+	"reports": [
+		{
+			"provider": "anthropic",
+			"ok": true,
+			"ms": 153117.989083,
+			"revision": 8,
+			"savedTurns": 7,
+			"manualEndingExact": true,
+			"judgement": {
+				"constraintsPreserved": true,
+				"revisionsApplied": true,
+				"coherentStory": true,
+				"manualEditPreserved": true,
+				"reason": "7件すべてに保存済みの改稿が示されています。最終稿は澪の一人称で、港町の天文台、澪と律、歯車を照合して交換する物理的な修理、病院向け部品の集荷時刻を気にする律を保ち、病人は登場しません。対立は解決より前に導入され、澪の謝罪と持ち主への確認で収まり、見出し・人物名・手編集の末尾文も維持されています。これは提示された原稿に基づく評価で、実際の人間による受容を示すものではありません。"
+			},
+			"finalState": {
+				"stateSchemaVersion": 1,
+				"coreContractVersion": 1,
+				"packageVersion": "0.2.0",
+				"sessionId": "anthropic",
+				"revision": 7,
+				"sourceRevision": 7,
+				"work": {
+					"ref": "novel:anthropic",
+					"revision": 7,
+					"digest": "2386ed3289fab468e52be66817858efaf61d8b6fe3d4d95cb66494977b29f349"
+				},
+				"facts": [
+					{
+						"id": "cond-format-markdown",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "Markdownで短編小説を書く",
+						"sourceRefs": ["u1"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-setting-observatory",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "舞台は港町の古い天文台",
+						"sourceRefs": ["u1"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-characters",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "主人公は修理工の澪と配達員の律",
+						"sourceRefs": ["u1"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-heading",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "見出しを付ける",
+						"sourceRefs": ["u1"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-length",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "本文は600〜900字程度",
+						"sourceRefs": ["u1"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-plot-clock-repair",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "二人が壊れた時計を直す話にする",
+						"sourceRefs": ["u1"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-no-supernatural",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "超常現象で解決しない",
+						"sourceRefs": ["u1"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-narration-first-person-mio",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "語りは澪の一人称にする",
+						"sourceRefs": ["u2"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-quiet-atmosphere",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "静かな雰囲気は残す",
+						"sourceRefs": ["u3"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-conflict-scene",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "二人が対立する場面を一つ入れる",
+						"sourceRefs": ["u3"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-no-reconciliation-this-version",
+						"kind": "condition",
+						"status": "retracted",
+						"value": "この版では二人を和解させない",
+						"sourceRefs": ["u5"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-keep-handwritten-last-line",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "末尾に利用者が手で加えた一文「明日、同じ時刻に。」はそのまま最後に残す",
+						"sourceRefs": ["u4"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-mio-urgency-parts-pickup",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "律が急いでいる理由は、病院へ届ける部品の集荷時刻が迫っていることにする",
+						"sourceRefs": ["u4"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-no-added-sick-characters",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "病人の登場人物は追加しない",
+						"sourceRefs": ["u4"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-repair-by-concrete-work",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "時計は二人の具体的な作業で直す",
+						"sourceRefs": ["u5"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-resolve-conflict",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "二人の対立を解く",
+						"sourceRefs": ["u5"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-repair-success-reason-readable",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "修理に成功した理由が読んで分かるようにする",
+						"sourceRefs": ["u5"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-keep-heading-and-names",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "いまの見出しと人物名（澪・律）は変えない",
+						"sourceRefs": ["u6"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-trim-redundant-explanation",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "冗長な説明を削る",
+						"sourceRefs": ["u6"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-keep-short-dialogue",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "短い会話を生かす",
+						"sourceRefs": ["u6"],
+						"supersedes": []
+					},
+					{
+						"id": "cond-final-tension-before-clock-starts",
+						"kind": "condition",
+						"status": "confirmed",
+						"value": "時計が動き出す直前の緊張を少し強める",
+						"sourceRefs": ["u7"],
+						"supersedes": []
+					}
+				]
+			},
+			"history": [
+				{
+					"turn": 1,
+					"request": "Markdownで短編小説を書いてください。舞台は港町の古い天文台、主人公は修理工の澪と配達員の律です。見出しを付け、本文は600〜900字程度で、二人が壊れた時計を直す話にしてください。超常現象で解決しないでください。",
+					"revision": 1,
+					"filename": "revision-1.md",
+					"digest": "c2003c4dea5beb1c8b19ea8b485ff9330f8566447833ef0093571442e1a07e2d",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "anthropic",
+						"revision": 1,
+						"sourceRevision": 1,
+						"work": {
+							"ref": "novel:anthropic",
+							"revision": 0,
+							"digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+						},
+						"facts": [
+							{
+								"id": "cond-format-markdown",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "Markdownで短編小説を書く",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-setting-observatory",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-heading",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "見出しを付ける",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-plot-clock-repair",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が壊れた時計を直す話にする",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-supernatural",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "超常現象で解決しない",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 0,
+							"content": "# 潮風と時計\n\n港町の外れに、もう誰も使わなくなった古い天文台があった。白い壁は潮風で黄ばみ、ドームの鉄の扉は錆びついて開かない。その天文台の管理を任されているのは、町の修理工をしている澪だった。\n\nある日、配達員の律が一つの小箱を抱えて坂を上ってきた。「これ、天文台の人から預かったんです。直せるなら直してほしいって」。箱を開けると、真鍮の古い懐中時計が入っていた。ガラスは割れ、針は止まったままだ。\n\n澪は時計を手に取り、ルーペで歯車を覗いた。「ゼンマイは生きてる。歯車の一本が欠けてるだけ。予備の部品を探せば、動くと思う」\n\n二人は天文台の工房へ入った。棚には埃をかぶった部品箱が積まれている。律は懐中電灯を持ち、澪は一つずつ箱を開けた。古い油の匂いと、海からの風が混じり合う。\n\n「これ、合うかも」と律が声を上げた。小さな真鍮の歯車を差し出す。澪は慎重に欠けた箇所へはめ込み、細いピンセットで固定した。指先が震える。ルーペ越しに歯車が噛み合うのを確かめると、息を詰めてゼンマイを巻いた。\n\nカチ、カチ。\n\n止まっていた秒針が、ゆっくりと動き出した。律が小さく笑う。「やっと、時間が戻ったね」\n\n澪は時計を窓辺に置いた。夕日が差し込み、文字盤が金色に光る。二人はしばらく黙ったまま、規則正しい音に耳を澄ませた。\n\n時計を届ける日、天文台の持ち主は静かに頷いた。「ありがとう。父が大切にしていたものなんだ」。外へ出ると、港には夕暮れの光が広がっていた。遠くで汽笛が鳴る。律は空を見上げ、澪は手の中の懐かしい音を、もう一度確かめるように聞いていた。"
+						}
+					}
+				},
+				{
+					"turn": 2,
+					"request": "語りを澪の一人称に直してください。舞台、人物、時計を自然な原因で直す条件は残してください。",
+					"revision": 2,
+					"filename": "revision-2.md",
+					"digest": "a25530e41bd0e39b42acaf221d10e206de1a4a514178d1800286c169f816b757",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "anthropic",
+						"revision": 2,
+						"sourceRevision": 2,
+						"work": {
+							"ref": "novel:anthropic",
+							"revision": 1,
+							"digest": "c2003c4dea5beb1c8b19ea8b485ff9330f8566447833ef0093571442e1a07e2d"
+						},
+						"facts": [
+							{
+								"id": "cond-format-markdown",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "Markdownで短編小説を書く",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-setting-observatory",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-heading",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "見出しを付ける",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-plot-clock-repair",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が壊れた時計を直す話にする",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-supernatural",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "超常現象で解決しない",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-narration-first-person-mio",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "語りは澪の一人称にする",
+								"sourceRefs": ["u2"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 1,
+							"content": "# 潮風と時計\n\n港町の外れに、もう誰も使わなくなった古い天文台がある。白い壁は潮風で黄ばみ、ドームの鉄の扉は錆びついて開かない。私はその天文台の管理を任されていて、町では修理工をしている。\n\nある日、配達員の律が一つの小箱を抱えて坂を上ってきた。「これ、天文台の人から預かったんです。直せるなら直してほしいって」。箱を開けると、真鍮の古い懐中時計が入っていた。ガラスは割れ、針は止まったままだ。\n\n私は時計を手に取り、ルーペで歯車を覗いた。「ゼンマイは生きてる。歯車の一本が欠けてるだけ。予備の部品を探せば、動くと思う」\n\n二人で天文台の工房へ入った。棚には埃をかぶった部品箱が積まれている。律は懐中電灯を持ち、私は一つずつ箱を開けた。古い油の匂いと、海からの風が混じり合う。\n\n「これ、合うかも」と律が声を上げた。小さな真鍮の歯車を差し出す。私は慎重に欠けた箇所へはめ込み、細いピンセットで固定した。指先が震える。ルーペ越しに歯車が噛み合うのを確かめると、息を詰めてゼンマイを巻いた。\n\nカチ、カチ。\n\n止まっていた秒針が、ゆっくりと動き出した。律が小さく笑う。「やっと、時間が戻ったね」\n\n私は時計を窓辺に置いた。夕日が差し込み、文字盤が金色に光る。二人はしばらく黙ったまま、規則正しい音に耳を澄ませた。\n\n時計を届ける日、天文台の持ち主は静かに頷いた。「ありがとう。父が大切にしていたものなんだ」。外へ出ると、港には夕暮れの光が広がっていた。遠くで汽笛が鳴る。律は空を見上げ、私は手の中の懐かしい音を、もう一度確かめるように聞いていた。"
+						}
+					}
+				},
+				{
+					"turn": 3,
+					"request": "静かな雰囲気は残し、二人が対立する場面を一つ入れてください。この版ではまだ和解させないでください。",
+					"revision": 3,
+					"filename": "revision-3.md",
+					"digest": "c9a79d5c37972d04811c050d445817ce4214557b5c2d430c020fa1cd1a83080f",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "anthropic",
+						"revision": 3,
+						"sourceRevision": 3,
+						"work": {
+							"ref": "novel:anthropic",
+							"revision": 2,
+							"digest": "a25530e41bd0e39b42acaf221d10e206de1a4a514178d1800286c169f816b757"
+						},
+						"facts": [
+							{
+								"id": "cond-format-markdown",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "Markdownで短編小説を書く",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-setting-observatory",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-heading",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "見出しを付ける",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-plot-clock-repair",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が壊れた時計を直す話にする",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-supernatural",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "超常現象で解決しない",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-narration-first-person-mio",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "語りは澪の一人称にする",
+								"sourceRefs": ["u2"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-quiet-atmosphere",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "静かな雰囲気は残す",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-conflict-scene",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が対立する場面を一つ入れる",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-reconciliation-this-version",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "この版では二人を和解させない",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 2,
+							"content": "# 潮風と時計\n\n港町の外れに、もう誰も使わなくなった古い天文台がある。白い壁は潮風で黄ばみ、ドームの鉄の扉は錆びついて開かない。私はその天文台の管理を任されていて、町では修理工をしている。\n\nある日、配達員の律が一つの小箱を抱えて坂を上ってきた。「これ、天文台の人から預かったんです。直せるなら直してほしいって」。箱を開けると、真鍮の古い懐中時計が入っていた。ガラスは割れ、針は止まったままだ。\n\n私は時計を手に取り、ルーペで歯車を覗いた。「ゼンマイは生きてる。歯車の一本が欠けてるだけ。予備の部品を探せば、動くと思う」\n\n二人で天文台の工房へ入った。棚には埃をかぶった部品箱が積まれている。律は懐中電灯を持ち、私は一つずつ箱を開けた。古い油の匂いと、海からの風が混じり合う。\n\n「これ、合うかも」と律が声を上げた。小さな真鍮の歯車を差し出す。私は慎重に欠けた箇所へはめ込み、細いピンセットで固定した。指先が震える。ルーペ越しに歯車が噛み合うのを確かめると、息を詰めてゼンマイを巻いた。\n\nカチ、カチ。\n\n止まっていた秒針が、ゆっくりと動き出した。律が小さく笑う。「やっと、時間が戻ったね」\n\n私は時計を窓辺に置いた。夕日が差し込み、文字盤が金色に光る。二人はしばらく黙ったまま、規則正しい音に耳を澄ませた。\n\n「その歯車、別の時計から外したものでしょう」と律が言った。声が少し尖っている。「勝手に使えば、持ち主に説明できない」。私は手を止めずに答えた。「動けば、それで十分だ」。律は黙って箱を閉じ、窓の外へ視線を逸らした。\n\n時計を届ける日、天文台の持ち主は静かに頷いた。「ありがとう。父が大切にしていたものなんだ」。外へ出ると、港には夕暮れの光が広がっていた。遠くで汽笛が鳴る。律は空を見上げ、私は手の中の懐かしい音を、もう一度確かめるように聞いていた。\n"
+						}
+					}
+				},
+				{
+					"turn": 4,
+					"request": "末尾に私が手で加えた一文は、そのまま最後に残してください。律が急いでいる理由を、病院へ届ける部品の集荷時刻が迫っていることに直してください。病人の登場人物は追加しないでください。",
+					"revision": 5,
+					"filename": "revision-5.md",
+					"digest": "8576d55e519ca7110b61733fe567d0e863a7cc2a5840c8e0e938743a7c2534bd",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "anthropic",
+						"revision": 4,
+						"sourceRevision": 4,
+						"work": {
+							"ref": "novel:anthropic",
+							"revision": 4,
+							"digest": "58819c81a66c6b317024773d87ed7ff965da3420cb6f7a287449ae66df606c2f"
+						},
+						"facts": [
+							{
+								"id": "cond-format-markdown",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "Markdownで短編小説を書く",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-setting-observatory",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-heading",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "見出しを付ける",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-plot-clock-repair",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が壊れた時計を直す話にする",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-supernatural",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "超常現象で解決しない",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-narration-first-person-mio",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "語りは澪の一人称にする",
+								"sourceRefs": ["u2"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-quiet-atmosphere",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "静かな雰囲気は残す",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-conflict-scene",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が対立する場面を一つ入れる",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-reconciliation-this-version",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "この版では二人を和解させない",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-keep-handwritten-last-line",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "末尾に利用者が手で加えた一文「明日、同じ時刻に。」はそのまま最後に残す",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-mio-urgency-parts-pickup",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "律が急いでいる理由は、病院へ届ける部品の集荷時刻が迫っていることにする",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-added-sick-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "病人の登場人物は追加しない",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 4,
+							"content": "# 潮風と時計\n\n港町の外れに、もう誰も使わなくなった古い天文台がある。白い壁は潮風で黄ばみ、ドームの鉄の扉は錆びついて開かない。私はその天文台の管理を任されていて、町では修理工をしている。\n\nある日、配達員の律が一つの小箱を抱えて坂を上ってきた。律は急いでいた。病院へ届ける部品の集荷時刻が迫っているからだ。「これ、天文台の人から預かったんです。直せるなら直してほしいって」。箱を開けると、真鍮の古い懐中時計が入っていた。ガラスは割れ、針は止まったままだ。\n\n私は時計を手に取り、ルーペで歯車を覗いた。「ゼンマイは生きてる。歯車の一本が欠けてるだけ。予備の部品を探せば、動くと思う」\n\n二人で天文台の工房へ入った。棚には埃をかぶった部品箱が積まれている。律は懐中電灯を持ち、私は一つずつ箱を開けた。古い油の匂いと、海からの風が混じり合う。\n\n「これ、合うかも」と律が声を上げた。小さな真鍮の歯車を差し出す。私は慎重に欠けた箇所へはめ込み、細いピンセットで固定した。指先が震える。ルーペ越しに歯車が噛み合うのを確かめると、息を詰めてゼンマイを巻いた。\n\nカチ、カチ。\n\n止まっていた秒針が、ゆっくりと動き出した。律が小さく笑う。「やっと、時間が戻ったね」\n\n私は時計を窓辺に置いた。夕日が差し込み、文字盤が金色に光る。二人はしばらく黙ったまま、規則正しい音に耳を澄ませた。\n\n「その歯車、別の時計から外したものでしょう」と律が言った。声が少し尖っている。「勝手に使えば、持ち主に説明できない」。私は手を止めずに答えた。「動けば、それで十分だ」。律は黙って箱を閉じ、窓の外へ視線を逸らした。\n\n時計を届ける日、天文台の持ち主は静かに頷いた。「ありがとう。父が大切にしていたものなんだ」。外へ出ると、港には夕暮れの光が広がっていた。遠くで汽笛が鳴る。律は空を見上げ、私は手の中の懐かしい音を、もう一度確かめるように聞いていた。\n\n\n「明日、同じ時刻に。」\n\n"
+						},
+						"text": "律の急ぐ理由を、病院へ届ける部品の集荷時刻が迫っていることに直しました。末尾の手書きの一文はそのまま残しています。"
+					}
+				},
+				{
+					"turn": 5,
+					"request": "時計を二人の具体的な作業で直し、対立を解いてください。修理に成功した理由が読んで分かるようにしてください。手で加えた末尾の一文と、これまでの他の条件は残してください。",
+					"revision": 6,
+					"filename": "revision-6.md",
+					"digest": "ebe568f9ac9f04306cb3a8afb7a7105a2bb448a12bc2e5a72961f5f33bf62f32",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "anthropic",
+						"revision": 5,
+						"sourceRevision": 5,
+						"work": {
+							"ref": "novel:anthropic",
+							"revision": 5,
+							"digest": "8576d55e519ca7110b61733fe567d0e863a7cc2a5840c8e0e938743a7c2534bd"
+						},
+						"facts": [
+							{
+								"id": "cond-format-markdown",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "Markdownで短編小説を書く",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-setting-observatory",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-heading",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "見出しを付ける",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-plot-clock-repair",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が壊れた時計を直す話にする",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-supernatural",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "超常現象で解決しない",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-narration-first-person-mio",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "語りは澪の一人称にする",
+								"sourceRefs": ["u2"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-quiet-atmosphere",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "静かな雰囲気は残す",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-conflict-scene",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が対立する場面を一つ入れる",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-reconciliation-this-version",
+								"kind": "condition",
+								"status": "retracted",
+								"value": "この版では二人を和解させない",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-keep-handwritten-last-line",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "末尾に利用者が手で加えた一文「明日、同じ時刻に。」はそのまま最後に残す",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-mio-urgency-parts-pickup",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "律が急いでいる理由は、病院へ届ける部品の集荷時刻が迫っていることにする",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-added-sick-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "病人の登場人物は追加しない",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-repair-by-concrete-work",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "時計は二人の具体的な作業で直す",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-resolve-conflict",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人の対立を解く",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-repair-success-reason-readable",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "修理に成功した理由が読んで分かるようにする",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 5,
+							"content": "# 潮風と時計\n\n港町の外れに、もう誰も使わなくなった古い天文台がある。白い壁は潮風で黄ばみ、ドームの鉄の扉は錆びついて開かない。私はその天文台の管理を任されていて、町では修理工をしている。\n\nある日、配達員の律が一つの小箱を抱えて坂を上ってきた。律は急いでいた。病院へ届ける部品の集荷時刻が迫っているからだ。「これ、天文台の人から預かったんです。直せるなら直してほしいって」。箱を開けると、真鍮の古い懐中時計が入っていた。ガラスは割れ、針は止まったままだ。\n\n私は時計を手に取り、ルーペで歯車を覗いた。「ゼンマイは生きてる。歯車の一本が欠けてるだけ。予備の部品を探せば、動くと思う」\n\n二人で天文台の工房へ入った。棚には埃をかぶった部品箱が積まれている。律は懐中電灯を持ち、私は一つずつ箱を開けた。古い油の匂いと、海からの風が混じり合う。\n\n「これ、合うかも」と律が声を上げた。小さな真鍮の歯車を差し出す。私は歯の数を数え、欠けた跡の幅と照らし合わせてから、細いピンセットで慎重にはめ込んだ。ルーペ越しに歯が噛み合うのを確かめ、律が懐中電灯で角度を変えて見せる。二人で息を詰めながら、ゼンマイを巻いた。\n\nカチ、カチ。\n\n止まっていた秒針が、ゆっくりと動き出した。律が小さく笑う。「やっと、時間が戻ったね」\n\n私は時計を窓辺に置いた。夕日が差し込み、文字盤が金色に光る。二人はしばらく黙ったまま、規則正しい音に耳を澄ませた。\n\n「その歯車、別の時計から外したものでしょう」と律が言った。声が少し尖っている。「勝手に使えば、持ち主に説明できない」。私は手を止めて答えた。「確かめずに言い過ぎた。持ち主に聞こう」。律は窓の外から視線を戻し、小さく頷いた。電話で持ち主に尋ねると、その歯車は父の時計の予備だと分かった。\n\n時計を届ける日、天文台の持ち主は静かに頷いた。「ありがとう。父が大切にしていたものなんだ」。外へ出ると、港には夕暮れの光が広がっていた。遠くで汽笛が鳴る。律は空を見上げ、私は手の中の懐かしい音を、もう一度確かめるように聞いていた。\n\n\n「明日、同じ時刻に。」"
+						}
+					}
+				},
+				{
+					"turn": 6,
+					"request": "いまの見出しと人物名を変えず、冗長な説明を削ってください。短い会話を生かし、本文の長さは最初の目安を優先してください。末尾の一文は動かさないでください。",
+					"revision": 7,
+					"filename": "revision-7.md",
+					"digest": "2386ed3289fab468e52be66817858efaf61d8b6fe3d4d95cb66494977b29f349",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "anthropic",
+						"revision": 6,
+						"sourceRevision": 6,
+						"work": {
+							"ref": "novel:anthropic",
+							"revision": 6,
+							"digest": "ebe568f9ac9f04306cb3a8afb7a7105a2bb448a12bc2e5a72961f5f33bf62f32"
+						},
+						"facts": [
+							{
+								"id": "cond-format-markdown",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "Markdownで短編小説を書く",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-setting-observatory",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-heading",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "見出しを付ける",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-plot-clock-repair",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が壊れた時計を直す話にする",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-supernatural",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "超常現象で解決しない",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-narration-first-person-mio",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "語りは澪の一人称にする",
+								"sourceRefs": ["u2"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-quiet-atmosphere",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "静かな雰囲気は残す",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-conflict-scene",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が対立する場面を一つ入れる",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-reconciliation-this-version",
+								"kind": "condition",
+								"status": "retracted",
+								"value": "この版では二人を和解させない",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-keep-handwritten-last-line",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "末尾に利用者が手で加えた一文「明日、同じ時刻に。」はそのまま最後に残す",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-mio-urgency-parts-pickup",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "律が急いでいる理由は、病院へ届ける部品の集荷時刻が迫っていることにする",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-added-sick-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "病人の登場人物は追加しない",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-repair-by-concrete-work",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "時計は二人の具体的な作業で直す",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-resolve-conflict",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人の対立を解く",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-repair-success-reason-readable",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "修理に成功した理由が読んで分かるようにする",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-keep-heading-and-names",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "いまの見出しと人物名（澪・律）は変えない",
+								"sourceRefs": ["u6"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-trim-redundant-explanation",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "冗長な説明を削る",
+								"sourceRefs": ["u6"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-keep-short-dialogue",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "短い会話を生かす",
+								"sourceRefs": ["u6"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 6,
+							"content": "# 潮風と時計\n\n港町の外れに、もう誰も使わなくなった古い天文台がある。白い壁は潮風で黄ばみ、ドームの鉄の扉は錆びついて開かない。私はその管理を任されていて、町では修理工をしている。\n\nある日、配達員の律が小箱を抱えて坂を上ってきた。律は急いでいた。病院へ届ける部品の集荷時刻が迫っているからだ。「天文台の人から預かったんです。直せるなら直してほしいって」。箱の中には、真鍮の古い懐中時計があった。ガラスは割れ、針は止まったままだ。\n\n私はルーペで歯車を覗いた。「ゼンマイは生きてる。歯車の一本が欠けてるだけ。予備の部品を探せば、動くと思う」\n\n二人で工房へ入り、埃をかぶった部品箱を一つずつ開けた。\n\n「これ、合うかも」と律が小さな真鍮の歯車を差し出す。私は歯の数と欠けた跡の幅を照らし合わせ、ピンセットではめ込んだ。ルーペ越しに歯が噛み合うのを確かめ、律が懐中電灯で角度を変えて見せる。二人で息を詰めながら、ゼンマイを巻いた。\n\nカチ、カチ。\n\n止まっていた秒針が、ゆっくりと動き出した。律が小さく笑う。「やっと、時間が戻ったね」\n\n私は時計を窓辺に置いた。夕日が差し込み、文字盤が金色に光る。\n\n「その歯車、別の時計から外したものでしょう」と律が言った。声が少し尖っている。「勝手に使えば、持ち主に説明できない」。私は手を止めた。「確かめずに言い過ぎた。持ち主に聞こう」。電話で尋ねると、その歯車は父の時計の予備だと分かった。\n\n時計を届ける日、持ち主は静かに頷いた。「ありがとう。父が大切にしていたものなんだ」。外へ出ると、港には夕暮れの光が広がっていた。遠くで汽笛が鳴る。\n\n「明日、同じ時刻に。」"
+						},
+						"text": "見出しと人物名を変えず、冗長な説明を削って本文を整えました。末尾の一文はそのまま残しています。"
+					}
+				},
+				{
+					"turn": 7,
+					"request": "最終調整です。時計が動き出す直前の緊張を少し強めてください。結末、視点、人物、手編集の一文、他の条件を保って完成候補にしてください。",
+					"revision": 8,
+					"filename": "revision-8.md",
+					"digest": "0c0a340d77301e24fa95da4d61d0411ced9c601424976bda19099e1be5d004c3",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "anthropic",
+						"revision": 7,
+						"sourceRevision": 7,
+						"work": {
+							"ref": "novel:anthropic",
+							"revision": 7,
+							"digest": "2386ed3289fab468e52be66817858efaf61d8b6fe3d4d95cb66494977b29f349"
+						},
+						"facts": [
+							{
+								"id": "cond-format-markdown",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "Markdownで短編小説を書く",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-setting-observatory",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-heading",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "見出しを付ける",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-plot-clock-repair",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が壊れた時計を直す話にする",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-supernatural",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "超常現象で解決しない",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-narration-first-person-mio",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "語りは澪の一人称にする",
+								"sourceRefs": ["u2"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-quiet-atmosphere",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "静かな雰囲気は残す",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-conflict-scene",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人が対立する場面を一つ入れる",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-reconciliation-this-version",
+								"kind": "condition",
+								"status": "retracted",
+								"value": "この版では二人を和解させない",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-keep-handwritten-last-line",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "末尾に利用者が手で加えた一文「明日、同じ時刻に。」はそのまま最後に残す",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-mio-urgency-parts-pickup",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "律が急いでいる理由は、病院へ届ける部品の集荷時刻が迫っていることにする",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-no-added-sick-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "病人の登場人物は追加しない",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-repair-by-concrete-work",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "時計は二人の具体的な作業で直す",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-resolve-conflict",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "二人の対立を解く",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-repair-success-reason-readable",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "修理に成功した理由が読んで分かるようにする",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-keep-heading-and-names",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "いまの見出しと人物名（澪・律）は変えない",
+								"sourceRefs": ["u6"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-trim-redundant-explanation",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "冗長な説明を削る",
+								"sourceRefs": ["u6"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-keep-short-dialogue",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "短い会話を生かす",
+								"sourceRefs": ["u6"],
+								"supersedes": []
+							},
+							{
+								"id": "cond-final-tension-before-clock-starts",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "時計が動き出す直前の緊張を少し強める",
+								"sourceRefs": ["u7"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 7,
+							"content": "# 潮風と時計\n\n港町の外れに、もう誰も使わなくなった古い天文台がある。白い壁は潮風で黄ばみ、ドームの鉄の扉は錆びついて開かない。私はその管理を任されていて、町では修理工をしている。\n\nある日、配達員の律が小箱を抱えて坂を上ってきた。律は急いでいた。病院へ届ける部品の集荷時刻が迫っているからだ。「天文台の人から預かったんです。直せるなら直してほしいって」。箱の中には、真鍮の古い懐中時計があった。ガラスは割れ、針は止まったままだ。\n\n私はルーペで歯車を覗いた。「ゼンマイは生きてる。歯車の一本が欠けてるだけ。予備の部品を探せば、動くと思う」\n\n二人で工房へ入り、埃をかぶった部品箱を一つずつ開けた。\n\n「これ、合うかも」と律が小さな真鍮の歯車を差し出す。私は歯の数と欠けた跡の幅を照らし合わせ、ピンセットではめ込んだ。ルーペ越しに歯が噛み合うのを確かめ、律が懐中電灯で角度を変えて見せる。二人で息を詰めながら、ゼンマイを巻いた。巻き上げるたびに、小さな抵抗が指先に返ってくる。律の喉が鳴った。次の一巻きで、また止まってしまうかもしれない。\n\nカチ、カチ。\n\n止まっていた秒針が、ゆっくりと動き出した。律が小さく笑う。「やっと、時間が戻ったね」\n\n私は時計を窓辺に置いた。夕日が差し込み、文字盤が金色に光る。\n\n「その歯車、別の時計から外したものでしょう」と律が言った。声が少し尖っている。「勝手に使えば、持ち主に説明できない」。私は手を止めた。「確かめずに言い過ぎた。持ち主に聞こう」。電話で尋ねると、その歯車は父の時計の予備だと分かった。\n\n時計を届ける日、持ち主は静かに頷いた。「ありがとう。父が大切にしていたものなんだ」。外へ出ると、港には夕暮れの光が広がっていた。遠くで汽笛が鳴る。\n\n「明日、同じ時刻に。」"
+						},
+						"text": "時計が動き出す直前の緊張を少し強めました。結末、視点、人物、手編集の一文は保っています。"
+					}
+				}
+			]
+		},
+		{
+			"provider": "openai",
+			"ok": false,
+			"error": "api_result_incomplete",
+			"revision": 6,
+			"savedTurns": 5,
+			"history": [
+				{
+					"turn": 1,
+					"request": "Markdownで短編小説を書いてください。舞台は港町の古い天文台、主人公は修理工の澪と配達員の律です。見出しを付け、本文は600〜900字程度で、二人が壊れた時計を直す話にしてください。超常現象で解決しないでください。",
+					"revision": 1,
+					"filename": "revision-1.md",
+					"digest": "c9531310e8773f691d44b9d3cad91c56dc33d57def354a16363ef02b6ae949c1",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "openai",
+						"revision": 1,
+						"sourceRevision": 1,
+						"work": {
+							"ref": "novel:openai",
+							"revision": 0,
+							"digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+						},
+						"facts": [
+							{
+								"id": "story-format",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "短編小説をMarkdownで書き、見出しを付ける。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-setting",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-plot",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "澪と律が壊れた時計を直す話にする。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-resolution",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "超常現象で解決しない。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 0,
+							"content": "# 潮待ちの時計\n\n港町の坂の上に、窓枠の塗装も剥げた古い天文台がある。潮風にさらされたドームは長く閉じたままで、町の人は時刻を確かめることもなくなっていた。修理工の澪がそこへ呼ばれたのは、塔の壁に掛かった大時計が止まったからだった。\n\n「これ、直せるかな」\n\n配達員の律は、油染みのついた包みを抱えて立っていた。時計の部品を町の時計店から運んできたのだという。澪は文字盤を外し、歯車を一つずつ調べた。軸が錆び、振り子の留め金も緩んでいる。けれど、いちばんの問題は、長年たまった塵が歯車の隙間に固まっていることだった。\n\n二人は窓を開け、机に布を敷いた。澪が小さな刷毛で汚れを払い、律は部品を並べて番号を書いた紙を添える。途中、律が届け先を間違えた古い伝票を見つけた。そこには、天文台の時計を最後に点検した職人の名があり、澪は留め金の向きを確かめる手掛かりにした。\n\n夕方までかかって、軸を磨き、欠けた留め金を作り直した。澪が歯車を組み戻し、律が振り子をそっと押す。針は一度だけ震え、それから、こつ、こつ、と確かな音を刻み始めた。\n\nドームの隙間から、港の灯が見えた。律は配達かばんを肩に掛け、「これで、次の便にも遅れずに済む」と笑った。澪は工具をしまいながら、時計の音に耳を澄ませる。町の時刻を取り戻したのは、手入れと工夫と、二人が持ち寄った小さな手掛かりだった。"
+						},
+						"text": "短編小説を書きました。"
+					}
+				},
+				{
+					"turn": 2,
+					"request": "語りを澪の一人称に直してください。舞台、人物、時計を自然な原因で直す条件は残してください。",
+					"revision": 2,
+					"filename": "revision-2.md",
+					"digest": "7c356f02ad7403ba30a7fece651bf2bd9db95a75603a823e502e3f9eb85f0f99",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "openai",
+						"revision": 2,
+						"sourceRevision": 2,
+						"work": {
+							"ref": "novel:openai",
+							"revision": 1,
+							"digest": "c9531310e8773f691d44b9d3cad91c56dc33d57def354a16363ef02b6ae949c1"
+						},
+						"facts": [
+							{
+								"id": "story-format",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "短編小説をMarkdownで書き、見出しを付ける。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-setting",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-plot",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "澪と律が壊れた時計を直す話にする。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-resolution",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "時計は超常現象によらず、自然な原因で直す。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-pov",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "語りを澪の一人称にする。",
+								"sourceRefs": ["u2"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 1,
+							"content": "# 潮待ちの時計\n\n港町の坂の上に、窓枠の塗装も剥げた古い天文台がある。潮風にさらされたドームは長く閉じたままで、町の人は時刻を確かめることもなくなっていた。修理工の私は、塔の壁に掛かった大時計が止まったと聞き、そこへ呼ばれた。\n\n「これ、直せるかな」\n\n配達員の律は、油染みのついた包みを抱えて立っていた。時計の部品を町の時計店から運んできたのだという。私は文字盤を外し、歯車を一つずつ調べた。軸が錆び、振り子の留め金も緩んでいる。けれど、いちばんの問題は、長年たまった塵が歯車の隙間に固まっていることだった。\n\n私たちは窓を開け、机に布を敷いた。私が小さな刷毛で汚れを払い、律は部品を並べて番号を書いた紙を添える。途中、律が届け先を間違えた古い伝票を見つけた。そこには、天文台の時計を最後に点検した職人の名があり、私は留め金の向きを確かめる手掛かりにした。\n\n夕方までかかって、軸を磨き、欠けた留め金を作り直した。私が歯車を組み戻し、律が振り子をそっと押す。針は一度だけ震え、それから、こつ、こつ、と確かな音を刻み始めた。\n\nドームの隙間から、港の灯が見えた。律は配達かばんを肩に掛け、「これで、次の便にも遅れずに済む」と笑った。私は工具をしまいながら、時計の音に耳を澄ませた。町の時刻を取り戻したのは、手入れと工夫と、私たちが持ち寄った小さな手掛かりだった。"
+						},
+						"text": "語りを澪の一人称に直し、舞台・人物・時計が自然な原因で直る条件を保ちました。"
+					}
+				},
+				{
+					"turn": 3,
+					"request": "静かな雰囲気は残し、二人が対立する場面を一つ入れてください。この版ではまだ和解させないでください。",
+					"revision": 3,
+					"filename": "revision-3.md",
+					"digest": "4f6ef524472cc19bf548c0dbea943fde710733b663be6f25235d3e514343c004",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "openai",
+						"revision": 3,
+						"sourceRevision": 3,
+						"work": {
+							"ref": "novel:openai",
+							"revision": 2,
+							"digest": "7c356f02ad7403ba30a7fece651bf2bd9db95a75603a823e502e3f9eb85f0f99"
+						},
+						"facts": [
+							{
+								"id": "story-format",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "短編小説をMarkdownで書き、見出しを付ける。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-setting",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-plot",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "澪と律が壊れた時計を直す話にする。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-resolution",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "時計は超常現象によらず、自然な原因で直す。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-pov",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "語りを澪の一人称にする。",
+								"sourceRefs": ["u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-quiet-atmosphere",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "静かな雰囲気を保つ。",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "story-conflict",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "澪と律が対立する場面を一つ入れる。",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "story-no-reconciliation-yet",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "この版では澪と律をまだ和解させない。",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 2,
+							"content": "# 潮待ちの時計\n\n港町の坂の上に、窓枠の塗装も剥げた古い天文台がある。潮風にさらされたドームは長く閉じたままで、町の人は時刻を確かめることもなくなっていた。修理工の私は、塔の壁に掛かった大時計が止まったと聞き、そこへ呼ばれた。\n\n「これ、直せるかな」\n\n配達員の律は、油染みのついた包みを抱えて立っていた。時計の部品を町の時計店から運んできたのだという。私は文字盤を外し、歯車を一つずつ調べた。軸が錆び、振り子の留め金も緩んでいる。けれど、いちばんの問題は、長年たまった塵が歯車の隙間に固まっていることだった。\n\n私たちは窓を開け、机に布を敷いた。私が小さな刷毛で汚れを払い、律は部品を並べて番号を書いた紙を添える。途中、律が届け先を間違えた古い伝票を見つけた。そこには、天文台の時計を最後に点検した職人の名があり、私は留め金の向きを確かめる手掛かりにした。\n\n「その向きじゃない。伝票の記録を見たんだ」と私が言うと、律は手を止めた。「また僕のせいにするのか。部品を並べたのは、君が頼んだからだ」声は低く、窓の外の波音にまぎれそうだった。私は返事をせず、伝票を机の端へ置いた。律もそれ以上は言わず、部品の番号を確かめ直した。\n\n夕方までかかって、軸を磨き、欠けた留め金を作り直した。私が歯車を組み戻し、律が振り子をそっと押す。針は一度だけ震え、それから、こつ、こつ、と確かな音を刻み始めた。\n\nドームの隙間から、港の灯が見えた。律は配達かばんを肩に掛け、「これで、次の便にも遅れずに済む」と言った。私は工具をしまい、彼の方を見ずに時計の音に耳を澄ませた。町の時刻を取り戻したのは、手入れと工夫と、私たちが持ち寄った小さな手掛かりだった。"
+						},
+						"text": "静かな雰囲気を保ち、対立する場面を加えました。二人はこの版では和解していません。"
+					}
+				},
+				{
+					"turn": 4,
+					"request": "末尾に私が手で加えた一文は、そのまま最後に残してください。律が急いでいる理由を、病院へ届ける部品の集荷時刻が迫っていることに直してください。病人の登場人物は追加しないでください。",
+					"revision": 5,
+					"filename": "revision-5.md",
+					"digest": "694f27f404f7cdfa6256bc846fe3bb9e0312a4f33f5149b095d9815240dac2e8",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "openai",
+						"revision": 4,
+						"sourceRevision": 4,
+						"work": {
+							"ref": "novel:openai",
+							"revision": 4,
+							"digest": "e9f6235e2f267ea69edca8216355f9d70047702335c4bd19f0226b4f08a81c83"
+						},
+						"facts": [
+							{
+								"id": "story-format",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "短編小説をMarkdownで書き、見出しを付ける。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-setting",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-plot",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "澪と律が壊れた時計を直す話にする。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-resolution",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "時計は超常現象によらず、自然な原因で直す。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-pov",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "語りを澪の一人称にする。",
+								"sourceRefs": ["u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-quiet-atmosphere",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "静かな雰囲気を保つ。",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "story-conflict",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "澪と律が対立する場面を一つ入れる。",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "story-no-reconciliation-yet",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "この版では澪と律をまだ和解させない。",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "story-preserve-final-sentence",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "手で加えた一文「明日、同じ時刻に。」をそのまま文末に残す。",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "story-ritsu-urgency",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "律が急いでいる理由は、病院へ届ける部品の集荷時刻が迫っていることにする。",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "story-no-sick-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "病人の登場人物は追加しない。",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 4,
+							"content": "# 潮待ちの時計\n\n港町の坂の上に、窓枠の塗装も剥げた古い天文台がある。潮風にさらされたドームは長く閉じたままで、町の人は時刻を確かめることもなくなっていた。修理工の私は、塔の壁に掛かった大時計が止まったと聞き、そこへ呼ばれた。\n\n「これ、直せるかな」\n\n配達員の律は、油染みのついた包みを抱えて立っていた。時計の部品を町の時計店から運んできたのだという。病院へ届ける部品の集荷時刻が迫っているらしく、律は何度も腕時計を見た。私は文字盤を外し、歯車を一つずつ調べた。軸が錆び、振り子の留め金も緩んでいる。けれど、いちばんの問題は、長年たまった塵が歯車の隙間に固まっていることだった。\n\n私たちは窓を開け、机に布を敷いた。私が小さな刷毛で汚れを払い、律は部品を並べて番号を書いた紙を添える。途中、律が届け先を間違えた古い伝票を見つけた。そこには、天文台の時計を最後に点検した職人の名があり、私は留め金の向きを確かめる手掛かりにした。\n\n「その向きじゃない。伝票の記録を見たんだ」と私が言うと、律は手を止めた。「また僕のせいにするのか。部品を並べたのは、君が頼んだからだ」声は低く、窓の外の波音にまぎれそうだった。私は返事をせず、伝票を机の端へ置いた。律もそれ以上は言わず、部品の番号を確かめ直した。\n\n夕方までかかって、軸を磨き、欠けた留め金を作り直した。私が歯車を組み戻し、律が振り子をそっと押す。針は一度だけ震え、それから、こつ、こつ、と確かな音を刻み始めた。\n\nドームの隙間から、港の灯が見えた。律は配達かばんを肩に掛け、「これで、次の便にも遅れずに済む」と言った。私は工具をしまい、彼の方を見ずに時計の音に耳を澄ませた。町の時刻を取り戻したのは、手入れと工夫と、私たちが持ち寄った小さな手掛かりだった。\n\n「明日、同じ時刻に。」"
+						},
+						"text": "律が急いでいる理由を、病院へ届ける部品の集荷時刻が迫っていることに変更しました。手で加えた末尾の一文はそのまま残しています。"
+					}
+				},
+				{
+					"turn": 5,
+					"request": "時計を二人の具体的な作業で直し、対立を解いてください。修理に成功した理由が読んで分かるようにしてください。手で加えた末尾の一文と、これまでの他の条件は残してください。",
+					"revision": 6,
+					"filename": "revision-6.md",
+					"digest": "94e8d83392ee74777b799c740fa9aaffd287a103f0f0a4f817c9d70122807f92",
+					"state": {
+						"stateSchemaVersion": 1,
+						"coreContractVersion": 1,
+						"packageVersion": "0.2.0",
+						"sessionId": "openai",
+						"revision": 5,
+						"sourceRevision": 5,
+						"work": {
+							"ref": "novel:openai",
+							"revision": 5,
+							"digest": "694f27f404f7cdfa6256bc846fe3bb9e0312a4f33f5149b095d9815240dac2e8"
+						},
+						"facts": [
+							{
+								"id": "story-format",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "短編小説をMarkdownで書き、見出しを付ける。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-setting",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "舞台は港町の古い天文台。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "主人公は修理工の澪と配達員の律。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-length",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "本文は600〜900字程度。",
+								"sourceRefs": ["u1"],
+								"supersedes": []
+							},
+							{
+								"id": "story-plot",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "澪と律が壊れた時計を直す話にする。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-resolution",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "時計は超常現象によらず、自然な原因で直す。",
+								"sourceRefs": ["u1", "u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-pov",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "語りを澪の一人称にする。",
+								"sourceRefs": ["u2"],
+								"supersedes": []
+							},
+							{
+								"id": "story-quiet-atmosphere",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "静かな雰囲気を保つ。",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "story-conflict",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "澪と律が対立する場面を一つ入れる。",
+								"sourceRefs": ["u3"],
+								"supersedes": []
+							},
+							{
+								"id": "story-no-reconciliation-yet",
+								"kind": "condition",
+								"status": "retracted",
+								"value": "この版では澪と律をまだ和解させない。",
+								"sourceRefs": ["u3", "u5"],
+								"supersedes": []
+							},
+							{
+								"id": "story-preserve-final-sentence",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "手で加えた一文「明日、同じ時刻に。」をそのまま文末に残す。",
+								"sourceRefs": ["u4", "u5"],
+								"supersedes": []
+							},
+							{
+								"id": "story-ritsu-urgency",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "律が急いでいる理由は、病院へ届ける部品の集荷時刻が迫っていることにする。",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "story-no-sick-characters",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "病人の登場人物は追加しない。",
+								"sourceRefs": ["u4"],
+								"supersedes": []
+							},
+							{
+								"id": "story-repair-and-explanation",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "澪と律がそれぞれ具体的な作業をして時計を直し、修理に成功した理由が読んで分かるように描く。",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							},
+							{
+								"id": "story-reconciliation",
+								"kind": "condition",
+								"status": "confirmed",
+								"value": "澪と律の対立を解く。",
+								"sourceRefs": ["u5"],
+								"supersedes": ["story-no-reconciliation-yet"]
+							},
+							{
+								"id": "story-revision-observation",
+								"kind": "question",
+								"status": "proposed",
+								"value": "今回依頼された改訂が作業文書に反映されたかは、まだ確認できていない。",
+								"sourceRefs": ["u5"],
+								"supersedes": []
+							}
+						]
+					},
+					"action": {
+						"kind": "invoke",
+						"tool": "doc.write",
+						"arguments": {
+							"expectedRevision": 5,
+							"content": "# 潮待ちの時計\n\n港町の坂の上に、窓枠の塗装も剥げた古い天文台がある。潮風にさらされたドームは長く閉じたままで、町の人は時刻を確かめることもなくなっていた。修理工の私は、塔の壁に掛かった大時計が止まったと聞き、そこへ呼ばれた。\n\n「これ、直せるかな」\n\n配達員の律は、油染みのついた包みを抱えて立っていた。時計の部品を町の時計店から運んできたのだという。病院へ届ける部品の集荷時刻が迫っているらしく、律は何度も腕時計を見た。私は文字盤を外し、歯車を一つずつ調べた。軸は錆び、振り子の留め金は緩み、歯車の隙間には塵が固まっていた。\n\n私たちは窓を開け、机に布を敷いた。私は刷毛で歯車の塵を払い、布で錆びた軸を磨いた。律は外した部品を順に並べ、番号を書いた紙を添えた。彼が届け先を間違えた古い伝票を見つけると、そこには時計を最後に点検した職人の名があった。記録に残る留め金の向きを手掛かりに、私は振り子の仕組みを確かめた。\n\n「その向きじゃない。伝票を見たんだ」と私が言うと、律は手を止めた。「また僕のせいにするのか。部品を並べたのは、君が頼んだからだ」声は低く、窓の外の波音にまぎれそうだった。私は返事をせず、伝票を机の端へ置いた。しばらくして、留め金の図を見直した私は、律にきつい言い方をしたと気づいた。「ごめん。伝票を見つけてくれたから、向きが分かった」律は少し目を伏せ、「僕も急いでいて、確かめずに言った」と答えた。それから彼は、合う大きさの予備の金具を探し始めた。\n\n夕方までかかって、私は軸を磨き、歯車の汚れを落として軸受けに油を差した。律は予備の金具を削って欠けた留め金を作り直し、伝票の記録どおりの向きに取り付けた。私は歯車の噛み合わせを確かめて組み戻し、律が振り子をそっと押す。塵が歯車を止め、錆と緩んだ留め金が動きを妨げていたのだ。汚れを取り、軸を滑らかにし、留め金を固定したことで、振り子の動きが歯車に伝わった。針は一度だけ震え、それから、こつ、こつ、と確かな音を刻み始めた。\n\nドームの隙間から、港の灯が見えた。律は配達かばんを肩に掛け、「これで、次の便にも遅れずに済む」と言った。私は工具をしまい、今度は彼の方を見てうなずいた。町の時刻を取り戻したのは、手入れと工夫と、私たちが持ち寄った小さな手掛かりだった。\n\n「明日、同じ時刻に。」"
+						},
+						"text": "二人の具体的な修理作業と、対立の解消、その理由が分かる描写を加えました。末尾の一文と、これまでの条件は保っています。"
+					}
+				}
+			]
+		}
+	],
+	"budget": {
+		"capUsd": 10,
+		"accountedUsd": 6.059887,
+		"calls": [
+			{
+				"provider": "anthropic",
+				"status": "estimated",
+				"calls": 728,
+				"estimatedCostUsd": 2.4676395,
+				"unknownReservedUsd": 0
+			},
+			{
+				"provider": "anthropic",
+				"status": "pending",
+				"calls": 43,
+				"estimatedCostUsd": null,
+				"unknownReservedUsd": 2.191044
+			},
+			{
+				"provider": "openai",
+				"status": "estimated",
+				"calls": 739,
+				"estimatedCostUsd": 1.2984915,
+				"unknownReservedUsd": 0
+			},
+			{
+				"provider": "openai",
+				"status": "pending",
+				"calls": 2,
+				"estimatedCostUsd": null,
+				"unknownReservedUsd": 0.10271200000000001
+			}
+		]
+	}
+}

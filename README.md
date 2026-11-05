@@ -48,3 +48,5 @@ example/README.mdに、モデル・観測・外部作業のadapterと設定方�
 [MIT License](LICENSE)
 
 0.2.0では判断helperの呼出し契約が変わる。[更新・復旧手順](spec/upgrading-0.2.md)、[品質改善の実施記録](spec/quality-execution-2026-11-05.md)、[検証索引](spec/verification.json)を参照。APIキーはログインシェルから継承し、プロジェクト別の`.env`は不要。
+
+[Markdown小説の反復改訂](spec/writing-pilot-2026-11-05.md)では、両APIで7回ずつ実保存・版照合・模擬手編集の保持を確認した。Lunaの人物名省略の自動判定失敗は残っている。本文生成にも既存の登録操作schemaを直接渡せる。最終ローカル試験は61件で、人の受入とEumenes本体への取り込みは次工程とする。

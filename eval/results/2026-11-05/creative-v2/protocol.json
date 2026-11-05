@@ -1,0 +1,15 @@
+{
+	"snapshot": "819448a819830af724f3fb85443c102248722436",
+	"scenarioSha256": "cbe4032ba5e25299c207d5e108de5714b444caaab13e4c2235340ee16ae20ef4",
+	"models": {
+		"anthropic": "claude-haiku-5-5",
+		"openai": "gpt-6-luna"
+	},
+	"repetitions": 1,
+	"concurrency": 1,
+	"maxOutputTokens": 8192,
+	"timeoutMs": 120000,
+	"capUsd": 10,
+	"maxRepairCallsPerProposal": 1,
+	"scope": "Synthetic development pilot selected by the user; a real Markdown artifact is written after host validation. Simulated edits are not a human acceptance test."
+}

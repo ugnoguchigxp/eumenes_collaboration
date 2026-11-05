@@ -2,7 +2,7 @@
 	"date": "2026-11-05",
 	"scope": "independent library core and example host; isolated Eumenes package consumption; synthetic direct API validation",
 	"sourceCommit": "e5d0daf36576f95534bbd3d99fa68262e6c4c610",
-	"exampleValidationCommit": "2afaf80acfa4929d34603ad6f7f7980e8aefbff6",
+	"exampleValidationCommit": "68129301dd21d061a8911d94e5c6ce82aab8c03b",
 	"apiValidationCommit": "c369f244ac893028ecabdaba8345f4d06cc90217",
 	"packageVersion": "0.2.0",
 	"coreContractVersion": 1,
@@ -16,8 +16,8 @@
 	"installedResourcesMatch": true,
 	"checks": {
 		"coreVerify": "passed",
-		"coreAndExampleTests": 60,
-		"expectations": 742,
+		"coreAndExampleTests": 61,
+		"expectations": 747,
 		"strictPackSteps": 27,
 		"legacySpecialistTests": 64,
 		"parityOutputs": 149,
@@ -32,7 +32,10 @@
 		"liveSessions": 128,
 		"liveTurns": 704,
 		"decisionCases": 24,
-		"finalStateInvariantFailures": 0
+		"finalStateInvariantFailures": 0,
+		"writingProviders": 2,
+		"writingSavedTurns": 14,
+		"writingManualExactProviders": 2
 	},
 	"liveSemanticGate": {
 		"threshold": 0.9,
@@ -50,11 +53,13 @@
 	},
 	"apiCost": {
 		"capUsd": 10,
-		"conservativeEstimatedUsd": 3.2016775,
+		"conservativeEstimatedUsd": 3.974567,
 		"unknownReservedUsd": 2.293756,
-		"accountedUsd": 5.4954335,
-		"baseRateEstimateKnownCallsUsd": 0.6403355,
-		"kind": "not provider invoice; all attempts included"
+		"accountedUsd": 6.268323,
+		"baseRateEstimateKnownCallsUsd": 0.7949134,
+		"calls": 1542,
+		"unknownCalls": 45,
+		"kind": "not invoice; includes all comparison, preflight, aborted and writing calls"
 	},
 	"ci": {
 		"core": "https://github.com/ugnoguchigxp/eumenes_collaboration/actions/runs/42015768897",
@@ -73,11 +78,30 @@
 		"Nominal holdout exposed in aborted transport-debugging runs; not a fresh holdout.",
 		"One repetition and cross-provider judges; not a statistically established quality improvement.",
 		"Raw browser oracle 20/24; session decisions24/24. Null plans and underspecified color-search cases require oracle calibration, not silent regrading.",
-		"Local strict pack from e5d0daf; distributed src/contexts/catalog/package/lock unchanged through2afaf80, verified with git diff. The example changes are separately covered by60 tests and CI."
+		"Local strict pack from e5d0daf; distributed src/contexts/catalog/package/lock unchanged through2afaf80, verified with git diff. The example changes are separately covered by60 tests and CI.",
+		"Writing v1-v4 are development iterations. Native operation argument schemas and literal-retention instructions added to example only. Distributed core/catalog/package/lock unchanged from e5d0daf."
 	],
 	"contextTools": {
 		"context_compile": 1,
 		"compile_eval": 1,
 		"runId": "00000000-0000-0000-18e5-1d17e87268e6"
-	}
+	},
+	"writingPilot": {
+		"snapshot": "68129301dd21d061a8911d94e5c6ce82aab8c03b",
+		"reports": "../eval/results/2026-11-05/creative-v4/results.json",
+		"anthropic": {
+			"savedTurns": 7,
+			"manualExact": true,
+			"allSemanticCriteria": true
+		},
+		"openai": {
+			"savedTurns": 7,
+			"manualExact": true,
+			"allSemanticCriteria": false,
+			"reason": "Narrator name omitted; automated failure retained; human interpretation pending"
+		},
+		"humanAcceptance": "pending",
+		"scope": "saved Markdown artifacts from synthetic user-selected development workflow"
+	},
+	"scopeDecision": "User limited completion to independent project technical quality above80. No production incorporation. Further CI waived; prior evidence retained."
 }

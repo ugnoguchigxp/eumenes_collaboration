@@ -34,5 +34,25 @@
 	"final-pack.log": {
 		"sha256": "e9f2fd744bf22e2f73b404b432a5350355423f9b27cb0de54b3408902865d730",
 		"bytes": 733
+	},
+	"closed-project-tests.log": {
+		"sha256": "19ae6aeae5b86992609fa0bdc4c9503dc4b8c91b50439bd4c5be4beee89a544b",
+		"bytes": 6416
+	},
+	"closed-project-lint.log": {
+		"sha256": "d4a09b61560776ae8feee6a490738c8d5748a904be5cbbc1d00a2d92a4587484",
+		"bytes": 25
+	},
+	"native-arguments-integration.log": {
+		"sha256": "f0dcfed53a2f1dea88b2be273f7afa3031eb2998b56466d8a21d4b5932093018",
+		"bytes": 884
+	},
+	"creative-host-integration.log": {
+		"sha256": "c3361475c40d1cc88a639975ce541c00cc9b05f1e307c9af9d22c4b58dfd47af",
+		"bytes": 1018
+	},
+	"creative-cap-partial.log": {
+		"sha256": "9903ecaaf412ee0e613e6fe4ce924dfb38eec914ddb869e4bac4df399a2aadc7",
+		"bytes": 1008
 	}
 }

@@ -1,183 +1,147 @@
 {
-  "rubric_version": "1.1.0",
-  "technical_profile": "library",
-  "mode": "technical",
-  "assessment_kind": "expected",
-  "target": {
-    "locator": "eumenes_collaboration",
-    "snapshot": "Hypothetical future implementation after W00-W20; baseline a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
-    "reviewed_at": "2026-11-05",
-    "stage": "Historical Expected scenario at plan creation; not an observed re-evaluation",
-    "scope": "Conditional technical-only target at unchanged library weights, 30 applicable criteria, no exclusions. Assumes every specified acceptance and countercheck has passed on an immutable future snapshot. This is not a forecast or observed improvement. Current five confirmed findings remain unresolved; absence of findings in this hypothetical ledger only expresses the assumed scenario, not their withdrawal. Project Potential is not numerically forecast. Plan SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2 Historical plan source is commit9ab72d5; subsequent progress is recorded separately."
-  },
-  "depth": "deep",
-  "tracks": {
-    "technical": {
-      "raw_observed_score": 81.4,
-      "provisional_score": 81.4,
-      "score": null,
-      "score_status": "provisional",
-      "coverage_percent": 100.0,
-      "excluded_dimension_weight_percent": 0.0,
-      "raw_bounds": [
-        81.4,
-        81.4
-      ],
-      "bounds": [
-        81.4,
-        81.4
-      ],
-      "confidence": "Medium",
-      "required_dimensions_complete": true,
-      "incomplete_required_dimensions": [],
-      "unresolved_severe_suspicions": [],
-      "gates": [],
-      "production_readiness": "hypothetical: no blocker identified in reviewed scope",
-      "dimensions": {
-        "architecture": {
-          "status": "assessed",
-          "score": 8.3,
-          "coverage_percent": 100.0,
-          "bounds": [
-            8.3,
-            8.3
-          ],
-          "base_weight": 12,
-          "confidence": "Medium",
-          "effective_weight_percent": 12.0
-        },
-        "correctness": {
-          "status": "assessed",
-          "score": 9.2,
-          "coverage_percent": 100.0,
-          "bounds": [
-            9.2,
-            9.2
-          ],
-          "base_weight": 20,
-          "confidence": "Medium",
-          "effective_weight_percent": 20.0
-        },
-        "security": {
-          "status": "assessed",
-          "score": 8.3,
-          "coverage_percent": 100.0,
-          "bounds": [
-            8.3,
-            8.3
-          ],
-          "base_weight": 10,
-          "confidence": "Medium",
-          "effective_weight_percent": 10.0
-        },
-        "reliability": {
-          "status": "assessed",
-          "score": 7.5,
-          "coverage_percent": 100.0,
-          "bounds": [
-            7.5,
-            7.5
-          ],
-          "base_weight": 8,
-          "confidence": "Medium",
-          "effective_weight_percent": 8.0
-        },
-        "maintainability": {
-          "status": "assessed",
-          "score": 7.5,
-          "coverage_percent": 100.0,
-          "bounds": [
-            7.5,
-            7.5
-          ],
-          "base_weight": 12,
-          "confidence": "Medium",
-          "effective_weight_percent": 12.0
-        },
-        "common_components": {
-          "status": "assessed",
-          "score": 7.5,
-          "coverage_percent": 100.0,
-          "bounds": [
-            7.5,
-            7.5
-          ],
-          "base_weight": 5,
-          "confidence": "Medium",
-          "effective_weight_percent": 5.0
-        },
-        "testing": {
-          "status": "assessed",
-          "score": 8.3,
-          "coverage_percent": 100.0,
-          "bounds": [
-            8.3,
-            8.3
-          ],
-          "base_weight": 15,
-          "confidence": "Medium",
-          "effective_weight_percent": 15.0
-        },
-        "supply_chain": {
-          "status": "assessed",
-          "score": 7.5,
-          "coverage_percent": 100.0,
-          "bounds": [
-            7.5,
-            7.5
-          ],
-          "base_weight": 10,
-          "confidence": "Medium",
-          "effective_weight_percent": 10.0
-        },
-        "performance": {
-          "status": "assessed",
-          "score": 7.5,
-          "coverage_percent": 100.0,
-          "bounds": [
-            7.5,
-            7.5
-          ],
-          "base_weight": 5,
-          "confidence": "Medium",
-          "effective_weight_percent": 5.0
-        },
-        "operability": {
-          "status": "assessed",
-          "score": 7.5,
-          "coverage_percent": 100.0,
-          "bounds": [
-            7.5,
-            7.5
-          ],
-          "base_weight": 3,
-          "confidence": "Medium",
-          "effective_weight_percent": 3.0
-        }
-      }
-    }
-  },
-  "confirmed_findings": {
-    "Critical": 0,
-    "High": 0,
-    "Medium": 0,
-    "Low": 0
-  },
-  "priorities": {
-    "P0": 0,
-    "P1": 0,
-    "P2": 0,
-    "P3": 0
-  },
-  "suspected_findings": 0,
-  "baseline_snapshot": "a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
-  "scenario_conditions": [
-    "Current F01-F05 remain unresolved. The hypothetical calculation assumes all five fixes and original reproduction/acceptance checks have succeeded in a future snapshot.",
-    "W00-W14 and technical W20 complete, including authorized live model/host acceptance, production migration/rollback and realistic performance/cost measurement in declared scope.",
-    "All30 applicable technical criteria receive real evidence for at least anchor3; five explicitly listed anchors4 require High-confidence boundary/failure/countercheck evidence. No score is awarded for implementation intent alone.",
-    "Criterion-specific planned verification must be observed. Unsupported criteria remain unknown or are scored lower at re-evaluation;80 is not guaranteed.",
-    "No unresolved confirmed High or Critical findings, no unresolved severe suspicions; no relaxed tests, excluded criteria, changed profile/weights or task-specific semantic branches.",
-    "Live model credentials, explicit cost/call/time budgets, actual host authorization and workload thresholds are supplied before dependent execution. This planning task executes none of them.",
-    "W06 direct Claude Messages API and OpenAI Responses API gpt-6-luna both pass provider-specific schema, safety, fixed32-task and real-host acceptance under explicit shared/provider/judge budgets. Existing Claude Agent SDK fixture success is not direct API evidence. API tests have not been run."
-  ]
+	"rubric_version": "1.1.0",
+	"technical_profile": "library",
+	"mode": "technical",
+	"assessment_kind": "expected",
+	"target": {
+		"locator": "eumenes_collaboration",
+		"snapshot": "Hypothetical future implementation after W00-W20; baseline a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+		"reviewed_at": "2026-11-05",
+		"stage": "Historical Expected scenario at plan creation; not an observed re-evaluation",
+		"scope": "Conditional technical-only target at unchanged library weights, 30 applicable criteria, no exclusions. Assumes every specified acceptance and countercheck has passed on an immutable future snapshot. This is not a forecast or observed improvement. Current five confirmed findings remain unresolved; absence of findings in this hypothetical ledger only expresses the assumed scenario, not their withdrawal. Project Potential is not numerically forecast. Plan SHA256 8e8aa9bb9f0b684daba60978973af00dcdc4f22744acb27dc3b935b2f87f43e2 Historical plan source is commit9ab72d5; subsequent progress is recorded separately."
+	},
+	"depth": "deep",
+	"tracks": {
+		"technical": {
+			"raw_observed_score": 81.4,
+			"provisional_score": 81.4,
+			"score": null,
+			"score_status": "provisional",
+			"coverage_percent": 100.0,
+			"excluded_dimension_weight_percent": 0.0,
+			"raw_bounds": [81.4, 81.4],
+			"bounds": [81.4, 81.4],
+			"confidence": "Medium",
+			"required_dimensions_complete": true,
+			"incomplete_required_dimensions": [],
+			"unresolved_severe_suspicions": [],
+			"gates": [],
+			"production_readiness": "hypothetical: no blocker identified in reviewed scope",
+			"dimensions": {
+				"architecture": {
+					"status": "assessed",
+					"score": 8.3,
+					"coverage_percent": 100.0,
+					"bounds": [8.3, 8.3],
+					"base_weight": 12,
+					"confidence": "Medium",
+					"effective_weight_percent": 12.0
+				},
+				"correctness": {
+					"status": "assessed",
+					"score": 9.2,
+					"coverage_percent": 100.0,
+					"bounds": [9.2, 9.2],
+					"base_weight": 20,
+					"confidence": "Medium",
+					"effective_weight_percent": 20.0
+				},
+				"security": {
+					"status": "assessed",
+					"score": 8.3,
+					"coverage_percent": 100.0,
+					"bounds": [8.3, 8.3],
+					"base_weight": 10,
+					"confidence": "Medium",
+					"effective_weight_percent": 10.0
+				},
+				"reliability": {
+					"status": "assessed",
+					"score": 7.5,
+					"coverage_percent": 100.0,
+					"bounds": [7.5, 7.5],
+					"base_weight": 8,
+					"confidence": "Medium",
+					"effective_weight_percent": 8.0
+				},
+				"maintainability": {
+					"status": "assessed",
+					"score": 7.5,
+					"coverage_percent": 100.0,
+					"bounds": [7.5, 7.5],
+					"base_weight": 12,
+					"confidence": "Medium",
+					"effective_weight_percent": 12.0
+				},
+				"common_components": {
+					"status": "assessed",
+					"score": 7.5,
+					"coverage_percent": 100.0,
+					"bounds": [7.5, 7.5],
+					"base_weight": 5,
+					"confidence": "Medium",
+					"effective_weight_percent": 5.0
+				},
+				"testing": {
+					"status": "assessed",
+					"score": 8.3,
+					"coverage_percent": 100.0,
+					"bounds": [8.3, 8.3],
+					"base_weight": 15,
+					"confidence": "Medium",
+					"effective_weight_percent": 15.0
+				},
+				"supply_chain": {
+					"status": "assessed",
+					"score": 7.5,
+					"coverage_percent": 100.0,
+					"bounds": [7.5, 7.5],
+					"base_weight": 10,
+					"confidence": "Medium",
+					"effective_weight_percent": 10.0
+				},
+				"performance": {
+					"status": "assessed",
+					"score": 7.5,
+					"coverage_percent": 100.0,
+					"bounds": [7.5, 7.5],
+					"base_weight": 5,
+					"confidence": "Medium",
+					"effective_weight_percent": 5.0
+				},
+				"operability": {
+					"status": "assessed",
+					"score": 7.5,
+					"coverage_percent": 100.0,
+					"bounds": [7.5, 7.5],
+					"base_weight": 3,
+					"confidence": "Medium",
+					"effective_weight_percent": 3.0
+				}
+			}
+		}
+	},
+	"confirmed_findings": {
+		"Critical": 0,
+		"High": 0,
+		"Medium": 0,
+		"Low": 0
+	},
+	"priorities": {
+		"P0": 0,
+		"P1": 0,
+		"P2": 0,
+		"P3": 0
+	},
+	"suspected_findings": 0,
+	"baseline_snapshot": "a23dd54bf1a32ae2b3b953cfd13eae9935b846b3",
+	"scenario_conditions": [
+		"Current F01-F05 remain unresolved. The hypothetical calculation assumes all five fixes and original reproduction/acceptance checks have succeeded in a future snapshot.",
+		"W00-W14 and technical W20 complete, including authorized live model/host acceptance, production migration/rollback and realistic performance/cost measurement in declared scope.",
+		"All30 applicable technical criteria receive real evidence for at least anchor3; five explicitly listed anchors4 require High-confidence boundary/failure/countercheck evidence. No score is awarded for implementation intent alone.",
+		"Criterion-specific planned verification must be observed. Unsupported criteria remain unknown or are scored lower at re-evaluation;80 is not guaranteed.",
+		"No unresolved confirmed High or Critical findings, no unresolved severe suspicions; no relaxed tests, excluded criteria, changed profile/weights or task-specific semantic branches.",
+		"Live model credentials, explicit cost/call/time budgets, actual host authorization and workload thresholds are supplied before dependent execution. This planning task executes none of them.",
+		"W06 direct Claude Messages API and OpenAI Responses API gpt-6-luna both pass provider-specific schema, safety, fixed32-task and real-host acceptance under explicit shared/provider/judge budgets. Existing Claude Agent SDK fixture success is not direct API evidence. API tests have not been run."
+	]
 }
