@@ -14,7 +14,9 @@ import type {
 } from "../src/index.ts";
 import scenario from "./creative.json";
 const root = resolve(import.meta.dir, "..");
-const dir = join(root, "reports/quality-2026-11-05/creative-v1");
+const runName = process.argv[2] ?? "creative-v2";
+if (!/^[a-zA-Z0-9_-]+$/.test(runName)) throw new Error("run_name_invalid");
+const dir = join(root, "reports/quality-2026-11-05", runName);
 await mkdir(dir, { recursive: true });
 const protocolPath = join(dir, "protocol.json");
 if (await Bun.file(protocolPath).exists())
@@ -33,6 +35,8 @@ await Bun.write(
 			models: { anthropic: "claude-haiku-5-5", openai: "gpt-6-luna" },
 			repetitions: 1,
 			concurrency: 1,
+			maxOutputTokens: 8192,
+			timeoutMs: 120000,
 			capUsd: 10,
 			maxRepairCallsPerProposal: 1,
 			scope: scenario.scope,
@@ -65,8 +69,8 @@ try {
 			provider,
 			model: provider === "anthropic" ? "claude-haiku-5-5" : "gpt-6-luna",
 			budget,
-			maxOutputTokens: 4096,
-			timeoutMs: 60000,
+			maxOutputTokens: 8192,
+			timeoutMs: 120000,
 		});
 		const store = new ExampleStateStore(":memory:");
 		let body = "",

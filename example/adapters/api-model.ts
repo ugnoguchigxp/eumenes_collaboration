@@ -155,7 +155,7 @@ export function createApiModel(config: ApiConfig): ModelAdapter {
 			(config.provider === "anthropic" ? "claude-haiku-5-5" : "gpt-6-luna") ||
 		!Number.isSafeInteger(config.maxOutputTokens) ||
 		config.maxOutputTokens < 1 ||
-		config.maxOutputTokens > 4096 ||
+		config.maxOutputTokens > 8192 ||
 		!Number.isFinite(config.timeoutMs) ||
 		config.timeoutMs <= 0
 	)
