@@ -5,6 +5,7 @@ import {
 	stateProposalSchema,
 	collaborationStateSchema,
 	proposeStateUpdate,
+	withinJsonLimits,
 	type StateHostContext,
 	type TurnContext,
 } from "eumenes-collaboration";
@@ -19,6 +20,8 @@ export async function proposeFacts(
 	sourceText: ReadonlyArray<{ ref: string; text: string }>,
 	signal: AbortSignal,
 ) {
+	if (!withinJsonLimits(saved))
+		return { ok: false as const, reason: "json_resource_limit", costUsd: 0 };
 	if (!collaborationStateSchema.safeParse(saved).success)
 		return {
 			ok: false as const,

@@ -126,6 +126,12 @@ const usageSchema = z.object({
 	output_tokens: z.number().int().nonnegative(),
 	cache_creation_input_tokens: z.number().int().nonnegative().optional(),
 	cache_read_input_tokens: z.number().int().nonnegative().optional(),
+	input_tokens_details: z
+		.object({ cached_tokens: z.number().int().nonnegative().optional() })
+		.optional(),
+	output_tokens_details: z
+		.object({ reasoning_tokens: z.number().int().nonnegative().optional() })
+		.optional(),
 });
 export type ApiConfig = {
 	provider: "anthropic" | "openai";

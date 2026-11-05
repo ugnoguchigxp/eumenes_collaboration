@@ -94,11 +94,14 @@ export function createClaudeModel(
 				if (result === undefined) throw new Error("model_result_missing");
 				return { output: result, costUsd: cost };
 			} finally {
-				stream?.close();
-				busy = false;
-				request.signal.removeEventListener("abort", cancel);
-				if (cost === null) unknownCost = true;
-				else spent += cost;
+				try {
+					stream?.close();
+				} finally {
+					busy = false;
+					request.signal.removeEventListener("abort", cancel);
+					if (cost === null) unknownCost = true;
+					else spent += cost;
+				}
 			}
 		},
 	};

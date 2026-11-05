@@ -85,3 +85,47 @@ test("an unsupported persisted schema is preserved across restart and attempted 
 		store.close();
 	}
 });
+
+test("two SQLite connections cannot observe or publish a partial state/receipt transaction", async () => {
+	const dir = await mkdtemp(join(tmpdir(), "collaboration-contention-"));
+	const left = new ExampleStateStore(join(dir, "state.sqlite"));
+	const right = new ExampleStateStore(join(dir, "state.sqlite"));
+	try {
+		left.initialize(initial(), 2);
+		left.db.exec("BEGIN IMMEDIATE");
+		expect(left.adopt("s", "winner", proposal(), host()).ok).toBe(true);
+		expect(right.read("s")).toEqual(initial());
+		expect(right.db.query("SELECT * FROM example_receipts").all()).toEqual([]);
+		expect(() => right.adopt("s", "contender", proposal(), host())).toThrow();
+		left.db.exec("COMMIT");
+		expect(right.read("s")).toMatchObject({ revision: 1 });
+		expect(right.db.query("SELECT id FROM example_receipts").all()).toEqual([
+			{ id: "winner" },
+		]);
+		expect(right.adopt("s", "contender", proposal(), host())).toEqual({
+			ok: false,
+			reason: "state_revision_conflict",
+		});
+		expect(right.adopt("s", "winner", proposal(), host())).toMatchObject({
+			ok: true,
+			replay: true,
+			revision: 1,
+		});
+	} finally {
+		left.close();
+		right.close();
+		await rm(dir, { recursive: true, force: true });
+	}
+});
+
+test("initialization cannot persist an oversized state that subsequent adoption cannot read", () => {
+	const store = new ExampleStateStore(":memory:");
+	try {
+		const state = initial();
+		state.facts[0]!.value = "x".repeat(2100000);
+		expect(() => store.initialize(state, 2)).toThrow("json_resource_limit");
+		expect(store.db.query("SELECT * FROM example_sessions").all()).toEqual([]);
+	} finally {
+		store.close();
+	}
+});

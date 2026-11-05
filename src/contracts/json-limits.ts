@@ -11,9 +11,25 @@ export function withinJsonLimits(value: unknown): boolean {
 	const active = new Set<object>();
 	let nodes = 0,
 		bytes = 0;
+	// Count JSON's encoded bytes without allocating an escaped copy of a large string.
 	const size = (text: string) => {
 		if (text.length > JSON_LIMITS.bytes) return false;
-		bytes += new TextEncoder().encode(text).length;
+		bytes += 2; // quotes
+		for (let i = 0; i < text.length; i++) {
+			const code = text.charCodeAt(i);
+			if (code === 34 || code === 92) bytes += 2;
+			else if (code < 32) bytes += [8, 9, 10, 12, 13].includes(code) ? 2 : 6;
+			else if (code < 128) bytes++;
+			else if (code < 2048) bytes += 2;
+			else if (code >= 0xd800 && code <= 0xdbff) {
+				const next = text.charCodeAt(i + 1);
+				if (next >= 0xdc00 && next <= 0xdfff) {
+					bytes += 4;
+					i++;
+				} else bytes += 6; // JSON escapes an unpaired surrogate.
+			} else bytes += code >= 0xdc00 && code <= 0xdfff ? 6 : 3;
+			if (bytes > JSON_LIMITS.bytes) return false;
+		}
 		return bytes <= JSON_LIMITS.bytes;
 	};
 	try {
@@ -27,12 +43,12 @@ export function withinJsonLimits(value: unknown): boolean {
 				return false;
 			const v = item.value;
 			if (v === null || typeof v === "boolean") {
-				bytes += 5;
+				bytes += v === false ? 5 : 4;
 				continue;
 			}
 			if (typeof v === "number") {
 				if (!Number.isFinite(v)) return false;
-				bytes += 24;
+				bytes += String(v).length;
 				continue;
 			}
 			if (typeof v === "string") {
@@ -50,12 +66,20 @@ export function withinJsonLimits(value: unknown): boolean {
 			stack.push({ value: null, depth: 0, leave: v });
 			const keys = Object.keys(v);
 			if (nodes + keys.length > JSON_LIMITS.nodes) return false;
-			bytes += keys.length * 4;
+			const array = Array.isArray(v);
+			if (
+				array &&
+				(keys.length !== v.length || keys.some((key, i) => key !== String(i)))
+			)
+				return false;
+			bytes += 2 + Math.max(0, keys.length - 1) + (array ? 0 : keys.length);
 			if (bytes > JSON_LIMITS.bytes) return false;
 			for (const key of keys) {
-				if (!Array.isArray(v) && !size(key)) return false;
+				if (!array && !size(key)) return false;
+				const descriptor = Object.getOwnPropertyDescriptor(v, key);
+				if (!descriptor || !Object.hasOwn(descriptor, "value")) return false;
 				stack.push({
-					value: (v as Record<string, unknown>)[key],
+					value: descriptor.value,
 					depth: item.depth + 1,
 				});
 			}

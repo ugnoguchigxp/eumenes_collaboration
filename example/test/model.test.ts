@@ -173,3 +173,37 @@ test("omitted environment inherits the launch environment while an explicit map 
 		expect(captured?.options?.env === env).toBe(true);
 	}
 });
+
+test("SDK cleanup failure still accounts cost and releases the in-flight lock", async () => {
+	const { query } = await import("@anthropic-ai/claude-agent-sdk");
+	const fake = (() =>
+		Object.assign(
+			(async function* () {
+				yield {
+					type: "result",
+					subtype: "success",
+					is_error: false,
+					total_cost_usd: 0.2,
+					structured_output: { ok: true },
+				};
+			})(),
+			{
+				close() {
+					throw new Error("close_failed");
+				},
+			},
+		)) as unknown as typeof query;
+	const adapter = createClaudeModel(
+		{ model: "fixture", cwd: "/tmp", maxBudgetUsd: 0.2, maxCalls: 2, env: {} },
+		fake,
+	);
+	const request = {
+		messages: [{ role: "system" as const, content: "fixed" }],
+		outputSchema: {},
+		signal: new AbortController().signal,
+	};
+	await expect(adapter.infer(request)).rejects.toThrow("close_failed");
+	await expect(adapter.infer(request)).rejects.toThrow(
+		"model_budget_exhausted",
+	);
+});

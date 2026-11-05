@@ -3,6 +3,7 @@ import {
 	collaborationStateSchema,
 	forgetStateSources,
 	proposeStateUpdate,
+	withinJsonLimits,
 	type CollaborationState,
 	type StateHostContext,
 } from "eumenes-collaboration";
@@ -31,6 +32,7 @@ export class ExampleStateStore {
 			.immediate();
 	}
 	initialize(state: CollaborationState, epoch: number) {
+		if (!withinJsonLimits(state)) throw new Error("json_resource_limit");
 		const checked = collaborationStateSchema.parse(state);
 		this.db
 			.query(

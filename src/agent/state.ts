@@ -116,13 +116,15 @@ export function proposeStateUpdate(
 			for (const prior of fact.supersedes)
 				facts.set(prior, { ...facts.get(prior)!, status: "retracted" });
 	if (facts.size > 1000) return reject("state_capacity_exceeded");
-	const candidate = collaborationStateSchema.safeParse({
+	const composed = {
 		...current,
 		revision: current.revision + 1,
 		sourceRevision: host.sourceRevision,
 		work: { ...host.work },
 		facts: structuredClone([...facts.values()]),
-	});
+	};
+	if (!withinJsonLimits(composed)) return reject("json_resource_limit");
+	const candidate = collaborationStateSchema.safeParse(composed);
 	if (!candidate.success) return reject("candidate_state_invalid");
 	return {
 		ok: true,
@@ -136,6 +138,7 @@ export function forgetStateSources(
 	invalidRefs: ReadonlySet<string>,
 	sourceRevision: number,
 ): CollaborationState {
+	if (!withinJsonLimits(saved)) throw new Error("json_resource_limit");
 	const state = collaborationStateSchema.parse(saved);
 	if (
 		!Number.isSafeInteger(sourceRevision) ||

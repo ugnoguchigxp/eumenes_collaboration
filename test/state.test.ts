@@ -181,3 +181,60 @@ test("seeded state sequences preserve schema, revisions, acceptance and unrelate
 		initial().facts[0],
 	);
 });
+
+test("JSON byte limits include escaped values, keys, UTF-8 and lone surrogates", async () => {
+	const { withinJsonLimits, JSON_LIMITS } = await import("../src/index.ts");
+	for (const char of ["\n", "\u0000", '"', "\\", "\ud800", "🌸", "漢"]) {
+		const width = Buffer.byteLength(JSON.stringify(char)) - 2;
+		const text = char.repeat(Math.floor((JSON_LIMITS.bytes - 2) / width));
+		expect(withinJsonLimits(text)).toBe(true);
+		expect(withinJsonLimits(text + char)).toBe(false);
+	}
+	const key = "\u0000".repeat(Math.floor(JSON_LIMITS.bytes / 6));
+	expect(withinJsonLimits({ [key]: null })).toBe(false);
+});
+
+test("composition cannot persist a state exceeding the next read's resource contract", async () => {
+	const { ExampleStateStore } = await import("../example/state-store.ts");
+	const saved = initial();
+	saved.facts[0]!.value = "x".repeat(1100000);
+	const p = proposal();
+	p.upserts[0]!.value = "y".repeat(1100000);
+	p.upserts[0]!.supersedes = [];
+	const store = new ExampleStateStore(":memory:");
+	try {
+		store.initialize(saved, 2);
+		expect(store.adopt("s", "too-large", p, host())).toEqual({
+			ok: false,
+			reason: "json_resource_limit",
+		});
+		expect(store.read("s")).toEqual(saved);
+		expect(
+			store.db.query("SELECT count(*) AS n FROM example_receipts").get(),
+		).toEqual({ n: 0 });
+	} finally {
+		store.close();
+	}
+});
+
+test("accepted replacement transitions require user/observation evidence across source and status kinds", () => {
+	for (const kind of ["user", "observation", "assistant"] as const)
+		for (const status of [
+			"proposed",
+			"confirmed",
+			"rejected",
+			"retracted",
+		] as const) {
+			const h = host();
+			h.sources = [...h.sources, { ref: "witness", active: true, kind }];
+			const p = proposal();
+			p.upserts[0]!.sourceRefs = ["witness"];
+			p.upserts[0]!.status = status;
+			const result = proposeStateUpdate(initial(), p, h);
+			expect(result.ok).toBe(!(status === "confirmed" && kind === "assistant"));
+			if (result.ok)
+				expect(result.state.facts.find((f) => f.id === "prior")?.status).toBe(
+					status === "confirmed" ? "retracted" : "confirmed",
+				);
+		}
+});

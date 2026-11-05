@@ -16,7 +16,10 @@ export class ApiBudget {
 		const row = this.db
 			.query<{ cap: number }, []>("SELECT cap FROM api_budget WHERE id=1")
 			.get()!;
-		if (row.cap !== limitUsd) throw new Error("api_budget_identity_conflict");
+		if (row.cap !== limitUsd) {
+			this.db.close();
+			throw new Error("api_budget_identity_conflict");
+		}
 	}
 	reserve(provider: string, ceiling: number) {
 		return this.db
