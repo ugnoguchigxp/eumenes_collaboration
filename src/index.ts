@@ -26,4 +26,12 @@ export {
 	type Plan,
 	type PlanStep,
 	type PlanBudget,
+	type PlanOptions,
+	browserSignals,
+	browserChoicePrompt,
+	parseBrowserChoice,
+	type BrowserHistoryEntry,
+	type BrowserSignals,
+	type BrowserDecision,
+	type BrowserChoice,
 } from "./agent/plan.ts";

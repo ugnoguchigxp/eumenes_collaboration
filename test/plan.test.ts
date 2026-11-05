@@ -3,32 +3,41 @@ import {
 	budgetCheck,
 	collaborationFactSchema,
 	planBudget,
+	parseBrowserChoice,
 	planSteps,
+	browserChoicePrompt,
 	STEP_RESULT_CHARS,
 	stepResultFact,
 } from "../src/index.ts";
+
+const SITES =
+	/Google Finance|YouTube|PyPI|GitHub|NHK|ウィキペディア|世界銀行|crates\.io|価格\.com/iu;
+const O = { siteNamed: (goal: string) => SITES.test(goal) };
+/** true/false when the plan settled it, "agent" when the step's inference decides. */
+const routed = (s: { browser: { by: string; browser?: boolean } }) =>
+	s.browser.by === "plan" ? s.browser.browser : "agent";
 
 const MSFT =
 	"Google FinanceでMSFTの株価と最新ニュースを調べて、YouTubeで関連する動画を探して再生して、最後にサマリーを教えて";
 
 describe("planSteps", () => {
 	test("the MSFT request is three steps: look up, play (kept open), summarize (no browser)", () => {
-		const { steps } = planSteps(MSFT, "u1");
+		const { steps } = planSteps(MSFT, "u1", O);
 		expect(steps.map((s) => s.goal)).toEqual([
 			"Google FinanceでMSFTの株価と最新ニュースを調べて",
 			"YouTubeで関連する動画を探して再生して",
 			"最後にサマリーを教えて",
 		]);
-		expect(steps.map((s) => [s.needsBrowser, s.keepOpen, s.output])).toEqual([
+		expect(steps.map((s) => [routed(s), s.keepOpen, s.output])).toEqual([
 			[true, false, "findings"],
 			[true, true, "screen"],
-			[false, false, "summary"],
+			["agent", false, "summary"],
 		]);
 		expect(steps[2]?.inputs).toEqual(["s1", "s2"]);
 	});
 
 	test("goals are explicit and confirmed; derived fields are inferred and proposed; all facts are valid", () => {
-		const { facts } = planSteps(MSFT, "u1");
+		const { facts } = planSteps(MSFT, "u1", O);
 		for (const f of facts) collaborationFactSchema.parse(f);
 		const goal = facts.find((f) => f.id === "plan.s1.goal")!;
 		const shape = facts.find((f) => f.id === "plan.s1.shape")!;
@@ -94,9 +103,10 @@ describe("planSteps write-up (L3)", () => {
 		const { steps } = planSteps(
 			"ウィキペディアで富士山を調べて、ブログ記事にしてください",
 			"u",
+			O,
 		);
 		expect(steps).toHaveLength(2);
-		expect(steps[1]?.needsBrowser).toBe(false);
+		expect(routed(steps[1]!)).toBe("agent");
 		expect(steps[1]?.output).toBe("summary");
 	});
 
@@ -104,8 +114,11 @@ describe("planSteps write-up (L3)", () => {
 		const { steps } = planSteps(
 			"NHKで天気を調べて、関連する記事を開いてください",
 			"u",
+			O,
 		);
-		expect(steps[1]?.needsBrowser).toBe(true);
+		// No site named in the second step: its own inference decides, with the action signal.
+		expect(routed(steps[1]!)).toBe("agent");
+		expect(steps[1]!.browser.signals.explicitAction).toBe(true);
 	});
 });
 
@@ -128,20 +141,22 @@ describe("planSteps: 連用形 clauses (2026-11-04)", () => {
 		const p = planSteps(
 			"PyPIで requests の最新版を調べ、GitHubでそのリポジトリを見て、まとめてください",
 			"r",
+			O,
 		);
-		expect(p.steps.map((s) => [s.needsBrowser, s.output])).toEqual([
+		expect(p.steps.map((s) => [routed(s), s.output])).toEqual([
 			[true, "findings"],
 			[true, "findings"],
-			[false, "summary"],
+			["agent", "summary"],
 		]);
 	});
 	test("a lone first step that also says まとめ still uses the browser", () => {
 		const p = planSteps(
 			"crates.ioで serde の最新版を調べてまとめてください",
 			"r",
+			O,
 		);
 		expect(p.steps).toHaveLength(1);
-		expect(p.steps[0]!.needsBrowser).toBe(true);
+		expect(routed(p.steps[0]!)).toBe(true);
 	});
 	test("a list joined by 、 is not split", () => {
 		const p = planSteps("東京、大阪、名古屋の天気を調べてください", "r");
@@ -151,11 +166,87 @@ describe("planSteps: 連用形 clauses (2026-11-04)", () => {
 		const p = planSteps(
 			"世界銀行で日本の人口を調べ、ウィキペディアの日本の記事の人口と比べて、まとめる",
 			"r",
+			O,
 		);
-		expect(p.steps.map((s) => [s.needsBrowser, s.output])).toEqual([
+		expect(p.steps.map((s) => [routed(s), s.output])).toEqual([
 			[true, "findings"],
 			[true, "findings"],
-			[false, "summary"],
+			["agent", "summary"],
 		]);
+	});
+});
+
+describe("browser or not per step (L4, 2026-11-05)", () => {
+	test("a first step with nothing known uses the browser (tie-break toward fresh information)", () => {
+		const { steps } = planSteps("東京の天気を調べて", "u", O);
+		expect(steps[0]!.browser).toMatchObject({
+			by: "plan",
+			browser: true,
+			rationale: "first_step_nothing_known",
+		});
+	});
+
+	test("an address is a named site even without the host's list", () => {
+		const { steps } = planSteps(
+			"天気を調べて、https://example.com を読んで",
+			"u",
+		);
+		expect(steps[1]!.browser).toMatchObject({
+			by: "plan",
+			rationale: "explicit_site",
+		});
+	});
+
+	test("価格.com then 安い順の上位: the second step is its own inference's to decide, with freshness and the prior result", () => {
+		const { steps } = planSteps(
+			"価格.comで Nintendo Switch 2 を検索して、安い順の上位を教えて",
+			"u",
+			O,
+		);
+		expect(steps).toHaveLength(2);
+		const b = steps[1]!.browser;
+		expect(b.by).toBe("agent");
+		expect(b.signals.freshness).toBe(true);
+		expect(b.signals.priorResults).toEqual(["s1"]);
+		const prompt = browserChoicePrompt(b.signals);
+		expect(prompt).toContain("変わる情報(最新・価格・順位など)=あり");
+		expect(prompt).toContain("迷ったときは新しい情報を取りに行きます");
+	});
+
+	test("a past misjudgment on an alike goal is shown to the inference", () => {
+		const { steps } = planSteps(
+			"価格.comで Switch を検索して、安い順の上位を教えて",
+			"u",
+			{
+				...O,
+				history: [
+					{ goal: "安い順の上位を教えて", browser: false, correct: true },
+				],
+			},
+		);
+		expect(steps[1]!.browser.signals.pastMisjudged).toHaveLength(1);
+		expect(browserChoicePrompt(steps[1]!.browser.signals)).toContain(
+			"過去の判断ミス",
+		);
+	});
+
+	test("the answer: BROWSER with a reason, NONE with the answer, anything else is an answer", () => {
+		expect(parseBrowserChoice("BROWSER: 価格は変わるので")).toEqual({
+			browser: true,
+			rationale: "価格は変わるので",
+			answer: "",
+		});
+		expect(
+			parseBrowserChoice("NONE: 前の結果で足りる\n最安は 54,099円"),
+		).toEqual({
+			browser: false,
+			rationale: "前の結果で足りる",
+			answer: "最安は 54,099円",
+		});
+		expect(parseBrowserChoice("まとめ")).toEqual({
+			browser: false,
+			rationale: "unstated",
+			answer: "まとめ",
+		});
 	});
 });
