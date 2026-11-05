@@ -230,6 +230,24 @@ describe("browser or not per step (L4, 2026-11-05)", () => {
 		);
 	});
 
+	test("Japanese goals without spaces are matched by character pairs", () => {
+		const history = [
+			{ goal: "富士山の最初の登頂記録を教えて", browser: false, correct: true },
+		];
+		const alike = planSteps(
+			"ja.wikipedia で浅間山の記事を開いて、浅間山の最初の登頂記録を教えて",
+			"u",
+			{ ...O, history },
+		);
+		expect(alike.steps[1]!.browser.signals.pastMisjudged).toHaveLength(1);
+		const other = planSteps(
+			"ja.wikipedia で浅間山の記事を開いて、近くの温泉の名前を教えて",
+			"u",
+			{ ...O, history },
+		);
+		expect(other.steps[1]!.browser.signals.pastMisjudged).toEqual([]);
+	});
+
 	test("the answer: BROWSER with a reason, NONE with the answer, anything else is an answer", () => {
 		expect(parseBrowserChoice("BROWSER: 価格は変わるので")).toEqual({
 			browser: true,

@@ -70,13 +70,24 @@ export type BrowserDecision =
 	| { by: "plan"; browser: boolean; rationale: string; signals: BrowserSignals }
 	| { by: "agent"; signals: BrowserSignals };
 
-const words = (t: string) =>
-	new Set(
-		t
-			.normalize("NFKC")
-			.toLowerCase()
-			.match(/[\p{L}\p{N}]{2,}/gu) ?? [],
-	);
+/** Japanese and Chinese runs have no spaces between words, so they are compared by character pairs. */
+const CJK = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
+
+const words = (t: string) => {
+	const out = new Set<string>();
+	for (const w of t
+		.normalize("NFKC")
+		.toLowerCase()
+		.match(/[\p{L}\p{N}]{2,}/gu) ?? []) {
+		if (!CJK.test(w)) {
+			out.add(w);
+			continue;
+		}
+		const cs = [...w];
+		for (let i = 0; i + 1 < cs.length; i++) out.add(cs[i]! + cs[i + 1]!);
+	}
+	return out;
+};
 
 function alike(a: string, b: string): boolean {
 	const x = words(a);
