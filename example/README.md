@@ -45,3 +45,7 @@ hostはExternalTarget、ExternalGrant、現在epoch、有効な出所を発行�
 直接APIは`adapters/api-model.ts`、永続した合計予算は`adapters/api-budget.ts`に分ける。Messages/Responses API、toolなし、自動retryなし、モデル置換なし。`decision-turn.ts`はLLMの構造化したsession/plan提案を既存ModelAdapterへ接続する。実行・更新・復旧の詳細は[0.2更新手順](../spec/upgrading-0.2.md)、結果は[品質改善記録](../spec/quality-execution-2026-11-05.md)を参照。SDK接続のfixture成功と直接APIの成功は別に記録する。
 
 `propose`の第4引数にはhostが登録した操作の引数JSON Schemaを渡せる。モデルへnativeな構造を示して、長文を汎用JSON文字列へ二重化する費用を避ける。実行側のaction、操作引数、版・権限の検査は引き続き必要。原文保持の指示は本文生成側でも適用する。[小説試験](../spec/writing-pilot-2026-11-05.md)に反復制作の例を置いた。
+
+接続を作成した後に元の設定オブジェクトを書き換えても、モデル・費用上限・明示したSDK環境は変更されない。設定を変える場合は新しい接続を作る。省略したSDK環境の継承は維持する。
+
+API表現では、省略可能かつnullableな値を、外側のnull（省略）と`{value:null}`（明示したnull）で区別する。nullable/unionの内側も復元し、解釈が複数に分かれる表現や、このadapterで正規化していないallOfは送受信時に拒否する。元のhost schemaによる検査を省略しない。実APIへ送って再確認した結果ではなく、今回の非課金の契約試験で検証している。

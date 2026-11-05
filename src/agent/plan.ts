@@ -1,14 +1,19 @@
 import { z } from "zod";
-import type { CollaborationFact } from "../contracts/state.ts";
+import {
+	collaborationFactSchema,
+	type CollaborationFact,
+} from "../contracts/state.ts";
 
 export const MAX_PLAN_STEPS = 5;
 export const STEP_INFERENCE_BUDGET = 10;
 export const PLAN_INFERENCE_CAP = 30;
 const ref = z.string().min(1).max(256);
+// Both plan.<id> and result.<id> must fit the 256-character fact-id contract.
+const stepRef = z.string().min(1).max(249);
 export const planStepSchema = z.strictObject({
-	id: ref,
+	id: stepRef,
 	goal: z.string().min(1).max(16000),
-	inputs: z.array(ref).max(MAX_PLAN_STEPS),
+	inputs: z.array(stepRef).max(MAX_PLAN_STEPS),
 	output: z.enum(["findings", "screen", "summary"]),
 	browser: z.boolean(),
 	keepOpen: z.boolean(),
@@ -68,9 +73,10 @@ export function stepResultFact(
 	result: string,
 	observationRefs: readonly string[],
 ): CollaborationFact {
+	stepRef.parse(stepId);
 	if (observationRefs.length === 0)
 		throw new Error("step_result_without_observation");
-	return {
+	return collaborationFactSchema.parse({
 		id: `result.${stepId}`,
 		kind: "condition",
 		status: "confirmed",
@@ -83,7 +89,7 @@ export function stepResultFact(
 		},
 		sourceRefs: [...observationRefs],
 		supersedes: [],
-	};
+	});
 }
 
 export type PlanBudget = { perStep: number; overall: number };

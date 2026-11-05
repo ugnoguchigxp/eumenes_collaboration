@@ -56,6 +56,12 @@ export function withinJsonLimits(value: unknown): boolean {
 				continue;
 			}
 			if (typeof v !== "object" || active.has(v)) return false;
+			const hook = Object.getOwnPropertyDescriptor(v, "toJSON");
+			if (
+				hook &&
+				(!Object.hasOwn(hook, "value") || typeof hook.value === "function")
+			)
+				return false;
 			if (
 				!Array.isArray(v) &&
 				Object.getPrototypeOf(v) !== Object.prototype &&

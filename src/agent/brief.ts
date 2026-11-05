@@ -1,4 +1,7 @@
-import type { CollaborationFact } from "../contracts/state.ts";
+import {
+	collaborationFactSchema,
+	type CollaborationFact,
+} from "../contracts/state.ts";
 
 export const briefSlots = [
 	"who",
@@ -74,5 +77,9 @@ export function completeBrief(input: BriefInput): Brief {
 			});
 		}
 	}
-	return { facts, inferred, questions };
+	return {
+		facts: collaborationFactSchema.array().parse(facts),
+		inferred,
+		questions,
+	};
 }

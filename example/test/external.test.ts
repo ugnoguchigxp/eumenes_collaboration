@@ -8,15 +8,21 @@ import {
 	type ExternalTarget,
 } from "../adapters/external.ts";
 import { createEumenesTerminalsPort } from "../adapters/eumenes-terminals.ts";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { ExampleStateStore } from "../state-store.ts";
+import { initial } from "../../test/state.fixture.ts";
 
 function fixture(
 	options: {
 		failDelivery?: boolean;
 		failAnswer?: boolean;
 		noAnswer?: boolean;
+		path?: string;
 	} = {},
 ) {
-	const db = new Database(":memory:");
+	const db = new Database(options.path ?? ":memory:");
 	const deliveries: ExternalRequest[] = [];
 	const answers: Array<{
 		target: ExternalTarget;
@@ -84,7 +90,17 @@ function fixture(
 		}),
 	};
 	const adapter = new ExampleExternalAdapter(db, port, host);
-	return { db, adapter, target, request, deliveries, answers, port, host };
+	return {
+		db,
+		adapter,
+		target,
+		request,
+		deliveries,
+		answers,
+		port,
+		host,
+		grant,
+	};
 }
 const question = {
 	id: "q",
@@ -399,5 +415,229 @@ test("a reconciled or forgotten answer cannot return a stale success to its call
 		} finally {
 			f.db.close();
 		}
+	}
+});
+
+test("a live question arriving during inspection cannot be overwritten by the older inspection", async () => {
+	const f = fixture();
+	let release!: (value: { status: "started" }) => void;
+	f.port.inspect = () =>
+		new Promise((resolve) => {
+			release = resolve;
+		});
+	try {
+		await f.adapter.submit(f.request);
+		const pending = f.adapter.reconcile("r", f.adapter.read("r")!.attempt!);
+		f.adapter.event({
+			id: "question",
+			requestId: "r",
+			generation: 1,
+			kind: "waiting",
+			question,
+		});
+		release({ status: "started" });
+		expect((await pending).status).toBe("waiting");
+		expect(await f.adapter.answer(answer)).toEqual({ status: "sent" });
+	} finally {
+		f.db.close();
+	}
+});
+
+test("revoked sources block first-time delivery and answers even when the host snapshot still says active", async () => {
+	const f = fixture();
+	try {
+		f.adapter.forgetSources("s", new Set(["u1"]));
+		const reopened = new ExampleExternalAdapter(f.db, f.port, f.host);
+		await expect(reopened.submit(f.request)).rejects.toThrow(
+			"external_source_invalid",
+		);
+		expect(f.deliveries).toEqual([]);
+		f.request.sourceRefs = ["a1"];
+		const { authorityRef: _authorityRef, ...frozen } = f.request;
+		f.grant.requestDigest = requestDigest(frozen);
+		await reopened.submit(f.request);
+		reopened.event({
+			id: "question",
+			requestId: "r",
+			generation: 1,
+			kind: "waiting",
+			question,
+		});
+		await expect(reopened.answer(answer)).rejects.toThrow(
+			"external_source_invalid",
+		);
+		expect(f.answers).toEqual([]);
+	} finally {
+		f.db.close();
+	}
+});
+
+test("revocation before state initialization survives adapter-to-store handover", async () => {
+	const dir = await mkdtemp(join(tmpdir(), "collaboration-revocation-"));
+	const path = join(dir, "state.sqlite");
+	const f = fixture({ path });
+	f.adapter.forgetSources("s", new Set(["u1"]));
+	f.db.close();
+	const store = new ExampleStateStore(path);
+	try {
+		expect(() => store.initialize(initial(), 2)).toThrow("source_invalid");
+		expect(store.read("s")).toBeNull();
+	} finally {
+		store.close();
+		await rm(dir, { recursive: true, force: true });
+	}
+});
+
+test("oversized external provenance is rejected before querying the host registry", async () => {
+	const f = fixture();
+	let sources = 0;
+	f.host.source = () => {
+		sources++;
+		return { active: true, kind: "user" as const };
+	};
+	try {
+		await expect(
+			f.adapter.submit({ ...f.request, sourceRefs: Array(100001).fill("u1") }),
+		).rejects.toThrow("json_resource_limit");
+		expect(sources).toBe(0);
+		expect(f.deliveries).toEqual([]);
+	} finally {
+		f.db.close();
+	}
+});
+
+test("an in-flight stop keeps its original target generation when the host registry changes", async () => {
+	const f = fixture();
+	let release!: (value: "confirmed") => void;
+	let sent: ExternalTarget | undefined;
+	f.port.stop = (target) => {
+		sent = target;
+		return new Promise((resolve) => {
+			release = resolve;
+		});
+	};
+	try {
+		await f.adapter.submit(f.request);
+		const pending = f.adapter.stop("r");
+		f.target.generation = 2;
+		expect(sent?.generation).toBe(1);
+		release("confirmed");
+		expect((await pending).status).toBe("unknown");
+	} finally {
+		f.db.close();
+	}
+});
+
+test("forgetting an answer's source fences its late result even if the original request used another source", async () => {
+	const f = fixture();
+	f.request.sourceRefs = ["a1"];
+	const { authorityRef: _authorityRef, ...frozen } = f.request;
+	f.grant.requestDigest = requestDigest(frozen);
+	let release!: (value: "sent") => void;
+	f.port.answerQuestion = () =>
+		new Promise((resolve) => {
+			release = resolve;
+		});
+	try {
+		await f.adapter.submit(f.request);
+		f.adapter.event({
+			id: "question",
+			requestId: "r",
+			generation: 1,
+			kind: "waiting",
+			question,
+		});
+		const pending = f.adapter.answer(answer);
+		f.adapter.forgetSources("s", new Set(["u1"]));
+		release("sent");
+		expect(await pending).toEqual({ status: "unknown" });
+		expect(f.adapter.read("r")).toMatchObject({
+			forgotten: true,
+			request: { prompt: "", sourceRefs: [] },
+		});
+	} finally {
+		f.db.close();
+	}
+});
+
+test("revocation is scoped to its collaboration session and does not block another session's same local ref", async () => {
+	const f = fixture();
+	try {
+		f.adapter.forgetSources("s", new Set(["u1"]));
+		f.host.sessionId = "other";
+		f.request.collaborationSessionId = "other";
+		f.request.requestId = "other-r";
+		const { authorityRef: _authorityRef, ...frozen } = f.request;
+		f.grant.requestDigest = requestDigest(frozen);
+		const other = new ExampleExternalAdapter(f.db, f.port, f.host);
+		expect((await other.submit(f.request)).status).toBe("delivered");
+		expect(f.deliveries.length).toBe(1);
+	} finally {
+		f.db.close();
+	}
+});
+
+test("legacy answers with unknown provenance are redacted on nonempty session forgetting", async () => {
+	const f = fixture();
+	try {
+		await f.adapter.submit(f.request);
+		f.adapter.event({
+			id: "question",
+			requestId: "r",
+			generation: 1,
+			kind: "waiting",
+			question,
+		});
+		await f.adapter.answer(answer);
+		const legacy = f.adapter.read("r")!;
+		delete legacy.answer!.sourceRef;
+		f.db
+			.query("UPDATE example_external_requests SET body=? WHERE id='r'")
+			.run(JSON.stringify(legacy));
+		f.adapter.forgetSources("s", new Set());
+		expect(f.adapter.read("r")?.forgotten).not.toBe(true);
+		f.adapter.forgetSources("s", new Set(["unknown-old-source"]));
+		expect(f.adapter.read("r")).toMatchObject({
+			forgotten: true,
+			request: { prompt: "", sourceRefs: [] },
+		});
+	} finally {
+		f.db.close();
+	}
+});
+
+test("legacy answer receipt identity keeps the original frozen JSON key order", async () => {
+	const f = fixture();
+	try {
+		await f.adapter.submit(f.request);
+		f.adapter.event({
+			id: "question",
+			requestId: "r",
+			generation: 1,
+			kind: "waiting",
+			question,
+		});
+		const input = {
+			text: answer.text,
+			sourceRef: answer.sourceRef,
+			generation: 1,
+			requestId: "r",
+			questionId: "q",
+		};
+		const legacy = f.adapter.read("r")!;
+		legacy.answer = {
+			digest: new Bun.CryptoHasher("sha256")
+				.update(JSON.stringify(input))
+				.digest("hex"),
+			status: "sent",
+		};
+		legacy.question!.answered = true;
+		f.db
+			.query("UPDATE example_external_requests SET body=? WHERE id='r'")
+			.run(JSON.stringify(legacy));
+		expect(await f.adapter.answer(input)).toEqual({ status: "sent" });
+		expect(f.answers).toEqual([]);
+	} finally {
+		f.db.close();
 	}
 });

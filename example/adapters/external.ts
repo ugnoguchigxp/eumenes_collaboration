@@ -1,5 +1,11 @@
 import { Database } from "bun:sqlite";
 import { z } from "zod";
+import { withinJsonLimits } from "eumenes-collaboration";
+import {
+	ensureSourceRevocations,
+	revokedSources,
+	revokeSources,
+} from "../source-revocations.ts";
 
 const ref = z.string().min(1).max(256);
 const revision = z.number().int().nonnegative();
@@ -16,6 +22,13 @@ const externalEventSchema = z.strictObject({
 		})
 		.optional(),
 	report: z.string().max(16000).optional(),
+});
+const externalAnswerSchema = z.strictObject({
+	requestId: ref,
+	questionId: ref,
+	generation: revision,
+	text: z.string(),
+	sourceRef: ref,
 });
 export const externalRequestSchema = z.strictObject({
 	requestId: ref,
@@ -67,7 +80,11 @@ export type ExternalRecord = {
 	reportedResult?: string;
 	independentlyVerified: boolean;
 	forgotten?: boolean;
-	answer?: { digest: string; status: "pending" | "sent" | "unknown" };
+	answer?: {
+		digest: string;
+		status: "pending" | "sent" | "unknown";
+		sourceRef?: string;
+	};
 	/** Persisted fencing token; old async replies may not overwrite reconciliation. */
 	attempt?: number;
 };
@@ -90,14 +107,18 @@ export interface ExternalPort {
 		requestId: string,
 	): Promise<"confirmed" | "unconfirmed">;
 }
-export const requestDigest = (request: Omit<ExternalRequest, "authorityRef">) =>
-	new Bun.CryptoHasher("sha256")
+export const requestDigest = (
+	request: Omit<ExternalRequest, "authorityRef">,
+) => {
+	if (!withinJsonLimits(request)) throw new Error("json_resource_limit");
+	return new Bun.CryptoHasher("sha256")
 		.update(
 			JSON.stringify(
 				externalRequestSchema.omit({ authorityRef: true }).parse(request),
 			),
 		)
 		.digest("hex");
+};
 const jsonDigest = (value: unknown) =>
 	new Bun.CryptoHasher("sha256").update(JSON.stringify(value)).digest("hex");
 const terminal = (status: ExternalStatus) =>
@@ -120,6 +141,7 @@ export class ExampleExternalAdapter {
 				| undefined;
 		},
 	) {
+		ensureSourceRevocations(db);
 		db.exec(
 			"CREATE TABLE IF NOT EXISTS example_external_requests(id TEXT PRIMARY KEY, digest TEXT NOT NULL, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS example_external_events(id TEXT PRIMARY KEY,digest TEXT NOT NULL); CREATE TABLE IF NOT EXISTS example_external_questions(request_id TEXT NOT NULL,id TEXT NOT NULL,digest TEXT NOT NULL,PRIMARY KEY(request_id,id))",
 		);
@@ -153,9 +175,10 @@ export class ExampleExternalAdapter {
 			this.host.epoch(request.collaborationSessionId) !== request.epoch
 		)
 			throw new Error("external_target_changed");
-		return target;
+		return Object.freeze({ ...target });
 	}
 	async submit(value: unknown) {
+		if (!withinJsonLimits(value)) throw new Error("json_resource_limit");
 		const request = externalRequestSchema.parse(value);
 		const { authorityRef, ...frozen } = request;
 		const digest = requestDigest(frozen);
@@ -174,7 +197,12 @@ export class ExampleExternalAdapter {
 			return existing;
 		}
 		this.target(request);
-		if (!request.sourceRefs.every((ref) => this.host.source(ref)?.active))
+		const revoked = revokedSources(this.db, this.host.sessionId);
+		if (
+			!request.sourceRefs.every(
+				(ref) => this.host.source(ref)?.active && !revoked.has(ref),
+			)
+		)
 			throw new Error("external_source_invalid");
 		const grant = this.host.grant(authorityRef);
 		if (
@@ -221,6 +249,7 @@ export class ExampleExternalAdapter {
 		question?: Omit<ExternalQuestion, "answered">;
 		report?: string;
 	}) {
+		if (!withinJsonLimits(value)) throw new Error("json_resource_limit");
 		const event = externalEventSchema.parse(value);
 		return this.db
 			.transaction(() => {
@@ -270,6 +299,7 @@ export class ExampleExternalAdapter {
 					return false;
 				this.save({
 					...record,
+					attempt: (record.attempt ?? 0) + 1,
 					status: event.kind,
 					...(event.kind === "waiting"
 						? {
@@ -286,13 +316,15 @@ export class ExampleExternalAdapter {
 			})
 			.immediate();
 	}
-	async answer(input: {
+	async answer(value: {
 		requestId: string;
 		questionId: string;
 		generation: number;
 		text: string;
 		sourceRef: string;
 	}) {
+		if (!withinJsonLimits(value)) throw new Error("json_resource_limit");
+		const input = externalAnswerSchema.parse(value);
 		const record = this.read(input.requestId);
 		if (
 			!record ||
@@ -306,10 +338,12 @@ export class ExampleExternalAdapter {
 		if (!this.port.answerQuestion) return { status: "unsupported" as const };
 		if (!(
 			this.host.source(input.sourceRef)?.active &&
-			this.host.source(input.sourceRef)?.kind === "user"
+			this.host.source(input.sourceRef)?.kind === "user" &&
+			!revokedSources(this.db, this.host.sessionId).has(input.sourceRef)
 		))
 			throw new Error("external_source_invalid");
-		const digest = jsonDigest(input);
+		// Preserve existing receipt identity; schema parsing must not reorder the frozen input.
+		const digest = jsonDigest(value);
 		if (record.answer) {
 			if (record.answer.digest !== digest)
 				throw new Error("external_answer_identity_conflict");
@@ -318,7 +352,11 @@ export class ExampleExternalAdapter {
 		if (record.status !== "waiting" || record.question.answered)
 			throw new Error("external_question_changed");
 		const attempt = (record.attempt ?? 0) + 1;
-		this.save({ ...record, attempt, answer: { digest, status: "pending" } });
+		this.save({
+			...record,
+			attempt,
+			answer: { digest, status: "pending", sourceRef: input.sourceRef },
+		});
 		let status: "sent" | "unknown" = "unknown";
 		try {
 			status = await this.port.answerQuestion(
@@ -340,7 +378,7 @@ export class ExampleExternalAdapter {
 			this.save({
 				...latest,
 				question: { ...latest.question, answered: status === "sent" },
-				answer: { digest, status },
+				answer: { digest, status, sourceRef: input.sourceRef },
 			});
 			return { status };
 		}
@@ -351,6 +389,7 @@ export class ExampleExternalAdapter {
 			throw new Error("external_session_scope_invalid");
 		this.db
 			.transaction(() => {
+				revokeSources(this.db, sessionId, refs);
 				const rows = this.db
 					.query<{ body: string }, []>(
 						"SELECT body FROM example_external_requests",
@@ -359,7 +398,15 @@ export class ExampleExternalAdapter {
 				for (const row of rows) {
 					const record: ExternalRecord = JSON.parse(row.body);
 					if (record.request.collaborationSessionId !== sessionId) continue;
-					if (!record.request.sourceRefs.some((ref) => refs.has(ref))) continue;
+					const requestAffected = record.request.sourceRefs.some((ref) =>
+						refs.has(ref),
+					);
+					// Legacy answers lack provenance; their retained text cannot be proven unrelated.
+					const answerAffected =
+						refs.size > 0 &&
+						record.answer &&
+						(!record.answer.sourceRef || refs.has(record.answer.sourceRef));
+					if (!requestAffected && !answerAffected) continue;
 					this.save({
 						...record,
 						forgotten: true,

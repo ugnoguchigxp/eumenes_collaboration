@@ -1,6 +1,10 @@
 import { test, expect } from "bun:test";
 import { ApiBudget } from "../adapters/api-budget.ts";
-import { createApiModel, apiSchema } from "../adapters/api-model.ts";
+import {
+	createApiModel,
+	apiSchema,
+	type ApiConfig,
+} from "../adapters/api-model.ts";
 import { z } from "zod";
 import { stateProposalSchema } from "../../src/index.ts";
 import { mkdtemp, rm } from "node:fs/promises";
@@ -279,4 +283,160 @@ test("cancellation reaches the HTTP request and preserves the uncertain reservat
 	} finally {
 		budget.close();
 	}
+});
+
+test("nullable unions recursively decode opaque values and omitted optional fields", () => {
+	const schema = z.strictObject({
+		nested: z
+			.strictObject({ value: z.json(), note: z.string().optional() })
+			.nullable(),
+	});
+	const wire = apiSchema(z.toJSONSchema(schema));
+	expect(
+		schema.parse(
+			wire.decode({
+				nested: { value: { json: '{"items":[1,"日本語"]}' }, note: null },
+			}),
+		),
+	).toEqual({ nested: { value: { items: [1, "日本語"] } } });
+});
+
+test("optional nullable values distinguish omission from explicit null and unknown fields stay visible", () => {
+	const schema = z.strictObject({
+		clear: z.string().nullable().optional(),
+		note: z.string().optional(),
+	});
+	const wire = apiSchema(z.toJSONSchema(schema));
+	expect(
+		schema.parse(wire.decode({ clear: { value: null }, note: null })),
+	).toEqual({ clear: null });
+	expect(schema.parse(wire.decode({ clear: null, note: null }))).toEqual({});
+	expect(
+		schema.safeParse(
+			wire.decode({ clear: null, note: null, unregistered: null }),
+		).success,
+	).toBe(false);
+	expect(
+		schema.parse(wire.decode({ clear: { value: "kept" }, note: null })),
+	).toEqual({ clear: "kept" });
+});
+
+test("discriminated union branches decode their own payload and ambiguous representations fail closed", () => {
+	const schema = z.union([
+		z.strictObject({ tag: z.literal("data"), payload: z.json() }),
+		z.strictObject({ tag: z.literal("text"), text: z.string() }),
+	]);
+	const wire = apiSchema(z.toJSONSchema(schema));
+	expect(
+		schema.parse(wire.decode({ tag: "data", payload: { json: '["a",1]' } })),
+	).toEqual({ tag: "data", payload: ["a", 1] });
+	expect(schema.parse(wire.decode({ tag: "text", text: "original" }))).toEqual({
+		tag: "text",
+		text: "original",
+	});
+	const ambiguous = apiSchema(
+		z.toJSONSchema(z.union([z.json(), z.strictObject({ json: z.string() })])),
+	);
+	expect(() => ambiguous.decode({ json: '{"x":1}' })).toThrow(
+		"api_json_union_ambiguous",
+	);
+	expect(() =>
+		apiSchema({
+			allOf: [
+				{ type: "object", properties: { a: { type: "string" } } },
+				{ type: "object", properties: { b: { type: "string" } } },
+			],
+		}),
+	).toThrow("api_schema_intersection_unsupported");
+});
+
+test("API decoding refuses excessive decoded depth, including inside opaque envelopes", async () => {
+	const budget = new ApiBudget(":memory:", 1);
+	let nested: unknown = null;
+	for (let i = 0; i < 70; i++) nested = [nested];
+	try {
+		const model = createApiModel({
+			provider: "openai",
+			model: "gpt-6-luna",
+			apiKey: "fixture-key",
+			budget,
+			maxOutputTokens: 100,
+			timeoutMs: 1000,
+			fetcher: async () =>
+				Response.json({
+					status: "completed",
+					usage: { input_tokens: 10, output_tokens: 5 },
+					output: [
+						{
+							content: [
+								{
+									type: "output_text",
+									text: JSON.stringify({ json: JSON.stringify(nested) }),
+								},
+							],
+						},
+					],
+				}),
+		});
+		await expect(
+			model.infer({
+				messages: [{ role: "system", content: "fixed" }],
+				outputSchema: { $ref: "#/$defs/json" },
+				signal: new AbortController().signal,
+			}),
+		).rejects.toThrow("api_output_capacity_exceeded");
+	} finally {
+		budget.close();
+	}
+});
+
+test("adapter configuration cannot switch an already validated model after creation", async () => {
+	const budget = new ApiBudget(":memory:", 1);
+	let sent: Record<string, unknown> = {};
+	const config: ApiConfig = {
+		provider: "openai",
+		model: "gpt-6-luna",
+		apiKey: "fixture-key",
+		budget,
+		maxOutputTokens: 100,
+		timeoutMs: 1000,
+		fetcher: async (_url, init) => {
+			sent = JSON.parse(String(init.body));
+			return Response.json({
+				status: "completed",
+				usage: { input_tokens: 10, output_tokens: 5 },
+				output: [{ content: [{ type: "output_text", text: '{"ok":true}' }] }],
+			});
+		},
+	};
+	try {
+		const model = createApiModel(config);
+		config.model = "unapproved-model";
+		expect(
+			(
+				await model.infer({
+					messages: [{ role: "system", content: "fixed" }],
+					outputSchema: {
+						type: "object",
+						properties: { ok: { type: "boolean" } },
+						required: ["ok"],
+						additionalProperties: false,
+					},
+					signal: new AbortController().signal,
+				})
+			).output,
+		).toEqual({ ok: true });
+		expect(sent.model).toBe("gpt-6-luna");
+	} finally {
+		budget.close();
+	}
+});
+
+test("native object decoding never repairs an invalid scalar into an accepted empty object", () => {
+	const schema = z.strictObject({
+		settings: z.strictObject({ note: z.string().optional() }),
+	});
+	const wire = apiSchema(z.toJSONSchema(schema));
+	for (const settings of [null, "wrong", 42, []])
+		expect(schema.safeParse(wire.decode({ settings })).success).toBe(false);
 });

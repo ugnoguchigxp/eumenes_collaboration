@@ -3,6 +3,7 @@ import { mkdir, rm, cp } from "node:fs/promises";
 import { resolve, join } from "node:path";
 import { applyHostAdapter } from "./host-adapter.ts";
 import { compareHosts } from "./compare-hosts.ts";
+import { sourceProvenance } from "./source-provenance.ts";
 import {
 	coreContractVersion,
 	supportedStateSchemaVersions,
@@ -136,6 +137,8 @@ try {
 		"package.json",
 		"bun.lock",
 		"s11tnext.config.toml",
+		"README.md",
+		"LICENSE",
 	].sort();
 	const fileDigests = Object.fromEntries(
 		await Promise.all(
@@ -145,18 +148,16 @@ try {
 			]),
 		),
 	);
-	const commit = Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: root });
 	const manifest = {
 		packageVersion,
-		sourceCommit:
-			commit.exitCode === 0 ? commit.stdout.toString().trim() : null,
+		...sourceProvenance(root),
 		sourceTreeDigest: digest(JSON.stringify(fileDigests)),
 		files: fileDigests,
 		coreContractVersion,
 		supportedStateSchemaVersions,
 		hostBaselineCommit: declaredBaseline,
 		environment: { bun: Bun.version },
-		generation: "bun run context:build",
+		generation: "bun run pack:check",
 	};
 	await Bun.write(
 		join(root, "manifest.json"),
@@ -190,6 +191,20 @@ try {
 	])
 		if (!paths.includes("package/" + path))
 			throw new Error("missing_packed_resource:" + path);
+	// Check the actual archive even in package-only mode, where no consumer is installed.
+	for (const [path, expected] of Object.entries(fileDigests)) {
+		if (path === "bun.lock" || path === "s11tnext.config.toml") continue;
+		const packed = Bun.spawnSync(["tar", "-xOf", tgz, "package/" + path], {
+			cwd: root,
+		});
+		if (packed.exitCode !== 0 || digest(packed.stdout) !== expected)
+			throw new Error("packed_resource_mismatch:" + path);
+	}
+	report.sourceProvenance = {
+		sourceCommit: manifest.sourceCommit,
+		sourceBaseCommit: manifest.sourceBaseCommit,
+		sourceTreeDirty: manifest.sourceTreeDirty,
+	};
 	if (!host.ok) {
 		if (process.env.PACK_CHECK_REQUIRE_HOST === "1")
 			throw new Error(`host_integration_required:${host.reason}`);

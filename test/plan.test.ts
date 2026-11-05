@@ -59,3 +59,20 @@ test("bounded results require observations and host budgets fail closed", () => 
 		expect(budgetCheck(n, planBudget(3)).decision).toBe("stop");
 	expect(budgetCheck(0, { overall: NaN, perStep: 10 }).decision).toBe("stop");
 });
+
+test("accepted step identifiers fit both generated fact prefixes and observation refs are validated", async () => {
+	const { collaborationFactSchema } = await import("../src/index.ts");
+	const id = "x".repeat(249);
+	expect(
+		collaborationFactSchema.safeParse(
+			planSteps({ steps: [step(id)] }, "u").facts[0],
+		).success,
+	).toBe(true);
+	expect(
+		collaborationFactSchema.safeParse(stepResultFact(id, "result", ["o"]))
+			.success,
+	).toBe(true);
+	expect(() => planSteps({ steps: [step(id + "x")] }, "u")).toThrow();
+	expect(() => stepResultFact(id + "x", "result", ["o"])).toThrow();
+	expect(() => stepResultFact("s", "result", [""])).toThrow();
+});

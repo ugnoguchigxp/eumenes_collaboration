@@ -129,3 +129,95 @@ test("initialization cannot persist an oversized state that subsequent adoption 
 		store.close();
 	}
 });
+
+test("receipt replay checks the current session and epoch before reporting success", () => {
+	const store = new ExampleStateStore(":memory:");
+	try {
+		store.initialize(initial(), 2);
+		expect(store.adopt("s", "op", proposal(), host()).ok).toBe(true);
+		expect(
+			store.adopt("s", "op", proposal(), { ...host(), sessionId: "other" }),
+		).toEqual({ ok: false, reason: "session_changed" });
+		store.db.query("UPDATE example_sessions SET epoch=3 WHERE id='s'").run();
+		expect(store.adopt("s", "op", proposal(), { ...host(), epoch: 3 }).ok).toBe(
+			false,
+		);
+	} finally {
+		store.close();
+	}
+});
+
+test("the writer rejects cyclic proposals before serialization and leaves no receipt", () => {
+	const store = new ExampleStateStore(":memory:");
+	try {
+		store.initialize(initial(), 2);
+		const p: Record<string, unknown> = {};
+		p.self = p;
+		expect(store.adopt("s", "cycle", p, host())).toEqual({
+			ok: false,
+			reason: "json_resource_limit",
+		});
+		expect(store.read("s")).toEqual(initial());
+		expect(store.db.query("SELECT * FROM example_receipts").all()).toEqual([]);
+	} finally {
+		store.close();
+	}
+});
+
+test("invalid epochs cannot initialize a session that no valid proposal could update", () => {
+	const store = new ExampleStateStore(":memory:");
+	try {
+		for (const epoch of [NaN, Infinity, -1, 1.5])
+			expect(() => store.initialize(initial(), epoch)).toThrow("epoch_invalid");
+		expect(store.read("s")).toBeNull();
+	} finally {
+		store.close();
+	}
+});
+
+test("existing version-one databases keep their receipts and foreign-key revocations", async () => {
+	const { Database } = await import("bun:sqlite");
+	const dir = await mkdtemp(join(tmpdir(), "collaboration-legacy-"));
+	const path = join(dir, "state.sqlite");
+	const old = new Database(path);
+	const saved = { ...initial(), revision: 1, sourceRevision: 2, facts: [] };
+	old.exec(
+		"PRAGMA foreign_keys=ON; CREATE TABLE example_migrations(version INTEGER PRIMARY KEY); INSERT INTO example_migrations VALUES(1); CREATE TABLE example_sessions(id TEXT PRIMARY KEY, epoch INTEGER NOT NULL,state TEXT NOT NULL); CREATE TABLE example_receipts(id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES example_sessions(id),digest TEXT NOT NULL,revision INTEGER NOT NULL); CREATE TABLE example_revoked_sources(session_id TEXT NOT NULL REFERENCES example_sessions(id),ref TEXT NOT NULL,PRIMARY KEY(session_id,ref));",
+	);
+	old
+		.query("INSERT INTO example_sessions VALUES(?,?,?)")
+		.run("s", 2, JSON.stringify(saved));
+	old.query("INSERT INTO example_revoked_sources VALUES(?,?)").run("s", "u1");
+	old
+		.query("INSERT INTO example_receipts VALUES(?,?,?,?)")
+		.run("historic", "s", "digest", 1);
+	old.close();
+	const store = new ExampleStateStore(path);
+	try {
+		expect(store.initialize(initial(), 2)).toEqual(saved);
+		expect(store.db.query("SELECT id FROM example_receipts").all()).toEqual([
+			{ id: "historic" },
+		]);
+		expect(
+			store.db.query("PRAGMA foreign_key_list(example_revoked_sources)").all()
+				.length,
+		).toBe(1);
+		const p = {
+			...proposal(),
+			expectedRevision: 1,
+			sourceRevision: 2,
+			upserts: [initial().facts[0]!],
+			removals: [],
+		};
+		expect(
+			store.adopt("s", "stale", p, { ...host(), sourceRevision: 2 }),
+		).toEqual({ ok: false, reason: "source_invalid" });
+		p.upserts = [{ ...initial().facts[0]!, sourceRefs: ["u2"] }];
+		expect(
+			store.adopt("s", "fresh", p, { ...host(), sourceRevision: 2 }).ok,
+		).toBe(true);
+	} finally {
+		store.close();
+		await rm(dir, { recursive: true, force: true });
+	}
+});

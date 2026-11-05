@@ -60,3 +60,51 @@ test("UI and Pipeline observations bind to their own revision and reject a concu
 		).toMatchObject({ status: "stale", current: { revision: 2 } });
 	}
 });
+
+test("a capture callback cannot change the revision the host asked it to observe", async () => {
+	const current = { ref: "ui:work", revision: 1, digest: "one" };
+	const result = await observeCurrent({
+		current: () => current,
+		async capture(target) {
+			target.revision = 2;
+			target.digest = "two";
+			current.revision = 2;
+			current.digest = "two";
+			return {
+				ref: "o",
+				work: target,
+				capturedAt: "2026-11-05",
+				kind: "preview",
+				evidence: "fixture",
+				result: {},
+			};
+		},
+	});
+	expect(result.status).toBe("stale");
+});
+
+test("a captured work revision remains stable after the live work object changes", async () => {
+	const current = { ref: "ui:work", revision: 1, digest: "one" };
+	const result = await observeCurrent({
+		current: () => current,
+		async capture() {
+			return {
+				ref: "o",
+				work: current,
+				capturedAt: "2026-11-05",
+				kind: "preview",
+				evidence: "fixture",
+				result: {},
+			};
+		},
+	});
+	expect(result.status).toBe("current");
+	current.revision = 2;
+	current.digest = "two";
+	if (result.status === "current")
+		expect(result.observation.work).toEqual({
+			ref: "ui:work",
+			revision: 1,
+			digest: "one",
+		});
+});

@@ -111,10 +111,13 @@ export function proposeStateUpdate(
 		return false;
 	};
 	if ([...facts.keys()].some(cycle)) return reject("supersession_cycle");
-	for (const fact of facts.values())
-		if (fact.status === "confirmed")
-			for (const prior of fact.supersedes)
-				facts.set(prior, { ...facts.get(prior)!, status: "retracted" });
+	// Snapshot accepted edges before retracting their targets; proposal order must not hide an edge.
+	const replacements = [...facts.values()].filter(
+		(fact) => fact.status === "confirmed",
+	);
+	for (const fact of replacements)
+		for (const prior of fact.supersedes)
+			facts.set(prior, { ...facts.get(prior)!, status: "retracted" });
 	if (facts.size > 1000) return reject("state_capacity_exceeded");
 	const composed = {
 		...current,
@@ -149,7 +152,7 @@ export function forgetStateSources(
 		(fact) => !fact.sourceRefs.some((ref) => invalidRefs.has(ref)),
 	);
 	const kept = new Set(facts.map((fact) => fact.id));
-	return {
+	const candidate = {
 		...state,
 		revision: state.revision + 1,
 		sourceRevision,
@@ -158,4 +161,6 @@ export function forgetStateSources(
 			supersedes: fact.supersedes.filter((id) => kept.has(id)),
 		})),
 	};
+	if (!withinJsonLimits(candidate)) throw new Error("json_resource_limit");
+	return collaborationStateSchema.parse(candidate);
 }

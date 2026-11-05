@@ -10,13 +10,35 @@ export function apiSchema(schema: Schema): {
 	schema: Schema;
 	decode: (value: unknown) => unknown;
 } {
+	if (!withinJsonLimits(schema))
+		throw new Error("api_schema_capacity_exceeded");
+	const originals = new WeakMap<Schema, z.ZodType>();
+	const wireValidators = new WeakMap<Schema, z.ZodType>();
+	const original = (s: Schema) => {
+		let validator = originals.get(s);
+		if (!validator) {
+			validator = z.fromJSONSchema({
+				...s,
+				...(schema.$defs ? { $defs: schema.$defs } : {}),
+			} as Parameters<typeof z.fromJSONSchema>[0]);
+			originals.set(s, validator);
+		}
+		return validator;
+	};
+	const nullable = (s: Schema) => original(s).safeParse(null).success;
+	const opaque = (s: Schema) =>
+		Boolean(s.$ref) ||
+		(s.type === "object" &&
+			s.properties === undefined &&
+			s.additionalProperties !== false) ||
+		(s.type === undefined &&
+			!s.anyOf &&
+			!s.oneOf &&
+			!s.allOf &&
+			!s.enum &&
+			s.const === undefined);
 	const transform = (s: Schema): Schema => {
-		if (
-			s.$ref ||
-			(s.type === "object" &&
-				s.properties === undefined &&
-				s.additionalProperties !== false)
-		)
+		if (opaque(s))
 			return {
 				anyOf: [
 					{ type: "string" },
@@ -54,7 +76,9 @@ export function apiSchema(schema: Schema): {
 					String(out.description ?? "") + ` ${key}: ${out[key]}.`;
 			delete out[key];
 		}
-		for (const key of ["anyOf", "allOf", "oneOf"])
+		// This adapter does not normalize intersections; reject before sending rather than misdecode them.
+		if (s.allOf) throw new Error("api_schema_intersection_unsupported");
+		for (const key of ["anyOf", "oneOf"])
 			if (Array.isArray(s[key]))
 				out[key] = (s[key] as unknown[]).map((x) => transform(obj(x)));
 		if (out.const !== undefined) {
@@ -65,12 +89,23 @@ export function apiSchema(schema: Schema): {
 			const props = obj(s.properties),
 				required = new Set(Array.isArray(s.required) ? s.required : []);
 			out.properties = Object.fromEntries(
-				Object.entries(props).map(([k, v]) => [
-					k,
-					required.has(k)
-						? transform(obj(v))
-						: { anyOf: [transform(obj(v)), { type: "null" }] },
-				]),
+				Object.entries(props).map(([k, v]) => {
+					const child = obj(v),
+						transformed = transform(child);
+					if (required.has(k)) return [k, transformed];
+					// null alone means absent. A present nullable value needs its own envelope.
+					const present = nullable(child)
+						? {
+								type: "object",
+								properties: { value: transformed },
+								required: ["value"],
+								additionalProperties: false,
+								description:
+									"Present optional value, including explicit null. Use the outer null only to omit the field.",
+							}
+						: transformed;
+					return [k, { anyOf: [present, { type: "null" }] }];
+				}),
 			);
 			out.required = Object.keys(props);
 			out.additionalProperties = false;
@@ -79,12 +114,7 @@ export function apiSchema(schema: Schema): {
 		return out;
 	};
 	const decode = (s: Schema, v: unknown): unknown => {
-		if (
-			s.$ref ||
-			(s.type === "object" &&
-				s.properties === undefined &&
-				s.additionalProperties !== false)
-		) {
+		if (opaque(s)) {
 			if (
 				v === null ||
 				typeof v === "string" ||
@@ -104,22 +134,70 @@ export function apiSchema(schema: Schema): {
 				throw new Error("api_json_value_invalid");
 			}
 		}
+		const branches = s.anyOf ?? s.oneOf;
+		if (Array.isArray(branches)) {
+			const matches = branches.map(obj).filter((branch) => {
+				let validator = wireValidators.get(branch);
+				if (!validator) {
+					validator = z.fromJSONSchema(transform(branch));
+					wireValidators.set(branch, validator);
+				}
+				return validator.safeParse(v).success;
+			});
+			if (!matches.length || (s.oneOf && matches.length !== 1))
+				throw new Error("api_json_union_invalid");
+			const values = matches.map((branch) => decode(branch, v));
+			if (
+				values.some(
+					(value) => JSON.stringify(value) !== JSON.stringify(values[0]),
+				)
+			)
+				throw new Error("api_json_union_ambiguous");
+			return values[0];
+		}
 		if (s.type === "array") {
 			if (!Array.isArray(v)) return v;
 			return v.map((x) => decode(obj(s.items), x));
 		}
 		if (s.type === "object") {
+			if (v === null || typeof v !== "object" || Array.isArray(v)) return v;
 			const value = obj(v),
-				required = new Set(Array.isArray(s.required) ? s.required : []);
+				required = new Set(Array.isArray(s.required) ? s.required : []),
+				props = obj(s.properties);
 			return Object.fromEntries(
 				Object.entries(value)
-					.filter(([k, x]) => x !== null || required.has(k))
-					.map(([k, x]) => [k, decode(obj(obj(s.properties)[k]), x)]),
+					.filter(
+						([k, x]) =>
+							x !== null || required.has(k) || !Object.hasOwn(props, k),
+					)
+					.map(([k, x]) => {
+						if (!Object.hasOwn(props, k)) return [k, x];
+						const child = obj(props[k]);
+						if (!required.has(k) && nullable(child)) {
+							const present = obj(x);
+							if (
+								Object.keys(present).length !== 1 ||
+								!Object.hasOwn(present, "value")
+							)
+								throw new Error("api_json_optional_invalid");
+							return [k, decode(child, present.value)];
+						}
+						return [k, decode(child, x)];
+					}),
 			);
 		}
 		return v;
 	};
-	return { schema: transform(schema), decode: (v) => decode(schema, v) };
+	return {
+		schema: transform(schema),
+		decode: (v) => {
+			if (!withinJsonLimits(v)) throw new Error("api_output_capacity_exceeded");
+			const result = decode(schema, v);
+			if (!withinJsonLimits(result))
+				throw new Error("api_output_capacity_exceeded");
+			return result;
+		},
+	};
 }
 const usageSchema = z.object({
 	input_tokens: z.number().int().nonnegative(),
@@ -143,7 +221,8 @@ export type ApiConfig = {
 	fetcher?: (url: string, init: RequestInit) => Promise<Response>;
 };
 /** Direct HTTP adapters perform inference only, with no retries, tools or provider fallback. */
-export function createApiModel(config: ApiConfig): ModelAdapter {
+export function createApiModel(settings: ApiConfig): ModelAdapter {
+	const config = { ...settings };
 	const key =
 		config.apiKey ??
 		process.env[

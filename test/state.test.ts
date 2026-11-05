@@ -238,3 +238,60 @@ test("accepted replacement transitions require user/observation evidence across 
 				);
 		}
 });
+
+test("a confirmed correction chain has the same result in every proposal order", () => {
+	const base = proposal().upserts[0]!;
+	const middle = { ...base, id: "middle", supersedes: ["prior"] };
+	const latest = { ...base, id: "latest", supersedes: ["middle"] };
+	for (const upserts of [
+		[middle, latest],
+		[latest, middle],
+	]) {
+		const result = proposeStateUpdate(
+			initial(),
+			{ ...proposal(), upserts },
+			host(),
+		);
+		expect(result.ok).toBe(true);
+		if (result.ok) {
+			for (const id of ["prior", "middle"])
+				expect(result.state.facts.find((f) => f.id === id)?.status).toBe(
+					"retracted",
+				);
+			expect(result.state.facts.find((f) => f.id === "latest")?.status).toBe(
+				"confirmed",
+			);
+		}
+	}
+});
+
+test("forgetting cannot return an invalid revision or an oversized next state", async () => {
+	const { JSON_LIMITS } = await import("../src/index.ts");
+	const s = initial();
+	s.revision = Number.MAX_SAFE_INTEGER;
+	expect(() => forgetStateSources(s, new Set(), 2)).toThrow();
+	s.revision = 0;
+	s.sourceRevision = 9;
+	s.facts[0]!.value = "";
+	s.facts[0]!.value = "x".repeat(
+		JSON_LIMITS.bytes - Buffer.byteLength(JSON.stringify(s)),
+	);
+	expect(() => forgetStateSources(s, new Set(), 10)).toThrow(
+		"json_resource_limit",
+	);
+});
+
+test("resource inspection rejects hidden serialization hooks without invoking them", async () => {
+	const { withinJsonLimits } = await import("../src/index.ts");
+	let called = 0;
+	const value = {};
+	Object.defineProperty(value, "toJSON", {
+		value() {
+			called++;
+			return "unexpected";
+		},
+	});
+	expect(withinJsonLimits(value)).toBe(false);
+	expect(called).toBe(0);
+	expect(withinJsonLimits({ toJSON: "ordinary JSON data" })).toBe(true);
+});

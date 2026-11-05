@@ -54,3 +54,8 @@ test("only a missing must-ask slot becomes a question; a given one is not asked"
 	});
 	expect(given.questions).toEqual([]);
 });
+
+test("brief factories refuse invalid provenance instead of returning invalid state facts", () => {
+	for (const sourceRef of ["", "x".repeat(257)])
+		expect(() => completeBrief({ sourceRef, given: {}, defaults })).toThrow();
+});

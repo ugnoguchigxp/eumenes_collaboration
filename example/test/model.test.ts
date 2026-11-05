@@ -1,6 +1,9 @@
 import { expect, test } from "bun:test";
 import { createFixtureModel } from "../adapters/model.ts";
-import { createClaudeModel } from "../adapters/claude-model.ts";
+import {
+	createClaudeModel,
+	type ClaudeModelConfig,
+} from "../adapters/claude-model.ts";
 import { propose } from "../host.ts";
 
 test("the host parses a scripted proposal without treating it as a committed operation", async () => {
@@ -169,8 +172,10 @@ test("omitted environment inherits the launch environment while an explicit map 
 		expect(Object.hasOwn(captured?.options ?? {}, "env")).toBe(
 			env !== undefined,
 		);
-		// Compare identity only, so a regression cannot print inherited credentials.
-		expect(captured?.options?.env === env).toBe(true);
+		// Check omission/isolation without printing any inherited credential values.
+		expect(captured?.options?.env === undefined).toBe(env === undefined);
+		if (env !== undefined)
+			expect(Object.keys(captured?.options?.env ?? {}).length).toBe(0);
 	}
 });
 
@@ -272,4 +277,85 @@ test("registered native arguments preserve Unicode text without weakening the ac
 	} finally {
 		budget.close();
 	}
+});
+
+test("SDK settings and cost ceilings cannot be changed through the caller's configuration object", async () => {
+	const { query } = await import("@anthropic-ai/claude-agent-sdk");
+	let captured: Parameters<typeof query>[0] | undefined;
+	const fake = ((input: Parameters<typeof query>[0]) => {
+		captured = input;
+		return Object.assign(
+			(async function* () {
+				yield {
+					type: "result",
+					subtype: "success",
+					is_error: false,
+					total_cost_usd: 0.2,
+					structured_output: { ok: true },
+				};
+			})(),
+			{ close() {} },
+		);
+	}) as unknown as typeof query;
+	const config: ClaudeModelConfig = {
+		model: "fixture",
+		cwd: "/tmp",
+		maxBudgetUsd: 0.2,
+		maxCalls: 2,
+		env: { SAFE_ENV: "before" },
+	};
+	const model = createClaudeModel(config, fake);
+	config.model = "changed";
+	config.maxBudgetUsd = 99;
+	config.env!.SAFE_ENV = "after";
+	const request = {
+		messages: [{ role: "system" as const, content: "fixed" }],
+		outputSchema: {},
+		signal: new AbortController().signal,
+	};
+	await model.infer(request);
+	expect(captured?.options?.model).toBe("fixture");
+	expect(captured?.options?.env?.SAFE_ENV).toBe("before");
+	await expect(model.infer(request)).rejects.toThrow("model_budget_exhausted");
+});
+
+test("SDK resource limits reject before launch and account for oversized returned output", async () => {
+	const { query } = await import("@anthropic-ai/claude-agent-sdk");
+	let launches = 0;
+	const fake = (() => {
+		launches++;
+		return Object.assign(
+			(async function* () {
+				yield {
+					type: "result",
+					subtype: "success",
+					is_error: false,
+					total_cost_usd: 0.2,
+					structured_output: { text: "x".repeat(2 * 1024 * 1024) },
+				};
+			})(),
+			{ close() {} },
+		);
+	}) as unknown as typeof query;
+	const model = createClaudeModel(
+		{ model: "fixture", cwd: "/tmp", maxBudgetUsd: 0.2, maxCalls: 2, env: {} },
+		fake,
+	);
+	const request = {
+		messages: [{ role: "system" as const, content: "fixed" }],
+		outputSchema: {},
+		signal: new AbortController().signal,
+	};
+	await expect(
+		model.infer({
+			...request,
+			messages: [{ role: "system", content: "x".repeat(2 * 1024 * 1024) }],
+		}),
+	).rejects.toThrow("model_input_capacity_exceeded");
+	expect(launches).toBe(0);
+	await expect(model.infer(request)).rejects.toThrow(
+		"model_output_capacity_exceeded",
+	);
+	expect(launches).toBe(1);
+	await expect(model.infer(request)).rejects.toThrow("model_budget_exhausted");
 });

@@ -1,5 +1,6 @@
 import { query, type Options } from "@anthropic-ai/claude-agent-sdk";
 import type { ModelAdapter } from "./model.ts";
+import { withinJsonLimits } from "eumenes-collaboration";
 
 export type ClaudeModelConfig = {
 	model: string;
@@ -12,9 +13,13 @@ export type ClaudeModelConfig = {
 
 /** Mirrors the model-only SDK boundary in Eumenes's cloud-agents adapter. */
 export function createClaudeModel(
-	config: ClaudeModelConfig,
+	settings: ClaudeModelConfig,
 	startQuery: typeof query = query,
 ): ModelAdapter {
+	const config = {
+		...settings,
+		...(settings.env === undefined ? {} : { env: { ...settings.env } }),
+	};
 	if (
 		!config.model ||
 		!config.cwd ||
@@ -37,6 +42,11 @@ export function createClaudeModel(
 				unknownCost
 			)
 				throw new Error("model_budget_exhausted");
+			if (
+				!withinJsonLimits(request.messages) ||
+				!withinJsonLimits(request.outputSchema)
+			)
+				throw new Error("model_input_capacity_exceeded");
 			const first = request.messages[0];
 			if (
 				first?.role !== "system" ||
@@ -92,6 +102,8 @@ export function createClaudeModel(
 				}
 				request.signal.throwIfAborted();
 				if (result === undefined) throw new Error("model_result_missing");
+				if (!withinJsonLimits(result))
+					throw new Error("model_output_capacity_exceeded");
 				return { output: result, costUsd: cost };
 			} finally {
 				try {

@@ -18,8 +18,9 @@ const matches = (a: WorkVersion, b: WorkVersion) =>
 /** A renderer/domain adapter supplies evidence. The core never invents a preview or trial. */
 export async function observeCurrent(port: ObservationPort) {
 	const target = { ...port.current() };
-	const observation = await port.capture(target);
-	const current = port.current();
+	const captured = await port.capture({ ...target });
+	const observation = { ...captured, work: { ...captured.work } };
+	const current = { ...port.current() };
 	if (!matches(target, observation.work) || !matches(target, current))
 		return { status: "stale" as const, current };
 	return { status: "current" as const, observation };
