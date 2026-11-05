@@ -13,7 +13,7 @@
 
 ## 基準線と予算
 
-固定host commit: `5bf5ca556ad45a9c8a6b72f81aae85f7505e505c`。並行開発時の基準方針（2026-11-05）: `EUMENES_BASELINE_COMMIT`で別のhost commit（`HEAD`可）を指定でき、reportに宣言値と実使用値を両方残す。hostのcheckoutかcommitが無いときはhost統合段を理由付きで`skipped`とし、結果は`passed`ではなく`passed_package_only`とする。`PACK_CHECK_REQUIRE_HOST=1`（CI・リリース）では失敗にする。製品の未commit差分は取り込まない。git archiveからコードだけを展開し、製品DB・設定・秘密をコピーしない。
+固定host commit: `5bf5ca556ad45a9c8a6b72f81aae85f7505e505c`。並行開発時の基準方針（2026-11-05）: `EUMENES_BASELINE_COMMIT`で別のhost commit（`HEAD`可）を指定でき、reportに宣言値と実使用値を両方残す。hostのcheckoutかcommitが無いときはhost統合段を理由付きで`skipped`とし、結果は`passed`ではなく`passed_package_only`とする。`PACK_CHECK_REQUIRE_HOST=1`（CI・リリース）では失敗にする。host統合段の準備（公開・認証不要）: `git init ../eumenes && cd ../eumenes && git remote add origin https://github.com/ugnoguchigxp/eumenes && git fetch --depth=1 origin <基準commit> && git checkout FETCH_HEAD`。これで`pack:check`は`passed`まで通る（2026-11-05実測 約5分、parity 601比較）。製品の未commit差分は取り込まない。git archiveからコードだけを展開し、製品DB・設定・秘密をコピーしない。
 
 P1は固定モデルのみ、API費用0、現行最大4推論・doc.edit再試行1・doc.write再試行0を維持する。比較は既存specialist六試験ファイルと、出力schema・解析・違反・指示・文脈の直接比較。意味品質・実モデルの時間や費用は未測定であり0と報告しない。
 
