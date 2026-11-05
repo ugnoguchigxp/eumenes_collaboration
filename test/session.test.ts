@@ -52,3 +52,12 @@ test("a new request after completion reopens; thanks after completion stays clos
 		rule: "after_close",
 	});
 });
+
+test("thanks written with a long vowel mark is still thanks only (review L1)", () => {
+	expect(decideSession("サンキュー", false)).toEqual({
+		decision: "continue",
+		confidence: "low",
+		rule: "thanks_only",
+	});
+	expect(decideSession("サンキュー、以上です", false).decision).toBe("close");
+});

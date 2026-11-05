@@ -52,10 +52,16 @@ const THANKS = [
 ];
 const PREFIX = ["", "はい", "うん", "ok", "了解"];
 
+// The lists go through the same normalization as the utterance ("サンキュー" loses its ー there too).
+const DONE_N = DONE.map(norm);
+const THANKS_N = [...new Set(THANKS.map(norm))].sort(
+	(a, b) => b.length - a.length,
+);
+const PREFIX_N = PREFIX.map(norm);
+
 function stripThanks(text: string): string {
 	let out = text;
-	for (const t of [...THANKS].sort((a, b) => b.length - a.length))
-		out = out.split(t).join("");
+	for (const t of THANKS_N) out = out.split(t).join("");
 	return out;
 }
 
@@ -65,7 +71,7 @@ export function decideSession(
 ): SessionDecision {
 	const text = norm(utterance);
 	const core = stripThanks(text);
-	const explicit = PREFIX.some((p) => DONE.some((d) => core === p + d));
+	const explicit = PREFIX_N.some((p) => DONE_N.some((d) => core === p + d));
 	if (!closed && explicit)
 		return { decision: "close", confidence: "high", rule: "explicit_done" };
 	if (core === "" && text !== "")
