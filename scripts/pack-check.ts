@@ -10,7 +10,43 @@ import {
 
 const root = resolve(import.meta.dir, "..");
 const source = resolve(process.env.EUMENES_SOURCE ?? join(root, "../eumenes"));
-const baselineCommit = "5bf5ca556ad45a9c8a6b72f81aae85f7505e505c";
+/** The host commit this package was last proven against (manifest, spec/verification.json). */
+const declaredBaseline = "5bf5ca556ad45a9c8a6b72f81aae85f7505e505c";
+/**
+ * Baseline policy for parallel development (review 2026-11-05): the host and this package move together, so
+ * `EUMENES_BASELINE_COMMIT` may name another host commit (or `HEAD`) to prove against; the report records
+ * both. When the host checkout or the commit is absent, the host-integration stages are reported `skipped`
+ * with the reason and the run ends `passed_package_only`, never `passed`. `PACK_CHECK_REQUIRE_HOST=1` (CI,
+ * releases) turns that into a failure.
+ */
+const requestedBaseline =
+	process.env.EUMENES_BASELINE_COMMIT || declaredBaseline;
+function resolveBaseline():
+	{ ok: true; commit: string } | { ok: false; reason: string } {
+	const top = Bun.spawnSync([
+		"git",
+		"-C",
+		source,
+		"rev-parse",
+		"--show-toplevel",
+	]);
+	if (top.exitCode)
+		return { ok: false, reason: `host_source_absent:${source}` };
+	const commit = Bun.spawnSync([
+		"git",
+		"-C",
+		source,
+		"rev-parse",
+		"--verify",
+		"--quiet",
+		`${requestedBaseline}^{commit}`,
+	]);
+	if (commit.exitCode)
+		return { ok: false, reason: `host_baseline_absent:${requestedBaseline}` };
+	return { ok: true, commit: commit.stdout.toString().trim() };
+}
+const host = resolveBaseline();
+const baselineCommit = host.ok ? host.commit : requestedBaseline;
 const reportDir = join(root, "reports");
 const baseline = join(root, ".work/eumenes-baseline");
 const candidate = join(root, ".work/eumenes-candidate");
@@ -19,7 +55,7 @@ const report: {
 	baselineCommit: string;
 	steps: Array<{ name: string; exitCode: number; log: string }>;
 	[key: string]: unknown;
-} = { baselineCommit, steps: [] };
+} = { baselineCommit, declaredBaseline, steps: [] };
 const digest = (data: string | Uint8Array) =>
 	createHash("sha256").update(data).digest("hex");
 async function run(name: string, args: string[], cwd: string) {
@@ -116,7 +152,7 @@ try {
 		files: fileDigests,
 		coreContractVersion,
 		supportedStateSchemaVersions,
-		hostBaselineCommit: baselineCommit,
+		hostBaselineCommit: declaredBaseline,
 		environment: { bun: Bun.version },
 		generation: "bun run context:build",
 	};
@@ -152,144 +188,158 @@ try {
 	])
 		if (!paths.includes("package/" + path))
 			throw new Error("missing_packed_resource:" + path);
-	await archiveTo(baseline);
-	await run(
-		"baseline-install",
-		["bun", "install", "--frozen-lockfile"],
-		baseline,
-	);
-	await run("baseline-specialist", ["bun", "test", ...tests], baseline);
-	await archiveTo(candidate);
-	await applyHostAdapter(candidate);
-	await mkdir(join(candidate, "vendor/collaboration"), { recursive: true });
-	await cp(tgz, join(candidate, "vendor/collaboration/package.tgz"));
-	const packagePath = join(candidate, "package.json");
-	const pkg = await Bun.file(packagePath).json();
-	pkg.dependencies["eumenes-collaboration"] =
-		"file:vendor/collaboration/package.tgz";
-	await Bun.write(packagePath, JSON.stringify(pkg, null, "\t") + "\n");
-	await run("candidate-install-lock", ["bun", "install"], candidate);
-	report.lockfileSha256 = digest(
-		await Bun.file(join(candidate, "bun.lock")).text(),
-	);
-	await rm(join(candidate, "node_modules"), { recursive: true, force: true });
-	await run(
-		"candidate-install-frozen",
-		["bun", "install", "--frozen-lockfile"],
-		candidate,
-	);
-	await run(
-		"candidate-format",
-		[
-			"bun",
-			"fmt",
-			"api/domains/dialogue/service/specialist-prompt.ts",
-			"api/domains/dialogue/service/specialist-memory.ts",
-		],
-		candidate,
-	);
-	await run(
-		"candidate-context-build",
-		["bun", "run", "context:build"],
-		candidate,
-	);
-	await run("candidate-typecheck", ["bun", "run", "typecheck"], candidate);
-	await run(
-		"candidate-context-lint",
-		["bun", "run", "context:lint"],
-		candidate,
-	);
-	await run(
-		"candidate-context-check",
-		["bun", "run", "context:check"],
-		candidate,
-	);
-	// Verify the actual resolver chose the installed tarball, not a source alias.
-	await Bun.write(
-		join(candidate, "collaboration-consumption.ts"),
-		`import { collaborationInstructions,coreContractVersion } from "eumenes-collaboration";
-const path=import.meta.resolve("eumenes-collaboration");
-if(!path.includes("/node_modules/eumenes-collaboration/") || coreContractVersion!==1 || !collaborationInstructions.rules) throw new Error("package_resolution_failed");
-console.log(path);
-`,
-	);
-	report.resolvedEntry = (
-		await run(
-			"candidate-consumption",
-			["bun", "collaboration-consumption.ts"],
-			candidate,
-		)
-	).trim();
-	const installedRoot = join(candidate, "node_modules/eumenes-collaboration");
-	const installedManifest = await Bun.file(
-		join(installedRoot, "manifest.json"),
-	).json();
-	if (installedManifest.sourceTreeDigest !== manifest.sourceTreeDigest)
-		throw new Error("installed_manifest_mismatch");
-	for (const [path, expected] of Object.entries(fileDigests)) {
-		if (path === "bun.lock" || path === "s11tnext.config.toml") continue;
-		const actual = digest(
-			new Uint8Array(await Bun.file(join(installedRoot, path)).arrayBuffer()),
+	if (!host.ok) {
+		if (process.env.PACK_CHECK_REQUIRE_HOST === "1")
+			throw new Error(`host_integration_required:${host.reason}`);
+		report.hostIntegration = { status: "skipped", reason: host.reason };
+		console.log(
+			`host-integration skipped: ${host.reason} (set EUMENES_SOURCE / EUMENES_BASELINE_COMMIT to run it)`,
 		);
-		if (actual !== expected)
-			throw new Error("installed_resource_mismatch:" + path);
-	}
-	report.installedSourceTreeDigest = installedManifest.sourceTreeDigest;
-	await run(
-		"candidate-consumption-format",
-		["bun", "fmt", "collaboration-consumption.ts"],
-		candidate,
-	);
-	report.parity = await compareHosts(baseline, candidate);
-	await run("candidate-specialist", ["bun", "test", ...tests], candidate);
-	await run(
-		"candidate-domains",
-		[
-			"bun",
-			"run",
-			"verify",
-			"--",
-			"--domain",
-			"dialogue",
-			"--domain",
-			"inference",
-			"--domain",
-			"tool-runtime",
-			"--domain",
-			"capabilities",
-			"--domain",
-			"ui-compositions",
-			"--domain",
-			"pipelines",
-		],
-		candidate,
-	);
+	} else {
+		report.hostIntegration = {
+			status: "run",
+			baseline: baselineCommit,
+			declaredBaseline,
+		};
+		await archiveTo(baseline);
+		await run(
+			"baseline-install",
+			["bun", "install", "--frozen-lockfile"],
+			baseline,
+		);
+		await run("baseline-specialist", ["bun", "test", ...tests], baseline);
+		await archiveTo(candidate);
+		await applyHostAdapter(candidate);
+		await mkdir(join(candidate, "vendor/collaboration"), { recursive: true });
+		await cp(tgz, join(candidate, "vendor/collaboration/package.tgz"));
+		const packagePath = join(candidate, "package.json");
+		const pkg = await Bun.file(packagePath).json();
+		pkg.dependencies["eumenes-collaboration"] =
+			"file:vendor/collaboration/package.tgz";
+		await Bun.write(packagePath, JSON.stringify(pkg, null, "\t") + "\n");
+		await run("candidate-install-lock", ["bun", "install"], candidate);
+		report.lockfileSha256 = digest(
+			await Bun.file(join(candidate, "bun.lock")).text(),
+		);
+		await rm(join(candidate, "node_modules"), { recursive: true, force: true });
+		await run(
+			"candidate-install-frozen",
+			["bun", "install", "--frozen-lockfile"],
+			candidate,
+		);
+		await run(
+			"candidate-format",
+			[
+				"bun",
+				"fmt",
+				"api/domains/dialogue/service/specialist-prompt.ts",
+				"api/domains/dialogue/service/specialist-memory.ts",
+			],
+			candidate,
+		);
+		await run(
+			"candidate-context-build",
+			["bun", "run", "context:build"],
+			candidate,
+		);
+		await run("candidate-typecheck", ["bun", "run", "typecheck"], candidate);
+		await run(
+			"candidate-context-lint",
+			["bun", "run", "context:lint"],
+			candidate,
+		);
+		await run(
+			"candidate-context-check",
+			["bun", "run", "context:check"],
+			candidate,
+		);
+		// Verify the actual resolver chose the installed tarball, not a source alias.
+		await Bun.write(
+			join(candidate, "collaboration-consumption.ts"),
+			`import { collaborationInstructions,coreContractVersion } from "eumenes-collaboration";
+	const path=import.meta.resolve("eumenes-collaboration");
+	if(!path.includes("/node_modules/eumenes-collaboration/") || coreContractVersion!==1 || !collaborationInstructions.rules) throw new Error("package_resolution_failed");
+	console.log(path);
+	`,
+		);
+		report.resolvedEntry = (
+			await run(
+				"candidate-consumption",
+				["bun", "collaboration-consumption.ts"],
+				candidate,
+			)
+		).trim();
+		const installedRoot = join(candidate, "node_modules/eumenes-collaboration");
+		const installedManifest = await Bun.file(
+			join(installedRoot, "manifest.json"),
+		).json();
+		if (installedManifest.sourceTreeDigest !== manifest.sourceTreeDigest)
+			throw new Error("installed_manifest_mismatch");
+		for (const [path, expected] of Object.entries(fileDigests)) {
+			if (path === "bun.lock" || path === "s11tnext.config.toml") continue;
+			const actual = digest(
+				new Uint8Array(await Bun.file(join(installedRoot, path)).arrayBuffer()),
+			);
+			if (actual !== expected)
+				throw new Error("installed_resource_mismatch:" + path);
+		}
+		report.installedSourceTreeDigest = installedManifest.sourceTreeDigest;
+		await run(
+			"candidate-consumption-format",
+			["bun", "fmt", "collaboration-consumption.ts"],
+			candidate,
+		);
+		report.parity = await compareHosts(baseline, candidate);
+		await run("candidate-specialist", ["bun", "test", ...tests], candidate);
+		await run(
+			"candidate-domains",
+			[
+				"bun",
+				"run",
+				"verify",
+				"--",
+				"--domain",
+				"dialogue",
+				"--domain",
+				"inference",
+				"--domain",
+				"tool-runtime",
+				"--domain",
+				"capabilities",
+				"--domain",
+				"ui-compositions",
+				"--domain",
+				"pipelines",
+			],
+			candidate,
+		);
 
-	await run("candidate-web-build", ["bun", "run", "build:web"], candidate);
-	const patch = await run(
-		"candidate-patch",
-		[
-			"git",
-			"diff",
-			"--binary",
-			"HEAD",
-			"--",
-			"api/domains/dialogue",
-			".s11tnext",
-			"package.json",
-			"bun.lock",
-		],
-		candidate,
-	);
-	report.adapterPatchSha256 = digest(patch);
-	report.generatedCatalogSha256 = digest(
-		await Bun.file(join(candidate, ".s11tnext/catalog.json")).text(),
-	);
+		await run("candidate-web-build", ["bun", "run", "build:web"], candidate);
+		const patch = await run(
+			"candidate-patch",
+			[
+				"git",
+				"diff",
+				"--binary",
+				"HEAD",
+				"--",
+				"api/domains/dialogue",
+				".s11tnext",
+				"package.json",
+				"bun.lock",
+			],
+			candidate,
+		);
+		report.adapterPatchSha256 = digest(patch);
+		report.generatedCatalogSha256 = digest(
+			await Bun.file(join(candidate, ".s11tnext/catalog.json")).text(),
+		);
+	}
 	await Bun.write(
 		join(root, "dist/eumenes-collaboration-0.1.0.tgz.sha256"),
 		String(report.tgzSha256) + "  eumenes-collaboration-0.1.0.tgz\n",
 	);
-	report.status = "passed";
+	report.status = host.ok ? "passed" : "passed_package_only";
 } catch (error) {
 	report.status = "failed";
 	report.error = String(error);

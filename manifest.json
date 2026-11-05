@@ -1,6 +1,6 @@
 {
 	"packageVersion": "0.1.0",
-	"sourceCommit": "aff034c26983a53c1f4f6fd053772c6ca4e2e231",
+	"sourceCommit": "e30e0b35af6db67d4987c782b068af893cfae796",
 	"sourceTreeDigest": "ee588265097664a2df5b36a43155540e003b489701d8f5f1b61072e67ea287af",
 	"files": {
 		".s11tnext/catalog.generated.ts": "b069f62b19879df79fe4fbc944df5f1b9e373c5e4e11617712cf2913bd274bb9",
