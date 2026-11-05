@@ -103,5 +103,16 @@
 		"humanAcceptance": "pending",
 		"scope": "saved Markdown artifacts from synthetic user-selected development workflow"
 	},
-	"scopeDecision": "User limited completion to independent project technical quality above80. No production incorporation. Further CI waived; prior evidence retained."
+	"scopeDecision": "User limited completion to independent project technical quality above80. No production incorporation. Further CI waived; prior evidence retained.",
+	"technicalReevaluation": {
+		"score": 80.2,
+		"coveragePercent": 100,
+		"confidence": "Medium",
+		"profile": "library",
+		"rubricVersion": "1.1.0",
+		"snapshot": "a02ec730ec7769e86b4020613579f7ae3cb28f1a",
+		"ledger": "quality-review-2026-11-05.json",
+		"summary": "quality-score-2026-11-05.json",
+		"productionIncorporation": "not performed"
+	}
 }
