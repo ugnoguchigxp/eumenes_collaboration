@@ -100,3 +100,20 @@ test("API failures never retry or release uncertain reservations; successful res
 		b.close();
 	}
 });
+
+test("unsupported provider bounds remain enforced by the original host schema, including nullable branches", () => {
+	const schema = z.strictObject({
+		nested: z
+			.strictObject({
+				n: z.number().int().nonnegative(),
+				text: z.string().min(1),
+			})
+			.nullable(),
+	});
+	const wire = apiSchema(z.toJSONSchema(schema));
+	expect(JSON.stringify(wire.schema).includes('"minimum":')).toBe(false);
+	expect(JSON.stringify(wire.schema).includes('"minLength":')).toBe(false);
+	expect(
+		schema.safeParse(wire.decode({ nested: { n: -1, text: "" } })).success,
+	).toBe(false);
+});

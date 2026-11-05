@@ -6,7 +6,6 @@ import { createApiModel } from "../example/adapters/api-model.ts";
 import { proposeFacts } from "../example/state-turn.ts";
 import { ExampleStateStore } from "../example/state-store.ts";
 import { proposeDecisions } from "../example/decision-turn.ts";
-import type { ModelAdapter } from "../example/adapters/model.ts";
 import type {
 	CollaborationState,
 	StateHostContext,
@@ -18,6 +17,10 @@ const root = resolve(import.meta.dir, ".."),
 	dir = join(root, "reports/quality-2026-11-05");
 await mkdir(dir, { recursive: true });
 const budget = new ApiBudget(join(dir, "api-budget.sqlite"), 10);
+const runName = process.argv[2] ?? "run-v2";
+if (!/^[a-zA-Z0-9_-]+$/.test(runName)) throw new Error("run_name_invalid");
+const runDir = join(dir, runName);
+await mkdir(runDir, { recursive: true });
 const judgeSchema = z.strictObject({
 	retained: z.boolean(),
 	noInventedDecision: z.boolean(),
@@ -46,7 +49,7 @@ const api = (provider: "anthropic" | "openai", maxOutputTokens = 2048) =>
 		timeoutMs: 60000,
 	});
 const append = async (value: unknown) => {
-	const path = join(dir, "live.jsonl");
+	const path = join(runDir, "live.jsonl");
 	const old = (await Bun.file(path).exists())
 		? await Bun.file(path).text()
 		: "";
@@ -96,7 +99,7 @@ const protocol = {
 	limits:
 		"Semantic judgement is cross-provider evidence, not human acceptance, product renderer/terminal acceptance, or usage retention.",
 };
-const protocolPath = join(dir, "live-protocol.json");
+const protocolPath = join(runDir, "live-protocol.json");
 if (await Bun.file(protocolPath).exists())
 	throw new Error(
 		"live_run_already_started_use_new_protocol_not_silent_replay",
@@ -144,7 +147,7 @@ async function runTask(
 				})),
 			};
 			try {
-				const checked = await (
+				let checked = await (
 					arm === "baseline" ? baseline.proposeFacts : proposeFacts
 				)(
 					model,
@@ -154,6 +157,23 @@ async function runTask(
 					sources,
 					new AbortController().signal,
 				);
+				if (!checked.ok) {
+					const repair = context(utterance);
+					repair.callsLeft = 1;
+					repair.course.course = [
+						{ utterance, outcome: "failed", error: checked.reason },
+					];
+					checked = await (
+						arm === "baseline" ? baseline.proposeFacts : proposeFacts
+					)(
+						model,
+						repair,
+						store.read(id),
+						host,
+						sources,
+						new AbortController().signal,
+					);
+				}
 				if (checked.ok) {
 					const result = store.adopt(id, `${id}-${i}`, checked.proposal, host);
 					if (result.ok) accepted++;
@@ -172,7 +192,16 @@ async function runTask(
 			} catch (e) {
 				errors++;
 				const reason = e instanceof Error ? e.message : "unknown";
-				if (reason === "api_budget_exhausted") stopped = true;
+				if (
+					[
+						"api_budget_exhausted",
+						"api_http_400",
+						"api_http_401",
+						"api_http_403",
+						"api_http_404",
+					].includes(reason)
+				)
+					stopped = true;
 				await record({
 					kind: "turn",
 					provider,
@@ -295,7 +324,7 @@ try {
 		}
 	await write;
 	await Bun.write(
-		join(dir, "api-budget-summary.json"),
+		join(runDir, "api-budget-summary.json"),
 		JSON.stringify(budget.summary(), null, 2) + "\n",
 	);
 	console.log(

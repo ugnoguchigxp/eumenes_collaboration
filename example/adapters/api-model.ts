@@ -25,6 +25,23 @@ export function apiSchema(schema: Schema): {
 		const out: Schema = { ...s };
 		delete out.$schema;
 		delete out.$defs;
+		// Claude's constrained decoder rejects these keywords; the original host Zod schema still enforces them.
+		for (const key of [
+			"minimum",
+			"maximum",
+			"minLength",
+			"maxLength",
+			"minItems",
+			"maxItems",
+		]) {
+			if (out[key] !== undefined)
+				out.description =
+					String(out.description ?? "") + ` ${key}: ${out[key]}.`;
+			delete out[key];
+		}
+		for (const key of ["anyOf", "allOf", "oneOf"])
+			if (Array.isArray(s[key]))
+				out[key] = (s[key] as unknown[]).map((x) => transform(obj(x)));
 		if (out.const !== undefined) {
 			out.enum = [out.const];
 			delete out.const;
