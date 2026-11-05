@@ -1,0 +1,42 @@
+{
+	"kind": "iterative-markdown-novel",
+	"scope": "Synthetic development pilot selected by the user; a real Markdown artifact is written after host validation. Simulated edits are not a human acceptance test.",
+	"turns": [
+		{
+			"request": "Markdownで短編小説を書いてください。舞台は港町の古い天文台、主人公は修理工の澪と配達員の律です。見出しを付け、本文は600〜900字程度で、二人が壊れた時計を直す話にしてください。超常現象で解決しないでください。"
+		},
+		{
+			"request": "語りを澪の一人称に直してください。舞台、人物、時計を自然な原因で直す条件は残してください。"
+		},
+		{
+			"request": "静かな雰囲気は残し、二人が対立する場面を一つ入れてください。この版ではまだ和解させないでください。"
+		},
+		{
+			"manualAppend": "\n\n「明日、同じ時刻に。」\n",
+			"request": "末尾に私が手で加えた一文は、そのまま最後に残してください。律が急いでいる理由を、病院へ届ける部品の集荷時刻が迫っていることに直してください。病人の登場人物は追加しないでください。"
+		},
+		{
+			"request": "時計を二人の具体的な作業で直し、対立を解いてください。修理に成功した理由が読んで分かるようにしてください。手で加えた末尾の一文と、これまでの他の条件は残してください。"
+		},
+		{
+			"request": "いまの見出しと人物名を変えず、冗長な説明を削ってください。短い会話を生かし、本文の長さは最初の目安を優先してください。末尾の一文は動かさないでください。"
+		},
+		{
+			"request": "最終調整です。時計が動き出す直前の緊張を少し強めてください。結末、視点、人物、手編集の一文、他の条件を保って完成候補にしてください。"
+		}
+	],
+	"acceptance": [
+		"7 requests produce saved revisions after host validation",
+		"First-person Mio, port observatory, Mio and Ritsu, plausible physical clock repair",
+		"Conflict introduced before resolution; collection deadline concerns parts for a hospital, with no invented sick character",
+		"Manual ending retained exactly through subsequent revisions",
+		"Heading and names preserved after the preservation request",
+		"Coherent original Markdown short story; approximate length is a preference, not a hidden hard cap"
+	],
+	"thresholds": {
+		"hostInvariantViolations": 0,
+		"minimumSavedTurnsPerProvider": 7,
+		"semanticCriteriaAllTrue": true,
+		"sharedAllAttemptsCapUsd": 10
+	}
+}
