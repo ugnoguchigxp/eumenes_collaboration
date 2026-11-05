@@ -31,7 +31,8 @@ const SPLIT =
 	/(?<=[てで])、(?:そして|それから|その後|次に)?|(?<=(?:調べ|探し|確認し|検索し|開き|読み|見つけ))、|(?<=。)|、(?:そして|それから|その後|次に|最後に)、?/u;
 const SUMMARY = /サマリー|まとめ|要約|summar/iu;
 /** Writing the result up ("記事にして", "記事を書いて") is a summary, not reading an article on a site (L3). */
-const WRITE_UP = /(?:記事|文章|レポート|メモ)(?:に(?:して|する|起こ)|を書|として書)/u;
+const WRITE_UP =
+	/(?:記事|文章|レポート|メモ)(?:に(?:して|する|起こ)|を書|として書)/u;
 const BROWSER_VERB =
 	/検索|調べ|探し|探す|開い|開く|見て|見せ|再生|表示|アクセス|クリック|ページ|サイト|記事|動画|ウィキペディア|wikipedia|https?:\/\//iu;
 const KEEP_OPEN =

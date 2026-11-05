@@ -59,14 +59,20 @@ describe("planSteps", () => {
 
 describe("planSteps write-up (L3)", () => {
 	test("writing the findings up as an article is a summary step, not a browser step", () => {
-		const { steps } = planSteps("ウィキペディアで富士山を調べて、ブログ記事にしてください", "u");
+		const { steps } = planSteps(
+			"ウィキペディアで富士山を調べて、ブログ記事にしてください",
+			"u",
+		);
 		expect(steps).toHaveLength(2);
 		expect(steps[1]?.needsBrowser).toBe(false);
 		expect(steps[1]?.output).toBe("summary");
 	});
 
 	test("reading an article on a site stays a browser step", () => {
-		const { steps } = planSteps("NHKで天気を調べて、関連する記事を開いてください", "u");
+		const { steps } = planSteps(
+			"NHKで天気を調べて、関連する記事を開いてください",
+			"u",
+		);
 		expect(steps[1]?.needsBrowser).toBe(true);
 	});
 });
