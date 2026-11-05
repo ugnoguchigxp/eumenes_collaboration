@@ -14,7 +14,7 @@ import type {
 } from "../src/index.ts";
 import scenario from "./creative.json";
 const root = resolve(import.meta.dir, "..");
-const runName = process.argv[2] ?? "creative-v2";
+const runName = process.argv[2] ?? "creative-v3";
 if (!/^[a-zA-Z0-9_-]+$/.test(runName)) throw new Error("run_name_invalid");
 const dir = join(root, "reports/quality-2026-11-05", runName);
 await mkdir(dir, { recursive: true });
