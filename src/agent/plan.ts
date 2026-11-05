@@ -116,6 +116,9 @@ export function planSteps(request: string, sourceRef: string): Plan {
 	return { steps, facts };
 }
 
+/** A step result longer than this is cut, so one step cannot flood the next step's context. */
+export const STEP_RESULT_CHARS = 1000;
+
 /** A step's result as a fact: confirmed by what the host observed, never by the model's word alone. */
 export function stepResultFact(
 	stepId: string,
@@ -128,7 +131,13 @@ export function stepResultFact(
 		id: `result.${stepId}`,
 		kind: "condition",
 		status: "confirmed",
-		value: { provenance: "observed", text: result },
+		value: {
+			provenance: "observed",
+			text:
+				result.length > STEP_RESULT_CHARS
+					? `${result.slice(0, STEP_RESULT_CHARS)}…`
+					: result,
+		},
 		sourceRefs: [...observationRefs],
 		supersedes: [],
 	};

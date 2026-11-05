@@ -4,6 +4,7 @@ import {
 	collaborationFactSchema,
 	planBudget,
 	planSteps,
+	STEP_RESULT_CHARS,
 	stepResultFact,
 } from "../src/index.ts";
 
@@ -54,6 +55,10 @@ describe("planSteps", () => {
 	test("a step result needs an observation behind it", () => {
 		expect(() => stepResultFact("s1", "x", [])).toThrow();
 		expect(stepResultFact("s1", "$520.99", ["obs:1"]).status).toBe("confirmed");
+		const long = stepResultFact("s1", "x".repeat(5000), ["obs:1"]);
+		const text = (long.value as { text: string }).text;
+		expect(text.length).toBe(STEP_RESULT_CHARS + 1);
+		expect(text.endsWith("…")).toBe(true);
 	});
 });
 

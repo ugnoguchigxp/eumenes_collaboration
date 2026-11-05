@@ -1,7 +1,7 @@
 {
 	"packageVersion": "0.1.0",
-	"sourceCommit": "b9fdc4d57464741c6b4f39b95b955702a83f14b0",
-	"sourceTreeDigest": "8cafadcc2bfee35f742ac2ce7dd3373837ac69eaa1d95f226bef741ec82f5c3d",
+	"sourceCommit": "d88ace1a1767503b1bb22cd5c551170d7e47d2c0",
+	"sourceTreeDigest": "8566286d9222a4c0f0cd34880fb2a5fc956d2f4b159c58e988c4cf4fb3a7b171",
 	"files": {
 		".s11tnext/catalog.generated.ts": "b069f62b19879df79fe4fbc944df5f1b9e373c5e4e11617712cf2913bd274bb9",
 		".s11tnext/catalog.json": "3170268c441385ccbb59591af329841169f72d4885feddf458aa40c647a2a79e",
@@ -16,12 +16,12 @@
 		"src/agent/brief.ts": "1c8641f3b9f0321ad4e847393719dc879b4e7ac22cd9f63896f4345ba6e8c2a1",
 		"src/agent/instructions.ts": "ab5723a2195581daed539e9e71f0a0ff62028c4d30d67028e2c56bb94a6b97e0",
 		"src/agent/messages.ts": "c5fa7ff5a18d68d33adb312a9ba66b43c6bfcd70e05a6cb6d55b3630144d4287",
-		"src/agent/plan.ts": "525ec41942399d211e73ff535489708c01f4c7f5b23ab197cccc0706103cb4cb",
+		"src/agent/plan.ts": "a1a094ee31d3fdb768fcb33bf52c9f0fa078769d46bcba2e760cc706c0c36ca6",
 		"src/agent/session.ts": "f576eabad39a8a95bc9aacb4ebc21f9e9779157f6de25b9571145fef6d21a6d5",
 		"src/agent/state.ts": "d0742ddcd4b85fe35fd50720ecbd15c46fe02b3f1a9ee83feb50a98bb16e38f2",
 		"src/contracts/index.ts": "72c33b52bc13045089ceb8d14e0acbcc31cf468490b64aaf70a2bce92da08ce5",
 		"src/contracts/state.ts": "93840fb7003fa5cab222a93f736d4be2a83a5cd81213ac7cb5cefe4879f1a131",
-		"src/index.ts": "30f65c417f2aa2f343ab59b1475e543eb958227c9ecc187fd21dfd76235711ac"
+		"src/index.ts": "0c98323a9b197fdd476b1c2d18a196de33d38a278bea4b39cbf23873e811a8e1"
 	},
 	"coreContractVersion": 1,
 	"supportedStateSchemaVersions": [1],

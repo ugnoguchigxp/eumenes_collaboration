@@ -16,6 +16,7 @@ export {
 } from "./agent/brief.ts";
 export {
 	planSteps,
+	STEP_RESULT_CHARS,
 	stepResultFact,
 	planBudget,
 	budgetCheck,
