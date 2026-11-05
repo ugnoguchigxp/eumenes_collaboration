@@ -57,6 +57,33 @@ describe("planSteps", () => {
 	});
 });
 
+describe("planSteps splitting (review 2026-11-05)", () => {
+	test("a quoted title or search term is never cut in two", () => {
+		const { steps } = planSteps(
+			"YouTubeで「食べて、祈って、恋をして」を探して、再生して",
+			"u",
+		);
+		expect(steps.map((s) => s.goal)).toEqual([
+			"YouTubeで「食べて、祈って、恋をして」を探して",
+			"再生して",
+		]);
+	});
+
+	test("the rest beyond five steps keeps the user's own separators", () => {
+		const long = planSteps(
+			"Aを調べて、Bを調べて、Cを調べて、Dを調べて、Eを調べた。最後にFをまとめて",
+			"u",
+		);
+		expect(long.steps).toHaveLength(5);
+		expect(long.steps[4]?.goal).toBe("Eを調べた。最後にFをまとめて");
+	});
+
+	test("an untrustworthy used count stops", () => {
+		for (const used of [Number.NaN, -1, Number.POSITIVE_INFINITY])
+			expect(budgetCheck(used, planBudget(3)).decision).toBe("stop");
+	});
+});
+
 describe("planSteps write-up (L3)", () => {
 	test("writing the findings up as an article is a summary step, not a browser step", () => {
 		const { steps } = planSteps(

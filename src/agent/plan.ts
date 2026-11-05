@@ -38,14 +38,36 @@ const BROWSER_VERB =
 const KEEP_OPEN =
 	/再生|流して|見せて|表示して(?:おいて|ください)?$|開いたままに/u;
 
+/** Spans inside 「」『』“”"" — a split there would cut a quoted title or search term in two. */
+function quoted(request: string): [number, number][] {
+	const spans: [number, number][] = [];
+	const re = /「[^」]*」|『[^』]*』|“[^”]*”|"[^"]*"/gu;
+	for (const m of request.matchAll(re))
+		spans.push([m.index, m.index + m[0].length]);
+	return spans;
+}
+
 function segments(request: string): string[] {
-	const parts = request
-		.split(SPLIT)
-		.map((s) => s.trim())
-		.filter((s) => s.length > 0);
-	if (parts.length <= MAX_PLAN_STEPS) return parts;
-	const head = parts.slice(0, MAX_PLAN_STEPS - 1);
-	return [...head, parts.slice(MAX_PLAN_STEPS - 1).join("、")];
+	const spans = quoted(request);
+	const re = new RegExp(SPLIT.source, "gu");
+	// [start, end) of each step in the original text; separators are dropped.
+	const cuts: [number, number][] = [];
+	let from = 0;
+	for (const m of request.matchAll(re)) {
+		const at = m.index;
+		if (spans.some(([a, b]) => at > a && at < b)) continue;
+		if (m[0].length === 0 && at === from) continue;
+		cuts.push([from, at]);
+		from = at + m[0].length;
+	}
+	cuts.push([from, request.length]);
+	const parts = cuts
+		.map(([a, b]) => ({ a, text: request.slice(a, b).trim() }))
+		.filter((p) => p.text.length > 0);
+	if (parts.length <= MAX_PLAN_STEPS) return parts.map((p) => p.text);
+	// The rest stays with the last step as the user wrote it (its own 。 and connectives kept).
+	const rest = request.slice(parts[MAX_PLAN_STEPS - 1]!.a).trim();
+	return [...parts.slice(0, MAX_PLAN_STEPS - 1).map((p) => p.text), rest];
 }
 
 export function planSteps(request: string, sourceRef: string): Plan {
@@ -133,6 +155,9 @@ export function budgetCheck(
 	used: number,
 	budget: PlanBudget,
 ): { decision: "go" | "ask" | "stop"; remaining: number } {
+	// A count the host cannot trust (NaN, negative, infinite) stops rather than going on.
+	if (!Number.isFinite(used) || used < 0)
+		return { decision: "stop", remaining: 0 };
 	const remaining = Math.max(budget.overall - used, 0);
 	if (remaining === 0) return { decision: "stop", remaining };
 	if (remaining < budget.perStep) return { decision: "ask", remaining };
