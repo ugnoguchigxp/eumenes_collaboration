@@ -1,63 +1,48 @@
-import { expect, test } from "bun:test";
+import { test, expect } from "bun:test";
 import { decideSession } from "../src/index.ts";
-
-test("explicit completion closes the session", () => {
-	for (const u of [
-		"完了",
-		"これでいい",
-		"これでいいです。",
-		"以上です",
-		"ありがとう、完了です",
-		"はい、これでOK",
-		"done",
-	])
-		expect(decideSession(u, false)).toEqual({
-			decision: "close",
-			confidence: "high",
-			rule: "explicit_done",
-		});
+test("session meaning must be proposed by the model, never inferred from user text", () => {
+	for (const text of ["これでいい？", "done", "ありがとう", "another task"])
+		expect(() => decideSession(text, false)).toThrow();
+	expect(
+		decideSession(
+			{
+				decision: "continue",
+				confidence: "low",
+				rationale: "確認の質問であり終了ではない",
+			},
+			false,
+		).decision,
+	).toBe("continue");
+	expect(
+		decideSession(
+			{ decision: "close", confidence: "high", rationale: "明示的終了" },
+			false,
+		).decision,
+	).toBe("close");
+	expect(
+		decideSession(
+			{ decision: "reopen", confidence: "high", rationale: "新しい依頼" },
+			true,
+		).decision,
+	).toBe("reopen");
 });
-
-test("thanks only, or an ambiguous utterance, keeps the session open", () => {
-	expect(decideSession("ありがとうございます！", false)).toEqual({
-		decision: "continue",
-		confidence: "low",
-		rule: "thanks_only",
-	});
-	expect(decideSession("完了したら教えて", false)).toMatchObject({
-		decision: "continue",
-		confidence: "low",
-	});
-	expect(decideSession("次は送料を調べて", false)).toEqual({
-		decision: "continue",
-		confidence: "high",
-		rule: "default",
-	});
-});
-
-test("a new request after completion reopens; thanks after completion stays closed", () => {
-	expect(decideSession("やっぱり別の色も探して", true)).toEqual({
-		decision: "reopen",
-		confidence: "high",
-		rule: "new_request",
-	});
-	expect(decideSession("ありがとう", true)).toEqual({
-		decision: "continue",
-		confidence: "high",
-		rule: "after_close",
-	});
-	expect(decideSession("完了", true)).toEqual({
-		decision: "continue",
-		confidence: "high",
-		rule: "after_close",
-	});
-});
-
-test("thanks written with a long vowel mark is still thanks only (review L1)", () => {
-	expect(decideSession("サンキュー", false)).toEqual({
-		decision: "continue",
-		confidence: "low",
-		rule: "thanks_only",
-	});
-	expect(decideSession("サンキュー、以上です", false).decision).toBe("close");
+test("schema and current lifecycle constrain model proposals", () => {
+	expect(() =>
+		decideSession(
+			{ decision: "close", confidence: "high", rationale: "x" },
+			true,
+		),
+	).toThrow("session_transition_invalid");
+	expect(() =>
+		decideSession(
+			{ decision: "reopen", confidence: "high", rationale: "x" },
+			false,
+		),
+	).toThrow("session_transition_invalid");
+	expect(() =>
+		decideSession(
+			{ decision: "close", confidence: "high", rationale: "", tool: "execute" },
+			false,
+		),
+	).toThrow();
 });

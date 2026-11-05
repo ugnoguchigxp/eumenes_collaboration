@@ -68,8 +68,17 @@ export type ExternalRecord = {
 	independentlyVerified: boolean;
 	forgotten?: boolean;
 	answer?: { digest: string; status: "pending" | "sent" | "unknown" };
+	/** Persisted fencing token; old async replies may not overwrite reconciliation. */
+	attempt?: number;
 };
 export interface ExternalPort {
+	inspect?(
+		target: ExternalTarget,
+		requestId: string,
+	): Promise<{
+		status: "delivered" | "started" | "completed" | "stopped" | "unknown";
+		answer?: "sent" | "unknown";
+	}>;
 	deliver(request: ExternalRequest): Promise<"queued" | "delivered">;
 	answerQuestion?(
 		target: ExternalTarget,
@@ -181,6 +190,7 @@ export class ExampleExternalAdapter {
 		const record: ExternalRecord = {
 			request,
 			status: "queued",
+			attempt: 1,
 			independentlyVerified: false,
 		};
 		this.db
@@ -190,10 +200,16 @@ export class ExampleExternalAdapter {
 			const status = await this.port.deliver(request);
 			this.target(request);
 			const latest = this.read(request.requestId)!;
-			if (latest.status === "queued") this.save({ ...latest, status });
+			if (latest.attempt === record.attempt && latest.status === "queued")
+				this.save({ ...latest, status });
 		} catch {
 			const latest = this.read(request.requestId)!;
-			if (!terminal(latest.status)) this.save({ ...latest, status: "unknown" });
+			if (
+				latest.attempt === record.attempt &&
+				!latest.forgotten &&
+				!terminal(latest.status)
+			)
+				this.save({ ...latest, status: "unknown" });
 		}
 		return this.read(request.requestId)!;
 	}
@@ -301,7 +317,8 @@ export class ExampleExternalAdapter {
 		}
 		if (record.status !== "waiting" || record.question.answered)
 			throw new Error("external_question_changed");
-		this.save({ ...record, answer: { digest, status: "pending" } });
+		const attempt = (record.attempt ?? 0) + 1;
+		this.save({ ...record, attempt, answer: { digest, status: "pending" } });
 		let status: "sent" | "unknown" = "unknown";
 		try {
 			status = await this.port.answerQuestion(
@@ -314,7 +331,12 @@ export class ExampleExternalAdapter {
 			status = "unknown";
 		}
 		const latest = this.read(input.requestId)!;
-		if (latest.question?.id === input.questionId && latest.status === "waiting")
+		if (
+			latest.attempt === attempt &&
+			!latest.forgotten &&
+			latest.question?.id === input.questionId &&
+			latest.status === "waiting"
+		)
 			this.save({
 				...latest,
 				question: { ...latest.question, answered: status === "sent" },
@@ -339,6 +361,7 @@ export class ExampleExternalAdapter {
 					this.save({
 						...record,
 						forgotten: true,
+						attempt: (record.attempt ?? 0) + 1,
 						request: { ...record.request, prompt: "", sourceRefs: [] },
 						question: undefined,
 						reportedResult: undefined,
@@ -355,13 +378,75 @@ export class ExampleExternalAdapter {
 			})
 			.immediate();
 	}
+	/** Explicit recovery, never a resend. The caller supplies the persisted attempt it observed. */
+	async reconcile(id: string, expectedAttempt: number) {
+		const record = this.read(id);
+		if (!record) throw new Error("external_request_missing");
+		if ((record.attempt ?? 0) !== expectedAttempt)
+			throw new Error("external_attempt_changed");
+		if (terminal(record.status) || record.forgotten) return record;
+		const target = this.target(record.request, false);
+		const attempt = expectedAttempt + 1;
+		this.save({
+			...record,
+			attempt,
+			status: "unknown",
+			...(record.answer?.status === "pending"
+				? { answer: { ...record.answer, status: "unknown" as const } }
+				: {}),
+		});
+		let observed: {
+			status: "delivered" | "started" | "completed" | "stopped" | "unknown";
+			answer?: "sent" | "unknown";
+		} = { status: "unknown" };
+		try {
+			if (this.port.inspect) observed = await this.port.inspect(target, id);
+		} catch {
+			/* unresolved effects stay unknown */
+		}
+		this.target(record.request, false);
+		const latest = this.read(id)!;
+		if (
+			latest.attempt !== attempt ||
+			latest.forgotten ||
+			terminal(latest.status)
+		)
+			return latest;
+		const checked = z
+			.strictObject({
+				status: z.enum([
+					"delivered",
+					"started",
+					"completed",
+					"stopped",
+					"unknown",
+				]),
+				answer: z.enum(["sent", "unknown"]).optional(),
+			})
+			.parse(observed);
+		this.save({
+			...latest,
+			status: checked.status,
+			...(latest.answer && checked.answer
+				? {
+						answer: { ...latest.answer, status: checked.answer },
+						question: latest.question
+							? { ...latest.question, answered: checked.answer === "sent" }
+							: undefined,
+					}
+				: {}),
+		});
+		return this.read(id)!;
+	}
+
 	async stop(id: string) {
 		const record = this.read(id);
 		if (!record) throw new Error("external_request_missing");
 		if (terminal(record.status)) return record;
 		const target = this.target(record.request);
 		if (record.status === "stopping") return record;
-		this.save({ ...record, status: "stopping" });
+		const attempt = (record.attempt ?? 0) + 1;
+		this.save({ ...record, attempt, status: "stopping" });
 		let confirmed = false;
 		try {
 			confirmed = (await this.port.stop(target, id)) === "confirmed";
@@ -369,7 +454,17 @@ export class ExampleExternalAdapter {
 			/* Reconcile unknown termination with the host. */
 		}
 		const latest = this.read(id)!;
-		this.save({ ...latest, status: confirmed ? "stopped" : "unknown" });
+		try {
+			this.target(record.request);
+		} catch {
+			confirmed = false;
+		}
+		if (
+			latest.attempt === attempt &&
+			!latest.forgotten &&
+			!terminal(latest.status)
+		)
+			this.save({ ...latest, status: confirmed ? "stopped" : "unknown" });
 		return this.read(id)!;
 	}
 }

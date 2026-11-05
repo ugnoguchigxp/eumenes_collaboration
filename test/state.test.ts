@@ -68,3 +68,116 @@ test("unsupported persisted versions are held rather than initialized as empty",
 		),
 	).toEqual({ ok: false, reason: "state_schema_unsupported_or_invalid" });
 });
+
+test("composed state stays valid at the limit and overflow never reaches the writer", async () => {
+	const { collaborationStateSchema } = await import("../src/index.ts");
+	const { ExampleStateStore } = await import("../example/state-store.ts");
+	const saved = initial();
+	saved.facts = Array.from({ length: 1000 }, (_, i) => ({
+		...saved.facts[0]!,
+		id: `f${i}`,
+	}));
+	const p = proposal();
+	p.upserts[0]!.supersedes = [];
+	const store = new ExampleStateStore(":memory:");
+	try {
+		store.initialize(saved, 2);
+		expect(store.adopt("s", "overflow", p, host())).toEqual({
+			ok: false,
+			reason: "state_capacity_exceeded",
+		});
+		expect(store.read("s")).toEqual(saved);
+		expect(
+			store.db.query("SELECT count(*) AS n FROM example_receipts").get(),
+		).toEqual({ n: 0 });
+		p.removals = [{ id: "f0", sourceRefs: ["u2"] }];
+		expect(store.adopt("s", "replace", p, host()).ok).toBe(true);
+		expect(collaborationStateSchema.safeParse(store.read("s")).success).toBe(
+			true,
+		);
+	} finally {
+		store.close();
+	}
+});
+
+test("only accepted replacements retract confirmed facts", () => {
+	for (const status of [
+		"proposed",
+		"rejected",
+		"retracted",
+		"confirmed",
+	] as const) {
+		const p = proposal();
+		p.upserts[0]!.status = status;
+		if (status !== "confirmed") p.upserts[0]!.sourceRefs = ["a1"];
+		const result = proposeStateUpdate(initial(), p, host());
+		expect(result.ok).toBe(true);
+		if (result.ok)
+			expect(result.state.facts.find((f) => f.id === "prior")?.status).toBe(
+				status === "confirmed" ? "retracted" : "confirmed",
+			);
+	}
+});
+
+test("assistant-only evidence cannot directly demote or remove an accepted condition", () => {
+	const p = proposal();
+	p.upserts = [
+		{ ...initial().facts[1]!, status: "retracted", sourceRefs: ["a1"] },
+	];
+	expect(proposeStateUpdate(initial(), p, host())).toEqual({
+		ok: false,
+		reason: "confirmation_evidence_required",
+	});
+	p.upserts = [];
+	p.removals = [{ id: "prior", sourceRefs: ["a1"] }];
+	expect(proposeStateUpdate(initial(), p, host())).toEqual({
+		ok: false,
+		reason: "confirmation_evidence_required",
+	});
+});
+
+test("resource guards reject depth, cycles and oversized JSON before schema parsing", async () => {
+	const { withinJsonLimits, JSON_LIMITS } = await import("../src/index.ts");
+	const cycle: Record<string, unknown> = {};
+	cycle.self = cycle;
+	expect(withinJsonLimits(cycle)).toBe(false);
+	let nested: unknown = null;
+	for (let i = 0; i < 70; i++) nested = [nested];
+	expect(withinJsonLimits(nested)).toBe(false);
+	expect(withinJsonLimits("x".repeat(JSON_LIMITS.bytes + 1))).toBe(false);
+	const same = { x: "valid" };
+	expect(withinJsonLimits([same, same])).toBe(true);
+	expect(proposeStateUpdate(initial(), cycle, host())).toEqual({
+		ok: false,
+		reason: "json_resource_limit",
+	});
+});
+
+test("seeded state sequences preserve schema, revisions, acceptance and unrelated facts", async () => {
+	const { collaborationStateSchema } = await import("../src/index.ts");
+	let saved = initial();
+	for (let i = 0; i < 100; i++) {
+		const p = proposal();
+		p.expectedRevision = saved.revision;
+		p.upserts = [
+			{
+				...p.upserts[0]!,
+				id: `f${i}`,
+				status: i % 3 === 0 ? "proposed" : "confirmed",
+				supersedes: [],
+			},
+		];
+		const previous = structuredClone(saved);
+		const result = proposeStateUpdate(saved, p, host());
+		expect(result.ok).toBe(true);
+		expect(saved).toEqual(previous);
+		if (result.ok) {
+			saved = result.state;
+			expect(collaborationStateSchema.safeParse(saved).success).toBe(true);
+			expect(saved.revision).toBe(i + 1);
+		}
+	}
+	expect(saved.facts.find((f) => f.id === "unchanged")).toEqual(
+		initial().facts[0],
+	);
+});

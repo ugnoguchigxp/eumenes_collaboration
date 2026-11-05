@@ -1,0 +1,14 @@
+[
+ {"utterance":"これでいい？","closed":false,"expected":"continue","browser":null},
+ {"utterance":"これでいいです。終わります。","closed":false,"expected":"close","browser":null},
+ {"utterance":"サンキュー","closed":false,"expected":"continue","browser":null},
+ {"utterance":"完了したら教えて","closed":false,"expected":"continue","browser":null},
+ {"utterance":"やっぱり別の色も探して","closed":true,"expected":"reopen","browser":true},
+ {"utterance":"Is this finished?","closed":false,"expected":"continue","browser":null},
+ {"utterance":"2+2を計算して","closed":false,"expected":"continue","browser":false},
+ {"utterance":"『おはよう』を英語に翻訳して","closed":false,"expected":"continue","browser":false},
+ {"utterance":"このJSONの構文を確認して: {\"a\":1}","closed":false,"expected":"continue","browser":false},
+ {"utterance":"東京の今日の天気を調べて","closed":false,"expected":"continue","browser":true},
+ {"utterance":"Google FinanceでMSFTの最新株価を調べて、YouTubeで関連動画を再生して、最後に結果をまとめて","closed":false,"expected":"continue","browser":true},
+ {"utterance":"全文を翻訳する前に、終了してよいか教えてください","closed":false,"expected":"continue","browser":null}
+]

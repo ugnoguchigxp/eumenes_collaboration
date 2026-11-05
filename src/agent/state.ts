@@ -1,3 +1,4 @@
+import { withinJsonLimits } from "../contracts/json-limits.ts";
 import {
 	collaborationStateSchema,
 	stateProposalSchema,
@@ -15,6 +16,8 @@ export function proposeStateUpdate(
 	host: StateHostContext,
 ): { ok: true; state: CollaborationState } | { ok: false; reason: string } {
 	const reject = (reason: string) => ({ ok: false as const, reason });
+	if (!withinJsonLimits(saved) || !withinJsonLimits(proposal))
+		return reject("json_resource_limit");
 	const state = collaborationStateSchema.safeParse(saved);
 	if (!state.success) return reject("state_schema_unsupported_or_invalid");
 	const next = stateProposalSchema.safeParse(proposal);
@@ -58,6 +61,24 @@ export function proposeStateUpdate(
 		)
 	)
 		return reject("confirmation_evidence_required");
+	const witnessed = (sources: string[]) =>
+		sources.some((ref) => {
+			const kind = refs.get(ref)?.kind;
+			return kind === "user" || kind === "observation";
+		});
+	const accepted = new Set(
+		current.facts.filter((f) => f.status === "confirmed").map((f) => f.id),
+	);
+	if (
+		input.upserts.some(
+			(f) =>
+				accepted.has(f.id) &&
+				f.status !== "confirmed" &&
+				!witnessed(f.sourceRefs),
+		) ||
+		input.removals.some((f) => accepted.has(f.id) && !witnessed(f.sourceRefs))
+	)
+		return reject("confirmation_evidence_required");
 	const ids = [
 		...input.upserts.map((f) => f.id),
 		...input.removals.map((f) => f.id),
@@ -91,17 +112,21 @@ export function proposeStateUpdate(
 	};
 	if ([...facts.keys()].some(cycle)) return reject("supersession_cycle");
 	for (const fact of facts.values())
-		for (const prior of fact.supersedes)
-			facts.set(prior, { ...facts.get(prior)!, status: "retracted" });
+		if (fact.status === "confirmed")
+			for (const prior of fact.supersedes)
+				facts.set(prior, { ...facts.get(prior)!, status: "retracted" });
+	if (facts.size > 1000) return reject("state_capacity_exceeded");
+	const candidate = collaborationStateSchema.safeParse({
+		...current,
+		revision: current.revision + 1,
+		sourceRevision: host.sourceRevision,
+		work: { ...host.work },
+		facts: structuredClone([...facts.values()]),
+	});
+	if (!candidate.success) return reject("candidate_state_invalid");
 	return {
 		ok: true,
-		state: {
-			...current,
-			revision: current.revision + 1,
-			sourceRevision: host.sourceRevision,
-			work: { ...host.work },
-			facts: structuredClone([...facts.values()]),
-		},
+		state: candidate.data,
 	};
 }
 

@@ -1,0 +1,102 @@
+import { test, expect } from "bun:test";
+import { ApiBudget } from "../adapters/api-budget.ts";
+import { createApiModel, apiSchema } from "../adapters/api-model.ts";
+import { z } from "zod";
+import { stateProposalSchema } from "../../src/index.ts";
+test("shared budget reserves atomically, retains unknown spend and refuses a changed or invalid settlement", () => {
+	const b = new ApiBudget(":memory:", 1);
+	try {
+		const id = b.reserve("openai", 0.7);
+		expect(() => b.reserve("anthropic", 0.4)).toThrow("api_budget_exhausted");
+		expect(() => b.settle(id, 0.8, {})).toThrow();
+		expect(b.used()).toBe(0.7);
+		b.settle(id, 0.1, {});
+		expect(b.used()).toBe(0.1);
+		expect(() => b.settle(id, 0, {})).toThrow();
+		expect(() => b.reserve("openai", NaN)).toThrow();
+	} finally {
+		b.close();
+	}
+});
+test("provider JSON representation round-trips opaque JSON without changing host constraints", () => {
+	const wire = apiSchema(z.toJSONSchema(stateProposalSchema));
+	const data = {
+		coreContractVersion: 1,
+		sessionId: "s",
+		epoch: 1,
+		expectedRevision: 0,
+		sourceRevision: 1,
+		work: { ref: "w", revision: 0, digest: "d" },
+		upserts: [
+			{
+				id: "f",
+				kind: "condition",
+				status: "confirmed",
+				value: '{"nested":[1,null,"x"]}',
+				sourceRefs: ["u"],
+				supersedes: [],
+			},
+		],
+		removals: [],
+	};
+	expect(
+		stateProposalSchema.parse(wire.decode(data)).upserts[0]?.value,
+	).toEqual({ nested: [1, null, "x"] });
+});
+test("API failures never retry or release uncertain reservations; successful responses expose bounded metadata only", async () => {
+	const b = new ApiBudget(":memory:", 1);
+	let calls = 0;
+	try {
+		const model = createApiModel({
+			provider: "openai",
+			model: "gpt-6-luna",
+			apiKey: "fixture-only",
+			budget: b,
+			maxOutputTokens: 100,
+			timeoutMs: 1000,
+			fetcher: async () => {
+				calls++;
+				return Response.json({ error: "no" }, { status: 429 });
+			},
+		});
+		const request = {
+			messages: [
+				{ role: "system" as const, content: "fixed" },
+				{ role: "user" as const, content: "hello" },
+			],
+			outputSchema: {
+				type: "object",
+				properties: { ok: { type: "boolean" } },
+				required: ["ok"],
+				additionalProperties: false,
+			},
+			signal: new AbortController().signal,
+		};
+		await expect(model.infer(request)).rejects.toThrow("api_http_429");
+		expect(calls).toBe(1);
+		expect(b.used() > 0).toBe(true);
+		const ok = createApiModel({
+			provider: "openai",
+			model: "gpt-6-luna",
+			apiKey: "fixture-only",
+			budget: b,
+			maxOutputTokens: 100,
+			timeoutMs: 1000,
+			fetcher: async () =>
+				Response.json({
+					status: "completed",
+					model: "gpt-6-luna",
+					usage: { input_tokens: 10, output_tokens: 5 },
+					output: [{ content: [{ type: "output_text", text: '{"ok":true}' }] }],
+				}),
+		});
+		expect((await ok.infer(request)).output).toEqual({ ok: true });
+		const controller = new AbortController();
+		controller.abort();
+		await expect(
+			ok.infer({ ...request, signal: controller.signal }),
+		).rejects.toThrow();
+	} finally {
+		b.close();
+	}
+});

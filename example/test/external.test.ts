@@ -344,3 +344,31 @@ test("an adapter cannot read, answer, or stop another collaboration session's re
 		f.db.close();
 	}
 });
+
+test("reconciliation fences interrupted delivery without resending or accepting stale callbacks", async () => {
+	const f = fixture();
+	let release!: (value: "delivered") => void;
+	f.port.deliver = () => new Promise((resolve) => (release = resolve));
+	try {
+		const pending = f.adapter.submit(f.request);
+		const restarted = new ExampleExternalAdapter(f.db, f.port, f.host);
+		const before = restarted.read("r")!;
+		expect((await restarted.reconcile("r", before.attempt ?? 0)).status).toBe(
+			"unknown",
+		);
+		release("delivered");
+		await pending;
+		expect(restarted.read("r")?.status).toBe("unknown");
+		await expect(restarted.reconcile("r", before.attempt ?? 0)).rejects.toThrow(
+			"external_attempt_changed",
+		);
+		f.port.inspect = async () => ({ status: "stopped" });
+		const current = restarted.read("r")!;
+		expect((await restarted.reconcile("r", current.attempt ?? 0)).status).toBe(
+			"stopped",
+		);
+		expect(restarted.read("r")?.independentlyVerified).toBe(false);
+	} finally {
+		f.db.close();
+	}
+});

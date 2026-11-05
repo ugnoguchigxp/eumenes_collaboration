@@ -1,0 +1,25 @@
+name: Verify collaboration package
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - run: bun install --frozen-lockfile
+      - run: bun run verify
+      - run: bun audit --production
+      - name: Fetch the fixed host without product state
+        run: |
+          git init .work/host-source
+          git -C .work/host-source fetch --depth=1 https://github.com/ugnoguchigxp/eumenes.git 5bf5ca556ad45a9c8a6b72f81aae85f7505e505c
+          git -C .work/host-source checkout --detach FETCH_HEAD
+      - run: bun run pack:check
+        env:
+          EUMENES_SOURCE: .work/host-source
+          PACK_CHECK_REQUIRE_HOST: '1'

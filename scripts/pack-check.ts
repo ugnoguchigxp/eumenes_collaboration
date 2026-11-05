@@ -9,6 +9,8 @@ import {
 } from "../src/index.ts";
 
 const root = resolve(import.meta.dir, "..");
+const packageVersion = (await Bun.file(join(root, "package.json")).json())
+	.version as string;
 const source = resolve(process.env.EUMENES_SOURCE ?? join(root, "../eumenes"));
 /** The host commit this package was last proven against (manifest, spec/verification.json). */
 const declaredBaseline = "5bf5ca556ad45a9c8a6b72f81aae85f7505e505c";
@@ -145,7 +147,7 @@ try {
 	);
 	const commit = Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: root });
 	const manifest = {
-		packageVersion: "0.1.0",
+		packageVersion,
 		sourceCommit:
 			commit.exitCode === 0 ? commit.stdout.toString().trim() : null,
 		sourceTreeDigest: digest(JSON.stringify(fileDigests)),
@@ -167,7 +169,7 @@ try {
 		["bun", "pm", "pack", "--destination", join(root, "dist")],
 		root,
 	);
-	const tgz = join(root, "dist/eumenes-collaboration-0.1.0.tgz");
+	const tgz = join(root, `dist/eumenes-collaboration-${packageVersion}.tgz`);
 	report.tgzSha256 = digest(new Uint8Array(await Bun.file(tgz).arrayBuffer()));
 	const content = await run("pack-contents", ["tar", "-tzf", tgz], root);
 	const paths = content.trim().split("\n");
@@ -336,8 +338,9 @@ try {
 		);
 	}
 	await Bun.write(
-		join(root, "dist/eumenes-collaboration-0.1.0.tgz.sha256"),
-		String(report.tgzSha256) + "  eumenes-collaboration-0.1.0.tgz\n",
+		join(root, `dist/eumenes-collaboration-${packageVersion}.tgz.sha256`),
+		String(report.tgzSha256) +
+			`  eumenes-collaboration-${packageVersion}.tgz\n`,
 	);
 	report.status = host.ok ? "passed" : "passed_package_only";
 } catch (error) {

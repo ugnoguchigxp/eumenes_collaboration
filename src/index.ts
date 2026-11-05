@@ -6,7 +6,11 @@ export const coreContractVersion = 1 as const;
 export const supportedStateSchemaVersions: readonly number[] = [1];
 export * from "./contracts/state.ts";
 export { proposeStateUpdate, forgetStateSources } from "./agent/state.ts";
-export { decideSession, type SessionDecision } from "./agent/session.ts";
+export {
+	decideSession,
+	sessionDecisionSchema,
+	type SessionDecision,
+} from "./agent/session.ts";
 export {
 	completeBrief,
 	briefSlots,
@@ -16,6 +20,9 @@ export {
 } from "./agent/brief.ts";
 export {
 	planSteps,
+	planStepSchema,
+	planProposalSchema,
+	browserChoiceSchema,
 	STEP_RESULT_CHARS,
 	stepResultFact,
 	planBudget,
@@ -26,12 +33,9 @@ export {
 	type Plan,
 	type PlanStep,
 	type PlanBudget,
-	type PlanOptions,
-	browserSignals,
-	browserChoicePrompt,
 	parseBrowserChoice,
-	type BrowserHistoryEntry,
-	type BrowserSignals,
-	type BrowserDecision,
 	type BrowserChoice,
 } from "./agent/plan.ts";
+export const decisionContractVersion = 1 as const;
+
+export { withinJsonLimits, JSON_LIMITS } from "./contracts/json-limits.ts";
