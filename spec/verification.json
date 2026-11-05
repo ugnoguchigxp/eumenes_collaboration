@@ -114,5 +114,14 @@
 		"ledger": "quality-review-2026-11-05.json",
 		"summary": "quality-score-2026-11-05.json",
 		"productionIncorporation": "not performed"
+	},
+	"followupCodeReview": {
+		"sourceCommit": "b407ecd8372b2718f05c23a2340e0483833a0296",
+		"tests": 90,
+		"record": "code-review-2026-11-05.md",
+		"verification": "code-review-verification-2026-11-05.json",
+		"apiCalls": "not run",
+		"ci": "not run",
+		"score": "not recalculated"
 	}
 }

@@ -1,14 +1,14 @@
 {
 	"packageVersion": "0.2.0",
-	"sourceCommit": null,
-	"sourceBaseCommit": "4f395a25d62d04a40d6dcb4e3bf0e9d9386af976",
-	"sourceTreeDirty": true,
-	"sourceTreeDigest": "b569cdb90be8504e1630e9ee883a7ecfcc8f95593334dd360a2953121ed1c170",
+	"sourceCommit": "b407ecd8372b2718f05c23a2340e0483833a0296",
+	"sourceBaseCommit": "b407ecd8372b2718f05c23a2340e0483833a0296",
+	"sourceTreeDirty": false,
+	"sourceTreeDigest": "59e7a1d0cbd7aa3230ee62d6002e86b131bcdd3e183c75429e739e9dc89da308",
 	"files": {
 		".s11tnext/catalog.generated.ts": "2655fa5c72b28a178ccad148705af1450991effc3f35a82c9f254609543c6695",
 		".s11tnext/catalog.json": "6b2242263ea4d7d54821cde4420dfdd9d1dc1a9820281e7002e6d20b0808823b",
 		"LICENSE": "2aba7cd5e26f3fde78adaf402c2ce411654755aa2de8170e26cde5a5870e6379",
-		"README.md": "7e0bacfbcf9ce4a2b4ea6628c5ef362165d346ac7df25f0f238092a35aa30746",
+		"README.md": "8057952b43baa09772901ddf1b55ec3b3833960b545fe5d9b2208fa35598346d",
 		"bun.lock": "95714d186b8a18ffc255deb389a35d48f10777fd0f0e381fdfe4a35bc8a3d273",
 		"contexts/collaboration/correction.context.toml": "f0c0e0a89fc7ca033a885afa8b105d45616d68c7432f739b250e9cfe9d282737",
 		"contexts/collaboration/decision.context.toml": "bfe5882194f4433c2fed517047c856b3e8c99be5958ec73347e15539deccf290",
@@ -35,5 +35,5 @@
 	"environment": {
 		"bun": "1.4.4"
 	},
-	"generation": "bun run context:build"
+	"generation": "bun run pack:check"
 }

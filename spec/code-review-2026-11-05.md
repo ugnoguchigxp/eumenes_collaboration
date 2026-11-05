@@ -25,7 +25,7 @@
 - 基準は61試験。修正後は**90試験・837 assertion、全件合格**。型検査、書式、lint、固定指示のlint/生成物整合、32課題の構造検査も合格。
 - SQLiteの実ファイル再開、版1DBの状態・受付記録・外部キー付き失効行の保持、異なるsessionの同名出所、忘却のrollbackを確認。
 - 保存済み128状態・24判断を現行契約へ照合し、14件の採用済み本文を現行decoderで復元して保存済みMarkdownと文字列一致を確認。意味の再採点や新たなAPI実行はしていない。
-- ローカルのpackage-only検証で、実tgz・全配布資材のハッシュを照合。未commit時はsourceCommit=null/dirty=trueを確認し、確定commitから最終配布物も照合する。
+- ローカルのpackage-only検証で、実tgz・全配布資材のハッシュを照合。未commit時はsourceCommit=null/dirty=trueを確認し、確定commit`b407ecd8372b`の隔離copyから最終配布物も照合済み（配布資材21件、README/LICENSE含む）。
 - CI追加・再実行・完了待ち、有料API、新たな外部agent作業、Eumenes本体の変更は実施していない。今回の出費は0。
 
 ## 完了判断と限界

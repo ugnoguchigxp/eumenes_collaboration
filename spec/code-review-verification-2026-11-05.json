@@ -1,0 +1,163 @@
+{
+	"date": "2026-11-05",
+	"baselineCommit": "4f395a25d62d04a40d6dcb4e3bf0e9d9386af976",
+	"sourceCommit": "b407ecd8372b2718f05c23a2340e0483833a0296",
+	"sourceTreeDigest": "59e7a1d0cbd7aa3230ee62d6002e86b131bcdd3e183c75429e739e9dc89da308",
+	"sourceTreeDirty": false,
+	"scope": "independent core/example/scripts; no product repository changes",
+	"checks": {
+		"tests": 90,
+		"expectations": 837,
+		"typecheck": "passed",
+		"format": "passed",
+		"lint": "passed",
+		"contextLint": "passed",
+		"contextGeneratedCheck": "passed",
+		"evaluationInventory": 32,
+		"historyReplay": {
+			"states": 128,
+			"decisions": 24,
+			"documents": 14,
+			"passed": true,
+			"scope": "Offline structural replay of saved outputs and byte-identical Markdown. No model calls, semantic regrading or human acceptance."
+		},
+		"package": {
+			"status": "passed_package_only",
+			"steps": [
+				{
+					"name": "core-verify",
+					"exitCode": 0,
+					"log": "core-verify.log"
+				},
+				{
+					"name": "manifest-format",
+					"exitCode": 0,
+					"log": "manifest-format.log"
+				},
+				{
+					"name": "pack",
+					"exitCode": 0,
+					"log": "pack.log"
+				},
+				{
+					"name": "pack-contents",
+					"exitCode": 0,
+					"log": "pack-contents.log"
+				}
+			],
+			"tgzSha256": "52a7041f47cfafa148db132144d82a0f436c19bb9de4aedca6761b1e846fabbd",
+			"packedResourcesVerified": 21,
+			"READMEAndLicenseHashed": true,
+			"beforeCommit": {
+				"sourceCommit": null,
+				"sourceTreeDirty": true
+			},
+			"afterCommit": {
+				"sourceCommit": "b407ecd8372b2718f05c23a2340e0483833a0296",
+				"sourceBaseCommit": "b407ecd8372b2718f05c23a2340e0483833a0296",
+				"sourceTreeDirty": false
+			}
+		}
+	},
+	"notRun": [
+		"CI per user instruction",
+		"new paid API calls",
+		"real renderer/terminal acceptance",
+		"Eumenes consumer integration for this new source",
+		"new numerical project score"
+	],
+	"findings": {
+		"groupsFixed": 11,
+		"confirmedUnresolvedInReviewedCode": 0
+	},
+	"apiAdditionalCostUsd": 0,
+	"notes": [
+		"Prior semantic-quality failures remain unresolved results; not regraded.",
+		"Prior80.2 score refers to its earlier snapshot.",
+		"Package verified from clean isolated source commit. Later commit contains verification/manifest metadata only.",
+		"An initial isolated dependency symlink was correctly detected as untracked. Dependencies were moved inside a normal ignored directory before clean-source validation."
+	],
+	"logs": {
+		"answer-provenance-red.log": {
+			"sha256": "e2171c7c81e6a80cfb80c3d67c8a33cd3f549fde52b691884602b05267c15031",
+			"bytes": 2614
+		},
+		"api-green.log": {
+			"sha256": "021f99635e1eb58934d75bcd92a6786877c29faef7a889bae4b3a9330f22c263",
+			"bytes": 2097
+		},
+		"api-red.log": {
+			"sha256": "3f9140cb3f2cd7137d717adceeab0db21f7d7411ddbcb8983fa4e9393c7415f4",
+			"bytes": 3882
+		},
+		"baseline.log": {
+			"sha256": "930aab74d93cdb27f4565d80da03312a23e95fb9ca8ae709f8e69cd27f5e7729",
+			"bytes": 6416
+		},
+		"config-api-baseline-red.log": {
+			"sha256": "49f1d1ea98dcb0e67f6017a75ef9ac81ed8c727ce13bf44a37667d2ad905bd91",
+			"bytes": 618
+		},
+		"config-red.log": {
+			"sha256": "ec1dc2e7f2404ff378acf23e7d364d589f77725fa1a8489f846f587b0b98ddce",
+			"bytes": 3785
+		},
+		"contracts-red.log": {
+			"sha256": "83be6e2e22ebbc99c1cb3fa9c8548fb6d6161e52274b37e4106378570a472ffc",
+			"bytes": 8753
+		},
+		"final-core-verify.log": {
+			"sha256": "134579bb8281e468b5270319412361c54ccebee9beabff7fe104ac85f910b5d3",
+			"bytes": 9963
+		},
+		"final-manifest-format.log": {
+			"sha256": "fba59e3248b603172a1f41f228eb13e9069fee9cddccbbf6642dac34c7b4e934",
+			"bytes": 53
+		},
+		"final-pack-contents.log": {
+			"sha256": "0c7d9fed5e16fb5f0455daf1a64e1185b28f18117fc5df1d9c88de2564a4188a",
+			"bytes": 730
+		},
+		"final-pack.log": {
+			"sha256": "7ccfa0b6e09b45a2afd4494da5152fd83189545c948db747761a19d1fe2ecdfa",
+			"bytes": 1159
+		},
+		"final-package.log": {
+			"sha256": "f229d64a3b0e2b709243d6f3f2e7c195e4fce89c7aeba354658ae7aaa31b4afb",
+			"bytes": 395
+		},
+		"integration.log": {
+			"sha256": "03b7253203606d4606151805a5725ea74af1be828b03e5a15f5afe491ae0bf8c",
+			"bytes": 9318
+		},
+		"legacy-answer-red.log": {
+			"sha256": "20121f2a99838a1aab84331825436a355079f4a81ac278dbca685276a473e7c3",
+			"bytes": 2823
+		},
+		"package-precommit.log": {
+			"sha256": "39c4be4c6ca666edf776050287728b8f125ea0c2564889396791fde94bc3a9ff",
+			"bytes": 366
+		},
+		"serialization-hook-red.log": {
+			"sha256": "8d010aa527a78a01c832e0f220c5dd05d811b0df1a5f9964116965671bf3b6c4",
+			"bytes": 2195
+		},
+		"state-external-green.log": {
+			"sha256": "544e04c57b2cb7cc52a5b6809cbbeae90099e23cad21848e77d02ffe0e5ba7f2",
+			"bytes": 4244
+		},
+		"state-external-red.log": {
+			"sha256": "2ba1e3e8661b8847dc1f39539e1444e7a0416621506a08b6e3bb5cd3d52009ea",
+			"bytes": 12878
+		},
+		"version-alias-red.log": {
+			"sha256": "60ea7264519b05ae36e819339c23f99f5a0dab538793709d3cd3da372d2479db",
+			"bytes": 4181
+		}
+	},
+	"contextTools": {
+		"context_compile": 1,
+		"compile_eval": 1,
+		"runId": "00000000-0000-0000-18e5-24c77c51e6bd"
+	}
+}
