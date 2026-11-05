@@ -55,7 +55,7 @@ export function buildCollaborationMessages(input: TurnContext): ChatMessage[] {
 		...input.time,
 	};
 	const block = document
-		? `\nCURRENT_DOCUMENT path=${document.path} revision=${document.revision}${document.outlined ? " outline" : ""}\n<<<\n${document.body}\n>>>`
+		? `\nCURRENT_DOCUMENT path=${document.path} revision=${document.revision}${document.outlined ? " outline" : ""}\n<<<\n${fenced(document.body)}\n>>>`
 		: "";
 	return [
 		input.system,
@@ -78,4 +78,9 @@ function lastRevision(course: CourseEntry[]): number {
 		for (const step of [...(entry.steps ?? [])].reverse())
 			if (step.revision !== undefined) return step.revision;
 	return 0;
+}
+
+/** A body line that is exactly the closing fence would end the block early: it gets a leading backslash. */
+function fenced(body: string): string {
+	return body.replace(/^(\\*)>>>$/gmu, "\\$1>>>");
 }
