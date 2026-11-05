@@ -336,13 +336,15 @@ export class ExampleExternalAdapter {
 			!latest.forgotten &&
 			latest.question?.id === input.questionId &&
 			latest.status === "waiting"
-		)
+		) {
 			this.save({
 				...latest,
 				question: { ...latest.question, answered: status === "sent" },
 				answer: { digest, status },
 			});
-		return { status };
+			return { status };
+		}
+		return { status: "unknown" as const };
 	}
 	forgetSources(sessionId: string, refs: ReadonlySet<string>) {
 		if (sessionId !== this.host.sessionId)

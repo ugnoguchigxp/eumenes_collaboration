@@ -372,3 +372,32 @@ test("reconciliation fences interrupted delivery without resending or accepting 
 		f.db.close();
 	}
 });
+
+test("a reconciled or forgotten answer cannot return a stale success to its caller", async () => {
+	for (const mode of ["reconcile", "forget"]) {
+		const f = fixture();
+		let release!: (status: "sent") => void;
+		f.port.answerQuestion = () =>
+			new Promise((resolve) => {
+				release = resolve;
+			});
+		try {
+			await f.adapter.submit(f.request);
+			f.adapter.event({
+				id: "question",
+				requestId: "r",
+				generation: 1,
+				kind: "waiting",
+				question,
+			});
+			const pending = f.adapter.answer(answer);
+			if (mode === "forget") f.adapter.forgetSources("s", new Set(["u1"]));
+			else await f.adapter.reconcile("r", f.adapter.read("r")!.attempt!);
+			release("sent");
+			expect(await pending).toEqual({ status: "unknown" });
+			expect(f.adapter.read("r")?.answer?.status).not.toBe("sent");
+		} finally {
+			f.db.close();
+		}
+	}
+});
