@@ -6,8 +6,8 @@ export type ClaudeModelConfig = {
 	cwd: string;
 	maxBudgetUsd: number;
 	maxCalls: number;
-	/** Supply a dedicated test credential/config environment; never copy product settings. */
-	env: Record<string, string | undefined>;
+	/** Omit to inherit the launch environment; an explicit map replaces it for isolated tests. */
+	env?: Record<string, string | undefined>;
 };
 
 /** Mirrors the model-only SDK boundary in Eumenes's cloud-agents adapter. */
@@ -53,7 +53,7 @@ export function createClaudeModel(
 			if (request.signal.aborted) controller.abort();
 			const options: Options = {
 				cwd: config.cwd,
-				env: config.env,
+				...(config.env === undefined ? {} : { env: config.env }),
 				model: config.model,
 				systemPrompt: first.content,
 				tools: [],

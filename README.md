@@ -39,6 +39,8 @@ example/README.mdに、モデル・観測・外部作業のadapterと設定方�
 
 固定試験の合格は、実モデルの意味品質や実画面の品質を保証しない。評価課題32件は開発/保留に分割済みで、実モデル評価は未実施。製品Eumenesの保存migration・bundle切替・実renderer受入・実外部agent受入は未実施。最新の範囲と結果はspec/implementation.md、元の段階計画はplan.mdを参照。
 
+レビューの全改善項目と技術品質80点以上を目指す実装順序・受入条件は、[品質改善実装計画](spec/quality-improvement-plan-2026-11-05.md)を参照。
+
 ## ライセンス
 
 [MIT License](LICENSE)

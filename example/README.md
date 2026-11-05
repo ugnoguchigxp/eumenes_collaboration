@@ -15,7 +15,20 @@
 
 ## 実モデルの接続
 
-`createClaudeModel({ model, cwd, maxBudgetUsd, maxCalls, env })`を呼び、返ったadapterを`propose`または`proposeFacts`へ渡す。modelは実行時に選んだ識別子、cwdは隔離したテストディレクトリ、envは専用テストcredential/configを指す設定とする。正の費用上限と最大呼出し数がない場合は起動しない。同一adapterで並行呼出しはしない。費用不明で終わった接続は自動再試行しない。
+`createClaudeModel({ model, cwd, maxBudgetUsd, maxCalls })`を呼び、返ったadapterを`propose`または`proposeFacts`へ渡す。modelは実行時に選んだ識別子、cwdは隔離したテストディレクトリとする。envを省略するとSDKが起動元の環境変数を継承する。envを明示した場合はそのmapだけを渡し、親環境と混ぜない。正の費用上限と最大呼出し数がない場合は起動しない。同一adapterで並行呼出しはしない。費用不明で終わった接続は自動再試行しない。
+
+### APIキーを共通の環境変数から使う
+
+プロジェクトごとの`.env`は不要。`.zprofile`の`CLAUDE_API_KEY`と`OPEN_AI_API_KEY`を、SDKの標準名へ対応させたログインシェルから起動する。次の行はキー本体を複製せず、既にexportされた値を引き継ぐ。
+
+```sh
+export ANTHROPIC_API_KEY="$CLAUDE_API_KEY"
+export OPENAI_API_KEY="$OPEN_AI_API_KEY"
+```
+
+設定後は新しいログインシェルを開くか、現在のターミナルで`source ~/.zprofile`を実行する。既に動いているアプリの環境は自動更新されないため、そこから実行する検証ではログインシェルを経由する。Codexなどの既存プロセスからは`zsh -lc '<検証コマンド>'`で起動できる。アプリ内から`.zprofile`を読み込んだり、キーの値を設定ファイル・ログへ保存したりしない。
+
+Claude接続ではenvを省略すれば`ANTHROPIC_API_KEY`を継承する。OpenAI直接APIのadapterは改善計画の実装対象であり、同じく`OPENAI_API_KEY`を起動環境から読む。キーが存在しても固定モデルの通常CLIが実APIへ切り替わることはなく、実モデルの選択と費用上限は別途指定する。
 
 通常のCLIは固定モデルであり、実SDKの起動、Claude Codeへの作業依頼、製品接続先の読取りを行わない。SDKの実出力・認証・費用計測の受入は、明示したテスト設定と予算を用意した後に行う。
 

@@ -130,3 +130,46 @@ test("a failed SDK start leaves unknown cost and cannot be retried automatically
 		"model_budget_exhausted",
 	);
 });
+
+test("omitted environment inherits the launch environment while an explicit map stays isolated", async () => {
+	const { query } = await import("@anthropic-ai/claude-agent-sdk");
+	for (const env of [undefined, {}]) {
+		let captured: Parameters<typeof query>[0] | undefined;
+		const fake = ((input: Parameters<typeof query>[0]) => {
+			captured = input;
+			return Object.assign(
+				(async function* () {
+					yield {
+						type: "result",
+						subtype: "success",
+						is_error: false,
+						total_cost_usd: 0,
+						structured_output: { action: "reply", text: "案です" },
+					};
+				})(),
+				{ close() {} },
+			);
+		}) as unknown as typeof query;
+		const adapter = createClaudeModel(
+			{
+				model: "fixture",
+				cwd: "/tmp",
+				maxBudgetUsd: 1,
+				maxCalls: 1,
+				...(env === undefined ? {} : { env }),
+			},
+			fake,
+		);
+		await adapter.infer({
+			messages: [{ role: "system", content: "fixed" }],
+			outputSchema: { type: "object" },
+			signal: new AbortController().signal,
+		});
+		expect(captured !== undefined).toBe(true);
+		expect(Object.hasOwn(captured?.options ?? {}, "env")).toBe(
+			env !== undefined,
+		);
+		// Compare identity only, so a regression cannot print inherited credentials.
+		expect(captured?.options?.env === env).toBe(true);
+	}
+});
