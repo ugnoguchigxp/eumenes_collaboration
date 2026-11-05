@@ -17,7 +17,7 @@ const root = resolve(import.meta.dir, ".."),
 	dir = join(root, "reports/quality-2026-11-05");
 await mkdir(dir, { recursive: true });
 const budget = new ApiBudget(join(dir, "api-budget.sqlite"), 10);
-const runName = process.argv[2] ?? "run-v2";
+const runName = process.argv[2] ?? "run-v3";
 if (!/^[a-zA-Z0-9_-]+$/.test(runName)) throw new Error("run_name_invalid");
 const runDir = join(dir, runName);
 await mkdir(runDir, { recursive: true });
@@ -199,6 +199,7 @@ async function runTask(
 						"api_http_401",
 						"api_http_403",
 						"api_http_404",
+						"api_json_value_invalid",
 					].includes(reason)
 				)
 					stopped = true;
@@ -213,7 +214,7 @@ async function runTask(
 			}
 		}
 		const final = store.read(id) as CollaborationState;
-		const judge = api(provider === "anthropic" ? "openai" : "anthropic", 1024);
+		const judge = api(provider === "anthropic" ? "openai" : "anthropic", 2048);
 		let verdict: unknown = null;
 		if (!stopped) {
 			try {

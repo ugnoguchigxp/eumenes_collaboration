@@ -32,7 +32,7 @@ test("provider JSON representation round-trips opaque JSON without changing host
 				id: "f",
 				kind: "condition",
 				status: "confirmed",
-				value: '{"nested":[1,null,"x"]}',
+				value: { json: '{"nested":[1,null,"x"]}' },
 				sourceRefs: ["u"],
 				supersedes: [],
 			},
@@ -116,4 +116,15 @@ test("unsupported provider bounds remain enforced by the original host schema, i
 	expect(
 		schema.safeParse(wire.decode({ nested: { n: -1, text: "" } })).success,
 	).toBe(false);
+});
+
+test("wire primitives never require a second JSON parse and tagged aggregates remain lossless", () => {
+	const wire = apiSchema({ $ref: "#/$defs/json" });
+	for (const value of ["日本語", "123", "null", true, 42, null])
+		expect(wire.decode(value)).toEqual(value);
+	for (const value of [{ a: [1, null, "x"] }, [1, "x"], { json: "literal" }])
+		expect(wire.decode({ json: JSON.stringify(value) })).toEqual(value);
+	expect(() => wire.decode({ json: "not JSON" })).toThrow(
+		"api_json_value_invalid",
+	);
 });

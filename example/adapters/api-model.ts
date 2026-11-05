@@ -5,7 +5,7 @@ import { ApiBudget } from "./api-budget.ts";
 type Schema = Record<string, unknown>;
 const obj = (v: unknown): Schema =>
 	v !== null && typeof v === "object" && !Array.isArray(v) ? (v as Schema) : {};
-/** JSON Schema free-form JSON is transported as JSON text, then decoded before host validation. */
+/** Native JSON primitives plus a tagged aggregate envelope preserve opaque JSON without schema recursion. */
 export function apiSchema(schema: Schema): {
 	schema: Schema;
 	decode: (value: unknown) => unknown;
@@ -18,9 +18,24 @@ export function apiSchema(schema: Schema): {
 				s.additionalProperties !== false)
 		)
 			return {
-				type: "string",
-				description:
-					"JSON-encoded value. Return valid JSON text, including quotes for a string.",
+				anyOf: [
+					{ type: "string" },
+					{ type: "number" },
+					{ type: "boolean" },
+					{ type: "null" },
+					{
+						type: "object",
+						properties: {
+							json: {
+								type: "string",
+								description:
+									"JSON-serialized object or array. Use this envelope for structured JSON values; primitive values use their native type.",
+							},
+						},
+						required: ["json"],
+						additionalProperties: false,
+					},
+				],
 			};
 		const out: Schema = { ...s };
 		delete out.$schema;
@@ -70,8 +85,24 @@ export function apiSchema(schema: Schema): {
 				s.properties === undefined &&
 				s.additionalProperties !== false)
 		) {
-			if (typeof v !== "string") throw new Error("api_json_value_invalid");
-			return JSON.parse(v);
+			if (
+				v === null ||
+				typeof v === "string" ||
+				typeof v === "boolean" ||
+				typeof v === "number"
+			)
+				return v;
+			const envelope = obj(v);
+			if (
+				Object.keys(envelope).length !== 1 ||
+				typeof envelope.json !== "string"
+			)
+				throw new Error("api_json_value_invalid");
+			try {
+				return JSON.parse(envelope.json);
+			} catch {
+				throw new Error("api_json_value_invalid");
+			}
 		}
 		if (s.type === "array") {
 			if (!Array.isArray(v)) return v;
