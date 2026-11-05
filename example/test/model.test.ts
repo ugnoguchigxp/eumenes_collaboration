@@ -207,3 +207,69 @@ test("SDK cleanup failure still accounts cost and releases the in-flight lock", 
 		"model_budget_exhausted",
 	);
 });
+
+test("registered native arguments preserve Unicode text without weakening the action contract", async () => {
+	const { z } = await import("zod");
+	const { ApiBudget } = await import("../adapters/api-budget.ts");
+	const { createApiModel } = await import("../adapters/api-model.ts");
+	const budget = new ApiBudget(":memory:", 1);
+	const args = z.strictObject({
+		expectedRevision: z.number().int().nonnegative(),
+		content: z.string().max(12000),
+	});
+	const content = "# 試験\n\n「原文をそのまま。」\n";
+	try {
+		for (const forbiddenForward of [false, true]) {
+			const model = createApiModel({
+				provider: "openai",
+				model: "gpt-6-luna",
+				apiKey: "fixture-key",
+				budget,
+				maxOutputTokens: 100,
+				timeoutMs: 1000,
+				fetcher: async (_url, init) => {
+					const sent = JSON.parse(String(init.body));
+					const schema = sent.text.format.schema.properties.arguments;
+					expect(schema.anyOf[0].properties.content.type).toBe("string");
+					return Response.json({
+						status: "completed",
+						usage: { input_tokens: 10, output_tokens: 5 },
+						output: [
+							{
+								content: [
+									{
+										type: "output_text",
+										text: JSON.stringify({
+											action: "invoke",
+											tool: "doc.write",
+											arguments: { expectedRevision: 0, content },
+											...(forbiddenForward ? { forward: true } : {}),
+										}),
+									},
+								],
+							},
+						],
+					});
+				},
+			});
+			const result = await propose(
+				model,
+				{
+					utterance: "改訂する",
+					course: { course: [], interrupted: null, handedOver: null },
+					work: { label: "文書", dirty: false, current: {}, savedRef: null },
+					viewing: null,
+					time: { now: "2026-11-05T00:00:00+09:00", timeZone: "Asia/Tokyo" },
+					callsLeft: 2,
+				},
+				new AbortController().signal,
+				z.toJSONSchema(args),
+			);
+			expect(result.ok).toBe(!forbiddenForward);
+			if (result.ok && result.action.kind === "invoke")
+				expect(args.parse(result.action.arguments).content).toBe(content);
+		}
+	} finally {
+		budget.close();
+	}
+});

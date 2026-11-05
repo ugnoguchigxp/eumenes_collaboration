@@ -31,8 +31,19 @@ export async function propose(
 	model: ModelAdapter,
 	input: Omit<TurnContext, "system">,
 	signal: AbortSignal,
+	/** Host-provided schema for the registered operation's arguments; the executor still validates them. */
+	toolArgumentsSchema?: Record<string, unknown>,
 ) {
 	const contract = createCollaborationContract(exampleReplyPolicy);
+	const outputSchema = toolArgumentsSchema
+		? {
+				...contract.outputSchema,
+				properties: {
+					...contract.outputSchema.properties,
+					arguments: toolArgumentsSchema,
+				},
+			}
+		: contract.outputSchema;
 	const messages = buildCollaborationMessages({
 		...input,
 		system: {
@@ -41,12 +52,12 @@ export async function propose(
 				collaborationInstructions.rules +
 				"\n文書の改訂ではCURRENT_DOCUMENTの現在版を原文の正本とし、今回指定された変更だけを反映します。保持が指定された本文・手編集は、句読点・括弧・改行も含め原文をそのまま写します。意味が同じでも保持箇所を言い換えたり、書式を正規化したり、削除したりしません。全文を返す場合も、現在版と採用済みの条件を照合してこの制約を守ります。" +
 				"\nOUTPUT_SCHEMA=" +
-				JSON.stringify(contract.outputSchema),
+				JSON.stringify(outputSchema),
 		},
 	});
 	const result = await model.infer({
 		messages,
-		outputSchema: contract.outputSchema,
+		outputSchema,
 		signal,
 	});
 	const action = contract.parse(result.output);

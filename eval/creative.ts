@@ -14,7 +14,7 @@ import type {
 } from "../src/index.ts";
 import scenario from "./creative.json";
 const root = resolve(import.meta.dir, "..");
-const runName = process.argv[2] ?? "creative-v3";
+const runName = process.argv[2] ?? "creative-v4";
 if (!/^[a-zA-Z0-9_-]+$/.test(runName)) throw new Error("run_name_invalid");
 const dir = join(root, "reports/quality-2026-11-05", runName);
 await mkdir(dir, { recursive: true });
@@ -36,6 +36,8 @@ await Bun.write(
 			repetitions: 1,
 			concurrency: 1,
 			maxOutputTokens: 8192,
+			argumentRepresentation:
+				"native registered operation schema; unchanged host validation",
 			timeoutMs: 120000,
 			capUsd: 10,
 			maxRepairCallsPerProposal: 1,
@@ -193,6 +195,7 @@ try {
 						model,
 						context,
 						new AbortController().signal,
+						z.toJSONSchema(argsSchema),
 					);
 					context.callsLeft--;
 					let failure = "action_contract_invalid";
