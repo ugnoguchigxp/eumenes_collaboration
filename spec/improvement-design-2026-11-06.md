@@ -3,7 +3,7 @@
 作成日 2026年11月6日
 基準commit `7843627`（main、package 0.2.0）
 対象版 0.3.0
-状態 実装・検証済み（CIを除く。利用者の決定は9章、結果は10章）。未commit。
+状態 実装・検証済み（CIを除く。利用者の決定は9章、結果は10章）。実装は commit `01e63be`、配布の検証は `14ecad2` の作業ツリーで実施。
 
 2026年11月6日に行った多角評価の指摘を、実装できる単位に分けて設計する。評価時点の事実は次のとおり。
 
@@ -547,8 +547,8 @@ Phase 4: E1〜E4の文書（E2は承認された場合だけ）
 - `PACK_CHECK_REQUIRE_HOST=1 bun run pack:check`：`passed`（27段）。
   - 旧版との601比較（149出力）で差分なし。
   - Eumenes既存のspecialist試験 64/64、隔離hostのdomain試験 1184/1184、Web buildが合格した。
-  - tgzのsha256は `117e3a0e…5e34`。`dist/eumenes-collaboration-0.3.0.verification.json` に記録した。
-  - manifestは未commitのため `sourceCommit: null`、`sourceTreeDirty: true`。
+  - commit後、クリーンな作業ツリー（`14ecad2`）で再実行し、27段すべて合格した。manifestは `sourceCommit: 14ecad2d…c44d`、`sourceTreeDirty: false`。
+  - tgzのsha256は `ed93fa7b…96b0`、検証報告のsha256は `5e6e6799…1cae`。`dist/eumenes-collaboration-0.3.0.verification.json` に記録した（`dist/` はcommit対象外）。
 - 行動契約のschemaは、0.2.0と同じJSON文字列であることを試験した（`test/action-schema.snapshot.json`）。
 - `.work`：手作業で作った検証用コピー3件（8.0GB）を削除した。固有の資料（検証スクリプト、ログ、作業差分、約1MB）は `.work/archive-2026-11-06/` に退避した。12GBが4.6GBになった。
 
