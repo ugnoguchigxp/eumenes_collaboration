@@ -1,6 +1,6 @@
 {
 	"name": "eumenes-collaboration",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"license": "MIT",
 	"private": true,
 	"type": "module",
@@ -29,6 +29,8 @@
 		"test": "bun test ./test",
 		"verify": "bun run typecheck && bun run format:check && bun run lint && bun run context:lint && bun run context:check && bun test ./test ./example/test && bun run eval:check",
 		"pack:check": "bun scripts/pack-check.ts",
+		"verify:clean": "bun scripts/verify-clean-copy.ts",
+		"work:clean": "bun scripts/clean-work.ts",
 		"standalone": "bun standalone/cli.ts",
 		"example": "bun example/cli.ts",
 		"example:check": "bun test ./example/test",

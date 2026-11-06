@@ -47,4 +47,4 @@
 
 同じ担当が別経路から反証点検を行い、追加の容量漏れ・SDK終了処理・遅延回答を検出した。独立した第三者レビューとはしない。実利用者の受入、長期保守、実renderer/端末、製品導入、負荷試験の一般化は未確認。
 
-計算の正本は[再評価ledger](quality-review-2026-11-05.json)と[計算結果](quality-score-2026-11-05.json)。過去の[基準ledger](../eval/results/2026-11-05/baseline-review.json)、[実施記録](quality-execution-2026-11-05.md)、[検証索引](verification.json)を合わせて参照する。context_compile/compile_evalは各1回、評価保存済み。
+計算の正本は[再評価ledger](quality-review-2026-11-05.json)と[計算結果](quality-score-2026-11-05.json)。過去の[基準ledger](../../../eval/results/2026-11-05/baseline-review.json)、[実施記録](quality-execution-2026-11-05.md)、[検証索引](../../verification.json)を合わせて参照する。context_compile/compile_evalは各1回、評価保存済み。

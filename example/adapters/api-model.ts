@@ -211,6 +211,21 @@ const usageSchema = z.object({
 		.object({ reasoning_tokens: z.number().int().nonnegative().optional() })
 		.optional(),
 });
+/**
+ * HTTP statuses after which the reservation is released because the request is treated as unbilled.
+ * Neither provider's official pages state this outright (checked 2026-11-06):
+ *  - Anthropic errors: https://platform.claude.com/docs/en/api/errors (400/401/403/404/413/429 meanings, no billing statement)
+ *  - Anthropic rate limits: https://platform.claude.com/docs/en/api/rate-limits (spend-limit 400 and rate-limit 429 are
+ *    enforced at request start; ITPM is estimated "at the beginning of each request"; no billing statement)
+ *  - OpenAI errors: https://developers.openai.com/api/docs/guides/error-codes (400/401/403/429; no billing statement, 404/413/422 not listed)
+ *  - OpenAI rate limits: https://developers.openai.com/api/docs/guides/rate-limits (failed requests count toward rate limits; no billing statement)
+ * So the list is an inference from HTTP semantics (the request was rejected before inference), not a documented
+ * guarantee. 5xx, 408, timeouts, disconnects, corrupt bodies and cancellation never release: the outcome is unknown.
+ * Hosts that need stricter accounting override `releaseOnStatus` (an empty list never releases).
+ */
+export const DEFAULT_RELEASE_ON_STATUS: readonly number[] = Object.freeze([
+	400, 401, 403, 404, 413, 422, 429,
+]);
 export type ApiConfig = {
 	provider: "anthropic" | "openai";
 	model: string;
@@ -218,11 +233,16 @@ export type ApiConfig = {
 	maxOutputTokens: number;
 	timeoutMs: number;
 	apiKey?: string;
+	/** Statuses treated as unbilled rejections; defaults to `DEFAULT_RELEASE_ON_STATUS`. Only 4xx other than 408. */
+	releaseOnStatus?: readonly number[];
 	fetcher?: (url: string, init: RequestInit) => Promise<Response>;
 };
 /** Direct HTTP adapters perform inference only, with no retries, tools or provider fallback. */
 export function createApiModel(settings: ApiConfig): ModelAdapter {
 	const config = { ...settings };
+	const releaseOnStatus = new Set(
+		config.releaseOnStatus ?? DEFAULT_RELEASE_ON_STATUS,
+	);
 	const key =
 		config.apiKey ??
 		process.env[
@@ -236,7 +256,14 @@ export function createApiModel(settings: ApiConfig): ModelAdapter {
 		config.maxOutputTokens < 1 ||
 		config.maxOutputTokens > 8192 ||
 		!Number.isFinite(config.timeoutMs) ||
-		config.timeoutMs <= 0
+		config.timeoutMs <= 0 ||
+		[...releaseOnStatus].some(
+			(status) =>
+				!Number.isInteger(status) ||
+				status < 400 ||
+				status > 499 ||
+				status === 408,
+		)
 	)
 		throw new Error("api_configuration_required");
 	return {
@@ -312,7 +339,20 @@ export function createApiModel(settings: ApiConfig): ModelAdapter {
 					]),
 				},
 			);
-			if (!response.ok) throw new Error(`api_http_${response.status}`);
+			if (!response.ok) {
+				if (releaseOnStatus.has(response.status)) {
+					void response.body?.cancel().catch(() => undefined);
+					config.budget.release(id, {
+						httpStatus: response.status,
+						requestId:
+							response.headers.get("request-id") ??
+							response.headers.get("x-request-id"),
+						ms: performance.now() - started,
+						reason: "http_rejected_before_inference",
+					});
+				}
+				throw new Error(`api_http_${response.status}`);
+			}
 			const reader = response.body?.getReader();
 			if (!reader) throw new Error("api_body_missing");
 			let size = 0;

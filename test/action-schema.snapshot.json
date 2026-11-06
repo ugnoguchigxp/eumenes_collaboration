@@ -1,0 +1,37 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"type": "object",
+	"properties": {
+		"action": {
+			"type": "string",
+			"enum": ["reply", "invoke", "return", "discard"],
+			"description": "reply=利用者への短い説明・質問・完了報告。必須条件が欠けるとき、または停止・破棄・復帰の意図が曖昧なときは、確認を一つだけ尋ねる。例 {\"action\":\"reply\",\"text\":\"どの題材にしますか。\"}\ninvoke=TOOLSの登録操作を一つ実行する。textを付けると、操作が成功したときにそのtextで利用者へ答えてターンを終える（次の推論はしない）。textを付けないと、TOOL_RESULTを読んでから次を決める。TOOL_RESULTがok:falseなら、errorとdetail・issuesを基に直して同じターンでinvokeし直す。callsLeftが1のときのinvokeには必ずtextを付ける。例 {\"action\":\"invoke\",\"tool\":\"<TOOLSのid>\",\"arguments\":{},\"text\":\"見出しを大きくしました。\"}\nreturn=担当範囲外の依頼、または復帰の依頼で、担当を離れる。例 {\"action\":\"return\",\"forward\":true}\ndiscard=利用者が未保存作業の破棄を明示したときだけ使う。例 {\"action\":\"discard\",\"text\":\"破棄しました。\"}"
+		},
+		"text": {
+			"description": "host reply policy",
+			"type": "string",
+			"maxLength": 300
+		},
+		"tool": {
+			"description": "invokeのときだけ必須。TOOLSのid。",
+			"type": "string",
+			"minLength": 1,
+			"maxLength": 64
+		},
+		"arguments": {
+			"description": "invokeのときだけ。成果物本体を入れ、依頼された内容を省略しない。依頼の変更箇所だけを反映し、未指定の項目は作業を進められる範囲で仮置きする。",
+			"type": "object",
+			"propertyNames": {
+				"type": "string"
+			},
+			"additionalProperties": {}
+		},
+		"forward": {
+			"description": "returnのときだけ必須。true=担当範囲外の依頼を、原文のまま通常担当へ渡す。viewing.refがsavedRefと異なる別作品の編集を求められたときもtrueにし、現在の作業は変えない。false=復帰だけが依頼で、短い返答を添える。未保存の作業は保留される。",
+			"type": "boolean"
+		}
+	},
+	"required": ["action"],
+	"additionalProperties": false,
+	"description": "返すJSONは一つだけ。長期記憶・World・別会話は参照も更新もできない。"
+}

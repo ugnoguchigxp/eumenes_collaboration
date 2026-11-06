@@ -7,6 +7,8 @@ export type ClaudeModelConfig = {
 	cwd: string;
 	maxBudgetUsd: number;
 	maxCalls: number;
+	/** Per-call limit (default 120000). A timed-out call has an unknown cost, so the adapter then refuses further calls. */
+	timeoutMs?: number;
 	/** Omit to inherit the launch environment; an explicit map replaces it for isolated tests. */
 	env?: Record<string, string | undefined>;
 };
@@ -18,6 +20,7 @@ export function createClaudeModel(
 ): ModelAdapter {
 	const config = {
 		...settings,
+		timeoutMs: settings.timeoutMs ?? 120000,
 		...(settings.env === undefined ? {} : { env: { ...settings.env } }),
 	};
 	if (
@@ -26,7 +29,9 @@ export function createClaudeModel(
 		!Number.isFinite(config.maxBudgetUsd) ||
 		config.maxBudgetUsd <= 0 ||
 		!Number.isSafeInteger(config.maxCalls) ||
-		config.maxCalls <= 0
+		config.maxCalls <= 0 ||
+		!Number.isFinite(config.timeoutMs) ||
+		config.timeoutMs <= 0
 	)
 		throw new Error("test_model_configuration_required");
 	let calls = 0;
@@ -58,9 +63,25 @@ export function createClaudeModel(
 			busy = true;
 			calls++;
 			const controller = new AbortController();
+			const signal = AbortSignal.any([
+				request.signal,
+				AbortSignal.timeout(config.timeoutMs),
+			]);
 			const cancel = () => controller.abort();
-			request.signal.addEventListener("abort", cancel, { once: true });
-			if (request.signal.aborted) controller.abort();
+			signal.addEventListener("abort", cancel, { once: true });
+			if (signal.aborted) controller.abort();
+			// A stream that ignores the abort must not hold the caller past the deadline.
+			const expired = new Promise<never>((_, reject) => {
+				const fail = () =>
+					reject(
+						request.signal.aborted
+							? request.signal.reason
+							: new Error("model_call_timeout"),
+					);
+				if (signal.aborted) fail();
+				else signal.addEventListener("abort", fail, { once: true });
+			});
+			expired.catch(() => undefined);
 			const options: Options = {
 				cwd: config.cwd,
 				...(config.env === undefined ? {} : { env: config.env }),
@@ -89,7 +110,11 @@ export function createClaudeModel(
 						.join("\n\n"),
 					options,
 				});
-				for await (const message of stream) {
+				const iterator = stream[Symbol.asyncIterator]();
+				while (true) {
+					const step = await Promise.race([iterator.next(), expired]);
+					if (step.done) break;
+					const message = step.value;
 					if (message.type !== "result") continue;
 					if (
 						Number.isFinite(message.total_cost_usd) &&
@@ -110,7 +135,7 @@ export function createClaudeModel(
 					stream?.close();
 				} finally {
 					busy = false;
-					request.signal.removeEventListener("abort", cancel);
+					signal.removeEventListener("abort", cancel);
 					if (cost === null) unknownCost = true;
 					else spent += cost;
 				}

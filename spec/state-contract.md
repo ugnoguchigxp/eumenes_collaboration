@@ -17,3 +17,5 @@ example hostはSQLiteにexample専用のsession・状態JSON・operation receipt
 コードレビュー後は、忘却の出力も同じschema・容量を再検査する。訂正を複数まとめて採用する場合は、採用する置換関係を先に固定し、入力順で撤回結果が変わらないようにする。工程idは`plan.`と`result.`を付けたfact idが256文字に収まる249文字までとする。
 
 exampleの状態writerと外部adapterは、同じsession/sourceRefの永続失効台帳を参照する。新しい依頼・回答・状態初期化も、古いhostスナップショットだけでは失効を覆せない。回答の出所も記録し、忘却時にはその回答に依存する外部記録を伏せる。出所を持たない旧回答は、無関係と証明できないため、そのsessionで非空の忘却を行う際に保守的に伏せる。既存の版1DBの状態・receipt・失効行は保持する。
+
+0.3.0では、失効した出所による拒否（`state_sources_invalid`）が、忘却すべき出所を `staleRefs` で返す。hostはそれを忘却してから提案し直す。忘却は `sessionId` と `expectedRevision` を照合し、確定済みの訂正だけが忘却されたために置換を失った `retracted` のfactを `orphaned` として返す。それらは復活させずに残し、尋ね直すかどうかはhostとLLMが決める。理由コードは `STATE_REJECT_REASONS` として公開する。手順は [0.3.0への更新](upgrading-0.3.md) を参照。

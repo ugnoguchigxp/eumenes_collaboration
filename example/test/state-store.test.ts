@@ -89,14 +89,16 @@ test("an unsupported persisted schema is preserved across restart and attempted 
 test("two SQLite connections cannot observe or publish a partial state/receipt transaction", async () => {
 	const dir = await mkdtemp(join(tmpdir(), "collaboration-contention-"));
 	const left = new ExampleStateStore(join(dir, "state.sqlite"));
-	const right = new ExampleStateStore(join(dir, "state.sqlite"));
+	const right = new ExampleStateStore(join(dir, "state.sqlite"), 20);
 	try {
 		left.initialize(initial(), 2);
 		left.db.exec("BEGIN IMMEDIATE");
 		expect(left.adopt("s", "winner", proposal(), host()).ok).toBe(true);
 		expect(right.read("s")).toEqual(initial());
 		expect(right.db.query("SELECT * FROM example_receipts").all()).toEqual([]);
-		expect(() => right.adopt("s", "contender", proposal(), host())).toThrow();
+		expect(() => right.adopt("s", "contender", proposal(), host())).toThrow(
+			"state_store_busy",
+		);
 		left.db.exec("COMMIT");
 		expect(right.read("s")).toMatchObject({ revision: 1 });
 		expect(right.db.query("SELECT id FROM example_receipts").all()).toEqual([

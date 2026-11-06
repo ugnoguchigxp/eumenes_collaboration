@@ -45,8 +45,14 @@ test("invented refs, assistant-only confirmation, duplicate ids and cyclic linea
 	});
 });
 test("forgetting removes dependent values and a stale proposal cannot restore them", () => {
-	const state = forgetStateSources(initial(), new Set(["u1"]), 2);
+	const { state, orphaned } = forgetStateSources(initial(), {
+		sessionId: "s",
+		expectedRevision: 0,
+		invalidRefs: new Set(["u1"]),
+		sourceRevision: 2,
+	});
 	expect(state.facts).toEqual([]);
+	expect(orphaned).toEqual([]);
 	const h = host();
 	h.sourceRevision = 2;
 	h.sources[0]!.active = false;
@@ -269,16 +275,21 @@ test("forgetting cannot return an invalid revision or an oversized next state", 
 	const { JSON_LIMITS } = await import("../src/index.ts");
 	const s = initial();
 	s.revision = Number.MAX_SAFE_INTEGER;
-	expect(() => forgetStateSources(s, new Set(), 2)).toThrow();
+	const forget = (sourceRevision: number) =>
+		forgetStateSources(s, {
+			sessionId: "s",
+			expectedRevision: s.revision,
+			invalidRefs: new Set(),
+			sourceRevision,
+		});
+	expect(() => forget(2)).toThrow("candidate_state_invalid");
 	s.revision = 0;
 	s.sourceRevision = 9;
 	s.facts[0]!.value = "";
 	s.facts[0]!.value = "x".repeat(
 		JSON_LIMITS.bytes - Buffer.byteLength(JSON.stringify(s)),
 	);
-	expect(() => forgetStateSources(s, new Set(), 10)).toThrow(
-		"json_resource_limit",
-	);
+	expect(() => forget(10)).toThrow("json_resource_limit");
 });
 
 test("resource inspection rejects hidden serialization hooks without invoking them", async () => {

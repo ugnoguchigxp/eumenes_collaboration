@@ -26,7 +26,7 @@
 | 6 | 見出し・名前・末尾を残して短縮 | 第7版 |
 | 7 | 緊張感を加えて完成候補 | 第8版 |
 
-完成候補は[Claude](../eval/results/2026-11-05/creative-v4/anthropic/final.md)、[Luna](../eval/results/2026-11-05/creative-v4/openai/final.md)。各フォルダに途中版も保存した。全出力・採点・履歴は[結果JSON](../eval/results/2026-11-05/creative-v4/results.json)、固定条件は[protocol](../eval/results/2026-11-05/creative-v4/protocol.json)、課題は[creative.json](../eval/creative.json)。失敗したv1〜v3も隣接フォルダに保持する。
+完成候補は[Claude](../../../eval/results/2026-11-05/creative-v4/anthropic/final.md)、[Luna](../../../eval/results/2026-11-05/creative-v4/openai/final.md)。各フォルダに途中版も保存した。全出力・採点・履歴は[結果JSON](../../../eval/results/2026-11-05/creative-v4/results.json)、固定条件は[protocol](../../../eval/results/2026-11-05/creative-v4/protocol.json)、課題は[creative.json](../../../eval/creative.json)。失敗したv1〜v3も隣接フォルダに保持する。
 
 全API試行の最終計上額は**6.268323米ドル**（保守的概算3.974567、不明45呼出しの予約2.293756）、上限10ドル以内。請求額を確認した値ではない。1542呼出しには先行の128セッション比較・採点・中断・事前確認も含む。予算台帳をリセットしていない。
 

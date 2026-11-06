@@ -1,3 +1,9 @@
+import {
+	CollaborationError,
+	issuesOf,
+	type Rejected,
+	type StateRejectReason,
+} from "../contracts/errors.ts";
 import { withinJsonLimits } from "../contracts/json-limits.ts";
 import {
 	collaborationStateSchema,
@@ -5,6 +11,12 @@ import {
 	type CollaborationState,
 	type StateHostContext,
 } from "../contracts/state.ts";
+
+/** A refused proposal. `staleRefs` names the saved state's inactive sources the host must forget first. */
+export type StateRejection = Rejected<StateRejectReason> & {
+	staleRefs?: string[];
+};
+const MAX_STALE_REFS = 256;
 
 const sameWork = (a: StateHostContext["work"], b: StateHostContext["work"]) =>
 	a.ref === b.ref && a.revision === b.revision && a.digest === b.digest;
@@ -14,8 +26,11 @@ export function proposeStateUpdate(
 	saved: unknown,
 	proposal: unknown,
 	host: StateHostContext,
-): { ok: true; state: CollaborationState } | { ok: false; reason: string } {
-	const reject = (reason: string) => ({ ok: false as const, reason });
+): { ok: true; state: CollaborationState } | StateRejection {
+	const reject = (reason: StateRejectReason): StateRejection => ({
+		ok: false,
+		reason,
+	});
 	if (!withinJsonLimits(saved) || !withinJsonLimits(proposal))
 		return reject("json_resource_limit");
 	const state = collaborationStateSchema.safeParse(saved);
@@ -43,8 +58,20 @@ export function proposeStateUpdate(
 		return reject("source_registry_invalid");
 	const validSources = (sources: string[]) =>
 		sources.every((ref) => refs.get(ref)?.active);
-	if (current.facts.some((fact) => !validSources(fact.sourceRefs)))
-		return reject("state_sources_invalid");
+	const stale = [
+		...new Set(
+			current.facts.flatMap((fact) =>
+				fact.sourceRefs.filter((ref) => !refs.get(ref)?.active),
+			),
+		),
+	].sort();
+	// Fail closed, but say what unblocks it: forget these refs, then propose again.
+	if (stale.length)
+		return {
+			ok: false,
+			reason: "state_sources_invalid",
+			staleRefs: stale.slice(0, MAX_STALE_REFS),
+		};
 	if (
 		input.upserts.some((fact) => !validSources(fact.sourceRefs)) ||
 		input.removals.some((removal) => !validSources(removal.sourceRefs))
@@ -138,29 +165,79 @@ export function proposeStateUpdate(
 /** Host-triggered forgetting; no proposal may reactivate an invalid source. */
 export function forgetStateSources(
 	saved: unknown,
-	invalidRefs: ReadonlySet<string>,
-	sourceRevision: number,
-): CollaborationState {
-	if (!withinJsonLimits(saved)) throw new Error("json_resource_limit");
-	const state = collaborationStateSchema.parse(saved);
+	request: {
+		sessionId: string;
+		expectedRevision: number;
+		invalidRefs: ReadonlySet<string>;
+		sourceRevision: number;
+	},
+): { state: CollaborationState; orphaned: string[] } {
 	if (
-		!Number.isSafeInteger(sourceRevision) ||
-		sourceRevision <= state.sourceRevision
+		typeof request !== "object" ||
+		request === null ||
+		typeof request.sessionId !== "string" ||
+		!Number.isSafeInteger(request.expectedRevision) ||
+		!Number.isSafeInteger(request.sourceRevision) ||
+		!(request.invalidRefs instanceof Set) ||
+		[...request.invalidRefs].some((ref) => typeof ref !== "string")
 	)
-		throw new Error("source_revision_conflict");
-	const facts = state.facts.filter(
-		(fact) => !fact.sourceRefs.some((ref) => invalidRefs.has(ref)),
+		throw new CollaborationError("forget_request_invalid");
+	if (!withinJsonLimits(saved))
+		throw new CollaborationError("json_resource_limit");
+	const parsed = collaborationStateSchema.safeParse(saved);
+	if (!parsed.success)
+		throw new CollaborationError(
+			"state_schema_unsupported_or_invalid",
+			issuesOf(parsed.error),
+		);
+	const state = parsed.data;
+	if (state.sessionId !== request.sessionId)
+		throw new CollaborationError("session_changed");
+	if (state.revision !== request.expectedRevision)
+		throw new CollaborationError("state_revision_conflict");
+	if (request.sourceRevision <= state.sourceRevision)
+		throw new CollaborationError("source_revision_conflict");
+	const invalid = request.invalidRefs;
+	const removed = state.facts.filter((fact) =>
+		fact.sourceRefs.some((ref) => invalid.has(ref)),
 	);
-	const kept = new Set(facts.map((fact) => fact.id));
+	const removedIds = new Set(removed.map((fact) => fact.id));
+	const facts = state.facts.filter((fact) => !removedIds.has(fact.id));
+	const kept = new Map(facts.map((fact) => [fact.id, fact]));
+	const stillReplaced = new Set(
+		facts
+			.filter((fact) => fact.status === "confirmed")
+			.flatMap((fact) => fact.supersedes),
+	);
+	// A retracted fact whose only accepted replacements were forgotten stays retracted: the user's intent to drop
+	// it may outlive the forgotten words. The host learns of it and asks; the core never restores or words it.
+	const orphaned = [
+		...new Set(
+			removed
+				.filter((fact) => fact.status === "confirmed")
+				.flatMap((fact) => fact.supersedes),
+		),
+	]
+		.filter(
+			(id) => kept.get(id)?.status === "retracted" && !stillReplaced.has(id),
+		)
+		.sort();
 	const candidate = {
 		...state,
 		revision: state.revision + 1,
-		sourceRevision,
+		sourceRevision: request.sourceRevision,
 		facts: facts.map((fact) => ({
 			...fact,
 			supersedes: fact.supersedes.filter((id) => kept.has(id)),
 		})),
 	};
-	if (!withinJsonLimits(candidate)) throw new Error("json_resource_limit");
-	return collaborationStateSchema.parse(candidate);
+	if (!withinJsonLimits(candidate))
+		throw new CollaborationError("json_resource_limit");
+	const next = collaborationStateSchema.safeParse(candidate);
+	if (!next.success)
+		throw new CollaborationError(
+			"candidate_state_invalid",
+			issuesOf(next.error),
+		);
+	return { state: next.data, orphaned };
 }

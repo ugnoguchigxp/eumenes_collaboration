@@ -6,7 +6,7 @@
 
 追加指示: 以後のCI検査の追加・再実行・完了待ちは利用者の指示により省略する。既存CI結果は参考証拠として保持する。実利用パイロットは本repo内のMarkdown小説を繰り返し改訂する流れとし、EumenesのUI自由作成は製品側受入に残す。
 
-状態 独立core/exampleの改善・実API比較を実施済み。Claudeの意味品質、製品受入・利用効果は未達または未確認。詳細は[実施記録](quality-execution-2026-11-05.md)と[検証索引](verification.json)。
+状態 独立core/exampleの改善・実API比較を実施済み。Claudeの意味品質、製品受入・利用効果は未達または未確認。詳細は[実施記録](quality-execution-2026-11-05.md)と[検証索引](../../verification.json)。
 
 ## 1 目的と完了条件
 
@@ -69,7 +69,7 @@ G1と独立core/exampleのG2/G3は検証したが、G4はClaude意味基準と�
 | 検証環境 | Bun 1.4.4。review用copyと元の関連47ファイルの一致を確認 |
 | 未実施 | 実モデルの意味品質・時間・費用、実rendererの操作受入、実外部agent、製品migration・採用・切戻し、実利用の効果測定 |
 
-既存の[計画](../plan.md)、[実装記録](implementation.md)、[状態契約](state-contract.md)、[example方針](example-host.md)を土台にする。元のP0〜P6は機能導入の段階であり、本書のG0〜G6は改善の検証ゲートである。P3/P5/P6を、exampleのfixtureや配布互換の成功で完了にしない。
+既存の[計画](../plan-2026-11-04.md)、[実装記録](../implementation-2026-11-04.md)、[状態契約](../../state-contract.md)、[example方針](../../example-host.md)を土台にする。元のP0〜P6は機能導入の段階であり、本書のG0〜G6は改善の検証ゲートである。P3/P5/P6を、exampleのfixtureや配布互換の成功で完了にしない。
 
 | 指摘 | 深刻度 | 再現条件と影響 | 対応作業 |
 | --- | --- | --- | --- |

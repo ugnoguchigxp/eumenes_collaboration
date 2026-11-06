@@ -1,4 +1,4 @@
-import { mkdir } from "node:fs/promises";
+import { appendFile, mkdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { z } from "zod";
 import { ApiBudget } from "../example/adapters/api-budget.ts";
@@ -16,7 +16,6 @@ import decisions from "./decisions.json";
 const root = resolve(import.meta.dir, ".."),
 	dir = join(root, "reports/quality-2026-11-05");
 await mkdir(dir, { recursive: true });
-const budget = new ApiBudget(join(dir, "api-budget.sqlite"), 10);
 const runName = process.argv[2] ?? "run-v3";
 if (!/^[a-zA-Z0-9_-]+$/.test(runName)) throw new Error("run_name_invalid");
 const runDir = join(dir, runName);
@@ -40,6 +39,8 @@ const context = (utterance: string): Omit<TurnContext, "system"> => ({
 	time: { now: "2026-11-05T00:00:00+09:00", timeZone: "Asia/Tokyo" },
 	callsLeft: 2,
 });
+// Opened by the preflight below, only after both adapters and the baseline are known to exist.
+let budget!: ApiBudget;
 const api = (provider: "anthropic" | "openai", maxOutputTokens = 2048) =>
 	createApiModel({
 		provider,
@@ -48,24 +49,40 @@ const api = (provider: "anthropic" | "openai", maxOutputTokens = 2048) =>
 		maxOutputTokens,
 		timeoutMs: 60000,
 	});
-const append = async (value: unknown) => {
-	const path = join(runDir, "live.jsonl");
-	const old = (await Bun.file(path).exists())
-		? await Bun.file(path).text()
-		: "";
-	await Bun.write(path, old + JSON.stringify(value) + "\n");
-};
-// One event-loop writer serializes log appends; no credentials or real user material enter these fixtures.
-let write = Promise.resolve();
+const append = (value: unknown) =>
+	appendFile(join(runDir, "live.jsonl"), JSON.stringify(value) + "\n");
+// One queue serializes log appends; no credentials or real user material enter these fixtures.
+// A failed append is remembered, never swallowed: later records still queue, workers stop calling the API.
+let write: Promise<void> = Promise.resolve();
+let logFailure: unknown = null;
 const record = (v: unknown) => {
-	write = write.then(() => append(v));
+	write = write
+		.then(() => append(v))
+		.catch((e) => {
+			logFailure ??= e;
+		});
 	return write;
 };
-const baseline = (await import(
-	join(root, ".work/evaluation-baseline/example/state-turn.ts")
-)) as { proposeFacts: typeof proposeFacts };
+// Preflight, in order, before the protocol file exists: baseline present, budget DB, both adapters (key check).
+// Any failure exits without writing the protocol, so the same run name can be started again.
+const baselineDir = join(root, ".work/evaluation-baseline");
+if (!(await Bun.file(join(baselineDir, "example/state-turn.ts")).exists()))
+	throw new Error("evaluation_baseline_missing");
+if (!(await Bun.file(join(baselineDir, "example/state-store.ts")).exists()))
+	throw new Error("evaluation_baseline_missing");
+budget = new ApiBudget(join(dir, "api-budget.sqlite"), 10);
+try {
+	api("anthropic");
+	api("openai");
+} catch (e) {
+	budget.close();
+	throw e;
+}
+const baseline = (await import(join(baselineDir, "example/state-turn.ts"))) as {
+	proposeFacts: typeof proposeFacts;
+};
 const baselineStore = (await import(
-	join(root, ".work/evaluation-baseline/example/state-store.ts")
+	join(baselineDir, "example/state-store.ts")
 )) as { ExampleStateStore: typeof ExampleStateStore };
 const snapshot = Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: root })
 	.stdout.toString()
@@ -133,7 +150,7 @@ async function runTask(
 	const started = performance.now();
 	try {
 		for (const [i, utterance] of task.turns.entries()) {
-			if (stopped) break;
+			if (stopped || logFailure) break;
 			sources.push({ ref: `u${i + 1}`, text: utterance });
 			const host: StateHostContext = {
 				sessionId: id,
@@ -216,7 +233,7 @@ async function runTask(
 		const final = store.read(id) as CollaborationState;
 		const judge = api(provider === "anthropic" ? "openai" : "anthropic", 2048);
 		let verdict: unknown = null;
-		if (!stopped) {
+		if (!stopped && !logFailure) {
 			try {
 				const result = await judge.infer({
 					messages: [
@@ -272,6 +289,7 @@ async function runTask(
 		store.close();
 	}
 }
+let workerFailure: unknown = null;
 try {
 	// Fixed paired order; no holdout answers enter model inputs or prompt tuning.
 	const jobs = tasks.flatMap((task) =>
@@ -282,26 +300,35 @@ try {
 		),
 	);
 	let next = 0;
-	await Promise.all(
+	// Wait for every worker before the budget DB closes, even when one of them fails.
+	await Promise.allSettled(
 		Array.from({ length: 2 }, async () => {
-			while (next < jobs.length && !stopped) {
+			while (next < jobs.length && !stopped && !logFailure && !workerFailure) {
 				const job = jobs[next++];
-				await job!();
+				try {
+					await job!();
+				} catch (e) {
+					workerFailure ??= e;
+					throw e;
+				}
 			}
 		}),
 	);
-	if (!stopped)
+	if (!stopped && !logFailure && !workerFailure)
 		for (const provider of ["anthropic", "openai"] as const) {
 			const model = api(provider);
 			for (const fixture of decisions) {
+				if (stopped || logFailure) break;
 				try {
 					const result = await proposeDecisions(
 						model,
 						context(fixture.utterance),
 						fixture.closed,
+						"u1",
 						new AbortController().signal,
 					);
 					const correct =
+						result.ok &&
 						result.session.decision === fixture.expected &&
 						(fixture.browser === null ||
 							result.plan?.steps[0]?.browser === fixture.browser);
@@ -331,6 +358,17 @@ try {
 	console.log(
 		JSON.stringify({ event: "complete", stopped, budget: budget.summary() }),
 	);
+	for (const [label, failure] of [
+		["log_write_failed", logFailure],
+		["worker_failed", workerFailure],
+	] as const)
+		if (failure) {
+			console.error(
+				label,
+				failure instanceof Error ? failure.message : String(failure),
+			);
+			process.exitCode = 1;
+		}
 } finally {
 	budget.close();
 }

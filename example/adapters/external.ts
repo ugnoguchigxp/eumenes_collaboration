@@ -87,7 +87,24 @@ export type ExternalRecord = {
 	};
 	/** Persisted fencing token; old async replies may not overwrite reconciliation. */
 	attempt?: number;
+	/**
+	 * The host's intent to stop, set by the first `stop()` and never cleared. `status` stays the last
+	 * observed external state; a stop that could not be confirmed leaves `status` as `unknown`/observed
+	 * and the host may call `stop()` again explicitly. Nothing is resent automatically.
+	 */
+	stopRequested?: { attempt: number };
 };
+/**
+ * `inconclusive`: the inspection gave no conclusive observation, so the recorded status was kept.
+ * `stopPending`: a stop was requested and the request has not ended; the host decides whether to call stop again.
+ */
+export type ExternalReconciliation = ExternalRecord & {
+	inspection?: "inconclusive";
+	stopPending?: true;
+};
+const needsStop = (status: ExternalStatus) =>
+	["delivered", "started", "waiting", "stopping", "unknown"].includes(status);
+const phase = { queued: 0, delivered: 1, started: 2 } as const;
 export interface ExternalPort {
 	inspect?(
 		target: ExternalTarget,
@@ -126,6 +143,19 @@ const terminal = (status: ExternalStatus) =>
 
 /** Example lifecycle ledger. Targets, grants, epochs and sources are supplied by the host. */
 export class ExampleExternalAdapter {
+	/**
+	 * Requests with a port call in flight in this process. Reconciling one would advance its attempt and discard
+	 * the live call's result, so it is refused until the call returns; after a crash the set starts empty.
+	 */
+	private readonly inFlight = new Set<string>();
+	private async withPortCall<T>(id: string, call: () => Promise<T>) {
+		this.inFlight.add(id);
+		try {
+			return await call();
+		} finally {
+			this.inFlight.delete(id);
+		}
+	}
 	constructor(
 		readonly db: Database,
 		readonly port: ExternalPort,
@@ -225,7 +255,9 @@ export class ExampleExternalAdapter {
 			.query("INSERT INTO example_external_requests VALUES(?,?,?)")
 			.run(request.requestId, digest, JSON.stringify(record));
 		try {
-			const status = await this.port.deliver(request);
+			const status = await this.withPortCall(request.requestId, () =>
+				this.port.deliver(request),
+			);
 			this.target(request);
 			const latest = this.read(request.requestId)!;
 			if (latest.attempt === record.attempt && latest.status === "queued")
@@ -359,10 +391,8 @@ export class ExampleExternalAdapter {
 		});
 		let status: "sent" | "unknown" = "unknown";
 		try {
-			status = await this.port.answerQuestion(
-				target,
-				input.questionId,
-				input.text,
+			status = await this.withPortCall(input.requestId, () =>
+				this.port.answerQuestion!(target, input.questionId, input.text),
 			);
 			this.target(record.request);
 		} catch {
@@ -384,12 +414,18 @@ export class ExampleExternalAdapter {
 		}
 		return { status: "unknown" as const };
 	}
+	/** Redacts retained text. `affected` reports each request touched and whether it may still run remotely. */
 	forgetSources(sessionId: string, refs: ReadonlySet<string>) {
 		if (sessionId !== this.host.sessionId)
 			throw new Error("external_session_scope_invalid");
-		this.db
+		return this.db
 			.transaction(() => {
 				revokeSources(this.db, sessionId, refs);
+				const affected: Array<{
+					id: string;
+					previousStatus: ExternalStatus;
+					needsStop: boolean;
+				}> = [];
 				const rows = this.db
 					.query<{ body: string }, []>(
 						"SELECT body FROM example_external_requests",
@@ -407,6 +443,11 @@ export class ExampleExternalAdapter {
 						record.answer &&
 						(!record.answer.sourceRef || refs.has(record.answer.sourceRef));
 					if (!requestAffected && !answerAffected) continue;
+					affected.push({
+						id: record.request.requestId,
+						previousStatus: record.status,
+						needsStop: needsStop(record.status),
+					});
 					this.save({
 						...record,
 						forgotten: true,
@@ -424,13 +465,25 @@ export class ExampleExternalAdapter {
 									: "unknown",
 					});
 				}
+				return { affected };
 			})
 			.immediate();
 	}
-	/** Explicit recovery, never a resend. The caller supplies the persisted attempt it observed. */
-	async reconcile(id: string, expectedAttempt: number) {
+	/**
+	 * Explicit recovery, never a resend. The caller supplies the persisted attempt it observed.
+	 * The recorded status is not overwritten before inspection; the attempt advances so late callbacks are dropped.
+	 * After inspection: `queued` with nothing conclusive becomes `unknown` (delivery outcome unknown);
+	 * `delivered`/`started`/`waiting` with nothing conclusive keep their status and report `inspection:"inconclusive"`;
+	 * non-terminal observations never move a record backwards (`queued` < `delivered` < `started`; `waiting` is event-driven);
+	 * `completed`/`stopped` are always accepted; `stopping`/`unknown` accept any observation. `stopRequested` is kept.
+	 */
+	async reconcile(
+		id: string,
+		expectedAttempt: number,
+	): Promise<ExternalReconciliation> {
 		const record = this.read(id);
 		if (!record) throw new Error("external_request_missing");
+		if (this.inFlight.has(id)) throw new Error("external_operation_in_flight");
 		if ((record.attempt ?? 0) !== expectedAttempt)
 			throw new Error("external_attempt_changed");
 		if (terminal(record.status) || record.forgotten) return record;
@@ -439,7 +492,6 @@ export class ExampleExternalAdapter {
 		this.save({
 			...record,
 			attempt,
-			status: "unknown",
 			...(record.answer?.status === "pending"
 				? { answer: { ...record.answer, status: "unknown" as const } }
 				: {}),
@@ -449,9 +501,11 @@ export class ExampleExternalAdapter {
 			answer?: "sent" | "unknown";
 		} = { status: "unknown" };
 		try {
-			if (this.port.inspect) observed = await this.port.inspect(target, id);
+			const inspect = this.port.inspect?.bind(this.port);
+			if (inspect)
+				observed = await this.withPortCall(id, () => inspect(target, id));
 		} catch {
-			/* unresolved effects stay unknown */
+			/* unresolved effects stay as recorded or unknown */
 		}
 		this.target(record.request, false);
 		const latest = this.read(id)!;
@@ -461,7 +515,7 @@ export class ExampleExternalAdapter {
 			terminal(latest.status)
 		)
 			return latest;
-		const checked = z
+		const parsed = z
 			.strictObject({
 				status: z.enum([
 					"delivered",
@@ -472,10 +526,31 @@ export class ExampleExternalAdapter {
 				]),
 				answer: z.enum(["sent", "unknown"]).optional(),
 			})
-			.parse(observed);
+			.safeParse(observed);
+		const checked = parsed.success
+			? parsed.data
+			: { status: "unknown" as const };
+		const current = latest.status;
+		let status: ExternalStatus;
+		let inconclusive = false;
+		if (checked.status === "completed" || checked.status === "stopped")
+			status = checked.status;
+		else if (current === "stopping" || current === "unknown")
+			status = checked.status;
+		else if (current === "queued")
+			status = checked.status; // `unknown` here: the delivery outcome is unknown
+		else if (checked.status === "unknown") {
+			status = current;
+			inconclusive = true;
+		} else if (
+			current === "waiting" ||
+			phase[checked.status] < phase[current as "delivered" | "started"]
+		)
+			status = current;
+		else status = checked.status;
 		this.save({
 			...latest,
-			status: checked.status,
+			status,
 			...(latest.answer && checked.answer
 				? {
 						answer: { ...latest.answer, status: checked.answer },
@@ -485,7 +560,14 @@ export class ExampleExternalAdapter {
 					}
 				: {}),
 		});
-		return this.read(id)!;
+		const saved = this.read(id)!;
+		return {
+			...saved,
+			...(inconclusive ? { inspection: "inconclusive" as const } : {}),
+			...(saved.stopRequested && !terminal(saved.status)
+				? { stopPending: true as const }
+				: {}),
+		};
 	}
 
 	async stop(id: string) {
@@ -495,10 +577,17 @@ export class ExampleExternalAdapter {
 		const target = this.target(record.request);
 		if (record.status === "stopping") return record;
 		const attempt = (record.attempt ?? 0) + 1;
-		this.save({ ...record, attempt, status: "stopping" });
+		this.save({
+			...record,
+			attempt,
+			status: "stopping",
+			stopRequested: record.stopRequested ?? { attempt },
+		});
 		let confirmed = false;
 		try {
-			confirmed = (await this.port.stop(target, id)) === "confirmed";
+			confirmed =
+				(await this.withPortCall(id, () => this.port.stop(target, id))) ===
+				"confirmed";
 		} catch {
 			/* Reconcile unknown termination with the host. */
 		}

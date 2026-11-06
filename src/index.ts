@@ -1,13 +1,29 @@
 export * from "./contracts/index.ts";
+export {
+	CollaborationError,
+	STATE_REJECT_REASONS,
+	DECISION_REJECT_REASONS,
+	HOST_INPUT_ERROR_CODES,
+	type StateRejectReason,
+	type DecisionRejectReason,
+	type HostInputErrorCode,
+	type Issue,
+	type Rejected,
+} from "./contracts/errors.ts";
+export { turnContextSchema } from "./contracts/turn.ts";
 export { createCollaborationContract } from "./agent/action.ts";
 export { buildCollaborationMessages } from "./agent/messages.ts";
 export { collaborationInstructions } from "./agent/instructions.ts";
 export const coreContractVersion = 1 as const;
 export const supportedStateSchemaVersions: readonly number[] = [1];
 export * from "./contracts/state.ts";
-export { proposeStateUpdate, forgetStateSources } from "./agent/state.ts";
 export {
-	decideSession,
+	proposeStateUpdate,
+	forgetStateSources,
+	type StateRejection,
+} from "./agent/state.ts";
+export {
+	checkSessionDecision,
 	sessionDecisionSchema,
 	type SessionDecision,
 } from "./agent/session.ts";
@@ -19,7 +35,7 @@ export {
 	type BriefSlot,
 } from "./agent/brief.ts";
 export {
-	planSteps,
+	checkPlan,
 	planStepSchema,
 	planProposalSchema,
 	browserChoiceSchema,
@@ -33,9 +49,10 @@ export {
 	type Plan,
 	type PlanStep,
 	type PlanBudget,
-	parseBrowserChoice,
+	checkBrowserChoice,
 	type BrowserChoice,
 } from "./agent/plan.ts";
-export const decisionContractVersion = 1 as const;
+/** 2 since 0.3.0: the decision helpers return a result under new names instead of throwing. */
+export const decisionContractVersion = 2 as const;
 
 export { withinJsonLimits, JSON_LIMITS } from "./contracts/json-limits.ts";

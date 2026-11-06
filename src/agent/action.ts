@@ -24,7 +24,7 @@ export function createCollaborationContract(policy: ReplyPolicy) {
 	 * the descriptions.
 	 */
 	const outputShape = z
-		.object({
+		.strictObject({
 			action: z
 				.enum(["reply", "invoke", "return", "discard"])
 				.describe(
@@ -61,7 +61,6 @@ export function createCollaborationContract(policy: ReplyPolicy) {
 					"returnのときだけ必須。true=担当範囲外の依頼を、原文のまま通常担当へ渡す。viewing.refがsavedRefと異なる別作品の編集を求められたときもtrueにし、現在の作業は変えない。false=復帰だけが依頼で、短い返答を添える。未保存の作業は保留される。",
 				),
 		})
-		.strict()
 		.describe(
 			"返すJSONは一つだけ。長期記憶・World・別会話は参照も更新もできない。",
 		);
@@ -110,10 +109,10 @@ export function createCollaborationContract(policy: ReplyPolicy) {
 
 	const MAX_VIOLATIONS = 8;
 
-	/** One broken point of a rejected output, as data for the repair call. Never carries an input value. */
 	/**
-	 * Where a model's output breaks the contract: the schema's path and kind, the reply's measured length
-	 * against its limits, or the fields the chosen action lacks or must not carry. Empty when it is valid.
+	 * Where a model's output breaks the contract, as data for the repair call and never an input value: the
+	 * schema's path and kind, the reply's measured length against its limits, or the fields the chosen action
+	 * lacks or must not carry. Empty when it is valid.
 	 */
 	function specialistViolations(value: unknown): SpecialistViolation[] {
 		const parsed = outputShape.safeParse(value);
@@ -180,8 +179,27 @@ export function createCollaborationContract(policy: ReplyPolicy) {
 		);
 	}
 
+	/** The output as a typed action, or every point where it breaks the contract. */
+	function checkSpecialistAction(value: unknown):
+		| { ok: true; action: SpecialistAction }
+		| {
+				ok: false;
+				reason: "action_contract_violation";
+				violations: SpecialistViolation[];
+		  } {
+		const action = parseSpecialistAction(value);
+		return action
+			? { ok: true, action }
+			: {
+					ok: false,
+					reason: "action_contract_violation",
+					violations: specialistViolations(value),
+				};
+	}
+
 	return {
 		outputSchema: z.toJSONSchema(outputShape),
+		check: checkSpecialistAction,
 		parse: parseSpecialistAction,
 		violations: specialistViolations,
 		violationNames,

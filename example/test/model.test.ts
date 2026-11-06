@@ -359,3 +359,81 @@ test("SDK resource limits reject before launch and account for oversized returne
 	expect(launches).toBe(1);
 	await expect(model.infer(request)).rejects.toThrow("model_budget_exhausted");
 });
+
+test("a hung SDK call times out as unknown cost and the adapter then refuses calls before launch", async () => {
+	const { query } = await import("@anthropic-ai/claude-agent-sdk");
+	let launches = 0;
+	let closed = 0;
+	const fake = (() => {
+		launches++;
+		return Object.assign(
+			{
+				[Symbol.asyncIterator]: () => ({
+					next: () => new Promise<IteratorResult<never>>(() => undefined),
+				}),
+			},
+			{
+				close() {
+					closed++;
+				},
+			},
+		);
+	}) as unknown as typeof query;
+	const adapter = createClaudeModel(
+		{
+			model: "runtime-selected",
+			cwd: "/tmp",
+			maxBudgetUsd: 1,
+			maxCalls: 3,
+			timeoutMs: 30,
+			env: {},
+		},
+		fake,
+	);
+	const request = {
+		messages: [{ role: "system" as const, content: "fixed" }],
+		outputSchema: {},
+		signal: new AbortController().signal,
+	};
+	const started = performance.now();
+	await expect(adapter.infer(request)).rejects.toThrow("model_call_timeout");
+	expect(performance.now() - started).toBeLessThan(2000);
+	expect(launches).toBe(1);
+	expect(closed).toBe(1);
+	await expect(adapter.infer(request)).rejects.toThrow(
+		"model_budget_exhausted",
+	);
+	expect(launches).toBe(1);
+});
+
+test("the caller's cancellation still wins over the timeout, and the timeout must be positive", async () => {
+	const { query } = await import("@anthropic-ai/claude-agent-sdk");
+	const fake = (() =>
+		Object.assign(
+			{
+				[Symbol.asyncIterator]: () => ({
+					next: () => new Promise<IteratorResult<never>>(() => undefined),
+				}),
+			},
+			{ close() {} },
+		)) as unknown as typeof query;
+	const base = {
+		model: "runtime-selected",
+		cwd: "/tmp",
+		maxBudgetUsd: 1,
+		maxCalls: 2,
+		env: {},
+	};
+	expect(() => createClaudeModel({ ...base, timeoutMs: 0 }, fake)).toThrow(
+		"test_model_configuration_required",
+	);
+	const controller = new AbortController();
+	const adapter = createClaudeModel({ ...base, timeoutMs: 60000 }, fake);
+	const pending = adapter.infer({
+		messages: [{ role: "system" as const, content: "fixed" }],
+		outputSchema: {},
+		signal: controller.signal,
+	});
+	controller.abort(new Error("caller_cancelled"));
+	await expect(pending).rejects.toThrow("caller_cancelled");
+});

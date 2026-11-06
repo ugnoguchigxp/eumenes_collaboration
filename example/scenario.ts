@@ -111,8 +111,8 @@ export async function runFixtureWorkflow(path: string) {
 		store.close();
 		store = new ExampleStateStore(path);
 		const replay = store.adopt("example", "op2", second, host);
-		const state = store.forget("example", new Set(["u1"]), 2);
-		return { mode: "fixture" as const, replay, state };
+		const { state, orphaned } = store.forget("example", new Set(["u1"]), 2);
+		return { mode: "fixture" as const, replay, state, orphaned };
 	} finally {
 		store.close();
 	}

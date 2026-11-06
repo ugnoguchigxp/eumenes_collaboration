@@ -4,6 +4,7 @@ import { resolve, join } from "node:path";
 import { applyHostAdapter } from "./host-adapter.ts";
 import { compareHosts } from "./compare-hosts.ts";
 import { sourceProvenance } from "./source-provenance.ts";
+import { childEnv } from "./child-env.ts";
 import {
 	coreContractVersion,
 	supportedStateSchemaVersions,
@@ -67,7 +68,7 @@ async function run(name: string, args: string[], cwd: string) {
 		cwd,
 		stdout: "pipe",
 		stderr: "pipe",
-		env: { ...process.env, TZ: "Asia/Tokyo" },
+		env: childEnv(process.env),
 	});
 	const [stdout, stderr, exitCode] = await Promise.all([
 		new Response(proc.stdout).text(),
@@ -118,6 +119,21 @@ async function archiveTo(destination: string) {
 		destination,
 	);
 }
+const distDir = join(root, "dist");
+const tgzPath = join(distDir, `eumenes-collaboration-${packageVersion}.tgz`);
+const shaPath = `${tgzPath}.sha256`;
+const verificationPath = join(
+	distDir,
+	`eumenes-collaboration-${packageVersion}.verification.json`,
+);
+/** Verification marks (.sha256, .verification.json) must never outlive the tgz they describe. */
+const removeStamps = () =>
+	Promise.all([
+		rm(shaPath, { force: true }),
+		rm(verificationPath, { force: true }),
+	]);
+// Same-version leftovers from an earlier run must not sit next to this run's result.
+await Promise.all([rm(tgzPath, { force: true }), removeStamps()]);
 const tests = [
 	"specialist",
 	"specialist-turn",
@@ -155,7 +171,8 @@ try {
 		files: fileDigests,
 		coreContractVersion,
 		supportedStateSchemaVersions,
-		hostBaselineCommit: declaredBaseline,
+		// The baseline this package declares; whether it was actually proven is in dist/*.verification.json.
+		hostBaselineDeclared: declaredBaseline,
 		environment: { bun: Bun.version },
 		generation: "bun run pack:check",
 	};
@@ -164,13 +181,13 @@ try {
 		JSON.stringify(manifest, null, "\t") + "\n",
 	);
 	await run("manifest-format", ["bun", "fmt", "manifest.json"], root);
-	await mkdir(join(root, "dist"), { recursive: true });
+	await mkdir(distDir, { recursive: true });
 	await run(
 		"pack",
 		["bun", "pm", "pack", "--destination", join(root, "dist")],
 		root,
 	);
-	const tgz = join(root, `dist/eumenes-collaboration-${packageVersion}.tgz`);
+	const tgz = tgzPath;
 	report.tgzSha256 = digest(new Uint8Array(await Bun.file(tgz).arrayBuffer()));
 	const content = await run("pack-contents", ["tar", "-tzf", tgz], root);
 	const paths = content.trim().split("\n");
@@ -352,15 +369,36 @@ try {
 			await Bun.file(join(candidate, ".s11tnext/catalog.json")).text(),
 		);
 	}
+	report.status = host.ok ? "passed" : "passed_package_only";
+	// Success marks go last and outside the tgz: the report is final before it is hashed, and the
+	// verification record points at that exact report content.
+	const reportJson = JSON.stringify(report, null, 2) + "\n";
+	await Bun.write(join(reportDir, "pack-check.json"), reportJson);
 	await Bun.write(
-		join(root, `dist/eumenes-collaboration-${packageVersion}.tgz.sha256`),
+		shaPath,
 		String(report.tgzSha256) +
 			`  eumenes-collaboration-${packageVersion}.tgz\n`,
 	);
-	report.status = host.ok ? "passed" : "passed_package_only";
+	await Bun.write(
+		verificationPath,
+		JSON.stringify(
+			{
+				tgzSha256: report.tgzSha256,
+				status: report.status,
+				hostBaseline: host.ok
+					? { declared: declaredBaseline, used: baselineCommit }
+					: null,
+				reportSha256: digest(reportJson),
+			},
+			null,
+			2,
+		) + "\n",
+	);
 } catch (error) {
 	report.status = "failed";
 	report.error = String(error);
+	// A failed run keeps its tgz for investigation but carries no verification mark.
+	await removeStamps();
 	process.exitCode = 1;
 } finally {
 	await Bun.write(

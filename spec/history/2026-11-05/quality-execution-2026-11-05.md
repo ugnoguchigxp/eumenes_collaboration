@@ -41,9 +41,9 @@ coreのローカル測定は各条件30回、0/999/1000fact。改善版p95は最
 
 ## 再現と残作業
 
-[検証索引](verification.json)、[API全結果](../eval/results/2026-11-05/live-analysis.json)、[ローカル測定](../eval/results/2026-11-05/benchmark.json)、[配布検証](../eval/results/2026-11-05/pack-check.json)、[依存の来歴](../eval/results/2026-11-05/runtime-dependencies.json)を保存した。rawログと予算DBはgit対象外のreportsに残し、hashをlog-index.jsonに記録した。APIキー・実業務文書を評価結果へ含めていない。
+[検証索引](../../verification.json)、[API全結果](../../../eval/results/2026-11-05/live-analysis.json)、[ローカル測定](../../../eval/results/2026-11-05/benchmark.json)、[配布検証](../../../eval/results/2026-11-05/pack-check.json)、[依存の来歴](../../../eval/results/2026-11-05/runtime-dependencies.json)を保存した。rawログと予算DBはgit対象外のreportsに残し、hashをlog-index.jsonに記録した。APIキー・実業務文書を評価結果へ含めていない。
 
-非課金の確認は`bun install --frozen-lockfile`、`bun run verify`、`bun audit --production`、`EUMENES_SOURCE=<hostのGit checkout> PACK_CHECK_REQUIRE_HOST=1 bun run pack:check`。既存rawログの再集計は`bun eval/summarize.ts run-v3`。有料の実行手順と0.2移行・異常状態・unknownの復旧は[更新手順](upgrading-0.2.md)を参照する。
+非課金の確認は`bun install --frozen-lockfile`、`bun run verify`、`bun audit --production`、`EUMENES_SOURCE=<hostのGit checkout> PACK_CHECK_REQUIRE_HOST=1 bun run pack:check`。既存rawログの再集計は`bun eval/summarize.ts run-v3`。有料の実行手順と0.2移行・異常状態・unknownの復旧は[更新手順](../../upgrading-0.2.md)を参照する。
 
 実renderer/Pipelineの操作、実外部agent、製品dialogueのmigration・切戻し・bundle採用、他の担当者による引継ぎ、利用者の受入と継続効果は未確認。Claudeの意味合格基準も未達。計画全体の完了、製品採用、利用価値80点の証拠とはしない。技術再評価は同じrubric1.1.0/libraryで別の実測ledgerに記録し、仮定上の目標81.4とは区別する。
 

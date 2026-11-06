@@ -1,3 +1,4 @@
+import { CollaborationError, issuesOf } from "../contracts/errors.ts";
 import {
 	collaborationFactSchema,
 	type CollaborationFact,
@@ -77,9 +78,8 @@ export function completeBrief(input: BriefInput): Brief {
 			});
 		}
 	}
-	return {
-		facts: collaborationFactSchema.array().parse(facts),
-		inferred,
-		questions,
-	};
+	const checked = collaborationFactSchema.array().safeParse(facts);
+	if (!checked.success)
+		throw new CollaborationError("brief_invalid", issuesOf(checked.error));
+	return { facts: checked.data, inferred, questions };
 }

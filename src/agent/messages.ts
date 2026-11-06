@@ -3,8 +3,18 @@ import type {
 	CourseEntry,
 	TurnContext,
 } from "../contracts/index.ts";
+import { CollaborationError, issuesOf } from "../contracts/errors.ts";
+import { JSON_LIMITS } from "../contracts/json-limits.ts";
+import { turnContextSchema } from "../contracts/turn.ts";
 import { collaborationInstructions } from "./instructions.ts";
+/** Throws `CollaborationError` when the host's context is malformed or its reference data exceeds JSON_LIMITS.bytes. */
 export function buildCollaborationMessages(input: TurnContext): ChatMessage[] {
+	const checked = turnContextSchema.safeParse(input);
+	if (!checked.success)
+		throw new CollaborationError(
+			"turn_context_invalid",
+			issuesOf(checked.error),
+		);
 	const { course, interrupted, handedOver } = input.course;
 	const document = input.document;
 	const rejected = document?.rejected;
@@ -54,6 +64,10 @@ export function buildCollaborationMessages(input: TurnContext): ChatMessage[] {
 		callsLeft: input.callsLeft,
 		...input.time,
 	};
+	// Measured as sent: the host's values may hold `undefined`, which JSON drops, so the encoded text is the bound.
+	const referenceJson = JSON.stringify(reference);
+	if (new TextEncoder().encode(referenceJson).length > JSON_LIMITS.bytes)
+		throw new CollaborationError("json_resource_limit");
 	const block = document
 		? `\nCURRENT_DOCUMENT path=${document.path} revision=${document.revision}${document.outlined ? " outline" : ""}\n<<<\n${fenced(document.body)}\n>>>`
 		: "";
@@ -61,7 +75,7 @@ export function buildCollaborationMessages(input: TurnContext): ChatMessage[] {
 		input.system,
 		{
 			role: "user",
-			content: `${collaborationInstructions.reference}\nREFERENCE=${JSON.stringify(reference)}${block}`,
+			content: `${collaborationInstructions.reference}\nREFERENCE=${referenceJson}${block}`,
 		},
 		{
 			role: "user",

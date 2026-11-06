@@ -1,5 +1,10 @@
 import { z } from "zod";
 import {
+	CollaborationError,
+	issuesOf,
+	type Rejected,
+} from "../contracts/errors.ts";
+import {
 	collaborationFactSchema,
 	type CollaborationFact,
 } from "../contracts/state.ts";
@@ -26,9 +31,25 @@ export type PlanStep = z.infer<typeof planStepSchema>;
 export type Plan = { steps: PlanStep[]; facts: CollaborationFact[] };
 
 /** The model chooses meaning and tools. Code checks only the proposal's structure and dependencies. */
-export function planSteps(proposal: unknown, sourceRef: string): Plan {
-	ref.parse(sourceRef);
-	const { steps } = planProposalSchema.parse(proposal);
+export function checkPlan(
+	proposal: unknown,
+	sourceRef: string,
+):
+	| { ok: true; plan: Plan }
+	| Rejected<
+			"plan_invalid" | "plan_dependency_invalid" | "plan_browser_required"
+	  > {
+	const source = ref.safeParse(sourceRef);
+	if (!source.success)
+		throw new CollaborationError("source_ref_invalid", issuesOf(source.error));
+	const parsed = planProposalSchema.safeParse(proposal);
+	if (!parsed.success)
+		return {
+			ok: false,
+			reason: "plan_invalid",
+			issues: issuesOf(parsed.error),
+		};
+	const { steps } = parsed.data;
 	const prior = new Set<string>();
 	for (const step of steps) {
 		if (
@@ -36,21 +57,24 @@ export function planSteps(proposal: unknown, sourceRef: string): Plan {
 			new Set(step.inputs).size !== step.inputs.length ||
 			step.inputs.some((id) => !prior.has(id))
 		)
-			throw new Error("plan_dependency_invalid");
+			return { ok: false, reason: "plan_dependency_invalid" };
 		if (step.keepOpen && !step.browser)
-			throw new Error("plan_browser_required");
+			return { ok: false, reason: "plan_browser_required" };
 		prior.add(step.id);
 	}
 	return {
-		steps,
-		facts: steps.map((s) => ({
-			id: `plan.${s.id}`,
-			kind: "assumption",
-			status: "proposed",
-			value: { ...s, provenance: "inferred" },
-			sourceRefs: [sourceRef],
-			supersedes: [],
-		})),
+		ok: true,
+		plan: {
+			steps,
+			facts: steps.map((s) => ({
+				id: `plan.${s.id}`,
+				kind: "assumption",
+				status: "proposed",
+				value: { ...s, provenance: "inferred" },
+				sourceRefs: [source.data],
+				supersedes: [],
+			})),
+		},
 	};
 }
 
@@ -60,8 +84,17 @@ export const browserChoiceSchema = z.strictObject({
 	answer: z.string().max(16000),
 });
 export type BrowserChoice = z.infer<typeof browserChoiceSchema>;
-export function parseBrowserChoice(value: unknown): BrowserChoice {
-	return browserChoiceSchema.parse(value);
+export function checkBrowserChoice(
+	value: unknown,
+): { ok: true; choice: BrowserChoice } | Rejected<"browser_choice_invalid"> {
+	const parsed = browserChoiceSchema.safeParse(value);
+	return parsed.success
+		? { ok: true, choice: parsed.data }
+		: {
+				ok: false,
+				reason: "browser_choice_invalid",
+				issues: issuesOf(parsed.error),
+			};
 }
 
 /** A step result longer than this is cut, so one step cannot flood the next step's context. */
@@ -73,23 +106,34 @@ export function stepResultFact(
 	result: string,
 	observationRefs: readonly string[],
 ): CollaborationFact {
-	stepRef.parse(stepId);
+	const step = stepRef.safeParse(stepId);
+	if (!step.success)
+		throw new CollaborationError("step_id_invalid", issuesOf(step.error));
 	if (observationRefs.length === 0)
-		throw new Error("step_result_without_observation");
-	return collaborationFactSchema.parse({
-		id: `result.${stepId}`,
+		throw new CollaborationError("step_result_without_observation");
+	const fact = collaborationFactSchema.safeParse({
+		id: `result.${step.data}`,
 		kind: "condition",
 		status: "confirmed",
 		value: {
 			provenance: "observed",
-			text:
-				result.length > STEP_RESULT_CHARS
-					? `${result.slice(0, STEP_RESULT_CHARS)}…`
-					: result,
+			text: truncate(result, STEP_RESULT_CHARS),
 		},
 		sourceRefs: [...observationRefs],
 		supersedes: [],
 	});
+	if (!fact.success)
+		throw new CollaborationError("source_ref_invalid", issuesOf(fact.error));
+	return fact.data;
+}
+
+/** Cut at `max` UTF-16 units without splitting a surrogate pair, so the text stays well formed. */
+function truncate(text: string, max: number): string {
+	if (text.length <= max) return text;
+	let end = max;
+	const last = text.charCodeAt(end - 1);
+	if (last >= 0xd800 && last <= 0xdbff) end--;
+	return `${text.slice(0, end)}…`;
 }
 
 export type PlanBudget = { perStep: number; overall: number };
@@ -101,13 +145,10 @@ export function planBudget(stepCount: number): PlanBudget {
 		stepCount < 1 ||
 		stepCount > MAX_PLAN_STEPS
 	)
-		throw new Error("plan_step_count_invalid");
+		throw new CollaborationError("plan_step_count_invalid");
 	return {
 		perStep: STEP_INFERENCE_BUDGET,
-		overall: Math.min(
-			Math.max(stepCount, 1) * STEP_INFERENCE_BUDGET,
-			PLAN_INFERENCE_CAP,
-		),
+		overall: Math.min(stepCount * STEP_INFERENCE_BUDGET, PLAN_INFERENCE_CAP),
 	};
 }
 

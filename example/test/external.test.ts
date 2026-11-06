@@ -408,7 +408,15 @@ test("a reconciled or forgotten answer cannot return a stale success to its call
 			});
 			const pending = f.adapter.answer(answer);
 			if (mode === "forget") f.adapter.forgetSources("s", new Set(["u1"]));
-			else await f.adapter.reconcile("r", f.adapter.read("r")!.attempt!);
+			else {
+				// The live process refuses to reconcile its own call in flight.
+				await expect(
+					f.adapter.reconcile("r", f.adapter.read("r")!.attempt!),
+				).rejects.toThrow("external_operation_in_flight");
+				// Recovery from another process (or after a restart) fences the late answer instead.
+				const recovery = new ExampleExternalAdapter(f.db, f.port, f.host);
+				await recovery.reconcile("r", recovery.read("r")!.attempt!);
+			}
 			release("sent");
 			expect(await pending).toEqual({ status: "unknown" });
 			expect(f.adapter.read("r")?.answer?.status).not.toBe("sent");

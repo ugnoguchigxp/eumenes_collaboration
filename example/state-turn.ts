@@ -19,6 +19,8 @@ export async function proposeFacts(
 	host: StateHostContext,
 	sourceText: ReadonlyArray<{ ref: string; text: string }>,
 	signal: AbortSignal,
+	/** `orphaned` ids from the last forgetting: retracted facts whose only replacement was forgotten. */
+	options: { reconfirm?: readonly string[] } = {},
 ) {
 	if (!withinJsonLimits(saved))
 		return { ok: false as const, reason: "json_resource_limit", costUsd: 0 };
@@ -37,7 +39,10 @@ export async function proposeFacts(
 		"\nCOLLABORATION_STATE=" +
 		JSON.stringify(saved) +
 		"\nSOURCE_REGISTRY=" +
-		JSON.stringify({ host, sourceText });
+		JSON.stringify({ host, sourceText }) +
+		(options.reconfirm?.length
+			? "\nRECONFIRM=" + JSON.stringify(options.reconfirm)
+			: "");
 	const result = await model.infer({ messages, outputSchema, signal });
 	const checked = proposeStateUpdate(saved, result.output, host);
 	return checked.ok

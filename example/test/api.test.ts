@@ -90,7 +90,7 @@ test("API failures never retry or release uncertain reservations; successful res
 			timeoutMs: 1000,
 			fetcher: async () => {
 				calls++;
-				return Response.json({ error: "no" }, { status: 429 });
+				return Response.json({ error: "no" }, { status: 503 });
 			},
 		});
 		const request = {
@@ -106,7 +106,7 @@ test("API failures never retry or release uncertain reservations; successful res
 			},
 			signal: new AbortController().signal,
 		};
-		await expect(model.infer(request)).rejects.toThrow("api_http_429");
+		await expect(model.infer(request)).rejects.toThrow("api_http_503");
 		expect(calls).toBe(1);
 		expect(b.used() > 0).toBe(true);
 		const ok = createApiModel({
@@ -439,4 +439,164 @@ test("native object decoding never repairs an invalid scalar into an accepted em
 	const wire = apiSchema(z.toJSONSchema(schema));
 	for (const settings of [null, "wrong", 42, []])
 		expect(schema.safeParse(wire.decode({ settings })).success).toBe(false);
+});
+
+const releaseRequest = () => ({
+	messages: [
+		{ role: "system" as const, content: "fixed" },
+		{ role: "user" as const, content: "hello" },
+	],
+	outputSchema: {
+		type: "object",
+		properties: { ok: { type: "boolean" } },
+		required: ["ok"],
+		additionalProperties: false,
+	},
+	signal: new AbortController().signal,
+});
+const modelReturning = (
+	budget: ApiBudget,
+	response: NonNullable<ApiConfig["fetcher"]>,
+	extra: Partial<ApiConfig> = {},
+) =>
+	createApiModel({
+		provider: "anthropic",
+		model: "claude-haiku-5-5",
+		apiKey: "fixture-only",
+		budget,
+		maxOutputTokens: 100,
+		timeoutMs: 1000,
+		fetcher: response,
+		...extra,
+	});
+
+test("a response that proves nothing was billed releases the reservation; uncertain failures keep it", async () => {
+	for (const status of [400, 401, 403, 404, 413, 422, 429]) {
+		const b = new ApiBudget(":memory:", 1);
+		try {
+			const before = b.used();
+			const model = modelReturning(b, async () =>
+				Response.json({ error: "no" }, { status }),
+			);
+			await expect(model.infer(releaseRequest())).rejects.toThrow(
+				`api_http_${status}`,
+			);
+			expect(b.used()).toBe(before);
+			expect(b.summary().calls).toMatchObject([
+				{ status: "released", calls: 1, estimatedCostUsd: 0 },
+			]);
+		} finally {
+			b.close();
+		}
+	}
+	for (const status of [408, 500, 503, 529]) {
+		const b = new ApiBudget(":memory:", 1);
+		try {
+			const model = modelReturning(b, async () =>
+				Response.json({ error: "no" }, { status }),
+			);
+			await expect(model.infer(releaseRequest())).rejects.toThrow(
+				`api_http_${status}`,
+			);
+			expect(b.used() > 0).toBe(true);
+			expect(b.summary().calls).toMatchObject([{ status: "pending" }]);
+		} finally {
+			b.close();
+		}
+	}
+});
+
+test("transport failures, timeouts, cancellation and corrupt bodies keep the reservation", async () => {
+	const failures: Array<() => Promise<Response>> = [
+		async () => {
+			throw new Error("connection_reset");
+		},
+		async () => new Response("not json", { status: 200 }),
+		async () => new Response(null, { status: 200 }),
+	];
+	for (const failure of failures) {
+		const b = new ApiBudget(":memory:", 1);
+		try {
+			await expect(
+				modelReturning(b, failure).infer(releaseRequest()),
+			).rejects.toThrow();
+			expect(b.used() > 0).toBe(true);
+		} finally {
+			b.close();
+		}
+	}
+	const b = new ApiBudget(":memory:", 1);
+	try {
+		const controller = new AbortController();
+		const model = modelReturning(
+			b,
+			async (_url: string, init: RequestInit) =>
+				new Promise<Response>((_, reject) => {
+					init.signal!.addEventListener("abort", () =>
+						reject(init.signal!.reason),
+					);
+					controller.abort();
+				}),
+		);
+		await expect(
+			model.infer({ ...releaseRequest(), signal: controller.signal }),
+		).rejects.toThrow();
+		expect(b.used() > 0).toBe(true);
+	} finally {
+		b.close();
+	}
+});
+
+test("releaseOnStatus overrides the default list and rejects statuses that cannot prove non-billing", async () => {
+	const b = new ApiBudget(":memory:", 1);
+	try {
+		const none = modelReturning(
+			b,
+			async () => Response.json({}, { status: 401 }),
+			{ releaseOnStatus: [] },
+		);
+		await expect(none.infer(releaseRequest())).rejects.toThrow("api_http_401");
+		const reserved = b.used();
+		expect(reserved > 0).toBe(true);
+		const only = modelReturning(
+			b,
+			async () => Response.json({}, { status: 409 }),
+			{ releaseOnStatus: [409] },
+		);
+		await expect(only.infer(releaseRequest())).rejects.toThrow("api_http_409");
+		expect(b.used()).toBe(reserved);
+		for (const bad of [[503], [408], [200], [401.5]])
+			expect(() =>
+				modelReturning(b, async () => Response.json({}), {
+					releaseOnStatus: bad,
+				}),
+			).toThrow("api_configuration_required");
+	} finally {
+		b.close();
+	}
+});
+
+test("release only returns a pending reservation and refuses unknown, settled or already released rows", () => {
+	const b = new ApiBudget(":memory:", 1);
+	try {
+		expect(() => b.release("missing", {})).toThrow("api_cost_untrusted");
+		const settled = b.reserve("openai", 0.3);
+		b.settle(settled, 0.1, {});
+		expect(() => b.release(settled, {})).toThrow("api_cost_untrusted");
+		expect(b.used()).toBe(0.1);
+		const id = b.reserve("openai", 0.3);
+		b.release(id, { httpStatus: 401 });
+		expect(b.used()).toBe(0.1);
+		expect(() => b.release(id, {})).toThrow("api_cost_untrusted");
+		expect(() => b.settle(id, 0.1, {})).toThrow("api_cost_untrusted");
+		expect(
+			b.db
+				.query<{ metadata: string }, [string]>(
+					"SELECT metadata FROM api_calls WHERE id=?",
+				)
+				.get(id)?.metadata,
+		).toBe('{"httpStatus":401}');
+	} finally {
+		b.close();
+	}
 });

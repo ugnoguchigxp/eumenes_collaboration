@@ -39,20 +39,22 @@ try {
 				model,
 				{ ...input, utterance: "2+2を計算してください" },
 				false,
+				"u1",
 				new AbortController().signal,
 			);
+			const decided = decision.ok ? decision : null;
 			const ok =
 				result.ok &&
-				decision.session.decision === "continue" &&
-				decision.plan?.steps[0]?.browser === false;
+				decided?.session.decision === "continue" &&
+				decided.plan?.steps[0]?.browser === false;
 			if (!ok) failed = true;
 			console.log(
 				JSON.stringify({
 					event: "preflight",
 					provider,
 					stateAccepted: result.ok,
-					decisionAccepted: decision.session.decision === "continue",
-					browser: decision.plan?.steps[0]?.browser,
+					decisionAccepted: decided?.session.decision === "continue",
+					browser: decided?.plan?.steps[0]?.browser,
 					ok,
 				}),
 			);

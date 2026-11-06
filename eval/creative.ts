@@ -21,6 +21,45 @@ await mkdir(dir, { recursive: true });
 const protocolPath = join(dir, "protocol.json");
 if (await Bun.file(protocolPath).exists())
 	throw new Error("creative_run_already_started_no_silent_replay");
+// Preflight before the protocol file exists: budget DB, then every adapter (key check). A failure here leaves no
+// protocol behind, so the same run name can be started again.
+const budget = new ApiBudget(
+	join(root, "reports/quality-2026-11-05/api-budget.sqlite"),
+	10,
+);
+const modelId = (provider: "anthropic" | "openai") =>
+	provider === "anthropic" ? "claude-haiku-5-5" : "gpt-6-luna";
+const adapter = (
+	provider: "anthropic" | "openai",
+	maxOutputTokens: number,
+	timeoutMs: number,
+) =>
+	createApiModel({
+		provider,
+		model: modelId(provider),
+		budget,
+		maxOutputTokens,
+		timeoutMs,
+	});
+let adapters: Record<
+	"anthropic" | "openai",
+	{ model: ReturnType<typeof adapter>; judge: ReturnType<typeof adapter> }
+>;
+try {
+	adapters = {
+		anthropic: {
+			model: adapter("anthropic", 8192, 120000),
+			judge: adapter("anthropic", 2048, 60000),
+		},
+		openai: {
+			model: adapter("openai", 8192, 120000),
+			judge: adapter("openai", 2048, 60000),
+		},
+	};
+} catch (e) {
+	budget.close();
+	throw e;
+}
 const digest = (s: string) =>
 	new Bun.CryptoHasher("sha256").update(s).digest("hex");
 const snapshot = Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: root })
@@ -47,10 +86,6 @@ await Bun.write(
 		2,
 	) + "\n",
 );
-const budget = new ApiBudget(
-	join(root, "reports/quality-2026-11-05/api-budget.sqlite"),
-	10,
-);
 const argsSchema = z.strictObject({
 	expectedRevision: z.number().int().nonnegative(),
 	content: z.string().min(1).max(12000),
@@ -67,13 +102,7 @@ try {
 	for (const provider of ["anthropic", "openai"] as const) {
 		const folder = join(dir, provider);
 		await mkdir(folder, { recursive: true });
-		const model = createApiModel({
-			provider,
-			model: provider === "anthropic" ? "claude-haiku-5-5" : "gpt-6-luna",
-			budget,
-			maxOutputTokens: 8192,
-			timeoutMs: 120000,
-		});
+		const model = adapters[provider].model;
 		const store = new ExampleStateStore(":memory:");
 		let body = "",
 			revision = 0;
@@ -254,14 +283,7 @@ try {
 			}
 			await Bun.write(join(folder, "final.md"), body);
 			const judgeProvider = provider === "anthropic" ? "openai" : "anthropic";
-			const judge = createApiModel({
-				provider: judgeProvider,
-				model:
-					judgeProvider === "anthropic" ? "claude-haiku-5-5" : "gpt-6-luna",
-				budget,
-				maxOutputTokens: 2048,
-				timeoutMs: 60000,
-			});
+			const judge = adapters[judgeProvider].judge;
 			const judgement = await judge.infer({
 				messages: [
 					{
