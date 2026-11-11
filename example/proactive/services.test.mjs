@@ -329,9 +329,6 @@ test("a declared comparison sends the allowed ledgers and uses Evaluator's row c
 								pointer,
 								evidence,
 								basis: {
-									comparisons: [],
-									decision: null,
-									dependencies: [],
 									facts: "台帳で準備が未完了",
 									value: "STOP",
 									via: null,
