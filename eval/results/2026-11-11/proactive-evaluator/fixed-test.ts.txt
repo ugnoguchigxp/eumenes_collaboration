@@ -1,0 +1,169 @@
+import { expect, test } from "bun:test";
+import { harness } from "./api/application/toolchain/toolchain.fixture";
+import { registerTrialEvaluator } from "./api/domains/dialogue/service/trial-evaluator";
+
+const question = "確定した見出しが画面定義に反映されていますか。";
+const evidence = {
+	evidenceId: "workflow",
+	pointer: "/children/0/title",
+	startLine: null,
+	endLine: null,
+};
+const checked = {
+	findings: [],
+	scopeChecks: [{ evidenceId: "workflow", status: "checked", reason: null }],
+	conditionChecks: [
+		{
+			conditionId: "heading",
+			status: "satisfied",
+			reason: "定義の title が確定条件と一致します。",
+			evidence: [evidence],
+		},
+	],
+};
+const opening =
+	"画面の見出しは『予約一覧』です。初稿の評価結果を聞くまで、追加の編集は保留してください。";
+const answer = {
+	action: "reply",
+	text: "現時点で確認できたことをお伝えします。",
+};
+const write = (title: string, revision: number) => ({
+	action: "invoke",
+	tool: "doc.write",
+	arguments: {
+		baseRevision: revision,
+		title,
+		content: { view: "text-block", title, body: "一覧です。" },
+	},
+});
+
+async function exercise(changeWork: boolean) {
+	const entered = Promise.withResolvers<void>();
+	const release = Promise.withResolvers<void>();
+	const reviewed = Promise.withResolvers<{ status: string }>();
+	const references: string[] = [];
+	let rounds = 0;
+	let reviewCalls = 0;
+	const h = await harness({
+		uiCompositions: true,
+		webResearch: false,
+		routeTool: "ui_create",
+		specialist(messages) {
+			const ref = messages[1]!.content;
+			expect(messages[0]!.content).toContain("reviewRequest");
+			references.push(ref);
+			rounds++;
+			if (rounds === 1) return write("予約一覧", 0);
+			if (rounds === 2) {
+				const lines = ref.split("\n");
+				const read = (key: string) =>
+					JSON.parse(
+						lines
+							.find((line) => line.startsWith(key + "="))!
+							.slice(key.length + 1),
+					);
+				const base = read("STATE_UPDATE_BASE");
+				const { sourceText } = read("SOURCE_REGISTRY");
+				const source = sourceText.find(
+					(item: { text: string }) => item.text === opening,
+				);
+				return {
+					...answer,
+					reviewRequest: { question, conditionIds: ["heading"] },
+					stateUpdate: {
+						...base,
+						upserts: [
+							{
+								id: "heading",
+								kind: "condition",
+								status: "confirmed",
+								value: "画面見出しは予約一覧",
+								sourceRefs: [source.ref],
+								supersedes: [],
+							},
+							{
+								id: "hold-edit",
+								kind: "decision",
+								status: "confirmed",
+								value: "報告が済むまで編集を保留する",
+								sourceRefs: [source.ref],
+								supersedes: [],
+							},
+						],
+					},
+				};
+			}
+			if (changeWork && rounds === 3)
+				return { ...write("更新済み", 1), text: "更新しました。" };
+			return answer;
+		},
+	});
+	const disable = registerTrialEvaluator(
+		h.queue,
+		{
+			async complete(request) {
+				reviewCalls++;
+				expect(request.prompt).toContain(question);
+				expect(request.prompt).toContain("画面見出しは予約一覧");
+				expect(request.prompt).not.toContain("報告が済むまで編集を保留する");
+				expect(request.prompt).toContain("予約一覧");
+				entered.resolve();
+				await release.promise;
+				return { text: JSON.stringify(checked), model: "fixture" };
+			},
+		},
+		(event) => reviewed.resolve(event),
+	);
+	async function say(text: string) {
+		const res = await h.request("/api/runs", {
+			requestId: crypto.randomUUID(),
+			conversationId: "main",
+			text,
+		});
+		expect(res.status).toBe(202);
+		const { id } = (await res.json()) as { id: string };
+		expect(
+			(await h.dialogue.waitForTerminal(id, { timeoutMs: 5000 }))?.status,
+		).toBe("completed");
+		return h.dialogue.answerText(id);
+	}
+	try {
+		expect(await say(opening)).toBe(answer.text);
+		await entered.promise;
+		expect(
+			await say(
+				changeWork
+					? "画面を修正してください。"
+					: "その間に、今わかることを教えてください。",
+			),
+		).toBe(changeWork ? "更新しました。" : answer.text);
+		expect(references.at(-1)).toContain('"status":"pending"');
+		release.resolve();
+		const result = await reviewed.promise;
+		expect(result.status).toBe(changeWork ? "stale" : "completed");
+		await say("今の確認結果を教えてください。");
+		if (changeWork)
+			expect(references.at(-1)).not.toContain("INDEPENDENT_REVIEW");
+		else {
+			expect(references.at(-1)).toContain('"status":"completed"');
+			expect(references.at(-1)).toContain('"pointer":"/children/0/title"');
+			expect(references.at(-1)).toContain('"conditionId":"heading"');
+		}
+		expect(reviewCalls).toBe(1);
+	} finally {
+		release.resolve();
+		disable();
+		await h.close();
+	}
+}
+
+test(
+	"a specialist opts into review, replies while it runs, then reads versioned findings",
+	() => exercise(false),
+	20000,
+);
+test(
+	"a review of a superseded definition is discarded after another turn edits the work",
+	() => exercise(true),
+	20000,
+);

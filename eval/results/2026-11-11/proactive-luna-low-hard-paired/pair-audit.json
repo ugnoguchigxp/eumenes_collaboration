@@ -1,0 +1,1962 @@
+{
+  "metrics": {
+    "current": {
+      "completed": 6,
+      "score": 16,
+      "max": 48,
+      "fields": 117,
+      "maxFields": 192,
+      "fullScoreTrials": 0,
+      "replyMedianMs": 8965.0,
+      "completionMedianMs": 22442.0,
+      "replyOverruns": 6,
+      "modelCalls": 12,
+      "inputTokens": 120774,
+      "outputTokens": 3406,
+      "callsByLane": {
+        "reply": 6,
+        "artifact": 6
+      },
+      "failedCalls": 0,
+      "callsWithTokenUsage": 12
+    },
+    "assisted": {
+      "completed": 6,
+      "score": 24,
+      "max": 48,
+      "fields": 126,
+      "maxFields": 192,
+      "fullScoreTrials": 0,
+      "replyMedianMs": 10329.5,
+      "completionMedianMs": 75731.0,
+      "replyOverruns": 4,
+      "modelCalls": 20,
+      "inputTokens": 207471,
+      "outputTokens": 15074,
+      "callsByLane": {
+        "reply": 6,
+        "evaluator": 5,
+        "skill-smith": 3,
+        "artifact": 6
+      },
+      "failedCalls": 1,
+      "callsWithTokenUsage": 19
+    }
+  },
+  "rowTransitions": {
+    "hard-02": {
+      "corrected": {
+        "C-11": 1
+      },
+      "stillCorrect": {
+        "C-12": 2,
+        "C-13": 2,
+        "C-14": 2,
+        "C-15": 2
+      },
+      "stillIncorrect": {
+        "C-16": 2,
+        "C-17": 2,
+        "C-18": 1,
+        "C-11": 1
+      },
+      "regressed": {
+        "C-18": 1
+      }
+    },
+    "hard-04": {
+      "corrected": {
+        "S-01": 2,
+        "S-05": 2,
+        "S-06": 2,
+        "S-03": 1,
+        "S-04": 1
+      },
+      "stillCorrect": {
+        "S-02": 2
+      },
+      "stillIncorrect": {
+        "S-03": 1,
+        "S-04": 1,
+        "S-07": 2,
+        "S-08": 2
+      }
+    },
+    "hard-05": {
+      "corrected": {
+        "P-01": 2
+      },
+      "stillCorrect": {
+        "P-02": 1,
+        "P-08": 2
+      },
+      "regressed": {
+        "P-03": 1,
+        "P-02": 1
+      },
+      "stillIncorrect": {
+        "P-04": 2,
+        "P-05": 2,
+        "P-06": 2,
+        "P-07": 2,
+        "P-03": 1
+      }
+    }
+  },
+  "pairs": [
+    {
+      "case": "hard-02",
+      "repetition": 1,
+      "currentArtifactId": "465067ab-5a9",
+      "assistedArtifactId": "63a7a9a5-8a5",
+      "review": {
+        "status": "completed",
+        "conditionIds": [
+          "cutoff",
+          "receipt",
+          "priority"
+        ],
+        "issues": [],
+        "elapsedMs": 55587,
+        "findings": [
+          {
+            "row": "C-11",
+            "pointer": "/decisions/0",
+            "title": "C-11の判定が誤り",
+            "problem": "基準時刻までに取消n113（11:41発効、11:45受領）が有効で、n111に紐づく受理ログは現行取消に紐づかない。最新取消から30分以内で、辞退等もないため期待判定はSEND。"
+          },
+          {
+            "row": "C-13",
+            "pointer": "/decisions/2",
+            "title": "C-13で辞退優先順位が適用されていない",
+            "problem": "確認済み状態票に取消n131と辞退イベントn133があり、判定優先順位ではOPT_OUTがSHIPPEDより先。期待判定はOPT_OUT。"
+          },
+          {
+            "row": "C-15",
+            "pointer": "/decisions/4",
+            "title": "C-15の期限切れ判定漏れ",
+            "problem": "確認済み状態票の期限11:52は基準時刻12:00より前であり、期待判定はEXPIRED。現行はSEND。"
+          },
+          {
+            "row": "C-16",
+            "pointer": "/decisions/5",
+            "title": "C-16で旧取消の受理ログを現行取消に誤適用",
+            "problem": "n161はRESTORE n162により解消され、その後n163が有効取消となる。受理ログr161はn161に紐づくため対象外。期待判定はSENDだが現行はSENT。"
+          }
+        ],
+        "rows": [
+          {
+            "row": null,
+            "pointer": "/asOf",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": "context",
+            "status": "checked",
+            "reason": "基準時刻（11月13日12:00 JST）の背景資料。単独では対象レコードの実際・期待判定を表さない。"
+          },
+          {
+            "row": null,
+            "pointer": "/confirmedState",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": "context",
+            "status": "checked",
+            "reason": "確認済み状態票を示す補足資料。"
+          },
+          {
+            "row": null,
+            "pointer": "/records",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": "context",
+            "status": "checked",
+            "reason": "注文履歴と配信履歴の補足資料。"
+          },
+          {
+            "row": "C-11",
+            "pointer": "/decisions/0",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "differs",
+            "status": "checked",
+            "reason": "C-11の現行判定がSENT。"
+          },
+          {
+            "row": "C-12",
+            "pointer": "/decisions/1",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "C-12の現行判定はSENDで、状態票の有効取消n121、期限12:07。"
+          },
+          {
+            "row": "C-13",
+            "pointer": "/decisions/2",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "differs",
+            "status": "checked",
+            "reason": "C-13の現行判定SHIPPEDは状態票の発送イベントn133ではなく、辞退イベントn133があるため期待判定OPT_OUT。"
+          },
+          {
+            "row": "C-14",
+            "pointer": "/decisions/3",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "C-14の現行判定SHIPPEDは、確認済み状態票の発送イベントn142に基づく期待判定と一致。"
+          },
+          {
+            "row": "C-15",
+            "pointer": "/decisions/4",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "differs",
+            "status": "checked",
+            "reason": "C-15の有効取消n151は期限11:52を基準時刻に過ぎているため期待判定EXPIRED。"
+          },
+          {
+            "row": "C-16",
+            "pointer": "/decisions/5",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "differs",
+            "status": "checked",
+            "reason": "C-16の受理ログr161は現行取消n163でなく旧取消n161に紐づく。最新取消n163は基準時刻までに発効・受領済みで、期待判定SEND。"
+          },
+          {
+            "row": "C-17",
+            "pointer": "/decisions/6",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "C-17の有効取消n171に紐づく試行x172は、最終ログr174（11:59発効、12:02受領）が基準時刻時点では未受領のため対象外。x171は最終行r172がFAILED。受理済みログはなく、OPT_OUT n174があるので期待判定OPT_OUT。"
+          },
+          {
+            "row": "C-18",
+            "pointer": "/decisions/7",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "C-18では同時刻イベントをID順に適用するとn181 CANCEL、n182 RESTORE、n183 CANCELの順で有効取消はn183。SHIP n184が有効状態で、後続UNSHIP n185は受領時刻12:01のため基準時刻時点では除外。期待判定SHIPPED。"
+          }
+        ]
+      },
+      "skill": null,
+      "rows": [
+        {
+          "id": "C-11",
+          "transition": "corrected",
+          "expected": [
+            "SEND",
+            "n113",
+            "n113",
+            "要修正"
+          ],
+          "current": [
+            "SENT",
+            "n113",
+            "r111",
+            "一致"
+          ],
+          "assisted": [
+            "SEND",
+            "n113",
+            "n113",
+            "要修正"
+          ],
+          "fieldsCorrected": [
+            1,
+            3,
+            4
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-12",
+          "transition": "stillCorrect",
+          "expected": [
+            "SEND",
+            "n121",
+            "n121",
+            "一致"
+          ],
+          "current": [
+            "SEND",
+            "n121",
+            "n121",
+            "一致"
+          ],
+          "assisted": [
+            "SEND",
+            "n121",
+            "n121",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-13",
+          "transition": "stillCorrect",
+          "expected": [
+            "OPT_OUT",
+            "n131",
+            "n133",
+            "要修正"
+          ],
+          "current": [
+            "OPT_OUT",
+            "n131",
+            "n133",
+            "要修正"
+          ],
+          "assisted": [
+            "OPT_OUT",
+            "n131",
+            "n133",
+            "要修正"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-14",
+          "transition": "stillCorrect",
+          "expected": [
+            "SHIPPED",
+            "n141",
+            "n142",
+            "一致"
+          ],
+          "current": [
+            "SHIPPED",
+            "n141",
+            "n142",
+            "一致"
+          ],
+          "assisted": [
+            "SHIPPED",
+            "n141",
+            "n142",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-15",
+          "transition": "stillCorrect",
+          "expected": [
+            "EXPIRED",
+            "n151",
+            "n151",
+            "要修正"
+          ],
+          "current": [
+            "EXPIRED",
+            "n151",
+            "n151",
+            "要修正"
+          ],
+          "assisted": [
+            "EXPIRED",
+            "n151",
+            "n151",
+            "要修正"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-16",
+          "transition": "stillIncorrect",
+          "expected": [
+            "NO_CANCEL",
+            "-",
+            "n162",
+            "要修正"
+          ],
+          "current": [
+            "SEND",
+            "n163",
+            "n163",
+            "要修正"
+          ],
+          "assisted": [
+            "SEND",
+            "n163",
+            "n163",
+            "要修正"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-17",
+          "transition": "stillIncorrect",
+          "expected": [
+            "SENT",
+            "n171",
+            "r173",
+            "要修正"
+          ],
+          "current": [
+            "OPT_OUT",
+            "n171",
+            "n174",
+            "一致"
+          ],
+          "assisted": [
+            "OPT_OUT",
+            "n171",
+            "n174",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-18",
+          "transition": "stillIncorrect",
+          "expected": [
+            "SHIPPED",
+            "n183",
+            "n184",
+            "要修正"
+          ],
+          "current": [
+            "SENT",
+            "n183",
+            "r181",
+            "一致"
+          ],
+          "assisted": [
+            "SENT",
+            "n183",
+            "r181",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        }
+      ]
+    },
+    {
+      "case": "hard-02",
+      "repetition": 2,
+      "currentArtifactId": "7baf30f1-1c9",
+      "assistedArtifactId": "b3e96ab3-edf",
+      "review": {
+        "status": "incomplete",
+        "conditionIds": [
+          "cutoff",
+          "receipt",
+          "priority"
+        ],
+        "issues": [
+          "model_output_partially_rejected",
+          "conditions_unverified"
+        ],
+        "elapsedMs": 51421,
+        "findings": [
+          {
+            "row": "C-18",
+            "pointer": "/decisions/7",
+            "title": "C-18の判定がSENDでなくSENT",
+            "problem": "現行判定SENTは、有効取消n183に対応する受理済み配信ログがないことに反する。"
+          }
+        ],
+        "rows": [
+          {
+            "row": null,
+            "pointer": "/asOf",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": "context",
+            "status": "checked",
+            "reason": "基準時刻は11月13日12:00 JST。"
+          },
+          {
+            "row": null,
+            "pointer": "/confirmedState",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": "context",
+            "status": "checked",
+            "reason": "確認済み状態票。C-12、C-13、C-14、C-15の期待判定に適用。"
+          },
+          {
+            "row": null,
+            "pointer": "/records",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": "context",
+            "status": "checked",
+            "reason": "履歴から状態と受理ログを復元する根拠。全記録は12:00までに発効・受領。"
+          },
+          {
+            "row": "C-11",
+            "pointer": "/decisions/0",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "C-11の現行判定SENTは期待値SENTと一致。"
+          },
+          {
+            "row": "C-12",
+            "pointer": "/decisions/1",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "C-12は期限12:07で未発送・辞退なし・受理なしのため期待値SEND。"
+          },
+          {
+            "row": "C-13",
+            "pointer": "/decisions/2",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "differs",
+            "status": "checked",
+            "reason": "C-13はOPT_OUTがあり、優先順位上SHIPPEDよりOPT_OUTが先。期待値OPT_OUT。"
+          },
+          {
+            "row": "C-14",
+            "pointer": "/decisions/3",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "C-14は状態票のSHIPPED状態がOPT_OUTなしより優先され、期待値SHIPPED。"
+          },
+          {
+            "row": "C-15",
+            "pointer": "/decisions/4",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "differs",
+            "status": "checked",
+            "reason": "C-15の期限11:52は基準時刻より前で、状態票から期待値EXPIRED。"
+          },
+          {
+            "row": "C-16",
+            "pointer": "/decisions/5",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "C-16の最終受理ログはr161（同じ試行x161のr161のみ）で、期待値SENT。"
+          },
+          {
+            "row": "C-17",
+            "pointer": "/decisions/6",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "C-17の有効受理ログは試行x171が失敗で最終行となるため受理なし。OPT_OUT n174により期待値OPT_OUT。"
+          },
+          {
+            "row": "C-18",
+            "pointer": "/decisions/7",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "differs",
+            "status": "checked",
+            "reason": "C-18では同時刻イベントをID昇順で適用し、n181後にn182で取消解除、n183で再取消。SHIP n184、UNSHIP n185の順で発送なし。受理ログr181は有効取消n183に紐づかないため期待値SEND。"
+          }
+        ]
+      },
+      "skill": null,
+      "rows": [
+        {
+          "id": "C-11",
+          "transition": "stillIncorrect",
+          "expected": [
+            "SEND",
+            "n113",
+            "n113",
+            "要修正"
+          ],
+          "current": [
+            "SENT",
+            "n113",
+            "r111",
+            "一致"
+          ],
+          "assisted": [
+            "SENT",
+            "n113",
+            "r111",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-12",
+          "transition": "stillCorrect",
+          "expected": [
+            "SEND",
+            "n121",
+            "n121",
+            "一致"
+          ],
+          "current": [
+            "SEND",
+            "n121",
+            "n121",
+            "一致"
+          ],
+          "assisted": [
+            "SEND",
+            "n121",
+            "n121",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-13",
+          "transition": "stillCorrect",
+          "expected": [
+            "OPT_OUT",
+            "n131",
+            "n133",
+            "要修正"
+          ],
+          "current": [
+            "OPT_OUT",
+            "n131",
+            "n133",
+            "要修正（現行:SHIPPED）"
+          ],
+          "assisted": [
+            "OPT_OUT",
+            "n131",
+            "n133",
+            "要修正（現行:SHIPPED）"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-14",
+          "transition": "stillCorrect",
+          "expected": [
+            "SHIPPED",
+            "n141",
+            "n142",
+            "一致"
+          ],
+          "current": [
+            "SHIPPED",
+            "n141",
+            "n142",
+            "一致"
+          ],
+          "assisted": [
+            "SHIPPED",
+            "n141",
+            "n142",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-15",
+          "transition": "stillCorrect",
+          "expected": [
+            "EXPIRED",
+            "n151",
+            "n151",
+            "要修正"
+          ],
+          "current": [
+            "EXPIRED",
+            "n151",
+            "n151",
+            "要修正（現行:SEND）"
+          ],
+          "assisted": [
+            "EXPIRED",
+            "n151",
+            "n151",
+            "要修正（現行:SEND）"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-16",
+          "transition": "stillIncorrect",
+          "expected": [
+            "NO_CANCEL",
+            "-",
+            "n162",
+            "要修正"
+          ],
+          "current": [
+            "SENT",
+            "n163",
+            "r161",
+            "一致"
+          ],
+          "assisted": [
+            "SEND",
+            "n163",
+            "n163",
+            "要修正（現行:SENT）"
+          ],
+          "fieldsCorrected": [
+            4
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-17",
+          "transition": "stillIncorrect",
+          "expected": [
+            "SENT",
+            "n171",
+            "r173",
+            "要修正"
+          ],
+          "current": [
+            "OPT_OUT",
+            "n171",
+            "n174",
+            "一致"
+          ],
+          "assisted": [
+            "OPT_OUT",
+            "n171",
+            "n174",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "C-18",
+          "transition": "regressed",
+          "expected": [
+            "SHIPPED",
+            "n183",
+            "n184",
+            "要修正"
+          ],
+          "current": [
+            "SHIPPED",
+            "n183",
+            "n184",
+            "要修正（現行:SENT）"
+          ],
+          "assisted": [
+            "NO_CANCEL",
+            "-",
+            "n182",
+            "要修正（現行:SENT）"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "case": "hard-04",
+      "repetition": 1,
+      "currentArtifactId": "a8686429-8f5",
+      "assistedArtifactId": "feb3aad9-626",
+      "review": {
+        "status": "expired",
+        "conditionIds": [
+          "inventory",
+          "priority",
+          "atomic"
+        ],
+        "issues": [
+          "deadline_exceeded"
+        ],
+        "elapsedMs": 60009,
+        "findings": [],
+        "rows": [
+          {
+            "row": null,
+            "pointer": "/asOf",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": null,
+            "pointer": "/records",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "S-01",
+            "pointer": "/decisions/0",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "S-02",
+            "pointer": "/decisions/1",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "S-03",
+            "pointer": "/decisions/2",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "S-04",
+            "pointer": "/decisions/3",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "S-05",
+            "pointer": "/decisions/4",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "S-06",
+            "pointer": "/decisions/5",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "S-07",
+            "pointer": "/decisions/6",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "S-08",
+            "pointer": "/decisions/7",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          }
+        ]
+      },
+      "skill": {
+        "status": "ok",
+        "elapsedMs": 8352,
+        "name": "10-00-a4941c175ade",
+        "dependencies": [
+          {
+            "id": "contextstill:kn_vbshgpsnvf6xusjkhckjadp4fu",
+            "version": "1",
+            "digest": "8d93df46b47b83a1ec4711fbb28122663001e96ab7d41465e523620bcabc5154",
+            "generation": 0
+          }
+        ],
+        "error": null
+      },
+      "rows": [
+        {
+          "id": "S-01",
+          "transition": "corrected",
+          "expected": [
+            "3",
+            "ALLOCATE",
+            "A0=4",
+            "0",
+            "一致"
+          ],
+          "current": [
+            "3",
+            "HOLD",
+            "-",
+            "4",
+            "要修正"
+          ],
+          "assisted": [
+            "3",
+            "ALLOCATE",
+            "A0=4",
+            "0",
+            "一致"
+          ],
+          "fieldsCorrected": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-02",
+          "transition": "stillCorrect",
+          "expected": [
+            "1",
+            "ALLOCATE",
+            "A3=6",
+            "0",
+            "一致"
+          ],
+          "current": [
+            "1",
+            "ALLOCATE",
+            "A3=6",
+            "0",
+            "一致"
+          ],
+          "assisted": [
+            "1",
+            "ALLOCATE",
+            "A3=6",
+            "0",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-03",
+          "transition": "stillIncorrect",
+          "expected": [
+            "2",
+            "ALLOCATE",
+            "A1=3+A5=3+A4=2",
+            "0",
+            "要修正"
+          ],
+          "current": [
+            "2",
+            "ALLOCATE",
+            "A1=3+A5=3+A2=2",
+            "0",
+            "要修正"
+          ],
+          "assisted": [
+            "2",
+            "ALLOCATE",
+            "A1=3+A5=3+A2=2",
+            "0",
+            "要修正"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-04",
+          "transition": "stillIncorrect",
+          "expected": [
+            "4",
+            "ALLOCATE",
+            "A4=5+B2=2",
+            "0",
+            "要修正"
+          ],
+          "current": [
+            "4",
+            "ALLOCATE",
+            "A4=7",
+            "0",
+            "要修正"
+          ],
+          "assisted": [
+            "4",
+            "ALLOCATE",
+            "A4=7",
+            "0",
+            "要修正"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-05",
+          "transition": "corrected",
+          "expected": [
+            "5",
+            "HOLD",
+            "-",
+            "2",
+            "一致"
+          ],
+          "current": [
+            "5",
+            "HOLD",
+            "-",
+            "8",
+            "一致"
+          ],
+          "assisted": [
+            "5",
+            "HOLD",
+            "-",
+            "2",
+            "一致"
+          ],
+          "fieldsCorrected": [
+            4
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-06",
+          "transition": "corrected",
+          "expected": [
+            "6",
+            "HOLD",
+            "-",
+            "1",
+            "一致"
+          ],
+          "current": [
+            "6",
+            "HOLD",
+            "-",
+            "6",
+            "要修正"
+          ],
+          "assisted": [
+            "6",
+            "HOLD",
+            "-",
+            "1",
+            "一致"
+          ],
+          "fieldsCorrected": [
+            4,
+            5
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-07",
+          "transition": "stillIncorrect",
+          "expected": [
+            "7",
+            "HOLD",
+            "-",
+            "3",
+            "要修正"
+          ],
+          "current": [
+            "7",
+            "HOLD",
+            "-",
+            "5",
+            "要修正"
+          ],
+          "assisted": [
+            "7",
+            "ALLOCATE",
+            "B1=5",
+            "0",
+            "要修正"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": [
+            2,
+            3
+          ]
+        },
+        {
+          "id": "S-08",
+          "transition": "stillIncorrect",
+          "expected": [
+            "8",
+            "ALLOCATE",
+            "B1=4",
+            "0",
+            "要修正"
+          ],
+          "current": [
+            "8",
+            "HOLD",
+            "-",
+            "4",
+            "一致"
+          ],
+          "assisted": [
+            "8",
+            "HOLD",
+            "-",
+            "4",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        }
+      ]
+    },
+    {
+      "case": "hard-04",
+      "repetition": 2,
+      "currentArtifactId": "942c8054-99d",
+      "assistedArtifactId": "42e3b9e1-51d",
+      "review": null,
+      "skill": null,
+      "rows": [
+        {
+          "id": "S-01",
+          "transition": "corrected",
+          "expected": [
+            "3",
+            "ALLOCATE",
+            "A0=4",
+            "0",
+            "一致"
+          ],
+          "current": [
+            "3",
+            "HOLD",
+            "-",
+            "4",
+            "要修正"
+          ],
+          "assisted": [
+            "3",
+            "ALLOCATE",
+            "A0=4",
+            "0",
+            "一致"
+          ],
+          "fieldsCorrected": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-02",
+          "transition": "stillCorrect",
+          "expected": [
+            "1",
+            "ALLOCATE",
+            "A3=6",
+            "0",
+            "一致"
+          ],
+          "current": [
+            "1",
+            "ALLOCATE",
+            "A3=6",
+            "0",
+            "一致"
+          ],
+          "assisted": [
+            "1",
+            "ALLOCATE",
+            "A3=6",
+            "0",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-03",
+          "transition": "corrected",
+          "expected": [
+            "2",
+            "ALLOCATE",
+            "A1=3+A5=3+A4=2",
+            "0",
+            "要修正"
+          ],
+          "current": [
+            "2",
+            "ALLOCATE",
+            "A1=3+A5=3+A2=2",
+            "0",
+            "要修正"
+          ],
+          "assisted": [
+            "2",
+            "ALLOCATE",
+            "A1=3+A5=3+A4=2",
+            "0",
+            "要修正"
+          ],
+          "fieldsCorrected": [
+            3
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-04",
+          "transition": "corrected",
+          "expected": [
+            "4",
+            "ALLOCATE",
+            "A4=5+B2=2",
+            "0",
+            "要修正"
+          ],
+          "current": [
+            "4",
+            "ALLOCATE",
+            "A4=7",
+            "0",
+            "要修正"
+          ],
+          "assisted": [
+            "4",
+            "ALLOCATE",
+            "A4=5+B2=2",
+            "0",
+            "要修正"
+          ],
+          "fieldsCorrected": [
+            3
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-05",
+          "transition": "corrected",
+          "expected": [
+            "5",
+            "HOLD",
+            "-",
+            "2",
+            "一致"
+          ],
+          "current": [
+            "5",
+            "HOLD",
+            "-",
+            "8",
+            "一致"
+          ],
+          "assisted": [
+            "5",
+            "HOLD",
+            "-",
+            "2",
+            "一致"
+          ],
+          "fieldsCorrected": [
+            4
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-06",
+          "transition": "corrected",
+          "expected": [
+            "6",
+            "HOLD",
+            "-",
+            "1",
+            "一致"
+          ],
+          "current": [
+            "6",
+            "HOLD",
+            "-",
+            "6",
+            "要修正"
+          ],
+          "assisted": [
+            "6",
+            "HOLD",
+            "-",
+            "1",
+            "一致"
+          ],
+          "fieldsCorrected": [
+            4,
+            5
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-07",
+          "transition": "stillIncorrect",
+          "expected": [
+            "7",
+            "HOLD",
+            "-",
+            "3",
+            "要修正"
+          ],
+          "current": [
+            "7",
+            "ALLOCATE",
+            "B1=5",
+            "0",
+            "要修正"
+          ],
+          "assisted": [
+            "7",
+            "ALLOCATE",
+            "B2=2+B1=3",
+            "0",
+            "要修正"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "S-08",
+          "transition": "stillIncorrect",
+          "expected": [
+            "8",
+            "ALLOCATE",
+            "B1=4",
+            "0",
+            "要修正"
+          ],
+          "current": [
+            "8",
+            "HOLD",
+            "-",
+            "4",
+            "一致"
+          ],
+          "assisted": [
+            "8",
+            "HOLD",
+            "-",
+            "4",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        }
+      ]
+    },
+    {
+      "case": "hard-05",
+      "repetition": 1,
+      "currentArtifactId": "36ceeb78-b2a",
+      "assistedArtifactId": "fd3860b6-6a2",
+      "review": {
+        "status": "expired",
+        "conditionIds": [
+          "approval",
+          "embargo",
+          "dependency"
+        ],
+        "issues": [
+          "deadline_exceeded"
+        ],
+        "elapsedMs": 60003,
+        "findings": [],
+        "rows": [
+          {
+            "row": null,
+            "pointer": "/asOf",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": null,
+            "pointer": "/confirmedApprovals",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": null,
+            "pointer": "/records",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "P-01",
+            "pointer": "/decisions/0",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "P-02",
+            "pointer": "/decisions/1",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "P-03",
+            "pointer": "/decisions/2",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "P-04",
+            "pointer": "/decisions/3",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "P-05",
+            "pointer": "/decisions/4",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "P-06",
+            "pointer": "/decisions/5",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "P-07",
+            "pointer": "/decisions/6",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          },
+          {
+            "row": "P-08",
+            "pointer": "/decisions/7",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": null,
+            "status": "unverified",
+            "reason": "モデルから有効な確認結果が返りませんでした"
+          }
+        ]
+      },
+      "skill": {
+        "status": "ok",
+        "elapsedMs": 7815,
+        "name": "skill-14ab5f7ba924",
+        "dependencies": [
+          {
+            "id": "contextstill:kn_72nrdzihlaf2d37islvr5ptpfe",
+            "version": "1",
+            "digest": "ea7fc93c16dad58f017927046e62c7e55a18909a77013b98b6a0e34cee51d4dd",
+            "generation": 0
+          }
+        ],
+        "error": null
+      },
+      "rows": [
+        {
+          "id": "P-01",
+          "transition": "corrected",
+          "expected": [
+            "CONTENT",
+            "a13",
+            "要修正"
+          ],
+          "current": [
+            "SCOPE",
+            "a13",
+            "要修正"
+          ],
+          "assisted": [
+            "CONTENT",
+            "a13",
+            "要修正"
+          ],
+          "fieldsCorrected": [
+            1
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "P-02",
+          "transition": "stillCorrect",
+          "expected": [
+            "SCOPE",
+            "-",
+            "一致"
+          ],
+          "current": [
+            "SCOPE",
+            "-",
+            "一致"
+          ],
+          "assisted": [
+            "SCOPE",
+            "-",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "P-03",
+          "transition": "regressed",
+          "expected": [
+            "READY",
+            "c31+c32",
+            "要修正"
+          ],
+          "current": [
+            "READY",
+            "c31+c32",
+            "要修正"
+          ],
+          "assisted": [
+            "EMBARGO",
+            "P-03",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "id": "P-04",
+          "transition": "stillIncorrect",
+          "expected": [
+            "EMBARGO",
+            "P-04",
+            "要修正"
+          ],
+          "current": [
+            "READY",
+            "d41+d42",
+            "一致"
+          ],
+          "assisted": [
+            "READY",
+            "d41+d42",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "P-05",
+          "transition": "stillIncorrect",
+          "expected": [
+            "READY",
+            "e51+e52+w51",
+            "要修正"
+          ],
+          "current": [
+            "SCOPE",
+            "e53",
+            "一致"
+          ],
+          "assisted": [
+            "SCOPE",
+            "e53",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "P-06",
+          "transition": "stillIncorrect",
+          "expected": [
+            "DEP",
+            "P-04",
+            "一致"
+          ],
+          "current": [
+            "DEP",
+            "P-05",
+            "要修正"
+          ],
+          "assisted": [
+            "DEP",
+            "P-05>e53",
+            "要修正"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "P-07",
+          "transition": "stillIncorrect",
+          "expected": [
+            "DEP",
+            "P-06>P-04",
+            "要修正"
+          ],
+          "current": [
+            "DEP",
+            "P-06>P-05",
+            "要修正"
+          ],
+          "assisted": [
+            "EMBARGO",
+            "P-07",
+            "要修正"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": [
+            1
+          ]
+        },
+        {
+          "id": "P-08",
+          "transition": "stillCorrect",
+          "expected": [
+            "EMBARGO",
+            "P-08",
+            "一致"
+          ],
+          "current": [
+            "EMBARGO",
+            "P-08",
+            "一致"
+          ],
+          "assisted": [
+            "EMBARGO",
+            "P-08",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        }
+      ]
+    },
+    {
+      "case": "hard-05",
+      "repetition": 2,
+      "currentArtifactId": "e8760c9b-c5b",
+      "assistedArtifactId": "fa8cecc0-a87",
+      "review": {
+        "status": "completed",
+        "conditionIds": [
+          "approval",
+          "embargo",
+          "dependency"
+        ],
+        "issues": [],
+        "elapsedMs": 52087,
+        "findings": [
+          {
+            "row": "P-01",
+            "pointer": "/decisions/0",
+            "title": "P-01の確認済み取消を無視",
+            "problem": "確認済み承認欄のCONTENTはREVOKEだが、現行判定はREADY。"
+          },
+          {
+            "row": "P-02",
+            "pointer": "/decisions/1",
+            "title": "P-02の対象承認なしを誤判定",
+            "problem": "PARTNER対象の承認ログがなく、確認済み欄もNO_RECORDだが、現行判定はSCOPE。"
+          },
+          {
+            "row": "P-06",
+            "pointer": "/decisions/5",
+            "title": "P-06の停止連鎖を誤判定",
+            "problem": "P-06自身の承認と解禁条件は満たすが、依存P-05はSCOPEで停止するためP-06の期待判定はDEP。現行判定はDEPだが、根拠IDが提示されていない。"
+          }
+        ],
+        "rows": [
+          {
+            "row": null,
+            "pointer": "/asOf",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": "context",
+            "status": "checked",
+            "reason": "基準時刻の背景資料。判定レコードではありません。"
+          },
+          {
+            "row": null,
+            "pointer": "/confirmedApprovals",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": "context",
+            "status": "checked",
+            "reason": "確認済み承認状態の背景資料。判定レコードではありません。"
+          },
+          {
+            "row": null,
+            "pointer": "/records",
+            "expectedOriginalDecisionVerdict": null,
+            "verdict": "context",
+            "status": "checked",
+            "reason": "対象パッケージの入力レコード。"
+          },
+          {
+            "row": "P-01",
+            "pointer": "/decisions/0",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "differs",
+            "status": "checked",
+            "reason": "P-01の現行判定。"
+          },
+          {
+            "row": "P-02",
+            "pointer": "/decisions/1",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": "differs",
+            "status": "checked",
+            "reason": "P-02の現行判定。"
+          },
+          {
+            "row": "P-03",
+            "pointer": "/decisions/2",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "P-03の現行判定。"
+          },
+          {
+            "row": "P-04",
+            "pointer": "/decisions/3",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "P-04の現行判定。"
+          },
+          {
+            "row": "P-05",
+            "pointer": "/decisions/4",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "P-05の現行判定。"
+          },
+          {
+            "row": "P-06",
+            "pointer": "/decisions/5",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": "differs",
+            "status": "checked",
+            "reason": "P-06の現行判定。"
+          },
+          {
+            "row": "P-07",
+            "pointer": "/decisions/6",
+            "expectedOriginalDecisionVerdict": "differs",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "P-07の現行判定。"
+          },
+          {
+            "row": "P-08",
+            "pointer": "/decisions/7",
+            "expectedOriginalDecisionVerdict": "matches",
+            "verdict": "matches",
+            "status": "checked",
+            "reason": "P-08の現行判定。"
+          }
+        ]
+      },
+      "skill": {
+        "status": "ok",
+        "elapsedMs": 7692,
+        "name": "skill-222fe2893537",
+        "dependencies": [
+          {
+            "id": "contextstill:kn_72nrdzihlaf2d37islvr5ptpfe",
+            "version": "1",
+            "digest": "964ce024ba6edf896299e6669b2aa6431d67828284adc93fe097d02b5258894b",
+            "generation": 0
+          }
+        ],
+        "error": null
+      },
+      "rows": [
+        {
+          "id": "P-01",
+          "transition": "corrected",
+          "expected": [
+            "CONTENT",
+            "a13",
+            "要修正"
+          ],
+          "current": [
+            "SCOPE",
+            "a13",
+            "要修正（現行READY）"
+          ],
+          "assisted": [
+            "CONTENT",
+            "a13",
+            "要修正（現行READY）"
+          ],
+          "fieldsCorrected": [
+            1
+          ],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "P-02",
+          "transition": "regressed",
+          "expected": [
+            "SCOPE",
+            "-",
+            "一致"
+          ],
+          "current": [
+            "SCOPE",
+            "-",
+            "一致"
+          ],
+          "assisted": [
+            "CONTENT",
+            "-",
+            "要修正（現行SCOPE）"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "P-03",
+          "transition": "stillIncorrect",
+          "expected": [
+            "READY",
+            "c31+c32",
+            "要修正"
+          ],
+          "current": [
+            "EMBARGO",
+            "P-03",
+            "一致"
+          ],
+          "assisted": [
+            "EMBARGO",
+            "P-03",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "P-04",
+          "transition": "stillIncorrect",
+          "expected": [
+            "EMBARGO",
+            "P-04",
+            "要修正"
+          ],
+          "current": [
+            "READY",
+            "d41+d42+w41",
+            "一致"
+          ],
+          "assisted": [
+            "READY",
+            "d41+d42",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "P-05",
+          "transition": "stillIncorrect",
+          "expected": [
+            "READY",
+            "e51+e52+w51",
+            "要修正"
+          ],
+          "current": [
+            "SCOPE",
+            "e53",
+            "一致"
+          ],
+          "assisted": [
+            "SCOPE",
+            "e51+e53",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "P-06",
+          "transition": "stillIncorrect",
+          "expected": [
+            "DEP",
+            "P-04",
+            "一致"
+          ],
+          "current": [
+            "DEP",
+            "P-05>P-05",
+            "要修正（現行DEP。根拠を修正）"
+          ],
+          "assisted": [
+            "DEP",
+            "P-05",
+            "要修正（現行DEPだが根拠IDなし）"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        },
+        {
+          "id": "P-07",
+          "transition": "stillIncorrect",
+          "expected": [
+            "DEP",
+            "P-06>P-04",
+            "要修正"
+          ],
+          "current": [
+            "DEP",
+            "P-06>P-05>P-05",
+            "要修正（現行EMBARGO）"
+          ],
+          "assisted": [
+            "EMBARGO",
+            "P-07",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "P-08",
+          "transition": "stillCorrect",
+          "expected": [
+            "EMBARGO",
+            "P-08",
+            "一致"
+          ],
+          "current": [
+            "EMBARGO",
+            "P-08",
+            "一致"
+          ],
+          "assisted": [
+            "EMBARGO",
+            "P-08",
+            "一致"
+          ],
+          "fieldsCorrected": [],
+          "fieldsRegressed": []
+        }
+      ]
+    }
+  ]
+}

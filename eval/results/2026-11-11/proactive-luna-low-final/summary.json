@@ -1,0 +1,288 @@
+{
+  "current": {
+    "completed": 6,
+    "attempted": 6,
+    "quality": 24,
+    "qualityMax": 24,
+    "procedureCompliance": 0,
+    "procedureCases": 3,
+    "replyMedianMs": 6958,
+    "replySentenceOverruns": 1,
+    "completionMedianMs": 16270,
+    "calls": 12,
+    "inputTokens": 104615,
+    "outputTokens": 1878,
+    "reasoningTokens": 0,
+    "callsWithUsage": 12
+  },
+  "assisted": {
+    "completed": 6,
+    "attempted": 6,
+    "quality": 23,
+    "qualityMax": 24,
+    "procedureCompliance": 0,
+    "procedureCases": 3,
+    "replyMedianMs": 7140.5,
+    "replySentenceOverruns": 1,
+    "completionMedianMs": 33582,
+    "calls": 21,
+    "inputTokens": 308374,
+    "outputTokens": 5828,
+    "reasoningTokens": 0,
+    "callsWithUsage": 21
+  },
+  "selectors": {
+    "review": {
+      "selectedOnUseful": 2,
+      "useful": 3,
+      "usefulWithDecision": 3,
+      "selectedOnOther": 0,
+      "other": 3
+    },
+    "skill": {
+      "selectedOnUseful": 3,
+      "useful": 3,
+      "usefulWithDecision": 3,
+      "selectedOnOther": 1,
+      "other": 3
+    }
+  },
+  "pairs": [
+    {
+      "case": "01",
+      "title": "案内の短文化",
+      "current": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 6895,
+        "completionMs": 12898,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 6370,
+        "completionMs": 11666,
+        "status": "completed",
+        "calls": 2
+      },
+      "review": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "calls": 0,
+        "result": null,
+        "procedureReflected": null,
+        "query": null
+      }
+    },
+    {
+      "case": "02",
+      "title": "取消後の通知分岐",
+      "current": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 7469,
+        "completionMs": 18375,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 3,
+        "procedure": null,
+        "replyMs": 10712,
+        "completionMs": 62798,
+        "status": "completed",
+        "calls": 4
+      },
+      "review": {
+        "wanted": true,
+        "selected": true,
+        "started": true,
+        "result": "completed",
+        "conditions": [
+          "gate"
+        ]
+      },
+      "skill": {
+        "wanted": false,
+        "selected": true,
+        "started": true,
+        "calls": 1,
+        "result": "failed",
+        "procedureReflected": null,
+        "error": "skill_delivery_needs_input: [\"利用できる候補資料がなく、確認票の必須項目・定型表記・順番を定める手順を確認できません。適用可能な手順資料と本文を提示してください。\"]",
+        "query": "取消後 通知分岐 受入確認票"
+      }
+    },
+    {
+      "case": "03",
+      "title": "機材貸出の受付引継ぎ",
+      "current": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 7021,
+        "completionMs": 16966,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 7828,
+        "completionMs": 35794,
+        "status": "completed",
+        "calls": 4
+      },
+      "review": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": true,
+        "selected": true,
+        "started": true,
+        "calls": 2,
+        "result": "failed",
+        "procedureReflected": false,
+        "error": "skill_delivery_needs_input: [\"依頼の受入条件は、次の担当が確認事項と着手順を一目で把握できる引継ぎ票の作成です。資料には、表題直後に「貸出引継ぎ区分：未完了」と記載し、案件ID・戻り予定・点検状態を一覧化する手順があります。提供済み資料だけで引継ぎ票を作成できますが、現在の実行環境では必須の initial_instructions MCP ツールを実行できません。指示に従って作業を開始できないため、利用可能な状態にしてください。\"]",
+        "query": "機材貸出の受付引継ぎ票"
+      }
+    },
+    {
+      "case": "04",
+      "title": "日次の欠品引継ぎ",
+      "current": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 5516,
+        "completionMs": 15241,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 5860,
+        "completionMs": 31370,
+        "status": "completed",
+        "calls": 4
+      },
+      "review": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": true,
+        "selected": true,
+        "started": true,
+        "calls": 2,
+        "result": "failed",
+        "procedureReflected": false,
+        "error": "skill_delivery_needs_input: [\"必須の『最終稿の後に最低1回の意味検証』に必要なモデル呼出し予算が残っていません（上限3回、使用済み2回）。この成果物の作成と意味検証を完了できる予算が必要です。\"]",
+        "query": "欠品対応のシフト引継ぎ票"
+      }
+    },
+    {
+      "case": "05",
+      "title": "公開前の承認・例外",
+      "current": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 8132,
+        "completionMs": 19637,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 11276,
+        "completionMs": 47271,
+        "status": "completed",
+        "calls": 5
+      },
+      "review": {
+        "wanted": true,
+        "selected": true,
+        "started": true,
+        "result": "incomplete",
+        "conditions": [
+          "approval",
+          "embargo"
+        ]
+      },
+      "skill": {
+        "wanted": true,
+        "selected": true,
+        "started": true,
+        "calls": 2,
+        "result": "failed",
+        "procedureReflected": false,
+        "error": "skill_delivery_needs_input: [\"現在の成果物は公開判断の担当交代引継ぎ表です。候補資料の本文には表の形式と「公開引継ぎ区分：承認待ちあり」という定型表記はありますが、公開判断の正式条件は案件の正式資料に従うとされています。提示された確定条件だけでは、各行で公開可否を確定できません。\",\"P-01〜P-04それぞれの正式な公開判断条件・資料が必要です。P-01は解禁日前、P-02は公開範囲承認なし、P-03は承認済みだが基準日時点で解禁日当日、P-04は内容承認なしです。特に解禁日の到来判定に使う基準時刻・タイムゾーンが必要です。\"]",
+        "query": "公開判断と承認の担当交代引継ぎ"
+      }
+    },
+    {
+      "case": "06",
+      "title": "予約上限と重複判定",
+      "current": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 6558,
+        "completionMs": 15574,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 6453,
+        "completionMs": 14721,
+        "status": "completed",
+        "calls": 2
+      },
+      "review": {
+        "wanted": true,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "calls": 0,
+        "result": null,
+        "procedureReflected": null,
+        "query": null
+      }
+    }
+  ],
+  "commonCompleted": {
+    "pairs": 6,
+    "qualityMax": 24,
+    "currentQuality": 24,
+    "assistedQuality": 23
+  },
+  "pairQuality": {
+    "better": 0,
+    "equal": 5,
+    "worse": 1
+  }
+}

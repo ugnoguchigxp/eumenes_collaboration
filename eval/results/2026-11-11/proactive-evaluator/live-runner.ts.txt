@@ -1,0 +1,209 @@
+import { strict as assert } from "node:assert";
+import { writeFileSync } from "node:fs";
+import { createCloudAgents } from "./api/domains/inference/adapters/cloud-agents";
+import { harness } from "./api/application/toolchain/toolchain.fixture";
+import { registerTrialEvaluator } from "./api/domains/dialogue/service/trial-evaluator";
+import type { EvaluationResult } from "eumenes-evaluator";
+
+const [model, output] = Bun.argv.slice(2);
+if (!model || !output) throw new Error("usage: model output");
+const agents = createCloudAgents(process.env);
+const reviewed = Promise.withResolvers<{
+	status: string;
+	result?: EvaluationResult;
+}>();
+const refs: string[] = [];
+const turns: Array<{
+	text: string;
+	answer: string | null;
+	elapsedMs: number;
+	status: string | undefined;
+}> = [];
+const usage: Array<{
+	lane: string;
+	model?: string | null;
+	ms: number;
+	input?: number | null;
+	output?: number | null;
+}> = [];
+let rounds = 0;
+let calls = 0;
+const opening =
+	"予約の一覧を作ります。画面の見出しは『予約一覧』と確定します。";
+async function complete(
+	lane: string,
+	messages: Parameters<typeof agents.run>[0]["messages"],
+	schema: Record<string, unknown> | undefined,
+	signal: AbortSignal,
+) {
+	if (++calls > 5) throw Error("trial_call_budget_exhausted");
+	const start = performance.now();
+	const result = await agents.run({
+		kind: "codex-sdk",
+		model: model!,
+		baseUrl: "https://api.openai.com/v1",
+		credential: null,
+		messages,
+		reasoningEffort: "low",
+		signal,
+		...(schema ? { outputSchema: schema } : {}),
+	});
+	usage.push({
+		lane,
+		model: result.usageModel,
+		ms: Math.round(performance.now() - start),
+		input: result.inputTokens,
+		output: result.outputTokens,
+	});
+	return result.text;
+}
+const h = await harness({
+	uiCompositions: true,
+	webResearch: false,
+	routeTool: "ui_create",
+	settingsEnv: {},
+	async specialist(messages, signal, options) {
+		rounds++;
+		if (rounds === 1)
+			return {
+				action: "invoke",
+				tool: "doc.write",
+				arguments: {
+					baseRevision: 0,
+					title: "申込一覧",
+					content: {
+						view: "text-block",
+						title: "申込一覧",
+						body: "現在の申込内容を表示します。",
+					},
+				},
+			};
+		const reference = messages[1]!.content;
+		if (rounds === 2) {
+			const lines = reference.split("\n");
+			const read = (key: string) =>
+				JSON.parse(
+					lines
+						.find((line) => line.startsWith(key + "="))!
+						.slice(key.length + 1),
+				);
+			const { sourceText } = read("SOURCE_REGISTRY");
+			const source = sourceText.find(
+				(entry: { text: string }) => entry.text === opening,
+			);
+			return {
+				action: "reply",
+				text: "確認用の初稿を用意しました。",
+				reviewRequest: null,
+				stateUpdate: {
+					...read("STATE_UPDATE_BASE"),
+					upserts: [
+						{
+							id: "heading",
+							kind: "condition",
+							status: "confirmed",
+							value: "画面に表示する見出しは『予約一覧』",
+							sourceRefs: [source.ref],
+							supersedes: [],
+						},
+					],
+				},
+			};
+		}
+		const review = reference
+			.split("\n")
+			.find((line) => line.startsWith("INDEPENDENT_REVIEW"));
+		if (review) refs.push(review);
+		return complete(
+			"specialist",
+			messages,
+			options?.jsonSchema,
+			signal ?? AbortSignal.timeout(75000),
+		);
+	},
+});
+const disable = registerTrialEvaluator(
+	h.queue,
+	{
+		async complete(request, signal) {
+			const text = await complete(
+				"review",
+				[
+					{ role: "system", content: request.system },
+					{ role: "user", content: request.prompt },
+				],
+				request.outputSchema as Record<string, unknown>,
+				signal,
+			);
+			return { text, model };
+		},
+	},
+	(event) => reviewed.resolve(event),
+);
+
+async function say(text: string) {
+	const start = performance.now();
+	const response = await h.request("/api/runs", {
+		requestId: crypto.randomUUID(),
+		conversationId: "main",
+		text,
+	});
+	assert.equal(response.status, 202);
+	const { id } = (await response.json()) as { id: string };
+	const run = await h.dialogue.waitForTerminal(id, { timeoutMs: 90000 });
+	const answer = h.dialogue.answerText(id);
+	turns.push({
+		text,
+		answer,
+		elapsedMs: Math.round(performance.now() - start),
+		status: run?.status,
+	});
+	assert.equal(run?.status, "completed");
+	return answer;
+}
+let result: EvaluationResult | undefined;
+try {
+	await say(opening);
+	await say(
+		"合意した見出しと画面が合っているか、制作担当とは別の視点で確認してください。画面はまだ編集せず、評価待ちでもいまの状況を短く教えてください。",
+	);
+	const observed = await Promise.race([
+		reviewed.promise,
+		Bun.sleep(65000).then(() => ({
+			status: "review_timeout",
+			result: undefined,
+		})),
+	]);
+	result = observed.result;
+	assert.equal(observed.status, "completed");
+	assert.deepEqual(result?.conditionSelection.applied, ["heading"]);
+	assert(
+		result?.conditionChecks.some(
+			(item) => item.conditionId === "heading" && item.status === "violated",
+		),
+	);
+	assert(
+		result?.findings.some(
+			(item) =>
+				item.conditionId === "heading" &&
+				item.primary.pointer === "/children/0/title",
+		),
+	);
+	const final = await say(
+		"背景の評価結果を短く教えてください。画面の編集は不要です。",
+	);
+	assert(refs.some((entry) => entry.includes('"status":"violated"')));
+	assert(final?.includes("予約一覧") && final.includes("申込一覧"));
+} finally {
+	writeFileSync(
+		output,
+		JSON.stringify(
+			{ model, calls, turns, usage, result, references: refs },
+			null,
+			2,
+		) + "\n",
+		{ flag: "wx" },
+	);
+	disable();
+	await h.close();
+}

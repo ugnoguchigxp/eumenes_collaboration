@@ -1,0 +1,233 @@
+{
+  "60": {
+    "evaluator-only": {
+      "completed": 6,
+      "score": 18,
+      "max": 48,
+      "fields": 123,
+      "maxFields": 192,
+      "modelCalls": 15,
+      "inputTokens": 147089,
+      "outputTokens": 8707,
+      "completionMedianMs": 45609.5,
+      "reviewOutcomes": {
+        "expired": 1,
+        "incomplete": 1,
+        "completed": 1
+      },
+      "reviews": [
+        {
+          "case": "hard-02",
+          "repetition": 1,
+          "ms": 60010,
+          "status": "expired",
+          "issues": [
+            "deadline_exceeded"
+          ],
+          "findingTitles": []
+        },
+        {
+          "case": "hard-05",
+          "repetition": 1,
+          "ms": 44475,
+          "status": "incomplete",
+          "issues": [
+            "model_output_partially_rejected",
+            "scope_unverified",
+            "conditions_unverified"
+          ],
+          "findingTitles": [
+            "確認済みの内容失効を無視",
+            "有効なPARTNER免除を考慮しない"
+          ]
+        },
+        {
+          "case": "hard-05",
+          "repetition": 2,
+          "ms": 55929,
+          "status": "completed",
+          "issues": [],
+          "findingTitles": [
+            "P-07の停止理由が依存連鎖でなくEMBARGOになっている"
+          ]
+        }
+      ]
+    },
+    "assisted": {
+      "completed": 6,
+      "score": 24,
+      "max": 48,
+      "fields": 133,
+      "maxFields": 192,
+      "modelCalls": 20,
+      "inputTokens": 206228,
+      "outputTokens": 13261,
+      "completionMedianMs": 74101.0,
+      "reviewOutcomes": {
+        "incomplete": 2,
+        "completed": 1,
+        "expired": 1
+      },
+      "reviews": [
+        {
+          "case": "hard-02",
+          "repetition": 1,
+          "ms": 53540,
+          "status": "incomplete",
+          "issues": [
+            "conditions_unverified"
+          ],
+          "findingTitles": [
+            "確認済み状態票の判定不一致",
+            "辞退状態より発送状態を優先",
+            "期限切れ注文の判定不一致",
+            "無効な取消IDの受理ログを誤適用"
+          ]
+        },
+        {
+          "case": "hard-05",
+          "repetition": 1,
+          "ms": 54863,
+          "status": "incomplete",
+          "issues": [
+            "conditions_unverified"
+          ],
+          "findingTitles": []
+        },
+        {
+          "case": "hard-02",
+          "repetition": 2,
+          "ms": 58297,
+          "status": "completed",
+          "issues": [],
+          "findingTitles": [
+            "C-18の現行判定が優先順位と不一致",
+            "C-13の現行判定が優先順位と不一致",
+            "C-15の現行判定が期限境界と不一致",
+            "C-18の現行判定が優先順位と不一致"
+          ]
+        },
+        {
+          "case": "hard-04",
+          "repetition": 2,
+          "ms": 60004,
+          "status": "expired",
+          "issues": [
+            "deadline_exceeded"
+          ],
+          "findingTitles": []
+        }
+      ]
+    }
+  },
+  "120": {
+    "evaluator-only": {
+      "completed": 6,
+      "score": 20,
+      "max": 48,
+      "fields": 127,
+      "maxFields": 192,
+      "modelCalls": 15,
+      "inputTokens": 158470,
+      "outputTokens": 10819,
+      "completionMedianMs": 40243.5,
+      "reviewOutcomes": {
+        "incomplete": 2,
+        "completed": 1
+      },
+      "reviews": [
+        {
+          "case": "hard-02",
+          "repetition": 1,
+          "ms": 57097,
+          "status": "incomplete",
+          "issues": [
+            "model_output_partially_rejected",
+            "scope_unverified",
+            "conditions_unverified"
+          ],
+          "findingTitles": [
+            "C-16とC-18の現行判定が期待結果と異なる",
+            "C-16の現行判定が期待値と異なる",
+            "C-18の現行判定が期待値と異なる"
+          ]
+        },
+        {
+          "case": "hard-05",
+          "repetition": 1,
+          "ms": 36015,
+          "status": "completed",
+          "issues": [],
+          "findingTitles": []
+        },
+        {
+          "case": "hard-02",
+          "repetition": 2,
+          "ms": 57276,
+          "status": "incomplete",
+          "issues": [
+            "model_output_partially_rejected",
+            "scope_unverified",
+            "conditions_unverified"
+          ],
+          "findingTitles": [
+            "C-13で発送を辞退より優先",
+            "C-15の期限切れを未反映"
+          ]
+        }
+      ]
+    },
+    "assisted": {
+      "completed": 6,
+      "score": 21,
+      "max": 48,
+      "fields": 127,
+      "maxFields": 192,
+      "modelCalls": 17,
+      "inputTokens": 183515,
+      "outputTokens": 9994,
+      "completionMedianMs": 33152.5,
+      "reviewOutcomes": {
+        "incomplete": 2,
+        "completed": 1
+      },
+      "reviews": [
+        {
+          "case": "hard-05",
+          "repetition": 1,
+          "ms": 67993,
+          "status": "incomplete",
+          "issues": [
+            "scope_unverified"
+          ],
+          "findingTitles": [
+            "P-01の確認済みCONTENT停止を反映していない",
+            "P-05の停止優先順位と依存判定が異なる",
+            "P-07で依存停止より自己EMBARGOを優先している"
+          ]
+        },
+        {
+          "case": "hard-02",
+          "repetition": 1,
+          "ms": 43704,
+          "status": "completed",
+          "issues": [],
+          "findingTitles": [
+            "C-11の現行判定が期待判定と異なる",
+            "C-16の現行判定が期待判定と異なる"
+          ]
+        },
+        {
+          "case": "hard-05",
+          "repetition": 2,
+          "ms": 24075,
+          "status": "incomplete",
+          "issues": [
+            "conditions_unverified"
+          ],
+          "findingTitles": []
+        }
+      ]
+    }
+  }
+}

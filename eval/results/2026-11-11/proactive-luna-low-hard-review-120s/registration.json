@@ -1,0 +1,77 @@
+{
+  "model": "gpt-6-luna",
+  "reasoning": "low",
+  "route": "codex-subscription",
+  "cases": [
+    {
+      "id": "hard-02",
+      "order": [
+        "evaluator-only",
+        "assisted"
+      ],
+      "orders": [
+        [
+          "evaluator-only",
+          "assisted"
+        ],
+        [
+          "assisted",
+          "evaluator-only"
+        ]
+      ]
+    },
+    {
+      "id": "hard-04",
+      "order": [
+        "evaluator-only",
+        "assisted"
+      ],
+      "orders": [
+        [
+          "evaluator-only",
+          "assisted"
+        ],
+        [
+          "assisted",
+          "evaluator-only"
+        ]
+      ]
+    },
+    {
+      "id": "hard-05",
+      "order": [
+        "assisted",
+        "evaluator-only"
+      ],
+      "orders": [
+        [
+          "assisted",
+          "evaluator-only"
+        ],
+        [
+          "evaluator-only",
+          "assisted"
+        ]
+      ]
+    }
+  ],
+  "repetitions": 2,
+  "concurrentPairs": 2,
+  "maxCallsPerArm": {
+    "evaluator-only": 3,
+    "assisted": 6
+  },
+  "maxCallsTotal": 54,
+  "armTimeoutMs": 240000,
+  "perCallTimeoutMs": 60000,
+  "evaluatorTimeoutMs": 120000,
+  "artifactCriteriaPerCase": 8,
+  "suite": "hard",
+  "hashes": {
+    "eval/proactive/luna/hard-cases.mjs": "10b6ad0094ab4711dc3e2d5954d388f4e38086cc9b41f56017c3a06a9ee3b6e9",
+    "eval/proactive/luna/run.mjs": "f6b0a89f2448ad077b0a4f15285c858d2f614230e675fa6cec2145cb3cab1ac7",
+    "example/proactive/codex.mjs": "6b61c4f40f7e4f62e5ab7e17f14b800a63f5ab7521532241afcfcb0fe2fe9be7",
+    "example/proactive/services.mjs": "7430ffe86c8ab64674ccbd2a7e80dc82fde5172596a57fc8dfe02042bb94897e",
+    "example/proactive/session.ts": "67f4cc5dee0165e11b0ad4f879fa018b7668e5fc409f52784dc0b5aa790bf96d"
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "result": {
+    "contractVersion": 1,
+    "evaluationId": "71c58e21-a208-4fa6-b751-b9271da7448a",
+    "rubric": {
+      "id": "workflow-correctness",
+      "version": 1
+    },
+    "target": {
+      "kind": "workflow",
+      "id": "02",
+      "version": "1",
+      "digest": "362da59ae51f6e99d894ae104c8880d36d741d3b14185a23cf0c61cdfc231ff3"
+    },
+    "inputDigest": "a41e3a1f8ec3e9db8573dd83fca6ce1f500e130ed12b596a91b31010ff0689d0",
+    "scopeSelection": {
+      "version": 1,
+      "digestVersion": 2,
+      "digest": "7f2b5e88fdd974cfbbf0503ef779b92a1139aaaf171068f1385e9050aecbb85f",
+      "conditionDigest": "772c5fe06bec311c3334d29aef8e03db7b6b4eecbaa4d984602c58687cf9de0d",
+      "conditionRevision": "ae4afce4cc1d241c1bf964cacc24a36f1286484478774b56bda2a14fd42dfe6c",
+      "targetDigest": "362da59ae51f6e99d894ae104c8880d36d741d3b14185a23cf0c61cdfc231ff3",
+      "target": {
+        "kind": "workflow",
+        "id": "02",
+        "version": "1"
+      },
+      "selected": [
+        {
+          "id": "json:438ab85cbe19bb7f53a1f119e7d22a3e2d4acc87490e86cc5391d832f1c8d252",
+          "kind": "json",
+          "version": "1",
+          "clipped": false,
+          "pointerRoot": "/rules/0"
+        },
+        {
+          "id": "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12",
+          "kind": "json",
+          "version": "1",
+          "clipped": false,
+          "pointerRoot": "/rules/1"
+        },
+        {
+          "id": "json:66813a7cc2636ea3f258cbf740bee152e7af1b369d3f2882b8236faf69c29880",
+          "kind": "json",
+          "version": "1",
+          "clipped": false,
+          "pointerRoot": "/rules/2"
+        },
+        {
+          "id": "json:e4acfe391e067e90c10c2620122493dd8064deff50933ae56b6958e19cc6ac4b",
+          "kind": "json",
+          "version": "1",
+          "clipped": false,
+          "pointerRoot": "/rules/3"
+        }
+      ],
+      "initialEvidenceIds": [],
+      "allowedEvidenceIds": [],
+      "availableEvidence": [],
+      "unknownEvidenceIds": [],
+      "requiredEvidenceIds": [],
+      "conditionIds": [
+        "gate"
+      ],
+      "unavailableConditionIds": []
+    },
+    "conditionSelection": {
+      "applied": [
+        "gate"
+      ],
+      "excluded": []
+    },
+    "conditions": "available",
+    "conditionRevision": "ae4afce4cc1d241c1bf964cacc24a36f1286484478774b56bda2a14fd42dfe6c",
+    "findings": [
+      {
+        "title": "通知辞退フラグを無視して通知する分岐",
+        "problem": "条件 b は取消済み・未発送ですが、通知辞退が true でも send が true です。確定条件では通知辞退なしも必須です。",
+        "trigger": "取消済み=true、未発送=true、通知辞退=true の場合。",
+        "impact": "通知を辞退した対象にも取消通知が送られます。",
+        "severity": "high",
+        "primary": {
+          "evidenceId": "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12",
+          "startLine": null,
+          "endLine": null,
+          "pointer": "/rules/1"
+        },
+        "evidence": [
+          {
+            "evidenceId": "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12",
+            "startLine": null,
+            "endLine": null,
+            "pointer": "/rules/1"
+          },
+          {
+            "evidenceId": "json:438ab85cbe19bb7f53a1f119e7d22a3e2d4acc87490e86cc5391d832f1c8d252",
+            "startLine": null,
+            "endLine": null,
+            "pointer": "/rules/0"
+          }
+        ],
+        "conditionId": "gate"
+      }
+    ],
+    "scopeChecks": [
+      {
+        "evidenceId": "json:438ab85cbe19bb7f53a1f119e7d22a3e2d4acc87490e86cc5391d832f1c8d252",
+        "status": "checked",
+        "reason": null
+      },
+      {
+        "evidenceId": "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12",
+        "status": "checked",
+        "reason": null
+      },
+      {
+        "evidenceId": "json:66813a7cc2636ea3f258cbf740bee152e7af1b369d3f2882b8236faf69c29880",
+        "status": "checked",
+        "reason": null
+      },
+      {
+        "evidenceId": "json:e4acfe391e067e90c10c2620122493dd8064deff50933ae56b6958e19cc6ac4b",
+        "status": "unverified",
+        "reason": "判定を裏付ける指摘がありません。"
+      }
+    ],
+    "conditionChecks": [
+      {
+        "conditionId": "gate",
+        "status": "violated",
+        "reason": "記載された入力で、取消済み・未発送・通知辞退なしの全条件を満たさない分岐 b と d が send=true です。",
+        "evidence": [
+          {
+            "evidenceId": "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12",
+            "startLine": null,
+            "endLine": null,
+            "pointer": "/rules/1"
+          },
+          {
+            "evidenceId": "json:e4acfe391e067e90c10c2620122493dd8064deff50933ae56b6958e19cc6ac4b",
+            "startLine": null,
+            "endLine": null,
+            "pointer": "/rules/3"
+          }
+        ]
+      }
+    ],
+    "status": "incomplete",
+    "issues": [
+      {
+        "code": "scope_unverified"
+      }
+    ],
+    "rejected": [],
+    "durationMs": 19211,
+    "model": "gpt-6-luna",
+    "rowVerdicts": {
+      "json:438ab85cbe19bb7f53a1f119e7d22a3e2d4acc87490e86cc5391d832f1c8d252": "matches",
+      "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12": "differs",
+      "json:66813a7cc2636ea3f258cbf740bee152e7af1b369d3f2882b8236faf69c29880": "matches",
+      "json:e4acfe391e067e90c10c2620122493dd8064deff50933ae56b6958e19cc6ac4b": "differs"
+    },
+    "discardedFindings": []
+  },
+  "calls": [
+    {
+      "lane": "evaluator",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 9904,
+      "outputTokens": 730,
+      "elapsedMs": 19202
+    }
+  ]
+}

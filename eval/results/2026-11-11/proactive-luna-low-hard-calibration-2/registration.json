@@ -1,0 +1,42 @@
+{
+  "model": "gpt-6-luna",
+  "reasoning": "low",
+  "route": "codex-subscription",
+  "cases": [
+    {
+      "id": "hard-02",
+      "order": [
+        "current"
+      ]
+    },
+    {
+      "id": "hard-04",
+      "order": [
+        "current"
+      ]
+    },
+    {
+      "id": "hard-05",
+      "order": [
+        "current"
+      ]
+    }
+  ],
+  "repetitions": 2,
+  "concurrentPairs": 2,
+  "maxCallsPerArm": {
+    "current": 2
+  },
+  "maxCallsTotal": 12,
+  "armTimeoutMs": 180000,
+  "perCallTimeoutMs": 60000,
+  "artifactCriteriaPerCase": 8,
+  "suite": "hard",
+  "hashes": {
+    "eval/proactive/luna/hard-cases.mjs": "06d6aa8a6d5bbeb84252bf5f5f3a0b64bbb538961a7c850f2b3ec17e0b7e3d0e",
+    "eval/proactive/luna/run.mjs": "30e59b9c6f1af89c08225a6c7fb423003e02a2083b685f123ef1d5116c3814be",
+    "example/proactive/codex.mjs": "1f04b921ddb6dad75b649f6f863c19a50efc3f210d6b41551af07af261928d2c",
+    "example/proactive/services.mjs": "57b38393b8623b949920b88307cd0234ec033dd36f6744026162ae4ac31f8ea2",
+    "example/proactive/session.ts": "67f4cc5dee0165e11b0ad4f879fa018b7668e5fc409f52784dc0b5aa790bf96d"
+  }
+}

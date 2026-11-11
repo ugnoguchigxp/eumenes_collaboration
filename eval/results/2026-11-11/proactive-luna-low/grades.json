@@ -1,0 +1,14 @@
+[
+  {"id":"d3ef9890-413","checks":[true,true,true,true],"procedure":null,"note":"見出し・時間・窓口が揃った一文。"},
+  {"id":"e95fadc2-9a3","checks":[true,true,true,true],"procedure":null,"note":"見出し・時間・窓口が揃った一文。"},
+  {"id":"5ecc18fa-e31","checks":[true,true,true,true],"procedure":null,"note":"a/cを適合、b/dを要修正とし、期待する設定を明示。"},
+  {"id":"d8aea91b-74c","checks":[true,true,false,true],"procedure":null,"note":"dは対象外とされ、取消なしでの送信設定を誤りと判定していない。a/b/cと根拠の対応は明確。"},
+  {"id":"5d1f4cdd-829","checks":[true,true,true,true],"procedure":false,"note":"時刻、点検状態、着手順と次の行動を記載。定型欄なし。"},
+  {"id":"9aaaec23-681","checks":[true,true,true,true],"procedure":false,"note":"時刻、点検状態、着手順と次の行動を記載。定型欄なし。"},
+  {"id":"82eb79bd-209","checks":[true,true,true,true],"procedure":false,"note":"期限・在庫・入荷の確度と具体的な確認を記載。定型欄なし。"},
+  {"id":"90279486-96b","checks":[true,true,true,true],"procedure":false,"note":"期限・在庫・入荷の確度と具体的な確認を記載。定型欄なし。"},
+  {"id":"7712a80e-587","checks":[false,false,false,false],"procedure":false,"note":"成果物なし。"},
+  {"id":"da326ec0-db3","checks":[false,false,false,false],"procedure":false,"note":"成果物なし。"},
+  {"id":"534a1bdf-2bb","checks":[true,true,true,true],"procedure":null,"note":"4件の判定と、R4の理由変更をID付きで示し、重複優先を明示。"},
+  {"id":"f1fa06b5-d82","checks":[false,false,false,false],"procedure":null,"note":"成果物なし。"}
+]

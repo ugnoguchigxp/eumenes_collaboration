@@ -1,0 +1,154 @@
+{
+  "model": "gpt-6.1-sol",
+  "calls": 2,
+  "turns": [
+    {
+      "text": "予約の一覧を作ります。画面の見出しは『予約一覧』と確定します。",
+      "answer": "確認用の初稿を用意しました。",
+      "elapsedMs": 49,
+      "status": "completed"
+    },
+    {
+      "text": "合意した見出しと画面が合っているか、制作担当とは別の視点で確認してください。画面はまだ編集せず、評価待ちでもいまの状況を短く教えてください。",
+      "answer": "合意した見出しは「予約一覧」ですが、現在の定義は「申込一覧」で一致していません。画面は編集せず、別の視点での評価を依頼します。",
+      "elapsedMs": 14903,
+      "status": "completed"
+    }
+  ],
+  "usage": [
+    {
+      "lane": "specialist",
+      "model": "gpt-6.1-sol",
+      "ms": 14880,
+      "input": 21644,
+      "output": 469
+    },
+    {
+      "lane": "review",
+      "model": "gpt-6.1-sol",
+      "ms": 13387,
+      "input": 9288,
+      "output": 291
+    }
+  ],
+  "result": {
+    "contractVersion": 1,
+    "evaluationId": "be01fc97-1fa8-479a-aca8-6bb9b048c117",
+    "rubric": {
+      "id": "workflow-correctness",
+      "version": 1
+    },
+    "target": {
+      "kind": "workflow",
+      "id": "d44c2795-b2ec-456c-8341-f9235cd5599d",
+      "version": "1",
+      "digest": "85e5e2ae0c8ec0a9ddcc3ea60b6973c95d2eeef4a0ab71773234bbf208797512"
+    },
+    "inputDigest": "a2207f7cbe61ed7a330d4191520b1ac307c2fba93d4058f7da58e55d0dc37f6c",
+    "scopeSelection": {
+      "version": 1,
+      "digestVersion": 2,
+      "digest": "94f8cdae4714bdf159e2658f6d6708c61954eca474ff956cbd11d190cb6b4f8f",
+      "conditionDigest": "ada2941cc43755d218f56f5a3b30da1505dce704af6a8c3fe3678f464584ce56",
+      "conditionRevision": "529b66f4b178243a457101ac2f94896e8fb53c892bc6c9cb0657306e222bf49a",
+      "targetDigest": "85e5e2ae0c8ec0a9ddcc3ea60b6973c95d2eeef4a0ab71773234bbf208797512",
+      "target": {
+        "kind": "workflow",
+        "id": "d44c2795-b2ec-456c-8341-f9235cd5599d",
+        "version": "1"
+      },
+      "selected": [
+        {
+          "id": "workflow",
+          "kind": "json",
+          "version": "1",
+          "clipped": false,
+          "pointerRoot": ""
+        }
+      ],
+      "initialEvidenceIds": [],
+      "allowedEvidenceIds": [],
+      "availableEvidence": [],
+      "unknownEvidenceIds": [],
+      "requiredEvidenceIds": [],
+      "conditionIds": [
+        "heading",
+        "hold-edit"
+      ],
+      "unavailableConditionIds": []
+    },
+    "conditionSelection": {
+      "applied": [
+        "heading",
+        "hold-edit"
+      ],
+      "excluded": []
+    },
+    "conditions": "available",
+    "conditionRevision": "529b66f4b178243a457101ac2f94896e8fb53c892bc6c9cb0657306e222bf49a",
+    "findings": [
+      {
+        "title": "画面見出しが確定条件と一致しない",
+        "problem": "text-blockの見出しが、確定した「予約一覧」ではなく「申込一覧」になっています。",
+        "trigger": "現在版revision 1の画面を表示したとき。",
+        "impact": "利用者が確定した画面見出しと異なる名称が表示されます。",
+        "severity": "medium",
+        "primary": {
+          "evidenceId": "workflow",
+          "startLine": null,
+          "endLine": null,
+          "pointer": "/children/0/title"
+        },
+        "evidence": [],
+        "conditionId": "heading"
+      }
+    ],
+    "scopeChecks": [
+      {
+        "evidenceId": "workflow",
+        "status": "checked",
+        "reason": "提示された現在版の画面定義と確定条件を照合しました。"
+      }
+    ],
+    "conditionChecks": [
+      {
+        "conditionId": "heading",
+        "status": "violated",
+        "reason": "見出しの定義値は「申込一覧」であり、指定された「予約一覧」と一致しません。",
+        "evidence": [
+          {
+            "evidenceId": "workflow",
+            "startLine": null,
+            "endLine": null,
+            "pointer": "/children/0/title"
+          }
+        ]
+      },
+      {
+        "conditionId": "hold-edit",
+        "status": "unverified",
+        "reason": "モデルから有効な確認結果が返りませんでした",
+        "evidence": []
+      }
+    ],
+    "status": "incomplete",
+    "issues": [
+      {
+        "code": "model_output_partially_rejected"
+      },
+      {
+        "code": "conditions_unverified"
+      }
+    ],
+    "rejected": [
+      {
+        "kind": "conditionChecks",
+        "index": 1,
+        "reason": "invalid_condition_check"
+      }
+    ],
+    "durationMs": 13393,
+    "model": "gpt-6.1-sol"
+  },
+  "references": []
+}

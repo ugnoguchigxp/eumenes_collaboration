@@ -1,0 +1,96 @@
+{
+  "model": "gpt-6-luna",
+  "reasoning": "low",
+  "route": "codex-subscription",
+  "cases": [
+    {
+      "id": "hard-02",
+      "order": [
+        "current",
+        "evaluator-only",
+        "skill-only",
+        "assisted"
+      ],
+      "orders": [
+        [
+          "current",
+          "evaluator-only",
+          "skill-only",
+          "assisted"
+        ],
+        [
+          "assisted",
+          "skill-only",
+          "evaluator-only",
+          "current"
+        ]
+      ]
+    },
+    {
+      "id": "hard-04",
+      "order": [
+        "evaluator-only",
+        "skill-only",
+        "assisted",
+        "current"
+      ],
+      "orders": [
+        [
+          "evaluator-only",
+          "skill-only",
+          "assisted",
+          "current"
+        ],
+        [
+          "current",
+          "assisted",
+          "skill-only",
+          "evaluator-only"
+        ]
+      ]
+    },
+    {
+      "id": "hard-05",
+      "order": [
+        "skill-only",
+        "assisted",
+        "current",
+        "evaluator-only"
+      ],
+      "orders": [
+        [
+          "skill-only",
+          "assisted",
+          "current",
+          "evaluator-only"
+        ],
+        [
+          "evaluator-only",
+          "current",
+          "assisted",
+          "skill-only"
+        ]
+      ]
+    }
+  ],
+  "repetitions": 2,
+  "concurrentPairs": 2,
+  "maxCallsPerArm": {
+    "current": 2,
+    "evaluator-only": 3,
+    "skill-only": 3,
+    "assisted": 6
+  },
+  "maxCallsTotal": 84,
+  "armTimeoutMs": 180000,
+  "perCallTimeoutMs": 60000,
+  "artifactCriteriaPerCase": 8,
+  "suite": "hard",
+  "hashes": {
+    "eval/proactive/luna/hard-cases.mjs": "10b6ad0094ab4711dc3e2d5954d388f4e38086cc9b41f56017c3a06a9ee3b6e9",
+    "eval/proactive/luna/run.mjs": "af21676bdb73bdf24a329b03be9912d5668479ef35479794267f0ebb83a14780",
+    "example/proactive/codex.mjs": "1f04b921ddb6dad75b649f6f863c19a50efc3f210d6b41551af07af261928d2c",
+    "example/proactive/services.mjs": "57b38393b8623b949920b88307cd0234ec033dd36f6744026162ae4ac31f8ea2",
+    "example/proactive/session.ts": "67f4cc5dee0165e11b0ad4f879fa018b7668e5fc409f52784dc0b5aa790bf96d"
+  }
+}

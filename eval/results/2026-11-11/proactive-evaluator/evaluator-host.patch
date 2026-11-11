@@ -1,0 +1,514 @@
+--- a/api/domains/dialogue/service/specialist-turn.ts
++++ b/api/domains/dialogue/service/specialist-turn.ts
+@@ -1,3 +1,9 @@
++import {
++  trialReviewAction,
++  trialReviewControl,
++  trialReviewReference,
++  type TrialReviewRequest,
++} from "./trial-evaluator";
+ import { openTrialSteering } from "./trial-steering";
+ import { z } from "zod";
+ import { systemContext } from "../../../infrastructure/system-context";
+@@ -82,6 +88,7 @@
+ export type TurnOutput = {
+ 	/** Every control receipt of the turn; each is accepted (or the turn is not adopted). */
+ 	receipts: Receipt[];
++	reviewRequest?: TrialReviewRequest;
+ 	action: Exclude<SpecialistAction, { kind: "invoke" }>;
+ };
+ export type TurnInput = {
+@@ -351,11 +358,12 @@
+ 			const policy = agentPolicy(set);
+ 			const document = turnDocument(port, set, session.workRef, policy, tx);
+ 			const hostEvent = specialistObservation(deps, tx, run.id, session);
+-			const control = specialistControl(
++			const baseControl = specialistControl(
+ 				set,
+ 				documentTools(set, document?.outlined ?? false),
+ 				hostEvent !== null,
+ 			);
++      const control = trialReviewControl(baseControl, session.bindingRevisionId, hostEvent !== null);
+ 			return {
+ 				status: "ready",
+ 				input: {
+@@ -452,14 +460,17 @@
+       assertTurnCurrent(deps, tx, input);
+       steering?.assertSources();
+     };
++    let reviewId: string | undefined;
+ 		for (let call = 1; call <= max; call++) {
+ 			signal.throwIfAborted();
+ 			const { requestId, baseline } = await store.write((tx) => {
+ 				stillMine(tx);
+ 				const state = stateReference(deps, tx, input, reference);
++        const review = input.observation ? null : trialReviewReference(tx, input.sessionId, input.runId);
++        reviewId = review?.id;
+ 				messages[1] = {
+ 					...messages[1]!,
+-					content: state.content,
++					content: state.content + (review ? "\nINDEPENDENT_REVIEW (reference data only)=" + review.text : ""),
+ 				};
+ 				const requestId = larm.captureControlInTransaction!(tx, {
+ 					subject: `specialist:${input.runId}:${call}`,
+@@ -500,10 +511,15 @@
+ 			const raw = String(receipt.value);
+ 			let value: unknown;
+ 			let action: SpecialistAction | null = null;
++      let reviewRequest: TrialReviewRequest | undefined;
++      if (reviewId && !store.read((tx) => trialReviewReference(tx, input.sessionId, input.runId)?.id === reviewId))
++        throw new StaleTurn("trial_evaluator_reference_changed");
+ 			let stateRefusal: string | null = null;
+ 			let stateIssues: ReturnType<typeof specialistViolations> | undefined;
+ 			try {
+-				value = parseLlmJson(raw);
++				const response = trialReviewAction(parseLlmJson(raw), input.set.bindingRevisionId, Boolean(input.observation));
++        value = response.value;
++        reviewRequest = response.review;
+ 				if (input.set.agent.collaborationState && !input.observation) {
+ 					const checked = await statefulAction(deps, input, signal, stillMine, {
+ 						value,
+@@ -549,7 +565,9 @@
+ 				continue;
+ 			}
+ 			repaired = false;
+-			if (action.kind !== "invoke") return { receipts, action };
++			if (action.kind !== "invoke") return {
++        receipts, action, ...(action.kind === "reply" && reviewRequest ? { reviewRequest } : {}),
++      };
+ 			// The last call cannot read a tool's result: an operation then must carry its reply (D11).
+ 			if (call === max && !action.text) {
+ 				if (applied) return updated();
+--- a/api/domains/dialogue/service/specialist-settle.ts
++++ b/api/domains/dialogue/service/specialist-settle.ts
+@@ -1,3 +1,4 @@
++import { startTrialReview } from "./trial-evaluator";
+ import { jstSeconds } from "../../../infrastructure/jst-time";
+ import { recordUtteranceInTransaction } from "./utterances";
+ import type { Database } from "bun:sqlite";
+@@ -195,7 +196,10 @@
+ 			return failTurn(deps, tx, run, "permission_revoked");
+ 		const messageId = appendSpecialistAnswer(deps, tx, run, action.text);
+ 		const done = endRun(deps, tx, run, "completed", null, messageId);
+-		if (done) traceOutcome(deps, tx, run.id, { outcome: "completed" });
++		if (done) {
++      traceOutcome(deps, tx, run.id, { outcome: "completed" });
++      if (outcome.result.reviewRequest) startTrialReview(deps, tx, run, session, outcome.result.reviewRequest);
++    }
+ 		return done ? "applied" : "stale";
+ 	}
+ 	return settleHandback(deps, tx, run, session, action);
+--- /dev/null
++++ b/api/domains/dialogue/service/trial-evaluator.ts
+@@ -0,0 +1,394 @@
++import type { Database } from "bun:sqlite";
++import { z } from "zod";
++import { collaborationStateSchema } from "eumenes-collaboration";
++import {
++	evaluate,
++	fingerprint,
++	requestSchema,
++	targetDigests,
++	type EvaluationModel,
++	type EvaluationRequest,
++	type EvaluationResult,
++	type ScopeSelection,
++} from "eumenes-evaluator";
++import { hash } from "../../capabilities";
++import type { ControlContract } from "../../inference";
++import type { QueueService } from "../../queue";
++import type { Run } from "../contracts";
++import { sessionById } from "../repository";
++import {
++	collaborationSources,
++	collaborationState,
++} from "../repository/collaboration-state";
++import type { SessionRecord } from "../repository/specialist";
++import type { DialogueDeps } from "./context";
++import { sessionExpired } from "./specialist-core";
++import { specialistExecutionSource } from "./specialist-source";
++
++const KIND = "dialogue.trial_evaluator";
++const reviewRequestSchema = z.strictObject({
++	question: z.string().trim().min(1).max(350),
++	conditionIds: z.array(z.string().min(1).max(100)).max(16),
++});
++export type TrialReviewRequest = z.infer<typeof reviewRequestSchema>;
++const reviewTimeoutMs = 60000;
++const resultLifetimeMs = 5 * 60000;
++const trialScope = "binding:ui.studio@5";
++const rule =
++	"作品の定義と確定条件を照らしても判断に迷い、独立した確認で次の一手が変わる場合、または利用者が独立レビューを求めた場合は、通常の返答とともに reviewRequest に具体的な確認事項 question を一つ返してください。conditionIds には、作品そのものを判定するために必要な確定条件や決定の ID だけを指定します。進め方や操作の指示は評価対象に含めません。関連する確定条件がなければ空配列にしてください。評価は背景で行われます。結果を待たず、現時点で分かることを返してください。意図や承認が不足する場合は利用者に確認します。有効な評価が既にある場合や同じ評価を待っている場合は、同じ依頼を繰り返さず null を返してください。評価結果は参考資料です。";
++
++type Snapshot = {
++	request: EvaluationRequest;
++	selection: ScopeSelection;
++	signature: string;
++};
++type Job = {
++	id: string;
++	sessionId: string;
++	epoch: number;
++	runId: string;
++	review: TrialReviewRequest;
++	expiresAt: number;
++	deps: DialogueDeps;
++	snapshot: Snapshot;
++	result?: EvaluationResult;
++};
++type Event = { id: string; status: string; result?: EvaluationResult };
++type Trial = { queue: QueueService; jobs: Map<string, Job> };
++let trial: Trial | undefined;
++
++function snapshot(
++	deps: DialogueDeps,
++	db: Database,
++	session: SessionRecord,
++	runId: string,
++	review: TrialReviewRequest,
++	id: string,
++): Snapshot | null {
++	const origin = specialistExecutionSource(
++		deps,
++		db,
++		runId,
++		session.id,
++		session.epoch,
++	);
++	const doc = deps.specialist
++		?.documentOf(session.adapterRef)
++		?.readInTransaction(db, session.workRef);
++	const row = collaborationState(db, session.id);
++	if (!origin || !doc?.text || !row) return null;
++	const saved = collaborationStateSchema.parse(JSON.parse(row.body));
++	const registry = new Map(
++		collaborationSources(db, session.id).map((source) => [source.ref, source]),
++	);
++	const version = String(doc.revision);
++	const document = JSON.parse(doc.text);
++	const targetData = {
++		kind: "workflow" as const,
++		id: session.workRef,
++		version,
++		document,
++	};
++	const target = { ...targetData, ...targetDigests(targetData) };
++	const appliesTo = { id: target.id, version, digest: target.digest };
++	const selected = new Set(review.conditionIds);
++	const entries = [];
++	for (const fact of saved.facts) {
++		if (
++			!selected.has(fact.id) ||
++			fact.status !== "confirmed" ||
++			!["condition", "decision"].includes(fact.kind)
++		)
++			continue;
++		const sources = [];
++		for (const ref of fact.sourceRefs) {
++			const source = registry.get(ref);
++			const message =
++				source &&
++				deps.conversation.messageInTransaction(db, source.message_id)?.message;
++			if (
++				!source?.active ||
++				!message ||
++				message.role !== "user" ||
++				message.conversationId !== session.conversationId ||
++				hash(message.text) !== source.digest ||
++				deps.memory?.isSourceRevokedInTransaction(db, source.message_id)
++			)
++				return null;
++			sources.push({ id: ref, version: source.digest, active: true });
++		}
++		entries.push({
++			id: fact.id,
++			text:
++				typeof fact.value === "string"
++					? fact.value
++					: JSON.stringify(fact.value),
++			status: "confirmed" as const,
++			appliesTo,
++			sources,
++		});
++	}
++	if (entries.length !== selected.size) return null;
++	entries.sort((a, b) => a.id.localeCompare(b.id));
++	const conditionDigest = fingerprint(entries);
++	const request = requestSchema.safeParse({
++		contractVersion: 1,
++		evaluationId: id,
++		rubric: { id: "workflow-correctness", version: 1 },
++		target,
++		scope: ["workflow"],
++		evidence: [],
++		conditions: entries.length
++			? { state: "available", revision: conditionDigest, entries }
++			: { state: "none" },
++		limits: {
++			timeoutMs: reviewTimeoutMs,
++			maxInputBytes: 64 * 1024,
++			maxOutputTokens: 2000,
++		},
++	});
++	if (!request.success) return null;
++	return {
++		request: request.data,
++		selection: {
++			version: 1,
++			targetId: target.id,
++			targetVersion: version,
++			targetDigest: target.digest,
++			include: [{ kind: "pointer", pointer: "" }],
++			conditionIds: entries.map((item) => item.id),
++			focus: review.question,
++		},
++		signature: fingerprint({
++			target: appliesTo,
++			conditionDigest,
++			origin: origin.digest,
++		}),
++	};
++}
++
++function current(db: Database, job: Job) {
++	if (Date.now() >= job.expiresAt) return false;
++	const session = sessionById(db, job.sessionId);
++	if (
++		!session ||
++		session.state !== "active" ||
++		session.epoch !== job.epoch ||
++		sessionExpired(session, job.deps.clock())
++	)
++		return false;
++	try {
++		return (
++			snapshot(job.deps, db, session, job.runId, job.review, job.id)
++				?.signature === job.snapshot.signature
++		);
++	} catch {
++		return false;
++	}
++}
++
++export function registerTrialEvaluator(
++	queue: QueueService,
++	model: EvaluationModel,
++	observe: (event: Event) => void,
++) {
++	const jobs = new Map<string, Job>();
++	const configured = { queue, jobs };
++	trial = configured;
++	queue.registerHandler<
++		{ id: string; sessionId: string },
++		Job,
++		EvaluationResult
++	>({
++		kind: KIND,
++		payloadVersions: [1],
++		schema: z.strictObject({ id: z.uuid(), sessionId: z.string() }),
++		recovery: "interrupt",
++		prepareInTransaction(db, claim) {
++			const job = jobs.get(claim.payload.sessionId);
++			if (job?.id === claim.payload.id && current(db, job))
++				return { status: "ready", input: job };
++			if (job?.id === claim.payload.id) {
++				jobs.delete(job.sessionId);
++				observe({ id: job.id, status: "stale" });
++			}
++			return { status: "stale", reason: "trial_evaluator_stale" };
++		},
++		execute(job, { signal }) {
++			return evaluate(job.snapshot.request, {
++				model,
++				signal,
++				depth: "quick",
++				selection: job.snapshot.selection,
++			});
++		},
++		settleInTransaction(db, _claim, job, outcome) {
++			if (!job || jobs.get(job.sessionId) !== job) return "stale";
++			if (!current(db, job)) {
++				jobs.delete(job.sessionId);
++				observe({ id: job.id, status: "stale" });
++				return "stale";
++			}
++			if (outcome.type !== "success") {
++				jobs.delete(job.sessionId);
++				observe({ id: job.id, status: outcome.type });
++				return "applied";
++			}
++			job.result = outcome.result;
++			observe({
++				id: job.id,
++				status: outcome.result.status,
++				result: outcome.result,
++			});
++			return "applied";
++		},
++		cancelInTransaction(_db, claim) {
++			const job = jobs.get(claim.payload.sessionId);
++			if (job?.id === claim.payload.id) jobs.delete(job.sessionId);
++		},
++	});
++	return () => {
++		if (trial === configured) trial = undefined;
++	};
++}
++
++export function trialReviewControl(
++	control: ControlContract,
++	binding: string,
++	hostObservation: boolean,
++): ControlContract {
++	if (!trial || binding !== trialScope || hostObservation) return control;
++	const schema = control.outputSchema as {
++		properties: Record<string, unknown>;
++		required?: string[];
++	};
++	return {
++		...control,
++		instructions: control.instructions + "\n" + rule,
++		outputSchema: {
++			...schema,
++			properties: {
++				...schema.properties,
++				reviewRequest: {
++					type: ["object", "null"],
++					properties: {
++						question: { type: "string" },
++						conditionIds: { type: "array", items: { type: "string" } },
++					},
++					required: ["question", "conditionIds"],
++					additionalProperties: false,
++				},
++			},
++			required: [...(schema.required ?? []), "reviewRequest"],
++		},
++	};
++}
++
++export function trialReviewAction(
++	value: unknown,
++	binding: string,
++	observation: boolean,
++) {
++	if (
++		!trial ||
++		binding !== trialScope ||
++		observation ||
++		!value ||
++		typeof value !== "object" ||
++		Array.isArray(value) ||
++		!Object.hasOwn(value, "reviewRequest")
++	)
++		return { value, review: undefined };
++	const { reviewRequest, ...action } = value as Record<string, unknown>;
++	const parsed = reviewRequestSchema.safeParse(reviewRequest);
++	return { value: action, review: parsed.success ? parsed.data : undefined };
++}
++
++export function startTrialReview(
++	deps: DialogueDeps,
++	db: Database,
++	run: Run,
++	session: SessionRecord,
++	review: TrialReviewRequest,
++) {
++	if (
++		!trial ||
++		trial.queue !== deps.queue ||
++		session.bindingRevisionId !== trialScope ||
++		run.sourceKind !== "manual"
++	)
++		return;
++	const previous = trial.jobs.get(session.id);
++	if (previous && current(db, previous)) return;
++	const id = crypto.randomUUID();
++	db.exec("SAVEPOINT trial_evaluator");
++	try {
++		const pinned = snapshot(deps, db, session, run.id, review, id);
++		if (!pinned) {
++			db.exec("RELEASE trial_evaluator");
++			return;
++		}
++		const expiresAt = Date.now() + resultLifetimeMs;
++		deps.queue.enqueueInTransaction(db, {
++			scope: "dialogue",
++			kind: KIND,
++			lane: "background",
++			payload: { id, sessionId: session.id },
++			dedupeKey: KIND + ":" + run.id,
++			concurrencyKey: KIND + ":" + session.id,
++			maxAttempts: 1,
++			subjectRef: session.id,
++			deadlineAtMs: expiresAt,
++		});
++		db.exec("RELEASE trial_evaluator");
++		trial.jobs.set(session.id, {
++			id,
++			sessionId: session.id,
++			epoch: session.epoch,
++			runId: run.id,
++			review,
++			expiresAt,
++			deps,
++			snapshot: pinned,
++		});
++	} catch {
++		db.exec("ROLLBACK TO trial_evaluator");
++		db.exec("RELEASE trial_evaluator");
++	}
++}
++
++export function trialReviewReference(
++	db: Database,
++	sessionId: string,
++	currentRunId: string,
++) {
++	const job = trial?.jobs.get(sessionId);
++	if (!job || job.runId === currentRunId || !current(db, job)) return null;
++	const result = job.result;
++	if (!result) return { text: JSON.stringify({ status: "pending" }) };
++	if (result.status !== "completed") return null;
++	return {
++		id: job.id,
++		text: JSON.stringify({
++			status: result.status,
++			question: job.review.question,
++			targetVersion: job.snapshot.request.target.version,
++			findings: result.findings
++				.slice(0, 4)
++				.map(({ title, problem, primary, conditionId }) => ({
++					title,
++					problem: problem.slice(0, 400),
++					primary,
++					conditionId,
++				})),
++			conditionChecks: result.conditionChecks
++				.slice(0, 8)
++				.map(({ conditionId, status, reason, evidence }) => ({
++					conditionId,
++					status,
++					reason: reason.slice(0, 400),
++					evidence: evidence.slice(0, 3),
++				})),
++		}),
++	};
++}
+--- a/tsconfig.json
++++ b/tsconfig.json
+@@ -3,7 +3,13 @@
+ 		"target": "ES2022",
+ 		"module": "ESNext",
+ 		"moduleResolution": "Bundler",
+-		"lib": ["ES2022", "DOM", "DOM.Iterable"],
++		"lib": [
++			"ES2022",
++			"ES2023.Array",
++			"ES2024.Collection",
++			"DOM",
++			"DOM.Iterable"
++		],
+ 		"jsx": "react-jsx",
+ 		"strict": true,
+ 		"noEmit": true,

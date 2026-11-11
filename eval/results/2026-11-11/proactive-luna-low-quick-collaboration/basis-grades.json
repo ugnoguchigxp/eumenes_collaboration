@@ -1,0 +1,110 @@
+{
+  "hard-02:1:C-13": {
+    "status": "correct",
+    "reason": "状態票の有効取消n131と辞退n133を優先"
+  },
+  "hard-02:1:C-16": {
+    "status": "incorrect",
+    "reason": "基準後受領の再取消n163を採用"
+  },
+  "hard-02:1:C-18": {
+    "status": "incorrect",
+    "reason": "基準後受領の発送取消n185を適用"
+  },
+  "hard-02:2:C-13": {
+    "status": "correct",
+    "reason": "状態票の有効取消n131と辞退n133を優先"
+  },
+  "hard-02:2:C-16": {
+    "status": "incorrect",
+    "reason": "基準後受領の再取消n163を採用"
+  },
+  "hard-02:2:C-18": {
+    "status": "incorrect",
+    "reason": "基準後受領の発送取消n185を適用"
+  },
+  "hard-02:1:C-15": {
+    "status": "correct",
+    "reason": "有効取消n151の期限11:52を経過"
+  },
+  "hard-02:1:C-11": {
+    "status": "incorrect",
+    "reason": "有効取消と除外したイベントは正しいが、11:41から12:00までを19分ではなく10分と記載"
+  },
+  "hard-02:1:C-17": {
+    "status": "incorrect",
+    "reason": "決め手の受理ログr173をn173と記載し、有効な辞退n174と遅着の失敗r174を混同"
+  },
+  "hard-02:2:C-11": {
+    "status": "correct",
+    "reason": "n113を採用し旧受理と遅着辞退を除外、19分で期限内"
+  },
+  "hard-02:2:C-15": {
+    "status": "incorrect",
+    "reason": "期限11:52を12:52と記載し、12:00に経過したとする"
+  },
+  "hard-04:1:S-03": {
+    "status": "correct",
+    "reason": "m01でA1を3に訂正し自拠点6と他拠点A4の2を引当"
+  },
+  "hard-04:2:S-03": {
+    "status": "correct",
+    "reason": "m01でA1を3に訂正し自拠点6と他拠点A4の2を引当"
+  },
+  "hard-04:1:S-04": {
+    "status": "incorrect",
+    "reason": "A4が5残ることとB2がWにあることを正しく使わず、引当可能数量を3とする"
+  },
+  "hard-04:1:S-07": {
+    "status": "insufficient",
+    "reason": "S-04への参照のみでB2残2と不足3を説明しない"
+  },
+  "hard-04:1:S-08": {
+    "status": "insufficient",
+    "reason": "正しいB1内訳を返すが、依存行の連鎖のみで残高や引当可否を説明しない"
+  },
+  "hard-04:2:S-04": {
+    "status": "incorrect",
+    "reason": "先行S-03で使ったA4の2を差し引かない"
+  },
+  "hard-04:2:S-07": {
+    "status": "incorrect",
+    "reason": "S-04の消費量が応答内で不一致で、A4とB2の残高も誤り"
+  },
+  "hard-05:1:P-01": {
+    "status": "correct",
+    "reason": "確認済み欄のCONTENT取消が優先"
+  },
+  "hard-05:1:P-03": {
+    "status": "correct",
+    "reason": "確認済みの両承認と解禁到来"
+  },
+  "hard-05:2:P-01": {
+    "status": "correct",
+    "reason": "確認済み欄のCONTENT取消が優先"
+  },
+  "hard-05:2:P-03": {
+    "status": "correct",
+    "reason": "確認済みの両承認と解禁到来"
+  },
+  "hard-05:1:P-04": {
+    "status": "correct",
+    "reason": "w41終了境界、w42版違い、解禁前"
+  },
+  "hard-05:1:P-05": {
+    "status": "correct",
+    "reason": "e53遅着を除外しe52有効、w51適用、P-03通過"
+  },
+  "hard-05:1:P-07": {
+    "status": "correct",
+    "reason": "引継ぎの直接依存連鎖P-06>P-04"
+  },
+  "hard-05:2:P-04": {
+    "status": "insufficient",
+    "reason": "解禁前と記載するが免除を除外した根拠がない"
+  },
+  "hard-05:2:P-05": {
+    "status": "insufficient",
+    "reason": "P-03への参照のみで、e53遅着、e52有効、w51適用の根拠がない"
+  }
+}

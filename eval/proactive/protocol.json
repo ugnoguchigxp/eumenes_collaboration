@@ -1,0 +1,22 @@
+{
+	"version": 1,
+	"status": "draft",
+	"modes": ["A", "A+", "B", "C"],
+	"repetitions": 2,
+	"holdoutPerGroup": 6,
+	"developmentCount": 6,
+	"observationWindowMs": 30000,
+	"baseline": {
+		"eumenesBaseCommit": "4ed26d7fff7aca65e00892cb3b50f8f101ff7e05",
+		"collaborationArchiveSha256": "ce0d56eedc6ada0e67e8aff39daba2ae29caddb4e328c1041620135d2a12450c",
+		"binding": "binding:ui.studio@5",
+		"modelRoute": null,
+		"productSnapshotSha256": null
+	},
+	"liveBudgetUsd": null,
+	"limits": {
+		"maxUnnecessaryProposalsInHoldout": 0,
+		"maxRelativeForegroundP95Increase": 0.1,
+		"maxAbsoluteForegroundP95IncreaseMs": null
+	}
+}

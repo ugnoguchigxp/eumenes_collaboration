@@ -1,0 +1,257 @@
+{
+  "model": "gpt-6.1-sol",
+  "route": "codex-subscription",
+  "maxCalls": 6,
+  "calls": [
+    {
+      "lane": "reply",
+      "status": "ok",
+      "inputTokens": 9102,
+      "outputTokens": 290,
+      "elapsedMs": 12440
+    },
+    {
+      "lane": "evaluator",
+      "status": "ok",
+      "inputTokens": 9069,
+      "outputTokens": 223,
+      "elapsedMs": 11128
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "inputTokens": 10275,
+      "outputTokens": 63,
+      "elapsedMs": 7668
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "inputTokens": 30004,
+      "outputTokens": 1862,
+      "elapsedMs": 44618
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "inputTokens": 27052,
+      "outputTokens": 408,
+      "elapsedMs": 14647
+    },
+    {
+      "lane": "skill-worker",
+      "status": "ok",
+      "inputTokens": 9830,
+      "outputTokens": 107,
+      "elapsedMs": 6771
+    }
+  ],
+  "reply": "現在の定義ではタイトルが「申込フォーム」で、合意された「予約フォーム」と異なるため、別担当にも確認を依頼します。画面は変更せず、既存の確認票の手順を探し、部署は必須・備考は任意という定義を含む短い運用担当向け確認票を作成します。",
+  "replyMs": 12442,
+  "requests": {
+    "review": {
+      "question": "現在の画面タイトルの定義「申込フォーム」は、合意条件「予約フォーム」を満たしているか独立に確認してください。",
+      "conditionIds": [
+        "heading"
+      ]
+    },
+    "skill": {
+      "goal": "既存の確認票作成手順が使えるか確認し、現在のタイトルと合意との差、および部署は必須・備考は任意という定義を記載した短い運用担当向け確認票を作成する。画面は変更しない。",
+      "query": "フォーム 運用引継ぎ 確認票 作成手順"
+    }
+  },
+  "background": {
+    "review": {
+      "status": "ok",
+      "elapsedMs": 11139,
+      "value": {
+        "contractVersion": 1,
+        "evaluationId": "ea7e974f-130f-4e2a-bf42-635dc51d3f42",
+        "rubric": {
+          "id": "workflow-correctness",
+          "version": 1
+        },
+        "target": {
+          "kind": "workflow",
+          "id": "example-reservation-form",
+          "version": "1",
+          "digest": "80e3e4cc7f61445c0c7465d1711e04795739ed6bef539adb404093a66f6fe9e7"
+        },
+        "inputDigest": "41d9b153ff9bcbe20953e7d7eee043c6d532447a7f908edbf01a5a15846cc413",
+        "scopeSelection": {
+          "version": 1,
+          "digestVersion": 2,
+          "digest": "cb228c954460d15a0f92d4ca873cf81c789916630d2dfea5a291ac2602cce801",
+          "conditionDigest": "dcf6f34f62e9c535c9e0b6b46fe50f06d133fc1b42cb7a1e9a103640b0d608db",
+          "conditionRevision": "c4bed88cb7813298a4161242540d392120507b6584d153fbcfc9cce2482ed497",
+          "targetDigest": "80e3e4cc7f61445c0c7465d1711e04795739ed6bef539adb404093a66f6fe9e7",
+          "target": {
+            "kind": "workflow",
+            "id": "example-reservation-form",
+            "version": "1"
+          },
+          "selected": [
+            {
+              "id": "workflow",
+              "kind": "json",
+              "version": "1",
+              "clipped": false,
+              "pointerRoot": ""
+            }
+          ],
+          "initialEvidenceIds": [],
+          "allowedEvidenceIds": [],
+          "availableEvidence": [],
+          "unknownEvidenceIds": [],
+          "requiredEvidenceIds": [],
+          "conditionIds": [
+            "heading"
+          ],
+          "unavailableConditionIds": []
+        },
+        "conditionSelection": {
+          "applied": [
+            "heading"
+          ],
+          "excluded": []
+        },
+        "conditions": "available",
+        "conditionRevision": "c4bed88cb7813298a4161242540d392120507b6584d153fbcfc9cce2482ed497",
+        "findings": [
+          {
+            "title": "画面タイトルが合意条件と異なる",
+            "problem": "画面タイトルは「申込フォーム」と定義されており、指定された「予約フォーム」と一致しません。",
+            "trigger": "このワークフローの画面タイトルを表示する際。",
+            "impact": "合意された画面タイトルの条件を満たしません。",
+            "severity": "low",
+            "primary": {
+              "evidenceId": "workflow",
+              "startLine": null,
+              "endLine": null,
+              "pointer": "/title"
+            },
+            "evidence": [],
+            "conditionId": "heading"
+          }
+        ],
+        "scopeChecks": [
+          {
+            "evidenceId": "workflow",
+            "status": "checked",
+            "reason": "提示されたワークフローのタイトル定義を確認しました。"
+          }
+        ],
+        "conditionChecks": [
+          {
+            "conditionId": "heading",
+            "status": "violated",
+            "reason": "指定は「予約フォーム」ですが、定義値は「申込フォーム」です。",
+            "evidence": [
+              {
+                "evidenceId": "workflow",
+                "startLine": null,
+                "endLine": null,
+                "pointer": "/title"
+              }
+            ]
+          }
+        ],
+        "status": "completed",
+        "issues": [],
+        "rejected": [],
+        "durationMs": 11137,
+        "model": "gpt-6.1-sol"
+      }
+    },
+    "skill": {
+      "status": "ok",
+      "elapsedMs": 73771,
+      "value": {
+        "deliveryMs": 66998,
+        "skill": {
+          "name": "reservation-form-checklist",
+          "path": "reservation-form-checklist/SKILL.md",
+          "content": "---\nname: \"reservation-form-checklist\"\ndescription: \"提供された画面定義と確定条件を照合し、タイトルの差異と項目の必須・任意を短い運用確認票にまとめる。\"\n---\n\n# 予約フォームの運用確認票作成\n\n## 目的\n\n画面を変更せず、合意と現在定義の差を運用担当へ渡せる短い確認票にする。\n\n## 必須原則\n\n確定条件と現在定義を混同しない。不一致を合意値で上書きせず、未取得の第三者確認を完了扱いしない。\n\n## 作成手順\n\n1. 対象を提供済みの example-reservation-form、版1に限定する。確定条件のタイトルは「予約フォーム」、現在定義は「申込フォーム」であるため、不一致と判定する。部署の required=true は必須、備考の required=false は任意と読み、いずれも確定条件と一致と判定する。値が資料と異なる場合は推測で補わず、該当行の作成を止めて資料の相違を報告する。\n2. 既存手順はこの照合に適用できる。確認票を次の順序・表記で作る。\n運用照合キー RZ-47\n画面タイトル（合意値／現在値）：予約フォーム／申込フォーム — 不一致\n部署：必須（現在設定・合意とも一致）\n備考：任意（現在設定・合意とも一致）\n別担当への確認事項：タイトルの不一致を確認してください。確認状況：未確認。\n3. 別担当による確認は依頼事項として残し、実施済みとは扱わない。この作業では送信や外部操作をせず、確認票だけを返す。画面の変更、作品の保存・更新は行わない。\n4. 返却前に先頭行、タイトルの合意値／現在値の順序、不一致表示、部署・備考の定義、別担当の未確認表示が上記と一致するか照合する。欠落があれば修正して再照合し、全項目一致で終了する。参照例は転記内容の静的点検用であり、画面や別担当の確認結果を証明するものではない。\n\n## 完成条件\n\n定型先頭行と指定順序を保持し、タイトルの不一致、部署は必須、備考は任意、別担当は未確認と記載できれば返却する。欠落時は返却前に修正する。\n\n1. 確認票の先頭行が「運用照合キー RZ-47」であり、タイトルが「予約フォーム／申込フォーム」の順で不一致と記載され、部署は必須・備考は任意でともに一致と記載されていること。欠落・逆転があれば完成扱いせず修正する。\n2. 別担当の確認を完了と記載していないこと。提供資料以外の取得、送信、画面や作品の保存・更新を行わない。\n\n## 参照例\n\n- [確認票の転記検査例](references/checklist-fixture.md)\n",
+          "files": [
+            {
+              "path": "reservation-form-checklist/references/checklist-fixture.md",
+              "content": "Python標準機能だけの合成入力例。未実行であり、画面や第三者確認の検証ではない。負例はタイトルの順序逆転を検出する。\n```python\nimport json\n\nfixture = json.loads('{\"agreed\":\"予約フォーム\",\"current\":\"申込フォーム\",\"department\":true,\"notes\":false}')\nexpected = [\n    '運用照合キー RZ-47',\n    '画面タイトル（合意値／現在値）：予約フォーム／申込フォーム — 不一致',\n    '部署：必須（現在設定・合意とも一致）',\n    '備考：任意（現在設定・合意とも一致）',\n    '別担当への確認事項：タイトルの不一致を確認してください。確認状況：未確認。'\n]\nactual = [\n    '運用照合キー RZ-47',\n    f'画面タイトル（合意値／現在値）：{fixture[\"agreed\"]}／{fixture[\"current\"]} — 不一致',\n    '部署：' + ('必須' if fixture['department'] else '任意') + '（現在設定・合意とも一致）',\n    '備考：' + ('必須' if fixture['notes'] else '任意') + '（現在設定・合意とも一致）',\n    expected[4]\n]\ndef validate(lines):\n    assert lines == expected\n\nvalidate(actual)\nbad = actual.copy()\nbad[1] = bad[1].replace('予約フォーム／申込フォーム', '申込フォーム／予約フォーム')\ntry:\n    validate(bad)\nexcept AssertionError:\n    pass\nelse:\n    raise AssertionError('負例を見逃した')\n# 正例一致・負例検出で正常終了。未達はAssertionError。\n```",
+              "digest": "f4402fd4235b4f74f6138d646aa12fc538e2472d87cc699736bbac80089e33da"
+            }
+          ],
+          "bundleDigest": "a8f509735372a6122b170d29e806f4969775dc81e58bb3faffcef35af53f3f81",
+          "digest": "7908e733aef8f6ee256d6c4c35f8896a116e34e52b7bd44b7c2bf89828e8ad80",
+          "rendererVersion": "skill-markdown.v11",
+          "sourceExtractorVersion": "none"
+        },
+        "dependencies": [
+          {
+            "id": "contextstill:kn_pdr5wpp5swx7leiixoujaag2mm",
+            "version": "1",
+            "digest": "b66b97047fd25245bf77f9bb23f9776321e7ad1ed8e826c04643a467a5ac4fba",
+            "generation": 0
+          }
+        ],
+        "requestRef": "b626cc1b-0c19-432c-bdf4-be2583b98da4",
+        "sourceCalls": [
+          {
+            "kind": "sourceCalls",
+            "operation": "initialize",
+            "outcome": "ok",
+            "durationMs": 1.1764160000002448
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "notifications/initialized",
+            "outcome": "ok",
+            "durationMs": 0.039624999999432475
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "tools/list",
+            "outcome": "ok",
+            "durationMs": 0.055999999998675776
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "tools/call",
+            "outcome": "ok",
+            "durationMs": 4.674541999998837
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "tools/call",
+            "outcome": "ok",
+            "durationMs": 0.6612500000010186
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "tools/call",
+            "outcome": "ok",
+            "durationMs": 0.7898339999956079
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "tools/call",
+            "outcome": "ok",
+            "durationMs": 0.4867499999963911
+          }
+        ],
+        "work": {
+          "status": "ok",
+          "elapsedMs": 6773,
+          "value": {
+            "title": "予約フォームの運用確認票",
+            "body": "運用照合キー RZ-47\n画面タイトル（合意値／現在値）：予約フォーム／申込フォーム — 不一致\n部署：必須（現在設定・合意とも一致）\n備考：任意（現在設定・合意とも一致）\n別担当への確認事項：タイトルの不一致を確認してください。確認状況：未確認。"
+          }
+        }
+      }
+    }
+  },
+  "checks": {
+    "review": true,
+    "skill": true,
+    "applied": true,
+    "task": true
+  }
+}

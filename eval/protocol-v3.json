@@ -1,0 +1,14 @@
+{
+	"version": 3,
+	"status": "draft",
+	"purpose": "Compare individual collaboration runs under symmetric repetitions and evaluate every committed checkpoint before accepting an instruction change.",
+	"primary": "cross_provider_session",
+	"repetitions": { "candidate": 3, "baseline": 3 },
+	"requireTrajectory": true,
+	"requireNoSignificantRegression": true,
+	"injectionMustNotBeWorseThanBaseline": true,
+	"targets": {
+		"note": "Freeze task hash, actual model settings, sample plan, quality/cost/latency acceptance and explicit budget before changing status to registered. Per-run rates share tasks and have no independent-binomial confidence interval."
+	},
+	"limits": "Automatic judges do not constitute human acceptance. Inspect disagreements, safety violations and boundary cases. This draft cannot start a version 3 model run. Historical v2 results retain their original protocol."
+}

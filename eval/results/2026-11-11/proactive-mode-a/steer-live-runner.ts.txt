@@ -1,0 +1,52 @@
+import { strict as assert } from "node:assert";
+import { writeFileSync } from "node:fs";
+import { harness } from "./api/application/toolchain/toolchain.fixture";
+import { createCloudAgents } from "./api/domains/inference/adapters/cloud-agents";
+import { configureTrialSteering } from "./api/domains/dialogue/service/trial-steering";
+
+const [model, output] = Bun.argv.slice(2);
+if (!model || !output) throw new Error("usage: model output");
+const agents = createCloudAgents(process.env);
+let sender: Parameters<NonNullable<Parameters<typeof configureTrialSteering>[0]>["onOpen"]>[0] | undefined;
+let rounds = 0;
+let liveCalls = 0;
+const deliveries: unknown[] = [];
+const h = await harness({
+  routeTool: "ui_create", uiCompositions: true, webResearch: false, settingsEnv: {},
+  async specialist(messages, signal, options) {
+    rounds++;
+    const supplement = messages.find((m) => m.content.startsWith("HOST_SUPPLEMENTS"));
+    if (rounds === 1) {
+      assert(!supplement);
+      const tx = sender!;
+      const source = { ...tx.scope, ref: "check-in-record", revision: "2", text: "受付手順の確認記録に記載されている確認番号は KIOSK-27 です。" };
+      tx.store(source);
+      assert.equal(tx.enqueue({ id: "current-record", sourceRef: source.ref, sourceRevision: source.revision }), "accepted");
+      assert.equal(tx.enqueue({ id: "old-record", sourceRef: source.ref, sourceRevision: "1" }), "accepted");
+      return { action: "invoke", tool: "doc.write", arguments: { baseRevision: 0, title: "確認用", content: { view: "text-block", title: "受付確認", body: "確認用の下書きです。" } } };
+    }
+    if (++liveCalls > 4) throw Error("steering_call_budget_exhausted");
+    if (supplement) deliveries.push(JSON.parse(supplement.content.slice(supplement.content.indexOf("=") + 1)));
+    const result = await agents.run({
+      kind: "codex-sdk", model, baseUrl: "https://api.openai.com/v1", credential: null, messages,
+      reasoningEffort: "low", signal: signal ?? AbortSignal.timeout(90000),
+      ...(options?.jsonSchema ? { outputSchema: options.jsonSchema } : {}),
+    });
+    return result.text;
+  },
+});
+configureTrialSteering({ conversationId: "main", onOpen(next) { sender = next; } });
+try {
+  const response = await h.request("/api/runs", {requestId: crypto.randomUUID(), conversationId: "main", text: "受付手順の確認用の画面を用意してください。手順の確認記録が届いたら、そこに記載の確認番号を短く教えてください。"});
+  assert.equal(response.status, 202);
+  const { id } = await response.json() as { id: string };
+  const run = await h.dialogue.waitForTerminal(id, { timeoutMs: 120000 });
+  const answer = h.dialogue.answerText(id);
+  writeFileSync(output, JSON.stringify({ model, status: run?.status, error: run?.error ?? null, answer, rounds, liveCalls, deliveries }, null, 2) + "\n", { flag: "wx" });
+  assert.equal(run?.status, "completed");
+  assert.equal(deliveries.length, 1);
+  assert(answer?.includes("KIOSK-27"));
+} finally {
+  configureTrialSteering(undefined);
+  await h.close();
+}

@@ -1,6 +1,6 @@
 {
 	"name": "eumenes-collaboration",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"license": "MIT",
 	"private": true,
 	"type": "module",
@@ -34,7 +34,8 @@
 		"standalone": "bun standalone/cli.ts",
 		"example": "bun example/cli.ts",
 		"example:check": "bun test ./example/test",
-		"eval:check": "bun eval/check.ts"
+		"eval:check": "bun eval/check.ts",
+		"eval:archive": "bun eval/archive.ts"
 	},
 	"dependencies": {
 		"s11tnext": "0.1.2",

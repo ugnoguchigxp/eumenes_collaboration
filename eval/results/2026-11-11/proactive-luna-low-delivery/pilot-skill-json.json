@@ -1,0 +1,52 @@
+{
+  "requests": {
+    "review": null,
+    "skill": {
+      "goal": "明日の窓口担当が確認事項と着手順を一目で把握できる機材貸出受付引継ぎ票を作る",
+      "query": "機材貸出の受付引継ぎ票の作り方"
+    }
+  },
+  "review": null,
+  "skill": {
+    "status": "failed",
+    "elapsedMs": 27661,
+    "error": "JSON Parse error: Unable to parse JSON string"
+  },
+  "artifact": {
+    "status": "ok",
+    "elapsedMs": 10863,
+    "value": {
+      "title": "機材貸出 受付引継ぎ票（2026年11月13日）",
+      "body": "| 優先 | 案件 | 借用班 | 返却予定 | 点検状況 | 次の担当が確認すること |\n|---|---|---|---|---|---|\n| 1 | EQ-41 | 研修班 | 10:30 | 未確認 | 返却の有無を確認し、返却後に点検を実施して記録する。点検は未実施として扱う。 |\n| 2 | EQ-52 | 営業班 | 16:00 | 済み | 返却の有無を確認する。返却後、受付記録と点検済みの記録を照合する。 |\n\n**対応の順番**：返却予定が早いEQ-41から確認し、次にEQ-52を確認してください。予定時刻は資料の基準時点（2026年11月12日 09:00）時点の情報です。実際の返却状況や、資料にない当日の変更は窓口で確認してください。"
+    }
+  },
+  "calls": [
+    {
+      "lane": "reply",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 123,
+      "inputTokens": 9211,
+      "outputTokens": 347,
+      "elapsedMs": 11906
+    },
+    {
+      "lane": "skill-smith",
+      "status": "failed",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 16008,
+      "outputTokens": 1322,
+      "elapsedMs": 27632
+    },
+    {
+      "lane": "artifact",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 8398,
+      "outputTokens": 277,
+      "elapsedMs": 10861
+    }
+  ]
+}

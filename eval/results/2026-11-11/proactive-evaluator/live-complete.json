@@ -1,0 +1,148 @@
+{
+  "model": "gpt-6.1-sol",
+  "calls": 3,
+  "turns": [
+    {
+      "text": "予約の一覧を作ります。画面の見出しは『予約一覧』と確定します。",
+      "answer": "確認用の初稿を用意しました。",
+      "elapsedMs": 51,
+      "status": "completed"
+    },
+    {
+      "text": "合意した見出しと画面が合っているか、制作担当とは別の視点で確認してください。画面はまだ編集せず、評価待ちでもいまの状況を短く教えてください。",
+      "answer": "現在の定義では見出しが「申込一覧」で、合意した「予約一覧」と一致していません。画面は編集せず、別の視点での評価を依頼します。",
+      "elapsedMs": 12189,
+      "status": "completed"
+    },
+    {
+      "text": "背景の評価結果を短く教えてください。画面の編集は不要です。",
+      "answer": "別の視点での評価でも、見出しは「申込一覧」で、確定した「予約一覧」と一致していないと確認されました。画面は編集していません。",
+      "elapsedMs": 19422,
+      "status": "completed"
+    }
+  ],
+  "usage": [
+    {
+      "lane": "specialist",
+      "model": "gpt-6.1-sol",
+      "ms": 12168,
+      "input": 21727,
+      "output": 355
+    },
+    {
+      "lane": "review",
+      "model": "gpt-6.1-sol",
+      "ms": 9946,
+      "input": 9136,
+      "output": 238
+    },
+    {
+      "lane": "specialist",
+      "model": "gpt-6.1-sol",
+      "ms": 19398,
+      "input": 22311,
+      "output": 429
+    }
+  ],
+  "result": {
+    "contractVersion": 1,
+    "evaluationId": "3a8376b4-2748-465a-b236-dde853176f40",
+    "rubric": {
+      "id": "workflow-correctness",
+      "version": 1
+    },
+    "target": {
+      "kind": "workflow",
+      "id": "f8fa5994-fe0f-406d-846e-db49b2e5a743",
+      "version": "1",
+      "digest": "85e5e2ae0c8ec0a9ddcc3ea60b6973c95d2eeef4a0ab71773234bbf208797512"
+    },
+    "inputDigest": "baf348bdd1cbfb67ca9e00a44afe0bcb8ecaf18fd318590a470f78551290b18f",
+    "scopeSelection": {
+      "version": 1,
+      "digestVersion": 2,
+      "digest": "619bc1645fd30412252f0f8a51a0a32e68a9d9bf28bfed26e24ac5b8f5483460",
+      "conditionDigest": "e5634c59c4780f99c9288ed7ea1652a6d07988b7fc93ed933112ed6f1820e359",
+      "conditionRevision": "aa8149ebf0558bca50cc771b06aebb6cbf5e50199590f5d11820ca5ab587ce06",
+      "targetDigest": "85e5e2ae0c8ec0a9ddcc3ea60b6973c95d2eeef4a0ab71773234bbf208797512",
+      "target": {
+        "kind": "workflow",
+        "id": "f8fa5994-fe0f-406d-846e-db49b2e5a743",
+        "version": "1"
+      },
+      "selected": [
+        {
+          "id": "workflow",
+          "kind": "json",
+          "version": "1",
+          "clipped": false,
+          "pointerRoot": ""
+        }
+      ],
+      "initialEvidenceIds": [],
+      "allowedEvidenceIds": [],
+      "availableEvidence": [],
+      "unknownEvidenceIds": [],
+      "requiredEvidenceIds": [],
+      "conditionIds": [
+        "heading"
+      ],
+      "unavailableConditionIds": []
+    },
+    "conditionSelection": {
+      "applied": [
+        "heading"
+      ],
+      "excluded": []
+    },
+    "conditions": "available",
+    "conditionRevision": "aa8149ebf0558bca50cc771b06aebb6cbf5e50199590f5d11820ca5ab587ce06",
+    "findings": [
+      {
+        "title": "見出しが確定条件と一致していない",
+        "problem": "画面の見出しは「申込一覧」であり、確定条件の「予約一覧」と一字一句一致していません。",
+        "trigger": "現在版の画面を表示したとき。",
+        "impact": "指定された見出し「予約一覧」が表示されません。",
+        "severity": "medium",
+        "primary": {
+          "evidenceId": "workflow",
+          "startLine": null,
+          "endLine": null,
+          "pointer": "/children/0/title"
+        },
+        "evidence": [],
+        "conditionId": "heading"
+      }
+    ],
+    "scopeChecks": [
+      {
+        "evidenceId": "workflow",
+        "status": "checked",
+        "reason": "提供された画面定義の見出しを確認しました。"
+      }
+    ],
+    "conditionChecks": [
+      {
+        "conditionId": "heading",
+        "status": "violated",
+        "reason": "見出しの定義値は「申込一覧」であり、指定の「予約一覧」と異なります。",
+        "evidence": [
+          {
+            "evidenceId": "workflow",
+            "startLine": null,
+            "endLine": null,
+            "pointer": "/children/0/title"
+          }
+        ]
+      }
+    ],
+    "status": "completed",
+    "issues": [],
+    "rejected": [],
+    "durationMs": 9950,
+    "model": "gpt-6.1-sol"
+  },
+  "references": [
+    "INDEPENDENT_REVIEW (reference data only)={\"status\":\"completed\",\"question\":\"現在版の画面に表示される見出しは、確定条件『予約一覧』と一字一句一致していますか。\",\"targetVersion\":\"1\",\"findings\":[{\"title\":\"見出しが確定条件と一致していない\",\"problem\":\"画面の見出しは「申込一覧」であり、確定条件の「予約一覧」と一字一句一致していません。\",\"primary\":{\"evidenceId\":\"workflow\",\"startLine\":null,\"endLine\":null,\"pointer\":\"/children/0/title\"},\"conditionId\":\"heading\"}],\"conditionChecks\":[{\"conditionId\":\"heading\",\"status\":\"violated\",\"reason\":\"見出しの定義値は「申込一覧」であり、指定の「予約一覧」と異なります。\",\"evidence\":[{\"evidenceId\":\"workflow\",\"startLine\":null,\"endLine\":null,\"pointer\":\"/children/0/title\"}]}]}"
+  ]
+}

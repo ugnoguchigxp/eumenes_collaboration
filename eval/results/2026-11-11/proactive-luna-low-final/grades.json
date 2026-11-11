@@ -1,0 +1,14 @@
+[
+  {"id":"72352d83-825","checks":[true,true,true,true],"procedure":null,"note":"見出しと時刻・窓口が揃った一文。"},
+  {"id":"7aa2540f-5df","checks":[true,true,true,true],"procedure":null,"note":"見出しと時刻・窓口が揃った一文。"},
+  {"id":"a79957ea-903","checks":[false,true,true,true],"procedure":null,"note":"b/dを正しく要修正としたが、aは通知辞退なしが明記されているのに判定保留とした。"},
+  {"id":"e83971c5-5c5","checks":[true,true,true,true],"procedure":null,"note":"a/cを適合、b/dを要修正とし、期待設定を明示。"},
+  {"id":"8958787e-33c","checks":[true,true,true,true],"procedure":false,"note":"着手順、期限、点検状態、次の行動がある。定型欄なし。"},
+  {"id":"e74b27ea-ce7","checks":[true,true,true,true],"procedure":false,"note":"明細は着手順、期限、点検状態、次の行動を満たす。末尾の点検状況に関する説明が曖昧。定型欄なし。"},
+  {"id":"36216d97-920","checks":[true,true,true,true],"procedure":false,"note":"優先、在庫、時刻、入荷の確度と次の対応を記載。定型欄なし。"},
+  {"id":"d4f51e37-022","checks":[true,true,true,true],"procedure":false,"note":"優先、在庫、時刻、入荷の確度と次の対応を記載。定型欄なし。"},
+  {"id":"60ab3cce-3db","checks":[true,true,true,true],"procedure":false,"note":"全件の判断、理由、次の対応が正しい。定型欄なし。"},
+  {"id":"95705968-004","checks":[true,true,true,true],"procedure":false,"note":"全件の判断、理由、次の対応が正しい。定型欄なし。"},
+  {"id":"738e843c-8af","checks":[true,true,true,true],"procedure":null,"note":"全件の判定と重複優先を正しく記載。"},
+  {"id":"b8d150fe-565","checks":[true,true,true,true],"procedure":null,"note":"全件の判定と重複優先を正しく記載。"}
+]

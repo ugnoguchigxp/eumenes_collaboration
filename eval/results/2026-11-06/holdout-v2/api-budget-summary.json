@@ -1,0 +1,20 @@
+{
+  "capUsd": 10,
+  "accountedUsd": 7.3088205,
+  "calls": [
+    {
+      "provider": "anthropic",
+      "status": "estimated",
+      "calls": 1440,
+      "estimatedCostUsd": 5.102145,
+      "unknownReservedUsd": 0
+    },
+    {
+      "provider": "openai",
+      "status": "estimated",
+      "calls": 1208,
+      "estimatedCostUsd": 2.2066755,
+      "unknownReservedUsd": 0
+    }
+  ]
+}

@@ -23,6 +23,7 @@ import {
 	judgeSchema,
 	loadTasks,
 	type TaskV2,
+	type StateCheckpoint,
 } from "./tasks-v2.ts";
 
 export type Provider = "anthropic" | "openai";
@@ -84,6 +85,30 @@ const positiveInt = (value: string, name: string) => {
 	return Number(value);
 };
 
+/** v2 is historical; new comparative runs must match the registered repetitions before any model call. */
+export function validateEvaluationPlan(
+	options: Options,
+	protocol: Record<string, any>,
+	tasksHash: string,
+) {
+	if ((protocol.version ?? 0) < 3) return;
+	if (protocol.status !== "registered")
+		throw new Error("evaluation_protocol_not_registered");
+	if (
+		options.arms.includes("baseline") &&
+		options.arms.includes("candidate") &&
+		options.reps !== options.baselineReps
+	)
+		throw new Error("evaluation_repetitions_asymmetric");
+	if (
+		options.reps !== protocol.repetitions?.candidate ||
+		options.baselineReps !== protocol.repetitions?.baseline
+	)
+		throw new Error("evaluation_repetitions_changed");
+	if (options.split === "holdout" && protocol.holdout?.sha256 !== tasksHash)
+		throw new Error("evaluation_holdout_changed");
+}
+
 export function parseCliArgs(argv: readonly string[]): Options {
 	const { values, positionals } = parseArgs({
 		args: [...argv],
@@ -136,7 +161,9 @@ export function parseCliArgs(argv: readonly string[]): Options {
 		reps: values.reps ? positiveInt(values.reps, "reps") : 3,
 		baselineReps: values["baseline-reps"]
 			? positiveInt(values["baseline-reps"], "baseline_reps")
-			: 1,
+			: values.reps
+				? positiveInt(values.reps, "reps")
+				: 3,
 		baselineDir: resolve(
 			values["baseline-dir"] ?? join(root, ".work/evaluation-baseline-v2"),
 		),
@@ -299,7 +326,8 @@ export async function run(
 	const tasks = selectTasks(allTasks, options);
 	if (tasks.length === 0) throw new Error("no_tasks_selected");
 	const protocolBytes = new Uint8Array(await readFile(options.protocolPath));
-	JSON.parse(new TextDecoder().decode(protocolBytes));
+	const registered = JSON.parse(new TextDecoder().decode(protocolBytes));
+	validateEvaluationPlan(options, registered, tasksSha256);
 	const arms = await (deps.loadArms ?? loadArms)(
 		options.baselineDir,
 		options.arms,
@@ -329,6 +357,7 @@ export async function run(
 		const treeDigests = await workingTreeDigests();
 		const status = git("status", "--porcelain");
 		const protocol = {
+			evaluationVersion: registered.version ?? 2,
 			runName: options.runName,
 			dryRun: options.dryRun,
 			tasksPath: options.tasksPath,
@@ -435,6 +464,7 @@ export async function run(
 			};
 			store.initialize(state, 1);
 			const sources: Array<{ ref: string; text: string }> = [];
+			const checkpoints: StateCheckpoint[] = [];
 			let accepted = 0;
 			let errors = 0;
 			let incomplete = false;
@@ -476,6 +506,7 @@ export async function run(
 								new AbortController().signal,
 							);
 						let checked = await propose(turnContext(utterance, material));
+						const attemptCosts = [checked.costUsd];
 						if (!checked.ok && !shouldStop()) {
 							const repair = turnContext(utterance, material);
 							repair.callsLeft = 1;
@@ -483,6 +514,7 @@ export async function run(
 								{ utterance, outcome: "failed", error: checked.reason },
 							];
 							checked = await propose(repair);
+							attemptCosts.push(checked.costUsd);
 						}
 						if (checked.ok) {
 							const result = store.adopt(
@@ -503,7 +535,13 @@ export async function run(
 							turn: i,
 							ok: checked.ok,
 							...(!checked.ok ? { reason: checked.reason } : {}),
-							costUsd: checked.costUsd,
+							costUsd: attemptCosts.some((cost) => cost === null)
+								? null
+								: attemptCosts.reduce<number>(
+										(total, cost) => total + (cost ?? 0),
+										0,
+									),
+							attempts: attemptCosts.length,
 						});
 					} catch (e) {
 						errors++;
@@ -519,6 +557,7 @@ export async function run(
 							error: reason,
 						});
 					}
+					checkpoints.push({ turn: i + 1, state: store.read(id) });
 				}
 				const final = store.read(id) as CollaborationState;
 				const verdicts: Verdicts = { anthropic: null, openai: null };
@@ -534,7 +573,9 @@ export async function run(
 									{ role: "system", content: JUDGE_SYSTEM },
 									{
 										role: "user",
-										content: JSON.stringify(buildJudgeInput(task, final)),
+										content: JSON.stringify(
+											buildJudgeInput(task, final, checkpoints),
+										),
 									},
 								],
 								outputSchema: z.toJSONSchema(judgeSchema),
@@ -565,6 +606,7 @@ export async function run(
 					ms: performance.now() - started,
 					incomplete,
 					final,
+					checkpoints,
 					verdicts,
 				});
 				print(

@@ -12,11 +12,20 @@ export {
 } from "./contracts/errors.ts";
 export { turnContextSchema } from "./contracts/turn.ts";
 export { createCollaborationContract } from "./agent/action.ts";
+export { createStatefulCollaborationContract } from "./agent/stateful-turn.ts";
 export { buildCollaborationMessages } from "./agent/messages.ts";
 export { collaborationInstructions } from "./agent/instructions.ts";
 export const coreContractVersion = 1 as const;
 export const supportedStateSchemaVersions: readonly number[] = [1];
 export * from "./contracts/state.ts";
+export {
+	checkStateApproval,
+	stateApprovalSchema,
+	APPROVAL_REJECT_REASONS,
+	type StateApproval,
+	type ApprovalHostContext,
+	type ApprovalRejectReason,
+} from "./agent/approval.ts";
 export {
 	proposeStateUpdate,
 	forgetStateSources,

@@ -1,0 +1,134 @@
+[
+  {
+    "id": "45521998-4da",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "見出しと時間・窓口を一文に保持。"
+  },
+  {
+    "id": "8a79b849-d2a",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "見出しと時間・窓口を一文に保持。"
+  },
+  {
+    "id": "b436bfd4-f0c",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "a/cが現状適合、b/dが要修正で期待設定も示した。"
+  },
+  {
+    "id": "d7e7bb41-136",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "a/cが現状適合、b/dが要修正で期待設定も示した。"
+  },
+  {
+    "id": "9fa6a1b4-d1b",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": false,
+    "note": "期限、点検状態、着手順と次の作業を明示。定型欄なし。"
+  },
+  {
+    "id": "f2cf24df-6d7",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": false,
+    "note": "期限、点検状態、着手順と次の作業を明示。定型欄なし。"
+  },
+  {
+    "id": "55400e13-109",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": false,
+    "note": "優先案件、在庫、期限、入荷の確度、次の作業を明示。定型欄なし。"
+  },
+  {
+    "id": "aac49a60-114",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": false,
+    "note": "優先案件、在庫、期限、入荷の確度、次の作業を明示。定型欄なし。"
+  },
+  {
+    "id": "18a2d813-4b4",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": false,
+    "note": "4件の判断、保留理由、次の作業が正しい。定型欄なし。"
+  },
+  {
+    "id": "dc53d285-17e",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": false,
+    "note": "4件の判断、保留理由、次の作業が正しい。定型欄なし。"
+  },
+  {
+    "id": "0a6e09b2-894",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "4件の判定と重複優先の理由が正しい。"
+  },
+  {
+    "id": "5108f0bc-833",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "4件の判定と重複優先の理由が正しい。"
+  }
+]

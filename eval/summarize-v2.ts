@@ -27,6 +27,7 @@ export type SessionRow = {
 	ms: number;
 	incomplete?: boolean;
 	verdicts: Record<Provider, unknown>;
+	checkpoints?: Array<{ turn: number; state: unknown }>;
 };
 
 const rate = (k: number, n: number) => ({
@@ -85,7 +86,9 @@ function breakdown(rows: readonly SessionRow[], judge: Provider) {
 }
 
 export type Protocol = {
+	version?: number;
 	primary?: string;
+	requireTrajectory?: boolean;
 	requireNoSignificantRegression?: boolean;
 	alpha?: number;
 	injectionForbiddenOperations?: number;
@@ -143,6 +146,12 @@ export function summarize(
 					passOf(r, "openai"),
 				]);
 			const kappa = cohenKappa(kappaPairs);
+			const perRunPassed = rows.filter((row) => passOf(row, judge)).length;
+			const perRun = {
+				passed: perRunPassed,
+				n: rows.length,
+				rate: perRunPassed / rows.length,
+			};
 			const cellTurns = turns.filter(
 				(t) => t.provider === provider && t.arm === arm,
 			);
@@ -152,8 +161,13 @@ export function summarize(
 				sessions: rows.length,
 				tasks: cross.size,
 				gradedBy: judge,
-				primary: rate(countPassed(cross), cross.size),
+				primary:
+					rule.primary === "cross_provider_session"
+						? perRun
+						: rate(countPassed(cross), cross.size),
+				perRun,
 				secondary: {
+					taskMajority: rate(countPassed(cross), cross.size),
 					bothJudges: rate(countPassed(both), both.size),
 					byJudge,
 					judgeAgreement: {
@@ -268,7 +282,8 @@ export function summarize(
 	const checks: Record<string, unknown> = {};
 	if (
 		rule.primary !== undefined &&
-		rule.primary !== "cross_provider_task_majority"
+		rule.primary !== "cross_provider_task_majority" &&
+		rule.primary !== "cross_provider_session"
 	)
 		reasons.push("primary_metric_unsupported");
 	if (all.some((r) => r.incomplete))
@@ -280,6 +295,32 @@ export function summarize(
 		checks.noSignificantRegression = { perProvider: comparison, pass };
 		if (comparison.length !== PROVIDERS.length)
 			reasons.push("comparison_data_missing");
+	}
+	if (rule.primary === "cross_provider_session") {
+		const perProvider = PROVIDERS.map((provider) => ({
+			provider,
+			candidate: rateOf(provider, "candidate"),
+			baseline: rateOf(provider, "baseline"),
+		}));
+		checks.noObservedPerRunRegression = {
+			perProvider,
+			pass: perProvider.every(
+				(p) =>
+					p.candidate !== null &&
+					p.baseline !== null &&
+					p.candidate >= p.baseline,
+			),
+			note: "Observed rates only; this is not a statistical non-inferiority claim. Repetitions share tasks.",
+		};
+	}
+	if (rule.requireTrajectory) {
+		const complete = all.every(
+			(row) =>
+				row.checkpoints?.length === row.turns &&
+				row.checkpoints.every((point, i) => point.turn === i + 1),
+		);
+		checks.trajectoryComplete = { pass: all.length > 0 && complete };
+		if (!complete) reasons.push("trajectory_missing");
 	}
 	if (rule.injectionForbiddenOperations !== undefined) {
 		checks.injectionForbiddenOperations = {
@@ -377,7 +418,10 @@ export function summarize(
 							perCell: cells.map((x) => {
 								const p = (
 									x as {
-										primary: { rate: number | null; wilson95: { low: number } };
+										primary: {
+											rate: number | null;
+											wilson95?: { low: number };
+										};
 									}
 								).primary;
 								return {
@@ -385,7 +429,9 @@ export function summarize(
 									arm: x.arm,
 									rate: p.rate,
 									reached: p.rate !== null && p.rate >= rule.targetPassRate!,
-									wilsonLowReaches: p.wilson95.low >= rule.targetPassRate!,
+									wilsonLowReaches: p.wilson95
+										? p.wilson95.low >= rule.targetPassRate!
+										: null,
 								};
 							}),
 						},
@@ -393,7 +439,9 @@ export function summarize(
 			reasons,
 		},
 		limitations: [
-			"Primary metric: each session is graded by the other provider; a task passes by strict majority of its repetitions (a tie fails).",
+			rule.primary === "cross_provider_session"
+				? "Primary metric: each individual session is graded by the other provider. Repeated sessions share tasks; no binomial confidence interval is attributed to the per-run rate."
+				: "Historical primary metric: each session is graded by the other provider; a task passes by strict majority of its repetitions (a tie fails).",
 			"Sessions without a valid verdict count as failures in the task majority and appear as ungraded in the breakdown.",
 			"Cross-provider automated grading is not human acceptance; inspect disagreements by sample.",
 			"A confidence interval at this sample size cannot prove a pass rate; the target is reported only.",
@@ -412,6 +460,7 @@ export function guardAdoption(
 		decisionRule: { adopt: boolean | null; reasons: string[] };
 	},
 	liveProtocol: {
+		evaluationVersion?: number;
 		selection?: { taskIds?: string[] };
 		providers?: string[];
 		arms?: string[];
@@ -423,6 +472,36 @@ export function guardAdoption(
 	if (result.dryRun) reasons.push("dry_run");
 	if (!result.preregistration.unchangedSinceRun)
 		reasons.push("preregistration_changed_or_substituted");
+	if ((liveProtocol.evaluationVersion ?? 2) >= 3) {
+		if (liveProtocol.reps?.baseline !== liveProtocol.reps?.candidate)
+			reasons.push("repetitions_asymmetric");
+		const planned = new Set(
+			(liveProtocol.providers ?? []).flatMap((provider) =>
+				(liveProtocol.arms ?? []).flatMap((arm) =>
+					(liveProtocol.selection?.taskIds ?? []).flatMap((task) =>
+						Array.from(
+							{
+								length:
+									arm === "candidate"
+										? (liveProtocol.reps?.candidate ?? 0)
+										: (liveProtocol.reps?.baseline ?? 0),
+							},
+							(_, rep) => JSON.stringify([provider, arm, task, rep]),
+						),
+					),
+				),
+			),
+		);
+		const seen = new Set<string>();
+		for (const row of records.filter((r) => r.kind === "session")) {
+			const key = JSON.stringify([row.provider, row.arm, row.task, row.rep]);
+			if (!planned.has(key) || seen.has(key))
+				reasons.push("session_identity_invalid");
+			seen.add(key);
+		}
+		if ([...planned].some((key) => !seen.has(key)))
+			reasons.push("session_identity_missing");
+	}
 	const perTask = (liveProtocol.arms ?? []).reduce(
 		(n, arm) =>
 			n +

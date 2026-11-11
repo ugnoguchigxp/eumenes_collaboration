@@ -1,0 +1,58 @@
+{
+  "model": "gpt-6-luna",
+  "reasoning": "low",
+  "reply": "SQLiteの外部キー制約は接続ごとの設定で、通常は無効です。接続を開いた直後に `PRAGMA foreign_keys = ON;` を実行してください。出典：SQLite公式「Foreign Key Support」（https://www.sqlite.org/foreignkeys.html）。",
+  "replyMs": 7170,
+  "requests": {
+    "review": null,
+    "skill": null,
+    "research": {
+      "goal": "SQLite外部キー制約が接続直後に通常有効か、および有効化SQLを公式資料で確認する",
+      "query": "SQLite official documentation foreign key support default disabled PRAGMA foreign_keys = ON"
+    }
+  },
+  "backgroundMs": 15665,
+  "review": null,
+  "skill": null,
+  "artifact": {
+    "status": "ok",
+    "elapsedMs": 7729,
+    "value": {
+      "title": "SQLite 外部キー制約の引継ぎメモ",
+      "body": "- SQLiteでは、外部キー制約は接続を開いた直後には通常無効です（`PRAGMA foreign_keys` の既定値は `OFF`）。\n- 接続ごとに、トランザクション開始前に次を実行して有効化します：`PRAGMA foreign_keys = ON;`\n- 出典：SQLite公式ドキュメント「Foreign Key Support」https://www.sqlite.org/foreignkeys.html"
+    }
+  },
+  "research": {
+    "status": "failed",
+    "elapsedMs": 7936,
+    "error": "cloud_agent_web_search_missing"
+  },
+  "calls": [
+    {
+      "lane": "reply",
+      "status": "ok",
+      "timeoutMs": 60000,
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 9001,
+      "outputTokens": 136,
+      "elapsedMs": 7166
+    },
+    {
+      "lane": "research",
+      "status": "failed",
+      "timeoutMs": 60000,
+      "elapsedMs": 7935
+    },
+    {
+      "lane": "artifact",
+      "status": "ok",
+      "timeoutMs": 60000,
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 8291,
+      "outputTokens": 129,
+      "elapsedMs": 7728
+    }
+  ]
+}

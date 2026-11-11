@@ -1,0 +1,3412 @@
+{
+  "metrics": {
+    "current": {
+      "completed": 6,
+      "attempted": 6,
+      "score": 19,
+      "max": 48,
+      "fields": 123,
+      "maxFields": 192,
+      "modelCalls": 12,
+      "inputTokens": 120786,
+      "outputTokens": 3261,
+      "replyMedianMs": 8906.5,
+      "completionMedianMs": 20843.5,
+      "callsByLane": {
+        "reply": 6,
+        "artifact": 6
+      },
+      "callsWithTokenUsage": 12,
+      "failedCalls": 0,
+      "reviewSelected": 0,
+      "reviewOutcomes": {},
+      "skillSelected": 0,
+      "skillOutcomes": {},
+      "fullScore": 0
+    },
+    "evaluator-only": {
+      "completed": 6,
+      "attempted": 6,
+      "score": 18,
+      "max": 48,
+      "fields": 123,
+      "maxFields": 192,
+      "modelCalls": 15,
+      "inputTokens": 147089,
+      "outputTokens": 8707,
+      "replyMedianMs": 10202.0,
+      "completionMedianMs": 45609.5,
+      "callsByLane": {
+        "reply": 6,
+        "artifact": 6,
+        "evaluator": 3
+      },
+      "callsWithTokenUsage": 14,
+      "failedCalls": 1,
+      "reviewSelected": 3,
+      "reviewOutcomes": {
+        "expired": 1,
+        "incomplete": 1,
+        "completed": 1
+      },
+      "skillSelected": 0,
+      "skillOutcomes": {},
+      "fullScore": 0
+    },
+    "skill-only": {
+      "completed": 6,
+      "attempted": 6,
+      "score": 21,
+      "max": 48,
+      "fields": 130,
+      "maxFields": 192,
+      "modelCalls": 16,
+      "inputTokens": 167140,
+      "outputTokens": 4091,
+      "replyMedianMs": 8539.5,
+      "completionMedianMs": 29312.5,
+      "callsByLane": {
+        "reply": 6,
+        "skill-smith": 4,
+        "artifact": 6
+      },
+      "callsWithTokenUsage": 16,
+      "failedCalls": 0,
+      "reviewSelected": 0,
+      "reviewOutcomes": {},
+      "skillSelected": 4,
+      "skillOutcomes": {
+        "ok": 4
+      },
+      "fullScore": 0
+    },
+    "assisted": {
+      "completed": 6,
+      "attempted": 6,
+      "score": 24,
+      "max": 48,
+      "fields": 133,
+      "maxFields": 192,
+      "modelCalls": 20,
+      "inputTokens": 206228,
+      "outputTokens": 13261,
+      "replyMedianMs": 8759.5,
+      "completionMedianMs": 74101.0,
+      "callsByLane": {
+        "reply": 6,
+        "skill-smith": 4,
+        "artifact": 6,
+        "evaluator": 4
+      },
+      "callsWithTokenUsage": 19,
+      "failedCalls": 1,
+      "reviewSelected": 4,
+      "reviewOutcomes": {
+        "incomplete": 2,
+        "completed": 1,
+        "expired": 1
+      },
+      "skillSelected": 4,
+      "skillOutcomes": {
+        "ok": 4
+      },
+      "fullScore": 0
+    }
+  },
+  "contrastsInCorrectRows": {
+    "evaluatorOnlyMinusCurrent": -1,
+    "skillOnlyMinusCurrent": 2,
+    "bothMinusSkillOnly": 3,
+    "bothMinusEvaluatorOnly": 6
+  },
+  "rowTransitionsByCase": {
+    "hard-02": {
+      "current": {
+        "stillIncorrect": 6,
+        "stillCorrect": 10
+      },
+      "evaluator-only": {
+        "stillIncorrect": 6,
+        "stillCorrect": 9,
+        "regressed": 1
+      },
+      "skill-only": {
+        "stillIncorrect": 6,
+        "stillCorrect": 9,
+        "regressed": 1
+      },
+      "assisted": {
+        "stillIncorrect": 6,
+        "stillCorrect": 10
+      }
+    },
+    "hard-04": {
+      "current": {
+        "stillCorrect": 3,
+        "stillIncorrect": 13
+      },
+      "evaluator-only": {
+        "regressed": 1,
+        "stillCorrect": 2,
+        "corrected": 2,
+        "stillIncorrect": 11
+      },
+      "skill-only": {
+        "stillCorrect": 3,
+        "stillIncorrect": 9,
+        "corrected": 4
+      },
+      "assisted": {
+        "stillCorrect": 3,
+        "stillIncorrect": 8,
+        "corrected": 5
+      }
+    },
+    "hard-05": {
+      "current": {
+        "stillIncorrect": 10,
+        "stillCorrect": 6
+      },
+      "evaluator-only": {
+        "stillIncorrect": 10,
+        "stillCorrect": 5,
+        "regressed": 1
+      },
+      "skill-only": {
+        "stillIncorrect": 10,
+        "stillCorrect": 5,
+        "regressed": 1
+      },
+      "assisted": {
+        "stillIncorrect": 10,
+        "stillCorrect": 6
+      }
+    }
+  },
+  "groups": [
+    {
+      "case": "hard-02",
+      "repetition": 1,
+      "arms": {
+        "current": {
+          "artifactId": "208d1b72-38f",
+          "score": 5,
+          "completionMs": 20215,
+          "review": null,
+          "skill": null
+        },
+        "evaluator-only": {
+          "artifactId": "befe4f6d-f5c",
+          "score": 4,
+          "completionMs": 79155,
+          "review": {
+            "status": "expired",
+            "elapsedMs": 60010,
+            "issues": [
+              "deadline_exceeded"
+            ],
+            "findings": [],
+            "checks": [
+              {
+                "row": "C-11",
+                "verdict": null,
+                "expected": "differs",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "C-12",
+                "verdict": null,
+                "expected": "matches",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "C-13",
+                "verdict": null,
+                "expected": "differs",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "C-14",
+                "verdict": null,
+                "expected": "matches",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "C-15",
+                "verdict": null,
+                "expected": "differs",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "C-16",
+                "verdict": null,
+                "expected": "differs",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "C-17",
+                "verdict": null,
+                "expected": "differs",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "C-18",
+                "verdict": null,
+                "expected": "differs",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              }
+            ]
+          },
+          "skill": null
+        },
+        "skill-only": {
+          "artifactId": "527444e9-9aa",
+          "score": 4,
+          "completionMs": 18299,
+          "review": null,
+          "skill": null
+        },
+        "assisted": {
+          "artifactId": "7bd76ae0-451",
+          "score": 5,
+          "completionMs": 72715,
+          "review": {
+            "status": "incomplete",
+            "elapsedMs": 53540,
+            "issues": [
+              "conditions_unverified"
+            ],
+            "findings": [
+              {
+                "row": null,
+                "title": "確認済み状態票の判定不一致",
+                "problem": "C-12は期限前で取消が有効なためSEND、C-15は期限超過のためEXPIREDが期待されますが、現行はそれぞれSENDおよびSENDです。"
+              },
+              {
+                "row": "C-13",
+                "title": "辞退状態より発送状態を優先",
+                "problem": "C-13はOPT_OUTイベントn133があるため、優先順位上OPT_OUTが期待されますが、現行判定はSHIPPEDです。"
+              },
+              {
+                "row": "C-15",
+                "title": "期限切れ注文の判定不一致",
+                "problem": "C-15は期限11:52に対し基準時刻が12:00のためEXPIREDが期待されますが、現行判定はSENDです。"
+              },
+              {
+                "row": "C-16",
+                "title": "無効な取消IDの受理ログを誤適用",
+                "problem": "C-16の最新の有効取消はn163です。受理ログr161は旧取消n161に紐づくためSENTの根拠にならず、期待判定はSENDです。"
+              }
+            ],
+            "checks": [
+              {
+                "row": "C-11",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "C-11の現行判定SENTは受理済みログと優先順位に一致します。"
+              },
+              {
+                "row": "C-12",
+                "verdict": "matches",
+                "expected": "matches",
+                "reason": "C-12の現行判定は期待されるSENDに一致します。"
+              },
+              {
+                "row": "C-13",
+                "verdict": "differs",
+                "expected": "differs",
+                "reason": "C-13は辞退イベントがあるためOPT_OUTが期待され、現行SHIPPEDとは異なります。"
+              },
+              {
+                "row": "C-14",
+                "verdict": "matches",
+                "expected": "matches",
+                "reason": "C-14は発送イベントがあり、OPT_OUTはないためSHIPPEDが期待され、現行と一致します。"
+              },
+              {
+                "row": "C-15",
+                "verdict": "differs",
+                "expected": "differs",
+                "reason": "C-15の期限は基準時刻より前で、期待判定EXPIREDと現行SENDが異なります。"
+              },
+              {
+                "row": "C-16",
+                "verdict": "differs",
+                "expected": "differs",
+                "reason": "C-16は最新の取消n163に対応する受理済みログがなく、旧取消n161の受理は無効です。期待SENDに対して現行SENTは異なります。"
+              },
+              {
+                "row": "C-17",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "C-17の有効取消n171について、試行x172の最終行は12:02受領のFAILEDで、受理済みではありません。辞退n174があるため期待OPT_OUTですが、現行と一致します。"
+              },
+              {
+                "row": "C-18",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "C-18の同時刻イベントはID順に適用すると最新の取消n183が有効です。受理r181は取消n181に紐づくため無効で、SHIPPEDイベントもあるため期待SHIPPEDとなり現行と一致します。"
+              }
+            ]
+          },
+          "skill": null
+        }
+      },
+      "rows": [
+        {
+          "id": "C-11",
+          "expected": [
+            "SEND",
+            "n113",
+            "n113",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n113",
+                "r111",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n113",
+                "r111",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n113",
+                "r111",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n113",
+                "r111",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "C-12",
+          "expected": [
+            "SEND",
+            "n121",
+            "n121",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "SEND",
+                "n121",
+                "n121",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "SEND",
+                "n121",
+                "n121",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "SEND",
+                "n121",
+                "n121",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "SEND",
+                "n121",
+                "n121",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "C-13",
+          "expected": [
+            "OPT_OUT",
+            "n131",
+            "n133",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "OPT_OUT",
+                "n131",
+                "n133",
+                "要修正（現行SHIPPED）"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "OPT_OUT",
+                "n131",
+                "n133",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "OPT_OUT",
+                "n131",
+                "n133",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "OPT_OUT",
+                "n131",
+                "n133",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "C-14",
+          "expected": [
+            "SHIPPED",
+            "n141",
+            "n142",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n141",
+                "n142",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n141",
+                "n142",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "SHIPPED",
+                "n141",
+                "n142",
+                "要修正"
+              ],
+              "transition": "regressed"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n141",
+                "n142",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "C-15",
+          "expected": [
+            "EXPIRED",
+            "n151",
+            "n151",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "EXPIRED",
+                "n151",
+                "n151",
+                "要修正（現行SEND）"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "EXPIRED",
+                "n151",
+                "n151",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "EXPIRED",
+                "n151",
+                "n151",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "EXPIRED",
+                "n151",
+                "n151",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "C-16",
+          "expected": [
+            "NO_CANCEL",
+            "-",
+            "n162",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n163",
+                "r161",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "SEND",
+                "n163",
+                "n163",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "SEND",
+                "n163",
+                "n163",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n163",
+                "r161",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "C-17",
+          "expected": [
+            "SENT",
+            "n171",
+            "r173",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "OPT_OUT",
+                "n171",
+                "n174",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "OPT_OUT",
+                "n171",
+                "n174",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "OPT_OUT",
+                "n171",
+                "n174",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "OPT_OUT",
+                "n171",
+                "n174",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "C-18",
+          "expected": [
+            "SHIPPED",
+            "n183",
+            "n184",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n183",
+                "n184",
+                "要修正（現行SENT）"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n183",
+                "r181",
+                "一致"
+              ],
+              "transition": "regressed"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n183",
+                "n184",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n183",
+                "n184",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "hard-02",
+      "repetition": 2,
+      "arms": {
+        "current": {
+          "artifactId": "104a5044-062",
+          "score": 5,
+          "completionMs": 18124,
+          "review": null,
+          "skill": null
+        },
+        "evaluator-only": {
+          "artifactId": "305023c9-ce3",
+          "score": 5,
+          "completionMs": 21324,
+          "review": null,
+          "skill": null
+        },
+        "skill-only": {
+          "artifactId": "3cbd4b30-56e",
+          "score": 5,
+          "completionMs": 14276,
+          "review": null,
+          "skill": null
+        },
+        "assisted": {
+          "artifactId": "145c38e1-8b3",
+          "score": 5,
+          "completionMs": 79656,
+          "review": {
+            "status": "completed",
+            "elapsedMs": 58297,
+            "issues": [],
+            "findings": [
+              {
+                "row": null,
+                "title": "C-18の現行判定が優先順位と不一致",
+                "problem": "履歴の発効時刻・同時刻のイベントID順適用と、取消IDに紐づく同一試行の最終配信ログを適用すると、C-18はSHIPPEDです。現行値はSENTです。"
+              },
+              {
+                "row": "C-13",
+                "title": "C-13の現行判定が優先順位と不一致",
+                "problem": "確定条件ではOPT_OUTがSHIPPEDより先です。C-13の期待値はOPT_OUTですが現行値はSHIPPEDです。"
+              },
+              {
+                "row": "C-15",
+                "title": "C-15の現行判定が期限境界と不一致",
+                "problem": "状態票の期限11:52を過ぎており、期待値はEXPIREDです。現行値はSENDです。"
+              },
+              {
+                "row": "C-18",
+                "title": "C-18の現行判定が優先順位と不一致",
+                "problem": "C-18の期待値はSHIPPEDですが、現行値はSENTです。"
+              }
+            ],
+            "checks": [
+              {
+                "row": "C-11",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "C-11の現行SENTは、配信受理ログr111により期待値と一致します。"
+              },
+              {
+                "row": "C-12",
+                "verdict": "matches",
+                "expected": "matches",
+                "reason": "C-12は状態票上、取消n121、期限12:07、受理・辞退・発送なしなのでSENDです。"
+              },
+              {
+                "row": "C-13",
+                "verdict": "differs",
+                "expected": "differs",
+                "reason": "C-13は状態票上、辞退イベントn133が優先されSHIPPEDより先にOPT_OUTとなります。"
+              },
+              {
+                "row": "C-14",
+                "verdict": "matches",
+                "expected": "matches",
+                "reason": "C-14は発送イベントn142が有効で、受理ログがないためSHIPPEDです。"
+              },
+              {
+                "row": "C-15",
+                "verdict": "differs",
+                "expected": "differs",
+                "reason": "状態票の期限11:52を基準時刻12:00が過ぎているためEXPIREDです。"
+              },
+              {
+                "row": "C-16",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "C-16の同一試行x161の最終行はr161でACCEPTEDとなり、有効取消n161に紐づくためSENTです。"
+              },
+              {
+                "row": "C-17",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "C-17の有効取消n171に対する試行x171の最終行r172はFAILED。試行x172の最終行r174もFAILEDで、辞退イベントn174によりOPT_OUTとなります。現行値が一致します。"
+              },
+              {
+                "row": "C-18",
+                "verdict": "differs",
+                "expected": "differs",
+                "reason": "C-18の現行SENTは期待値SHIPPEDと異なります。"
+              }
+            ]
+          },
+          "skill": null
+        }
+      },
+      "rows": [
+        {
+          "id": "C-11",
+          "expected": [
+            "SEND",
+            "n113",
+            "n113",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n113",
+                "r111",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n113",
+                "r111",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n113",
+                "r111",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n113",
+                "r111",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "C-12",
+          "expected": [
+            "SEND",
+            "n121",
+            "n121",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "SEND",
+                "n121",
+                "n121",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "SEND",
+                "n121",
+                "n121",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "SEND",
+                "n121",
+                "n121",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "SEND",
+                "n121",
+                "n121",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "C-13",
+          "expected": [
+            "OPT_OUT",
+            "n131",
+            "n133",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "OPT_OUT",
+                "n131",
+                "n133",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "OPT_OUT",
+                "n131",
+                "n133",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "OPT_OUT",
+                "n131",
+                "n133",
+                "要修正（現行SHIPPED）"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "OPT_OUT",
+                "n131",
+                "n133",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "C-14",
+          "expected": [
+            "SHIPPED",
+            "n141",
+            "n142",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n141",
+                "n142",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n141",
+                "n142",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n141",
+                "n142",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n141",
+                "n142",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "C-15",
+          "expected": [
+            "EXPIRED",
+            "n151",
+            "n151",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "EXPIRED",
+                "n151",
+                "n151",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "EXPIRED",
+                "n151",
+                "n151",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "EXPIRED",
+                "n151",
+                "n151",
+                "要修正（現行SEND）"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "EXPIRED",
+                "n151",
+                "n151",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "C-16",
+          "expected": [
+            "NO_CANCEL",
+            "-",
+            "n162",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "SEND",
+                "n163",
+                "n163",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "SEND",
+                "n163",
+                "n163",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "SENT",
+                "n163",
+                "r161",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "SEND",
+                "n163",
+                "n163",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "C-17",
+          "expected": [
+            "SENT",
+            "n171",
+            "r173",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "OPT_OUT",
+                "n171",
+                "n174",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "OPT_OUT",
+                "n171",
+                "n174",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "OPT_OUT",
+                "n171",
+                "n174",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "OPT_OUT",
+                "n171",
+                "n174",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "C-18",
+          "expected": [
+            "SHIPPED",
+            "n183",
+            "n184",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n183",
+                "n184",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n183",
+                "n184",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n183",
+                "n184",
+                "要修正（現行SENT）"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "SHIPPED",
+                "n183",
+                "n184",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "hard-04",
+      "repetition": 1,
+      "arms": {
+        "current": {
+          "artifactId": "8381ef74-576",
+          "score": 2,
+          "completionMs": 23461,
+          "review": null,
+          "skill": null
+        },
+        "evaluator-only": {
+          "artifactId": "94e5b193-0d8",
+          "score": 3,
+          "completionMs": 24064,
+          "review": null,
+          "skill": null
+        },
+        "skill-only": {
+          "artifactId": "a12d145c-df9",
+          "score": 4,
+          "completionMs": 32822,
+          "review": null,
+          "skill": {
+            "status": "ok",
+            "elapsedMs": 8795,
+            "dependencies": [
+              {
+                "id": "contextstill:kn_vbshgpsnvf6xusjkhckjadp4fu",
+                "version": "1",
+                "digest": "3d30372a3a7875d9cd545cdd29fa214a87293e4984509f2a0481a21b89d90150",
+                "generation": 0
+              }
+            ],
+            "name": "skill-b8e97cc31d66",
+            "error": null
+          }
+        },
+        "assisted": {
+          "artifactId": "6cd45bd2-53e",
+          "score": 4,
+          "completionMs": 40937,
+          "review": null,
+          "skill": {
+            "status": "ok",
+            "elapsedMs": 10257,
+            "dependencies": [
+              {
+                "id": "contextstill:kn_vbshgpsnvf6xusjkhckjadp4fu",
+                "version": "1",
+                "digest": "ef9e98ed4f5c9358a9ef1f85a8543a8fe01b9f5f07e6def0493b868d480df4dd",
+                "generation": 0
+              }
+            ],
+            "name": "skill-77987c43abf5",
+            "error": null
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "S-01",
+          "expected": [
+            "3",
+            "ALLOCATE",
+            "A0=4",
+            "0",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "3",
+                "ALLOCATE",
+                "A0=4",
+                "0",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "3",
+                "HOLD",
+                "-",
+                "4",
+                "要修正"
+              ],
+              "transition": "regressed"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "3",
+                "ALLOCATE",
+                "A0=4",
+                "0",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "3",
+                "ALLOCATE",
+                "A0=4",
+                "0",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "S-02",
+          "expected": [
+            "1",
+            "ALLOCATE",
+            "A3=6",
+            "0",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "1",
+                "ALLOCATE",
+                "A3=6",
+                "0",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "1",
+                "ALLOCATE",
+                "A3=6",
+                "0",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "1",
+                "ALLOCATE",
+                "A3=6",
+                "0",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "1",
+                "ALLOCATE",
+                "A3=6",
+                "0",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "S-03",
+          "expected": [
+            "2",
+            "ALLOCATE",
+            "A1=3+A5=3+A4=2",
+            "0",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "2",
+                "HOLD",
+                "-",
+                "1",
+                "要修正（現行はALLOCATE）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "2",
+                "ALLOCATE",
+                "A1=3+A5=3+A4=2",
+                "0",
+                "要修正"
+              ],
+              "transition": "corrected"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "2",
+                "ALLOCATE",
+                "A1=3+A5=3+A2=2",
+                "0",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "2",
+                "HOLD",
+                "-",
+                "1",
+                "要修正（現行ALLOCATE:A1=4+A5=3+A4=1）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "S-04",
+          "expected": [
+            "4",
+            "ALLOCATE",
+            "A4=5+B2=2",
+            "0",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "4",
+                "HOLD",
+                "-",
+                "7",
+                "要修正（現行はALLOCATE）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "4",
+                "ALLOCATE",
+                "A4=5+B2=2",
+                "0",
+                "要修正"
+              ],
+              "transition": "corrected"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "4",
+                "ALLOCATE",
+                "A4=7",
+                "0",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "4",
+                "ALLOCATE",
+                "A4=6+B2=1",
+                "0",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "S-05",
+          "expected": [
+            "5",
+            "HOLD",
+            "-",
+            "2",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "5",
+                "HOLD",
+                "-",
+                "8",
+                "要修正（現行の不足数2）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "5",
+                "HOLD",
+                "-",
+                "8",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "5",
+                "HOLD",
+                "-",
+                "2",
+                "一致"
+              ],
+              "transition": "corrected"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "5",
+                "HOLD",
+                "-",
+                "2",
+                "一致"
+              ],
+              "transition": "corrected"
+            }
+          }
+        },
+        {
+          "id": "S-06",
+          "expected": [
+            "6",
+            "HOLD",
+            "-",
+            "1",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "6",
+                "HOLD",
+                "-",
+                "6",
+                "要修正（現行の不足数1）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "6",
+                "HOLD",
+                "-",
+                "6",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "6",
+                "HOLD",
+                "-",
+                "1",
+                "一致"
+              ],
+              "transition": "corrected"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "6",
+                "HOLD",
+                "-",
+                "1",
+                "一致"
+              ],
+              "transition": "corrected"
+            }
+          }
+        },
+        {
+          "id": "S-07",
+          "expected": [
+            "7",
+            "HOLD",
+            "-",
+            "3",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "7",
+                "HOLD",
+                "-",
+                "5",
+                "要修正（現行はALLOCATE）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "7",
+                "ALLOCATE",
+                "B2=2+B1=3",
+                "0",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "7",
+                "ALLOCATE",
+                "B1=5",
+                "0",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "7",
+                "ALLOCATE",
+                "B1=5",
+                "0",
+                "要修正（現行ALLOCATE:B2=1+B1=4）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "S-08",
+          "expected": [
+            "8",
+            "ALLOCATE",
+            "B1=4",
+            "0",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "8",
+                "HOLD",
+                "-",
+                "4",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "8",
+                "ALLOCATE",
+                "A2=4",
+                "0",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "8",
+                "HOLD",
+                "-",
+                "4",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "8",
+                "ALLOCATE",
+                "A5=3+A2=1",
+                "0",
+                "要修正（現行HOLD:4）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "hard-04",
+      "repetition": 2,
+      "arms": {
+        "current": {
+          "artifactId": "afa5aa6f-af9",
+          "score": 1,
+          "completionMs": 21472,
+          "review": null,
+          "skill": null
+        },
+        "evaluator-only": {
+          "artifactId": "bfed2462-dbf",
+          "score": 1,
+          "completionMs": 21353,
+          "review": null,
+          "skill": null
+        },
+        "skill-only": {
+          "artifactId": "77f937a4-29e",
+          "score": 3,
+          "completionMs": 33664,
+          "review": null,
+          "skill": {
+            "status": "ok",
+            "elapsedMs": 8700,
+            "dependencies": [
+              {
+                "id": "contextstill:kn_vbshgpsnvf6xusjkhckjadp4fu",
+                "version": "1",
+                "digest": "35ed1e8ea1ecc0b4396a5d96ad17f1ef1d1aabc4a13396b4ff607badfa735498",
+                "generation": 0
+              }
+            ],
+            "name": "10-00-890d17a0effc",
+            "error": null
+          }
+        },
+        "assisted": {
+          "artifactId": "2d97541c-9e4",
+          "score": 4,
+          "completionMs": 85055,
+          "review": {
+            "status": "expired",
+            "elapsedMs": 60004,
+            "issues": [
+              "deadline_exceeded"
+            ],
+            "findings": [],
+            "checks": [
+              {
+                "row": "S-01",
+                "verdict": null,
+                "expected": "matches",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "S-02",
+                "verdict": null,
+                "expected": "matches",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "S-03",
+                "verdict": null,
+                "expected": "differs",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "S-04",
+                "verdict": null,
+                "expected": "differs",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "S-05",
+                "verdict": null,
+                "expected": "matches",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "S-06",
+                "verdict": null,
+                "expected": "matches",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "S-07",
+                "verdict": null,
+                "expected": "differs",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              },
+              {
+                "row": "S-08",
+                "verdict": null,
+                "expected": "differs",
+                "reason": "モデルから有効な確認結果が返りませんでした"
+              }
+            ]
+          },
+          "skill": {
+            "status": "ok",
+            "elapsedMs": 23857,
+            "dependencies": [
+              {
+                "id": "contextstill:kn_vbshgpsnvf6xusjkhckjadp4fu",
+                "version": "1",
+                "digest": "6f4c43c9a397e11c50ec45ac4cc64e897ed76ffdb628bad3cd1b01a6541fb11e",
+                "generation": 0
+              }
+            ],
+            "name": "10-00-6ba0731b7404",
+            "error": null
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "S-01",
+          "expected": [
+            "3",
+            "ALLOCATE",
+            "A0=4",
+            "0",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "3",
+                "HOLD",
+                "-",
+                "4",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "3",
+                "HOLD",
+                "-",
+                "4",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "3",
+                "HOLD",
+                "-",
+                "4",
+                "要修正（現行ALLOCATE:A0=4）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "3",
+                "ALLOCATE",
+                "A0=4",
+                "0",
+                "一致"
+              ],
+              "transition": "corrected"
+            }
+          }
+        },
+        {
+          "id": "S-02",
+          "expected": [
+            "1",
+            "ALLOCATE",
+            "A3=6",
+            "0",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "1",
+                "ALLOCATE",
+                "A3=6",
+                "0",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "1",
+                "ALLOCATE",
+                "A3=6",
+                "0",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "1",
+                "ALLOCATE",
+                "A3=6",
+                "0",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "1",
+                "ALLOCATE",
+                "A3=6",
+                "0",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "S-03",
+          "expected": [
+            "2",
+            "ALLOCATE",
+            "A1=3+A5=3+A4=2",
+            "0",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "2",
+                "ALLOCATE",
+                "A1=3+A5=3+A2=2",
+                "0",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "2",
+                "ALLOCATE",
+                "A1=3+A5=3+A2=2",
+                "0",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "2",
+                "ALLOCATE",
+                "A1=3+A5=3+A2=2",
+                "0",
+                "要修正（現行A1=4+A5=3+A4=1）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "2",
+                "HOLD",
+                "-",
+                "1",
+                "要修正（現行：ALLOCATEA1=4+A5=3+A4=1）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "S-04",
+          "expected": [
+            "4",
+            "ALLOCATE",
+            "A4=5+B2=2",
+            "0",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "4",
+                "ALLOCATE",
+                "A4=7",
+                "0",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "4",
+                "ALLOCATE",
+                "A4=7",
+                "0",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "4",
+                "ALLOCATE",
+                "A4=7",
+                "0",
+                "要修正（現行A4=6+B2=1）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "4",
+                "ALLOCATE",
+                "A4=7",
+                "0",
+                "要修正（現行：ALLOCATEA4=6+B2=1）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "S-05",
+          "expected": [
+            "5",
+            "HOLD",
+            "-",
+            "2",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "5",
+                "HOLD",
+                "-",
+                "8",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "5",
+                "HOLD",
+                "-",
+                "8",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "5",
+                "HOLD",
+                "-",
+                "2",
+                "一致（不足数2）"
+              ],
+              "transition": "corrected"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "5",
+                "HOLD",
+                "-",
+                "2",
+                "一致"
+              ],
+              "transition": "corrected"
+            }
+          }
+        },
+        {
+          "id": "S-06",
+          "expected": [
+            "6",
+            "HOLD",
+            "-",
+            "1",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "6",
+                "HOLD",
+                "-",
+                "6",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "6",
+                "HOLD",
+                "-",
+                "6",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "6",
+                "HOLD",
+                "-",
+                "1",
+                "一致（不足数1）"
+              ],
+              "transition": "corrected"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "6",
+                "HOLD",
+                "-",
+                "1",
+                "一致"
+              ],
+              "transition": "corrected"
+            }
+          }
+        },
+        {
+          "id": "S-07",
+          "expected": [
+            "7",
+            "HOLD",
+            "-",
+            "3",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "7",
+                "HOLD",
+                "-",
+                "5",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "7",
+                "ALLOCATE",
+                "B1=5",
+                "0",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "7",
+                "ALLOCATE",
+                "B1=5",
+                "0",
+                "要修正（現行B2=1+B1=4）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "7",
+                "ALLOCATE",
+                "B1=5",
+                "0",
+                "要修正（現行：ALLOCATEB2=1+B1=4）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "S-08",
+          "expected": [
+            "8",
+            "ALLOCATE",
+            "B1=4",
+            "0",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "8",
+                "HOLD",
+                "-",
+                "4",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "8",
+                "ALLOCATE",
+                "A2=4",
+                "0",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "8",
+                "ALLOCATE",
+                "A2=4",
+                "0",
+                "要修正（現行HOLD:4）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "8",
+                "HOLD",
+                "-",
+                "4",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "hard-05",
+      "repetition": 1,
+      "arms": {
+        "current": {
+          "artifactId": "4384113a-fc9",
+          "score": 3,
+          "completionMs": 19941,
+          "review": null,
+          "skill": null
+        },
+        "evaluator-only": {
+          "artifactId": "9e939f03-391",
+          "score": 3,
+          "completionMs": 67155,
+          "review": {
+            "status": "incomplete",
+            "elapsedMs": 44475,
+            "issues": [
+              "model_output_partially_rejected",
+              "scope_unverified",
+              "conditions_unverified"
+            ],
+            "findings": [
+              {
+                "row": "P-01",
+                "title": "確認済みの内容失効を無視",
+                "problem": "P-01 の確認済み承認欄では A2 の内容承認が REVOKE だが、現行判定は READY。"
+              },
+              {
+                "row": "P-07",
+                "title": "有効なPARTNER免除を考慮しない",
+                "problem": "P-07 の G2/PARTNER 免除 w72 は基準時刻に有効で embargo を解除するため、EMBARGO ではなく依存先 P-06 の状態による DEP が期待される。"
+              }
+            ],
+            "checks": [
+              {
+                "row": "P-01",
+                "verdict": "differs",
+                "expected": "differs",
+                "reason": "P-01 は確認済み承認で内容が REVOKE。期待結果は CONTENT（根拠 a13）だが、現行は READY。"
+              },
+              {
+                "row": "P-02",
+                "verdict": "matches",
+                "expected": "matches",
+                "reason": "P-02 は確認済み内容承認が GRANT だが、対象 PARTNER の承認記録がなく期待結果は SCOPE（根拠 -）。現行 SCOPE と一致する。"
+              },
+              {
+                "row": "P-03",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "確認済み承認は内容・対象とも GRANT だが、確認済み embargoReached が true。期待結果 EMBARGO、根拠 P-03 で現行と一致。"
+              },
+              {
+                "row": "P-04",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "P-04 の D1 に対する内容・PARTNER承認は基準時刻までに受領・発効し有効。w41 は有効期間内で一致する免除、w42 は版不一致。期待結果 READY、根拠 d41+d42+w41 で現行と一致。"
+              },
+              {
+                "row": "P-05",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "P-05 の E1 では最新の対象承認 e53 が REVOKE。期待結果 SCOPE（根拠 e53）だが現行は SCOPE で一致。"
+              },
+              {
+                "row": "P-06",
+                "verdict": "matches",
+                "expected": "matches",
+                "reason": "P-06 自身の承認は有効だが依存先 P-05 が SCOPE。期待結果 DEP、根拠 P-05 で現行と一致。"
+              },
+              {
+                "row": "P-07",
+                "verdict": "differs",
+                "expected": "differs",
+                "reason": "P-07 自身の承認は有効だが embargoAt は基準時刻より後。w72 は受領済み・版と対象が一致し有効期間内なので解禁を早められる。期待結果は依存先確認へ進む。P-06 が DEP（末端 P-05 の SCOPE）であるため最初の非READYは P-06、期待根拠 P-06>P-05。現行 EMBARGO は異なる。"
+              },
+              {
+                "row": "P-08",
+                "verdict": "matches",
+                "expected": "matches",
+                "reason": "P-08 の embargoAt は基準時刻より後。PARTNER向け免除 w81 は対象と合わず、PUBLICパッケージを解禁しない。期待結果 EMBARGO で現行と一致。"
+              }
+            ]
+          },
+          "skill": null
+        },
+        "skill-only": {
+          "artifactId": "11a95166-ea4",
+          "score": 3,
+          "completionMs": 28511,
+          "review": null,
+          "skill": {
+            "status": "ok",
+            "elapsedMs": 7210,
+            "dependencies": [
+              {
+                "id": "contextstill:kn_72nrdzihlaf2d37islvr5ptpfe",
+                "version": "1",
+                "digest": "891290256abe1cad4c3c23553c4dd7dcdb1ae0f9c1f94ad311b99c73f661faf6",
+                "generation": 0
+              }
+            ],
+            "name": "skill-f4d47aa6d5f0",
+            "error": null
+          }
+        },
+        "assisted": {
+          "artifactId": "83958d4d-323",
+          "score": 3,
+          "completionMs": 75487,
+          "review": {
+            "status": "incomplete",
+            "elapsedMs": 54863,
+            "issues": [
+              "conditions_unverified"
+            ],
+            "findings": [],
+            "checks": [
+              {
+                "row": "P-01",
+                "verdict": "context",
+                "expected": "differs",
+                "reason": "P-01の現行判定結果を示す補足資料です。"
+              },
+              {
+                "row": "P-02",
+                "verdict": "context",
+                "expected": "matches",
+                "reason": "P-02の現行判定結果を示す補足資料です。"
+              },
+              {
+                "row": "P-03",
+                "verdict": "context",
+                "expected": "differs",
+                "reason": "P-03の現行判定結果を示す補足資料です。"
+              },
+              {
+                "row": "P-04",
+                "verdict": "context",
+                "expected": "differs",
+                "reason": "P-04の現行判定結果を示す補足資料です。"
+              },
+              {
+                "row": "P-05",
+                "verdict": "context",
+                "expected": "differs",
+                "reason": "P-05の現行判定結果を示す補足資料です。"
+              },
+              {
+                "row": "P-06",
+                "verdict": "context",
+                "expected": "matches",
+                "reason": "P-06の現行判定結果を示す補足資料です。"
+              },
+              {
+                "row": "P-07",
+                "verdict": "context",
+                "expected": "differs",
+                "reason": "P-07の現行判定結果を示す補足資料です。"
+              },
+              {
+                "row": "P-08",
+                "verdict": "context",
+                "expected": "matches",
+                "reason": "P-08の現行判定結果を示す補足資料です。"
+              }
+            ]
+          },
+          "skill": {
+            "status": "ok",
+            "elapsedMs": 8277,
+            "dependencies": [
+              {
+                "id": "contextstill:kn_72nrdzihlaf2d37islvr5ptpfe",
+                "version": "1",
+                "digest": "7851d9b7661efc4403f2d907040ac9d28f49e1b2908d6962b45bc2d4ad9bb42b",
+                "generation": 0
+              }
+            ],
+            "name": "skill-8aaaeccf4e85",
+            "error": null
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "P-01",
+          "expected": [
+            "CONTENT",
+            "a13",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "a13",
+                "要修正（現行READY）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "a13",
+                "要修正（現行READY）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "a13",
+                "要修正（現行READY）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "a13",
+                "要修正（現行READY）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "P-02",
+          "expected": [
+            "SCOPE",
+            "-",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "SCOPE",
+                "-",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "SCOPE",
+                "-",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "SCOPE",
+                "-",
+                "一致（現行SCOPE）"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "SCOPE",
+                "-",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "P-03",
+          "expected": [
+            "READY",
+            "c31+c32",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "READY",
+                "c31+c32",
+                "要修正（現行EMBARGO）"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "READY",
+                "c31+c32",
+                "要修正（現行EMBARGO）"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "READY",
+                "c31+c32",
+                "要修正（現行EMBARGO）"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "READY",
+                "c31+c32",
+                "要修正（現行EMBARGO）"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "P-04",
+          "expected": [
+            "EMBARGO",
+            "P-04",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "READY",
+                "d41+d42+w41",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "READY",
+                "d41+d42+w41",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "READY",
+                "d41+d42",
+                "一致（現行READY）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "READY",
+                "d41+d42",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "P-05",
+          "expected": [
+            "READY",
+            "e51+e52+w51",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "e53",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "e53",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "e53",
+                "一致（現行SCOPE）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "e53",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "P-06",
+          "expected": [
+            "DEP",
+            "P-04",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-05",
+                "要修正（現行DEP。根拠IDを修正）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-05",
+                "要修正（現行DEP）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-05",
+                "要修正（現行DEP）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-05",
+                "要修正（現行DEP）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "P-07",
+          "expected": [
+            "DEP",
+            "P-06>P-04",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-06>P-05",
+                "要修正（現行EMBARGO）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-06>P-05",
+                "要修正（現行EMBARGO）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "EMBARGO",
+                "P-07",
+                "要修正（現行EMBARGO）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-06>P-05",
+                "要修正（現行EMBARGO）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "P-08",
+          "expected": [
+            "EMBARGO",
+            "P-08",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "EMBARGO",
+                "P-08",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "EMBARGO",
+                "P-08",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "EMBARGO",
+                "P-08",
+                "一致（現行EMBARGO）"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "EMBARGO",
+                "P-08",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "hard-05",
+      "repetition": 2,
+      "arms": {
+        "current": {
+          "artifactId": "d4267c59-da6",
+          "score": 3,
+          "completionMs": 23623,
+          "review": null,
+          "skill": null
+        },
+        "evaluator-only": {
+          "artifactId": "8137a069-378",
+          "score": 2,
+          "completionMs": 83811,
+          "review": {
+            "status": "completed",
+            "elapsedMs": 55929,
+            "issues": [],
+            "findings": [
+              {
+                "row": "P-07",
+                "title": "P-07の停止理由が依存連鎖でなくEMBARGOになっている",
+                "problem": "現行はEMBARGOだが、P-07自身の条件を満たした後、依存P-06がP-05のSCOPEによりDEPとなるため、期待判定はDEP。根拠はP-05>P-06の形式で停止の連鎖を示す必要がある。"
+              }
+            ],
+            "checks": [
+              {
+                "row": "P-01",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "P-01の現行判定はREADYで、期待判定と一致します。"
+              },
+              {
+                "row": "P-02",
+                "verdict": "matches",
+                "expected": "matches",
+                "reason": "P-02の現行判定はSCOPEで、承認欄に対象承認がなく、PARTNER承認ログもないため期待判定と一致します。"
+              },
+              {
+                "row": "P-03",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "P-03の確認済み票に embargoReached=true とあり、EMBARGO判定は期待どおりです。"
+              },
+              {
+                "row": "P-04",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "P-04は基準時刻までに受領済みのCONTENT/ PARTNER承認が有効で、時刻換算した解禁時刻も到来済みのためREADYが期待されます。"
+              },
+              {
+                "row": "P-05",
+                "verdict": "matches",
+                "expected": "differs",
+                "reason": "P-05では最新の有効なPARTNERログe53がREVOKEであり、SCOPEが期待されます。"
+              },
+              {
+                "row": "P-06",
+                "verdict": "matches",
+                "expected": "matches",
+                "reason": "P-06自身の承認と解禁は満たしますが、指定順の最初の依存P-05がSCOPEとなるためDEPが期待されます。"
+              },
+              {
+                "row": "P-07",
+                "verdict": "differs",
+                "expected": "differs",
+                "reason": "P-07の依存P-06はP-05のSCOPEに連鎖して非READYとなるため、DEPが期待されます。"
+              },
+              {
+                "row": "P-08",
+                "verdict": "matches",
+                "expected": "matches",
+                "reason": "P-08はPUBLIC対象で、PARTNER用免除は適用されず、基準時刻に解禁前のためEMBARGOが期待されます。"
+              }
+            ]
+          },
+          "skill": null
+        },
+        "skill-only": {
+          "artifactId": "13fe3626-b34",
+          "score": 2,
+          "completionMs": 30114,
+          "review": null,
+          "skill": {
+            "status": "ok",
+            "elapsedMs": 8004,
+            "dependencies": [
+              {
+                "id": "contextstill:kn_72nrdzihlaf2d37islvr5ptpfe",
+                "version": "1",
+                "digest": "ab5c2698a5e98b5520e26c9b467c21328a81ea9522e4c9cb88cfcc0726dfab76",
+                "generation": 0
+              }
+            ],
+            "name": "id-b34c20b5c30c",
+            "error": null
+          }
+        },
+        "assisted": {
+          "artifactId": "6f26e419-6cd",
+          "score": 3,
+          "completionMs": 27593,
+          "review": null,
+          "skill": {
+            "status": "ok",
+            "elapsedMs": 8217,
+            "dependencies": [
+              {
+                "id": "contextstill:kn_72nrdzihlaf2d37islvr5ptpfe",
+                "version": "1",
+                "digest": "50114a80b99827ba7a01fc21dd1bb879e0c617ddde5bf1c0001abdaa2d4b9317",
+                "generation": 0
+              }
+            ],
+            "name": "skill-f4e6ed122477",
+            "error": null
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "P-01",
+          "expected": [
+            "CONTENT",
+            "a13",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "a13",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "a13",
+                "要修正（現行READY）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "a13",
+                "要修正：現行READY"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "a13",
+                "要修正（現行READY）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "P-02",
+          "expected": [
+            "SCOPE",
+            "-",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "SCOPE",
+                "-",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "SCOPE",
+                "-",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "SCOPE",
+                "-",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "SCOPE",
+                "-",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "P-03",
+          "expected": [
+            "READY",
+            "c31+c32",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "READY",
+                "c31+c32",
+                "要修正"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "EMBARGO",
+                "P-03",
+                "一致"
+              ],
+              "transition": "regressed"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "READY",
+                "c31+c32",
+                "要修正：現行EMBARGO"
+              ],
+              "transition": "regressed"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "READY",
+                "c31+c32",
+                "要修正（現行EMBARGO）"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        },
+        {
+          "id": "P-04",
+          "expected": [
+            "EMBARGO",
+            "P-04",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "READY",
+                "d41+d42",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "READY",
+                "d41+d42+w41",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "READY",
+                "d41+d42+w41",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "READY",
+                "d41+d42",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "P-05",
+          "expected": [
+            "READY",
+            "e51+e52+w51",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "e53",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "e53",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "e53",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "SCOPE",
+                "e53",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "P-06",
+          "expected": [
+            "DEP",
+            "P-04",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-05",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-05>P-06",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-05",
+                "一致"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-05",
+                "要修正（現行DEP。根拠IDを修正）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "P-07",
+          "expected": [
+            "DEP",
+            "P-06>P-04",
+            "要修正"
+          ],
+          "arms": {
+            "current": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-06>P-05",
+                "要修正"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "evaluator-only": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-05>P-06",
+                "要修正（現行EMBARGO）"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "skill-only": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-06>P-05",
+                "要修正：現行EMBARGO"
+              ],
+              "transition": "stillIncorrect"
+            },
+            "assisted": {
+              "correct": false,
+              "observed": [
+                "DEP",
+                "P-06>P-05",
+                "要修正（現行EMBARGO）"
+              ],
+              "transition": "stillIncorrect"
+            }
+          }
+        },
+        {
+          "id": "P-08",
+          "expected": [
+            "EMBARGO",
+            "P-08",
+            "一致"
+          ],
+          "arms": {
+            "current": {
+              "correct": true,
+              "observed": [
+                "EMBARGO",
+                "P-08",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "evaluator-only": {
+              "correct": true,
+              "observed": [
+                "EMBARGO",
+                "P-08",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "skill-only": {
+              "correct": true,
+              "observed": [
+                "EMBARGO",
+                "P-08",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            },
+            "assisted": {
+              "correct": true,
+              "observed": [
+                "EMBARGO",
+                "P-08",
+                "一致"
+              ],
+              "transition": "stillCorrect"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

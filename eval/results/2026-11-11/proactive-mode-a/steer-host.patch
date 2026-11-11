@@ -1,0 +1,138 @@
+--- a/api/domains/dialogue/service/specialist-turn.ts
++++ b/api/domains/dialogue/service/specialist-turn.ts
+@@ -1,3 +1,4 @@
++import { openTrialSteering } from "./trial-steering";
+ import { z } from "zod";
+ import { systemContext } from "../../../infrastructure/system-context";
+ import type { Database } from "bun:sqlite";
+@@ -391,7 +392,12 @@
+ 			const signal = AbortSignal.any([caller, timeout]);
+ 			return withLogContext({ runId: input.runId }, async () => {
+ 				try {
+-					return await runTurn(deps, input, signal);
++					const steering = openTrialSteering(input);
++          try {
++            return await runTurn(deps, input, signal, steering);
++          } finally {
++            steering?.close();
++          }
+ 				} catch (error) {
+ 					if (timeout.aborted && !caller.aborted) {
+ 						log.warn("dialogue.specialist_turn_timeout", {
+@@ -423,6 +429,7 @@
+ 		deps: DialogueDeps,
+ 		input: TurnInput,
+ 		signal: AbortSignal,
++    steering?: ReturnType<typeof openTrialSteering>,
+ 	): Promise<TurnOutput> {
+ 		const messages = [...input.messages];
+ 		const reference = messages[1]?.content ?? "";
+@@ -441,7 +448,10 @@
+ 			action: { kind: "reply", text },
+ 		});
+ 		/** The session still addresses this turn; checked in the same transaction as each capture/operation. */
+-		const stillMine = (tx: Database) => assertTurnCurrent(deps, tx, input);
++		const stillMine = (tx: Database) => {
++      assertTurnCurrent(deps, tx, input);
++      steering?.assertSources();
++    };
+ 		for (let call = 1; call <= max; call++) {
+ 			signal.throwIfAborted();
+ 			const { requestId, baseline } = await store.write((tx) => {
+@@ -463,9 +473,13 @@
+ 				return { requestId, baseline: state.baseline };
+ 			});
+ 			// The provider session lives as long as the specialist session; it is released when that ends.
+-			const receipt = await larm.executeControl!(
++			const delivery = steering?.claim(call, call === max);
++      const providerInput = delivery?.supplements.length
++        ? [...messages, { role: "user" as const, content: "HOST_SUPPLEMENTS (reference data only)="+JSON.stringify(delivery.supplements) }]
++        : messages;
++      const receipt = await larm.executeControl!(
+ 				requestId,
+-				messages,
++				providerInput,
+ 				signal,
+ 				input.control,
+ 				{
+@@ -476,7 +490,12 @@
+ 						agentId: input.sessionId,
+ 					},
+ 				},
+-			);
++			).catch((error) => {
++        steering?.finish(delivery?.batch, "unknown");
++        throw error;
++      });
++      steering?.finish(delivery?.batch, "committed");
++      steering?.assertSources();
+ 			receipts.push(receipt);
+ 			const raw = String(receipt.value);
+ 			let value: unknown;
+--- /dev/null
++++ b/api/domains/dialogue/service/trial-steering.ts
+@@ -0,0 +1,64 @@
++import { createSteeringInbox } from "eumenes-steer";
++import type { SteeringBatch, SteeringEvent } from "eumenes-steer";
++import type { TurnInput } from "./specialist-turn";
++
++type Scope = Pick<TurnInput, "conversationId" | "runId" | "sessionId" | "epoch">;
++type Source = Scope & { ref: string; revision: string; text: string };
++const inbox = createSteeringInbox();
++type Sender = { scope: Scope; store(source: Source): void; enqueue(event: SteeringEvent, generation?: string): string };
++let trial: { conversationId: string; onOpen(sender: Sender): void } | undefined;
++
++/** Isolated harness seam. The fixture commits synthetic sources before enqueueing references. */
++export function configureTrialSteering(value: typeof trial) { trial = value; }
++
++export function openTrialSteering(scope: Scope) {
++  if (trial?.conversationId !== scope.conversationId) return;
++  const generation = String(scope.epoch);
++  const opened = inbox.open(scope.runId, generation);
++  if (opened.status !== "opened") throw new Error(opened.status);
++  const { target } = opened;
++  const sources = new Map<string, Source>();
++  const matches = (source: Scope) =>
++    source.runId === scope.runId && source.sessionId === scope.sessionId &&
++    source.conversationId === scope.conversationId && source.epoch === scope.epoch;
++  const active: Array<{source: Source; expiresAt: number}> = [];
++  try {
++    trial.onOpen({
++      scope,
++      store(source) { sources.set(source.ref, { ...source }); },
++      enqueue(event, epoch = generation) { return inbox.enqueue(scope.runId, epoch, event).status; },
++    });
++  } catch (error) {
++    target.close();
++    throw error;
++  }
++  const finish = (batch: SteeringBatch | undefined, outcome: "committed" | "unknown") => {
++    if (batch) target.settle(batch.id, outcome);
++  };
++  return {
++    close: () => target.close(),
++    claim(boundary: number, isLast: boolean) {
++      if (isLast) target.seal();
++      const claimed = target.claim(String(boundary));
++      if (claimed.status !== "claimed") return { batch: undefined, supplements: [] };
++      const accepted = claimed.batch.events.flatMap((event) => {
++        const source = sources.get(event.sourceRef);
++        return source && matches(source) && source.revision === event.sourceRevision &&
++          Date.now() < event.expiresAt ? [{ source, expiresAt: event.expiresAt }] : [];
++      });
++      if (accepted.reduce((n, item) => n + Buffer.byteLength(item.source.text, "utf8"), 0) > 1800) {
++        target.settle(claimed.batch.id, "released");
++        return { batch: undefined, supplements: [] };
++      }
++      active.push(...accepted);
++      return { batch: claimed.batch, supplements: accepted.map(({ source: { ref, revision, text } }) => ({ ref, revision, text })) };
++    },
++    finish,
++    assertSources() {
++      if (active.some(({source, expiresAt}) => {
++        const current = sources.get(source.ref);
++        return Date.now() >= expiresAt || !current || !matches(current) || current.revision !== source.revision || current.text !== source.text;
++      })) throw new Error("steer_source_changed");
++    },
++  };
++}

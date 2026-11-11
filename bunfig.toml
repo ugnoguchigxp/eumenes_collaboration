@@ -24,6 +24,8 @@ ignorePatterns = [
 	"node_modules/**",
 	".work/**",
 	"reports/**",
+	# Byte-exact historical evidence is validated by archive hashes, not reformatted.
+	"eval/results/**",
 	"dist/**",
 	"dist-web/**",
 	"coverage/**",

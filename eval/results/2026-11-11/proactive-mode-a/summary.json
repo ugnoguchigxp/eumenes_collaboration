@@ -1,0 +1,110 @@
+{
+  "mode": "A",
+  "status": "complete",
+  "missingCases": [],
+  "providerStop": null,
+  "model": "gpt-6.1-sol",
+  "modelUsageLabels": [
+    "gpt-6.1-sol"
+  ],
+  "modelCalls": 161,
+  "maxModelCalls": 440,
+  "additionalApiKeyBudgetUsd": 0,
+  "reportedApiCostUsd": null,
+  "inputTokens": 2990418,
+  "outputTokens": 76433,
+  "recordedUsageRows": 160,
+  "usageRowsMissingAfterTimeout": 1,
+  "timedOutTurns": [
+    {
+      "taskId": "event-checkin",
+      "repetition": 2,
+      "runId": "91e20849-157d-40fe-8b11-ccf8dccaa269"
+    }
+  ],
+  "rawSha256": "e5b44a81ddf485af3961926e24479faa89d15b9552c6669eb92f9da2ad5f8212",
+  "pairedTasks": 24,
+  "pairsWithDifferentPrimaryOutcome": 3,
+  "provisionalModelJudgment": {
+    "recorded": 48,
+    "completed": 45,
+    "bothCheckpointsAvailable": 45,
+    "assessed": 45,
+    "conditionsMet": 29,
+    "noFollowUpAndConditionsMet": 25,
+    "followUps": 10,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "recordedErrors": 0,
+    "stateCheckpoints": 106,
+    "turns": 106,
+    "foregroundMedianMs": 21821.0,
+    "foregroundP95Ms": 33951
+  },
+  "byGroup": {
+    "blockage": {
+      "recorded": 12,
+      "completed": 12,
+      "bothCheckpointsAvailable": 12,
+      "assessed": 12,
+      "conditionsMet": 6,
+      "noFollowUpAndConditionsMet": 5,
+      "followUps": 3,
+      "rework": 0,
+      "unnecessaryProposals": 0,
+      "recordedErrors": 0,
+      "stateCheckpoints": 27,
+      "turns": 27,
+      "foregroundMedianMs": 20816,
+      "foregroundP95Ms": 29138
+    },
+    "preparation": {
+      "recorded": 12,
+      "completed": 11,
+      "bothCheckpointsAvailable": 11,
+      "assessed": 11,
+      "conditionsMet": 5,
+      "noFollowUpAndConditionsMet": 2,
+      "followUps": 7,
+      "rework": 0,
+      "unnecessaryProposals": 0,
+      "recordedErrors": 0,
+      "stateCheckpoints": 31,
+      "turns": 31,
+      "foregroundMedianMs": 25276,
+      "foregroundP95Ms": 36841
+    },
+    "quiet": {
+      "recorded": 12,
+      "completed": 12,
+      "bothCheckpointsAvailable": 12,
+      "assessed": 12,
+      "conditionsMet": 8,
+      "noFollowUpAndConditionsMet": 8,
+      "followUps": 0,
+      "rework": 0,
+      "unnecessaryProposals": 0,
+      "recordedErrors": 0,
+      "stateCheckpoints": 24,
+      "turns": 24,
+      "foregroundMedianMs": 18265.0,
+      "foregroundP95Ms": 31484
+    },
+    "wait": {
+      "recorded": 12,
+      "completed": 10,
+      "bothCheckpointsAvailable": 10,
+      "assessed": 10,
+      "conditionsMet": 10,
+      "noFollowUpAndConditionsMet": 10,
+      "followUps": 0,
+      "rework": 0,
+      "unnecessaryProposals": 0,
+      "recordedErrors": 0,
+      "stateCheckpoints": 24,
+      "turns": 24,
+      "foregroundMedianMs": 19469.5,
+      "foregroundP95Ms": 31581
+    }
+  }
+}

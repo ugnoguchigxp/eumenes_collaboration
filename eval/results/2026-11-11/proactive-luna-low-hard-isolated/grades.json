@@ -1,0 +1,4370 @@
+[
+  {
+    "case": "hard-02",
+    "id": "104a5044-062",
+    "checks": [
+      {
+        "id": "C-11",
+        "expected": [
+          "SEND",
+          "n113",
+          "n113",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n113",
+          "r111",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-12",
+        "expected": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "observed": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-13",
+        "expected": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-14",
+        "expected": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-15",
+        "expected": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "observed": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-16",
+        "expected": [
+          "NO_CANCEL",
+          "-",
+          "n162",
+          "要修正"
+        ],
+        "observed": [
+          "SEND",
+          "n163",
+          "n163",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-17",
+        "expected": [
+          "SENT",
+          "n171",
+          "r173",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n171",
+          "n174",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-18",
+        "expected": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-02",
+    "id": "145c38e1-8b3",
+    "checks": [
+      {
+        "id": "C-11",
+        "expected": [
+          "SEND",
+          "n113",
+          "n113",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n113",
+          "r111",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-12",
+        "expected": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "observed": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-13",
+        "expected": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-14",
+        "expected": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-15",
+        "expected": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "observed": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-16",
+        "expected": [
+          "NO_CANCEL",
+          "-",
+          "n162",
+          "要修正"
+        ],
+        "observed": [
+          "SEND",
+          "n163",
+          "n163",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-17",
+        "expected": [
+          "SENT",
+          "n171",
+          "r173",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n171",
+          "n174",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-18",
+        "expected": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-02",
+    "id": "208d1b72-38f",
+    "checks": [
+      {
+        "id": "C-11",
+        "expected": [
+          "SEND",
+          "n113",
+          "n113",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n113",
+          "r111",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-12",
+        "expected": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "observed": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-13",
+        "expected": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正（現行SHIPPED）"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-14",
+        "expected": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-15",
+        "expected": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "observed": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正（現行SEND）"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-16",
+        "expected": [
+          "NO_CANCEL",
+          "-",
+          "n162",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n163",
+          "r161",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-17",
+        "expected": [
+          "SENT",
+          "n171",
+          "r173",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n171",
+          "n174",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-18",
+        "expected": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正（現行SENT）"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-02",
+    "id": "305023c9-ce3",
+    "checks": [
+      {
+        "id": "C-11",
+        "expected": [
+          "SEND",
+          "n113",
+          "n113",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n113",
+          "r111",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-12",
+        "expected": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "observed": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-13",
+        "expected": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-14",
+        "expected": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-15",
+        "expected": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "observed": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-16",
+        "expected": [
+          "NO_CANCEL",
+          "-",
+          "n162",
+          "要修正"
+        ],
+        "observed": [
+          "SEND",
+          "n163",
+          "n163",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-17",
+        "expected": [
+          "SENT",
+          "n171",
+          "r173",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n171",
+          "n174",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-18",
+        "expected": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-02",
+    "id": "3cbd4b30-56e",
+    "checks": [
+      {
+        "id": "C-11",
+        "expected": [
+          "SEND",
+          "n113",
+          "n113",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n113",
+          "r111",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-12",
+        "expected": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "observed": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-13",
+        "expected": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正（現行SHIPPED）"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-14",
+        "expected": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-15",
+        "expected": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "observed": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正（現行SEND）"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-16",
+        "expected": [
+          "NO_CANCEL",
+          "-",
+          "n162",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n163",
+          "r161",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-17",
+        "expected": [
+          "SENT",
+          "n171",
+          "r173",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n171",
+          "n174",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-18",
+        "expected": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正（現行SENT）"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-02",
+    "id": "527444e9-9aa",
+    "checks": [
+      {
+        "id": "C-11",
+        "expected": [
+          "SEND",
+          "n113",
+          "n113",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n113",
+          "r111",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-12",
+        "expected": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "observed": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-13",
+        "expected": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-14",
+        "expected": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-15",
+        "expected": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "observed": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-16",
+        "expected": [
+          "NO_CANCEL",
+          "-",
+          "n162",
+          "要修正"
+        ],
+        "observed": [
+          "SEND",
+          "n163",
+          "n163",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-17",
+        "expected": [
+          "SENT",
+          "n171",
+          "r173",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n171",
+          "n174",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-18",
+        "expected": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-02",
+    "id": "7bd76ae0-451",
+    "checks": [
+      {
+        "id": "C-11",
+        "expected": [
+          "SEND",
+          "n113",
+          "n113",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n113",
+          "r111",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-12",
+        "expected": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "observed": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-13",
+        "expected": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-14",
+        "expected": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-15",
+        "expected": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "observed": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-16",
+        "expected": [
+          "NO_CANCEL",
+          "-",
+          "n162",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n163",
+          "r161",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-17",
+        "expected": [
+          "SENT",
+          "n171",
+          "r173",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n171",
+          "n174",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-18",
+        "expected": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-02",
+    "id": "befe4f6d-f5c",
+    "checks": [
+      {
+        "id": "C-11",
+        "expected": [
+          "SEND",
+          "n113",
+          "n113",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n113",
+          "r111",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-12",
+        "expected": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "observed": [
+          "SEND",
+          "n121",
+          "n121",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-13",
+        "expected": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n131",
+          "n133",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-14",
+        "expected": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "observed": [
+          "SHIPPED",
+          "n141",
+          "n142",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-15",
+        "expected": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "observed": [
+          "EXPIRED",
+          "n151",
+          "n151",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "C-16",
+        "expected": [
+          "NO_CANCEL",
+          "-",
+          "n162",
+          "要修正"
+        ],
+        "observed": [
+          "SEND",
+          "n163",
+          "n163",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-17",
+        "expected": [
+          "SENT",
+          "n171",
+          "r173",
+          "要修正"
+        ],
+        "observed": [
+          "OPT_OUT",
+          "n171",
+          "n174",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "C-18",
+        "expected": [
+          "SHIPPED",
+          "n183",
+          "n184",
+          "要修正"
+        ],
+        "observed": [
+          "SENT",
+          "n183",
+          "r181",
+          "一致"
+        ],
+        "fields": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "hard-04",
+    "id": "2d97541c-9e4",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A4=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "2",
+          "HOLD",
+          "-",
+          "1",
+          "要修正（現行：ALLOCATEA1=4+A5=3+A4=1）"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "4",
+          "ALLOCATE",
+          "A4=5+B2=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "4",
+          "ALLOCATE",
+          "A4=7",
+          "0",
+          "要修正（現行：ALLOCATEA4=6+B2=1）"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致"
+        ],
+        "observed": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致"
+        ],
+        "observed": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "7",
+          "HOLD",
+          "-",
+          "3",
+          "要修正"
+        ],
+        "observed": [
+          "7",
+          "ALLOCATE",
+          "B1=5",
+          "0",
+          "要修正（現行：ALLOCATEB2=1+B1=4）"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "8",
+          "ALLOCATE",
+          "B1=4",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "8",
+          "HOLD",
+          "-",
+          "4",
+          "一致"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "hard-04",
+    "id": "6cd45bd2-53e",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A4=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "2",
+          "HOLD",
+          "-",
+          "1",
+          "要修正（現行ALLOCATE:A1=4+A5=3+A4=1）"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "4",
+          "ALLOCATE",
+          "A4=5+B2=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "4",
+          "ALLOCATE",
+          "A4=6+B2=1",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致"
+        ],
+        "observed": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致"
+        ],
+        "observed": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "7",
+          "HOLD",
+          "-",
+          "3",
+          "要修正"
+        ],
+        "observed": [
+          "7",
+          "ALLOCATE",
+          "B1=5",
+          "0",
+          "要修正（現行ALLOCATE:B2=1+B1=4）"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "8",
+          "ALLOCATE",
+          "B1=4",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "8",
+          "ALLOCATE",
+          "A5=3+A2=1",
+          "0",
+          "要修正（現行HOLD:4）"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "hard-04",
+    "id": "77f937a4-29e",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "3",
+          "HOLD",
+          "-",
+          "4",
+          "要修正（現行ALLOCATE:A0=4）"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A4=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A2=2",
+          "0",
+          "要修正（現行A1=4+A5=3+A4=1）"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "4",
+          "ALLOCATE",
+          "A4=5+B2=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "4",
+          "ALLOCATE",
+          "A4=7",
+          "0",
+          "要修正（現行A4=6+B2=1）"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致"
+        ],
+        "observed": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致（不足数2）"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致"
+        ],
+        "observed": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致（不足数1）"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "7",
+          "HOLD",
+          "-",
+          "3",
+          "要修正"
+        ],
+        "observed": [
+          "7",
+          "ALLOCATE",
+          "B1=5",
+          "0",
+          "要修正（現行B2=1+B1=4）"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "8",
+          "ALLOCATE",
+          "B1=4",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "8",
+          "ALLOCATE",
+          "A2=4",
+          "0",
+          "要修正（現行HOLD:4）"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "hard-04",
+    "id": "8381ef74-576",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A4=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "2",
+          "HOLD",
+          "-",
+          "1",
+          "要修正（現行はALLOCATE）"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "4",
+          "ALLOCATE",
+          "A4=5+B2=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "4",
+          "HOLD",
+          "-",
+          "7",
+          "要修正（現行はALLOCATE）"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致"
+        ],
+        "observed": [
+          "5",
+          "HOLD",
+          "-",
+          "8",
+          "要修正（現行の不足数2）"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致"
+        ],
+        "observed": [
+          "6",
+          "HOLD",
+          "-",
+          "6",
+          "要修正（現行の不足数1）"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "7",
+          "HOLD",
+          "-",
+          "3",
+          "要修正"
+        ],
+        "observed": [
+          "7",
+          "HOLD",
+          "-",
+          "5",
+          "要修正（現行はALLOCATE）"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "8",
+          "ALLOCATE",
+          "B1=4",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "8",
+          "HOLD",
+          "-",
+          "4",
+          "一致"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "hard-04",
+    "id": "94e5b193-0d8",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "3",
+          "HOLD",
+          "-",
+          "4",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A4=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A4=2",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "4",
+          "ALLOCATE",
+          "A4=5+B2=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "4",
+          "ALLOCATE",
+          "A4=5+B2=2",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致"
+        ],
+        "observed": [
+          "5",
+          "HOLD",
+          "-",
+          "8",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致"
+        ],
+        "observed": [
+          "6",
+          "HOLD",
+          "-",
+          "6",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "7",
+          "HOLD",
+          "-",
+          "3",
+          "要修正"
+        ],
+        "observed": [
+          "7",
+          "ALLOCATE",
+          "B2=2+B1=3",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "8",
+          "ALLOCATE",
+          "B1=4",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "8",
+          "ALLOCATE",
+          "A2=4",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "hard-04",
+    "id": "a12d145c-df9",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A4=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A2=2",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "4",
+          "ALLOCATE",
+          "A4=5+B2=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "4",
+          "ALLOCATE",
+          "A4=7",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致"
+        ],
+        "observed": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致"
+        ],
+        "observed": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "7",
+          "HOLD",
+          "-",
+          "3",
+          "要修正"
+        ],
+        "observed": [
+          "7",
+          "ALLOCATE",
+          "B1=5",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "8",
+          "ALLOCATE",
+          "B1=4",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "8",
+          "HOLD",
+          "-",
+          "4",
+          "一致"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "hard-04",
+    "id": "afa5aa6f-af9",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "3",
+          "HOLD",
+          "-",
+          "4",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A4=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A2=2",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "4",
+          "ALLOCATE",
+          "A4=5+B2=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "4",
+          "ALLOCATE",
+          "A4=7",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致"
+        ],
+        "observed": [
+          "5",
+          "HOLD",
+          "-",
+          "8",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致"
+        ],
+        "observed": [
+          "6",
+          "HOLD",
+          "-",
+          "6",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "7",
+          "HOLD",
+          "-",
+          "3",
+          "要修正"
+        ],
+        "observed": [
+          "7",
+          "HOLD",
+          "-",
+          "5",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "8",
+          "ALLOCATE",
+          "B1=4",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "8",
+          "HOLD",
+          "-",
+          "4",
+          "一致"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "hard-04",
+    "id": "bfed2462-dbf",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "3",
+          "ALLOCATE",
+          "A0=4",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "3",
+          "HOLD",
+          "-",
+          "4",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "observed": [
+          "1",
+          "ALLOCATE",
+          "A3=6",
+          "0",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A4=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "2",
+          "ALLOCATE",
+          "A1=3+A5=3+A2=2",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "4",
+          "ALLOCATE",
+          "A4=5+B2=2",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "4",
+          "ALLOCATE",
+          "A4=7",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "5",
+          "HOLD",
+          "-",
+          "2",
+          "一致"
+        ],
+        "observed": [
+          "5",
+          "HOLD",
+          "-",
+          "8",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "6",
+          "HOLD",
+          "-",
+          "1",
+          "一致"
+        ],
+        "observed": [
+          "6",
+          "HOLD",
+          "-",
+          "6",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "7",
+          "HOLD",
+          "-",
+          "3",
+          "要修正"
+        ],
+        "observed": [
+          "7",
+          "ALLOCATE",
+          "B1=5",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          false,
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "8",
+          "ALLOCATE",
+          "B1=4",
+          "0",
+          "要修正"
+        ],
+        "observed": [
+          "8",
+          "ALLOCATE",
+          "A2=4",
+          "0",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "hard-05",
+    "id": "11a95166-ea4",
+    "checks": [
+      {
+        "id": "P-01",
+        "expected": [
+          "CONTENT",
+          "a13",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "a13",
+          "要修正（現行READY）"
+        ],
+        "fields": [
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-02",
+        "expected": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "observed": [
+          "SCOPE",
+          "-",
+          "一致（現行SCOPE）"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-03",
+        "expected": [
+          "READY",
+          "c31+c32",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "c31+c32",
+          "要修正（現行EMBARGO）"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-04",
+        "expected": [
+          "EMBARGO",
+          "P-04",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "d41+d42",
+          "一致（現行READY）"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-05",
+        "expected": [
+          "READY",
+          "e51+e52+w51",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "e53",
+          "一致（現行SCOPE）"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-06",
+        "expected": [
+          "DEP",
+          "P-04",
+          "一致"
+        ],
+        "observed": [
+          "DEP",
+          "P-05",
+          "要修正（現行DEP）"
+        ],
+        "fields": [
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-07",
+        "expected": [
+          "DEP",
+          "P-06>P-04",
+          "要修正"
+        ],
+        "observed": [
+          "EMBARGO",
+          "P-07",
+          "要修正（現行EMBARGO）"
+        ],
+        "fields": [
+          false,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-08",
+        "expected": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "observed": [
+          "EMBARGO",
+          "P-08",
+          "一致（現行EMBARGO）"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-05",
+    "id": "13fe3626-b34",
+    "checks": [
+      {
+        "id": "P-01",
+        "expected": [
+          "CONTENT",
+          "a13",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "a13",
+          "要修正：現行READY"
+        ],
+        "fields": [
+          false,
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-02",
+        "expected": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "observed": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-03",
+        "expected": [
+          "READY",
+          "c31+c32",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "c31+c32",
+          "要修正：現行EMBARGO"
+        ],
+        "fields": [
+          true,
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-04",
+        "expected": [
+          "EMBARGO",
+          "P-04",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "d41+d42+w41",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-05",
+        "expected": [
+          "READY",
+          "e51+e52+w51",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "e53",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-06",
+        "expected": [
+          "DEP",
+          "P-04",
+          "一致"
+        ],
+        "observed": [
+          "DEP",
+          "P-05",
+          "一致"
+        ],
+        "fields": [
+          true,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-07",
+        "expected": [
+          "DEP",
+          "P-06>P-04",
+          "要修正"
+        ],
+        "observed": [
+          "DEP",
+          "P-06>P-05",
+          "要修正：現行EMBARGO"
+        ],
+        "fields": [
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-08",
+        "expected": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "observed": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-05",
+    "id": "4384113a-fc9",
+    "checks": [
+      {
+        "id": "P-01",
+        "expected": [
+          "CONTENT",
+          "a13",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "a13",
+          "要修正（現行READY）"
+        ],
+        "fields": [
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-02",
+        "expected": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "observed": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-03",
+        "expected": [
+          "READY",
+          "c31+c32",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "c31+c32",
+          "要修正（現行EMBARGO）"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-04",
+        "expected": [
+          "EMBARGO",
+          "P-04",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "d41+d42+w41",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-05",
+        "expected": [
+          "READY",
+          "e51+e52+w51",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "e53",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-06",
+        "expected": [
+          "DEP",
+          "P-04",
+          "一致"
+        ],
+        "observed": [
+          "DEP",
+          "P-05",
+          "要修正（現行DEP。根拠IDを修正）"
+        ],
+        "fields": [
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-07",
+        "expected": [
+          "DEP",
+          "P-06>P-04",
+          "要修正"
+        ],
+        "observed": [
+          "DEP",
+          "P-06>P-05",
+          "要修正（現行EMBARGO）"
+        ],
+        "fields": [
+          true,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-08",
+        "expected": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "observed": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-05",
+    "id": "6f26e419-6cd",
+    "checks": [
+      {
+        "id": "P-01",
+        "expected": [
+          "CONTENT",
+          "a13",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "a13",
+          "要修正（現行READY）"
+        ],
+        "fields": [
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-02",
+        "expected": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "observed": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-03",
+        "expected": [
+          "READY",
+          "c31+c32",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "c31+c32",
+          "要修正（現行EMBARGO）"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-04",
+        "expected": [
+          "EMBARGO",
+          "P-04",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "d41+d42",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-05",
+        "expected": [
+          "READY",
+          "e51+e52+w51",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "e53",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-06",
+        "expected": [
+          "DEP",
+          "P-04",
+          "一致"
+        ],
+        "observed": [
+          "DEP",
+          "P-05",
+          "要修正（現行DEP。根拠IDを修正）"
+        ],
+        "fields": [
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-07",
+        "expected": [
+          "DEP",
+          "P-06>P-04",
+          "要修正"
+        ],
+        "observed": [
+          "DEP",
+          "P-06>P-05",
+          "要修正（現行EMBARGO）"
+        ],
+        "fields": [
+          true,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-08",
+        "expected": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "observed": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-05",
+    "id": "8137a069-378",
+    "checks": [
+      {
+        "id": "P-01",
+        "expected": [
+          "CONTENT",
+          "a13",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "a13",
+          "要修正（現行READY）"
+        ],
+        "fields": [
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-02",
+        "expected": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "observed": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-03",
+        "expected": [
+          "READY",
+          "c31+c32",
+          "要修正"
+        ],
+        "observed": [
+          "EMBARGO",
+          "P-03",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-04",
+        "expected": [
+          "EMBARGO",
+          "P-04",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "d41+d42+w41",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-05",
+        "expected": [
+          "READY",
+          "e51+e52+w51",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "e53",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-06",
+        "expected": [
+          "DEP",
+          "P-04",
+          "一致"
+        ],
+        "observed": [
+          "DEP",
+          "P-05>P-06",
+          "一致"
+        ],
+        "fields": [
+          true,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-07",
+        "expected": [
+          "DEP",
+          "P-06>P-04",
+          "要修正"
+        ],
+        "observed": [
+          "DEP",
+          "P-05>P-06",
+          "要修正（現行EMBARGO）"
+        ],
+        "fields": [
+          true,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-08",
+        "expected": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "observed": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-05",
+    "id": "83958d4d-323",
+    "checks": [
+      {
+        "id": "P-01",
+        "expected": [
+          "CONTENT",
+          "a13",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "a13",
+          "要修正（現行READY）"
+        ],
+        "fields": [
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-02",
+        "expected": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "observed": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-03",
+        "expected": [
+          "READY",
+          "c31+c32",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "c31+c32",
+          "要修正（現行EMBARGO）"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-04",
+        "expected": [
+          "EMBARGO",
+          "P-04",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "d41+d42",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-05",
+        "expected": [
+          "READY",
+          "e51+e52+w51",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "e53",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-06",
+        "expected": [
+          "DEP",
+          "P-04",
+          "一致"
+        ],
+        "observed": [
+          "DEP",
+          "P-05",
+          "要修正（現行DEP）"
+        ],
+        "fields": [
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-07",
+        "expected": [
+          "DEP",
+          "P-06>P-04",
+          "要修正"
+        ],
+        "observed": [
+          "DEP",
+          "P-06>P-05",
+          "要修正（現行EMBARGO）"
+        ],
+        "fields": [
+          true,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-08",
+        "expected": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "observed": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-05",
+    "id": "9e939f03-391",
+    "checks": [
+      {
+        "id": "P-01",
+        "expected": [
+          "CONTENT",
+          "a13",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "a13",
+          "要修正（現行READY）"
+        ],
+        "fields": [
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-02",
+        "expected": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "observed": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-03",
+        "expected": [
+          "READY",
+          "c31+c32",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "c31+c32",
+          "要修正（現行EMBARGO）"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-04",
+        "expected": [
+          "EMBARGO",
+          "P-04",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "d41+d42+w41",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-05",
+        "expected": [
+          "READY",
+          "e51+e52+w51",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "e53",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-06",
+        "expected": [
+          "DEP",
+          "P-04",
+          "一致"
+        ],
+        "observed": [
+          "DEP",
+          "P-05",
+          "要修正（現行DEP）"
+        ],
+        "fields": [
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-07",
+        "expected": [
+          "DEP",
+          "P-06>P-04",
+          "要修正"
+        ],
+        "observed": [
+          "DEP",
+          "P-06>P-05",
+          "要修正（現行EMBARGO）"
+        ],
+        "fields": [
+          true,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-08",
+        "expected": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "observed": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "hard-05",
+    "id": "d4267c59-da6",
+    "checks": [
+      {
+        "id": "P-01",
+        "expected": [
+          "CONTENT",
+          "a13",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "a13",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-02",
+        "expected": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "observed": [
+          "SCOPE",
+          "-",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-03",
+        "expected": [
+          "READY",
+          "c31+c32",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "c31+c32",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "P-04",
+        "expected": [
+          "EMBARGO",
+          "P-04",
+          "要修正"
+        ],
+        "observed": [
+          "READY",
+          "d41+d42",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-05",
+        "expected": [
+          "READY",
+          "e51+e52+w51",
+          "要修正"
+        ],
+        "observed": [
+          "SCOPE",
+          "e53",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-06",
+        "expected": [
+          "DEP",
+          "P-04",
+          "一致"
+        ],
+        "observed": [
+          "DEP",
+          "P-05",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-07",
+        "expected": [
+          "DEP",
+          "P-06>P-04",
+          "要修正"
+        ],
+        "observed": [
+          "DEP",
+          "P-06>P-05",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "P-08",
+        "expected": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "observed": [
+          "EMBARGO",
+          "P-08",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  }
+]

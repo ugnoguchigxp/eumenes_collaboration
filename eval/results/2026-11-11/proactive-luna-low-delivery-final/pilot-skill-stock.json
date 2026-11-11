@@ -1,0 +1,73 @@
+{
+  "requests": {
+    "review": null,
+    "skill": {
+      "goal": "未解決の欠品対応について、確定事実・未回答事項・次の行動を短く整理したシフト引継ぎ票を作る",
+      "query": "欠品対応のシフト引継ぎ票"
+    }
+  },
+  "review": null,
+  "skill": {
+    "status": "failed",
+    "elapsedMs": 38889,
+    "error": "semantic_review_failed"
+  },
+  "artifact": {
+    "status": "ok",
+    "elapsedMs": 7647,
+    "value": {
+      "title": "欠品対応 引継ぎ票（次シフト）",
+      "body": "対象：梱包材（S-18）\n現状：14:00時点で在庫0。対応期限は15:00。入荷時刻は未回答のため、確定として案内しない。\n次の行動：入荷状況を確認し、確定情報が得られるまで入荷時刻を約束しない。期限が最も早いため、先に対応する。\n\n対象：伝票（S-21）\n現状：在庫2。対応期限は18:00。16:30入荷確定。\n次の行動：在庫と16:30入荷予定を踏まえて対応する。"
+    }
+  },
+  "calls": [
+    {
+      "lane": "reply",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 9205,
+      "outputTokens": 120,
+      "elapsedMs": 7942
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 15601,
+      "outputTokens": 1045,
+      "skillDecision": {
+        "stage": "draft",
+        "kind": "ready",
+        "strategy": "reuse",
+        "hasCorrection": false
+      },
+      "elapsedMs": 24628
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 12416,
+      "outputTokens": 447,
+      "skillDecision": {
+        "stage": "review",
+        "approved": false,
+        "reason": "原資料の手順を忠実に残し必須の定型表記・順番を明記していますが、参照fixtureのassertは負例を拒否せず、単なる文字列差を確認するだけで違反の検出を保証しないため承認できません。",
+        "hasCorrection": true
+      },
+      "elapsedMs": 14205
+    },
+    {
+      "lane": "artifact",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 8390,
+      "outputTokens": 183,
+      "elapsedMs": 7646
+    }
+  ]
+}

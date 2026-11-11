@@ -148,7 +148,7 @@ describe("cli and selection", () => {
 		expect([o.split, o.reps, o.baselineReps, o.cap, o.stopAt]).toEqual([
 			"development",
 			3,
-			1,
+			3,
 			10,
 			9,
 		]);

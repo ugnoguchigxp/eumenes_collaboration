@@ -1,0 +1,22 @@
+{
+  "status": "registered_mode_a_only",
+  "productCommit": "4ed26d7fff7aca65e00892cb3b50f8f101ff7e05",
+  "productArchiveSha256": "411b053014c52106112eb9906b9922bf03a91076a03a00830878faf2beb513da",
+  "collaborationSha256": "ce0d56eedc6ada0e67e8aff39daba2ae29caddb4e328c1041620135d2a12450c",
+  "holdoutSha256": "c94242ee8589cca8b728fee2eff0745275eddccfdfdc9fbc193edb1a6f00c290",
+  "runnerSha256": "f13f88c40d2e8567869bd3e60be87959299ec19ac4c371bba89d117bb7627c76",
+  "binding": "binding:ui.studio@5",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "auth": "ChatGPT subscription, no API credential",
+  "maxExtraApiUsd": 0,
+  "maxModelCalls": 440,
+  "repetitions": 2,
+  "parallel": 6,
+  "observationWindowMs": 30000,
+  "plannedCases": 48,
+  "foregroundAbsoluteIncreaseCapMs": 1000,
+  "routing": "Fixture fixes initial selection to ui.compose. All UI specialist turns use the real model through Eumenes' Codex adapter.",
+  "judge": "Same model in a fresh request with the task rubric; user-role follow-up and provisional grading. Human adoption review pending.",
+  "steerEnabled": false
+}

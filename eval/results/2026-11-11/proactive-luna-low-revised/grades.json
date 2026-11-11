@@ -1,0 +1,14 @@
+[
+  {"id":"8af27c3e-a88","checks":[true,true,true,true],"procedure":null,"note":"案内の見出しと時刻・窓口が揃った一文。"},
+  {"id":"fb1aca7d-eeb","checks":[true,true,true,true],"procedure":null,"note":"案内の見出しと時刻・窓口が揃った一文。"},
+  {"id":"279b4f8a-695","checks":[true,true,true,true],"procedure":null,"note":"a/c適合、b/d要修正を根拠とともに記載。"},
+  {"id":"eda6d59f-e94","checks":[true,true,true,true],"procedure":null,"note":"a/c適合、b/d要修正を根拠とともに記載。"},
+  {"id":"08fba046-53b","checks":[true,true,true,true],"procedure":false,"note":"必要な案件情報と着手順・次の対応がある。定型欄なし。"},
+  {"id":"40fc5c44-c76","checks":[true,true,true,true],"procedure":false,"note":"必要な案件情報と着手順・次の対応がある。定型欄なし。"},
+  {"id":"2e34f61e-136","checks":[true,true,true,true],"procedure":false,"note":"優先順位、在庫、時刻、確度と次の対応がある。定型欄なし。"},
+  {"id":"7e4b501d-bb2","checks":[true,true,true,true],"procedure":false,"note":"優先順位、在庫、時刻、確度と次の対応がある。定型欄なし。"},
+  {"id":"204ffb54-050","checks":[true,true,true,true],"procedure":false,"note":"全件に正しい判断・保留理由・次の対応を記載。定型欄なし。"},
+  {"id":"9f0ccef0-2bb","checks":[true,true,true,true],"procedure":false,"note":"全件に正しい判断・保留理由・次の対応を記載。定型欄なし。"},
+  {"id":"66248a32-98a","checks":[true,false,true,true],"procedure":null,"note":"R2を判断保留としたため、重複拒否が欠ける。ほかの行と重複優先の記載はあり。"},
+  {"id":"af0ad2dd-0f9","checks":[true,true,true,true],"procedure":null,"note":"全件の判定と重複理由を正確に記載。"}
+]

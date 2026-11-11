@@ -1,0 +1,245 @@
+{
+  "model": "gpt-6.1-sol",
+  "route": "codex-subscription",
+  "maxCalls": 6,
+  "calls": [
+    {
+      "lane": "reply",
+      "status": "ok",
+      "inputTokens": 9100,
+      "outputTokens": 215,
+      "elapsedMs": 9952
+    },
+    {
+      "lane": "evaluator",
+      "status": "ok",
+      "inputTokens": 9064,
+      "outputTokens": 223,
+      "elapsedMs": 10341
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "inputTokens": 10218,
+      "outputTokens": 59,
+      "elapsedMs": 7779
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "inputTokens": 29897,
+      "outputTokens": 1731,
+      "elapsedMs": 42400
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "inputTokens": 26296,
+      "outputTokens": 421,
+      "elapsedMs": 18263
+    },
+    {
+      "lane": "skill-worker",
+      "status": "ok",
+      "inputTokens": 9635,
+      "outputTokens": 191,
+      "elapsedMs": 8412
+    }
+  ],
+  "reply": "現在の定義ではタイトルが「申込フォーム」で、合意された「予約フォーム」と異なっています。画面は変更せず、別担当にタイトルの確認を依頼し、既存の手順が使えるか調べて運用担当向けの短い確認票を作成します。",
+  "replyMs": 9955,
+  "requests": {
+    "review": {
+      "question": "現在の画面タイトル「申込フォーム」は、合意された「予約フォーム」と一致しているか確認してください。",
+      "conditionIds": [
+        "heading"
+      ]
+    },
+    "skill": {
+      "goal": "既存の確認票作成手順を利用できるか確認し、現在のフォーム定義に基づいてタイトルの合意との差異、部署は必須、備考は任意であることを記した運用担当向けの短い確認票を作成する。画面は変更しない。",
+      "query": "フォーム 運用引継ぎ 確認票 作成手順"
+    }
+  },
+  "background": {
+    "review": {
+      "status": "ok",
+      "elapsedMs": 10359,
+      "value": {
+        "contractVersion": 1,
+        "evaluationId": "6455586f-fbcd-4510-b079-8592a71996fa",
+        "rubric": {
+          "id": "workflow-correctness",
+          "version": 1
+        },
+        "target": {
+          "kind": "workflow",
+          "id": "example-reservation-form",
+          "version": "1",
+          "digest": "80e3e4cc7f61445c0c7465d1711e04795739ed6bef539adb404093a66f6fe9e7"
+        },
+        "inputDigest": "e18cbdebe3839b2edc847e673d10da670c7f0b5e02033bef8ba3db44d5b921d7",
+        "scopeSelection": {
+          "version": 1,
+          "digestVersion": 2,
+          "digest": "e3fb009536803c5adde897efa7d0cf69685ed9cdcfb382ea500a301aeb65eb7d",
+          "conditionDigest": "dcf6f34f62e9c535c9e0b6b46fe50f06d133fc1b42cb7a1e9a103640b0d608db",
+          "conditionRevision": "c4bed88cb7813298a4161242540d392120507b6584d153fbcfc9cce2482ed497",
+          "targetDigest": "80e3e4cc7f61445c0c7465d1711e04795739ed6bef539adb404093a66f6fe9e7",
+          "target": {
+            "kind": "workflow",
+            "id": "example-reservation-form",
+            "version": "1"
+          },
+          "selected": [
+            {
+              "id": "workflow",
+              "kind": "json",
+              "version": "1",
+              "clipped": false,
+              "pointerRoot": ""
+            }
+          ],
+          "initialEvidenceIds": [],
+          "allowedEvidenceIds": [],
+          "availableEvidence": [],
+          "unknownEvidenceIds": [],
+          "requiredEvidenceIds": [],
+          "conditionIds": [
+            "heading"
+          ],
+          "unavailableConditionIds": []
+        },
+        "conditionSelection": {
+          "applied": [
+            "heading"
+          ],
+          "excluded": []
+        },
+        "conditions": "available",
+        "conditionRevision": "c4bed88cb7813298a4161242540d392120507b6584d153fbcfc9cce2482ed497",
+        "findings": [
+          {
+            "title": "画面タイトルが確定条件と一致していない",
+            "problem": "画面タイトルが「予約フォーム」ではなく「申込フォーム」になっている。",
+            "trigger": "この定義で画面を表示した場合。",
+            "impact": "合意された画面タイトルの要件を満たさない。",
+            "severity": "low",
+            "primary": {
+              "evidenceId": "workflow",
+              "startLine": null,
+              "endLine": null,
+              "pointer": "/title"
+            },
+            "evidence": [],
+            "conditionId": "heading"
+          }
+        ],
+        "scopeChecks": [
+          {
+            "evidenceId": "workflow",
+            "status": "checked",
+            "reason": "提示された定義の画面タイトルを確定条件と照合した。"
+          }
+        ],
+        "conditionChecks": [
+          {
+            "conditionId": "heading",
+            "status": "violated",
+            "reason": "定義の title は「申込フォーム」であり、指定された「予約フォーム」と一致しない。",
+            "evidence": [
+              {
+                "evidenceId": "workflow",
+                "startLine": null,
+                "endLine": null,
+                "pointer": "/title"
+              }
+            ]
+          }
+        ],
+        "status": "completed",
+        "issues": [],
+        "rejected": [],
+        "durationMs": 10354,
+        "model": "gpt-6.1-sol"
+      }
+    },
+    "skill": {
+      "status": "ok",
+      "elapsedMs": 76921,
+      "value": {
+        "deliveryMs": 68509,
+        "skill": {
+          "name": "reservation-form-checklist",
+          "bundleDigest": "c8899ce2040f91fbc03aacc908a1cf7756e20de10612269ba962d8ad39e8216e"
+        },
+        "dependencies": [
+          {
+            "id": "contextstill:kn_pdr5wpp5swx7leiixoujaag2mm",
+            "version": "1",
+            "digest": "7160d19745fd3d6ba18f9399d00db9499efb5dd8116f4ea05ab0db8d42500b0e",
+            "generation": 0
+          }
+        ],
+        "requestRef": "d03d666c-c9d6-4d1a-89a3-2dc44b15733c",
+        "sourceCalls": [
+          {
+            "kind": "sourceCalls",
+            "operation": "initialize",
+            "outcome": "ok",
+            "durationMs": 2.020457999999053
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "notifications/initialized",
+            "outcome": "ok",
+            "durationMs": 0.0939170000001468
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "tools/list",
+            "outcome": "ok",
+            "durationMs": 0.10429099999964819
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "tools/call",
+            "outcome": "ok",
+            "durationMs": 6.729958999998416
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "tools/call",
+            "outcome": "ok",
+            "durationMs": 0.6304159999999683
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "tools/call",
+            "outcome": "ok",
+            "durationMs": 1.507207999995444
+          },
+          {
+            "kind": "sourceCalls",
+            "operation": "tools/call",
+            "outcome": "ok",
+            "durationMs": 0.35462499999266583
+          }
+        ],
+        "work": {
+          "status": "ok",
+          "elapsedMs": 8413,
+          "value": {
+            "title": "運用担当向け確認票",
+            "body": "- 対象：社内予約フォーム（example-reservation-form、提供定義・版1）\n- タイトル：合意「予約フォーム」／現在の定義「申込フォーム」— 不一致。\n- 部署：必須（合意と一致）。\n- 備考：任意（合意と一致）。\n- 別担当への確認事項：画面タイトルが合意「予約フォーム」どおりかご確認ください。確認依頼は未送信で、別担当による確認は未実施・確認待ちです。\n\n既存の確認票の手順に沿って作成しました。実画面の確認、画面変更、保存、外部送信は行っていません。"
+          }
+        }
+      }
+    }
+  },
+  "checks": {
+    "review": true,
+    "skill": false,
+    "task": true
+  },
+  "error": "trial_acceptance_failed"
+}

@@ -1,0 +1,88 @@
+{
+  "requests": {
+    "review": null,
+    "skill": {
+      "goal": "明日の窓口担当が、確認事項と着手順を一目で把握できる機材貸出の受付引継ぎ票を作る",
+      "query": "機材貸出の受付引継ぎ票の作り方"
+    }
+  },
+  "review": null,
+  "skill": {
+    "status": "failed",
+    "elapsedMs": 64831,
+    "error": "semantic_review_failed"
+  },
+  "artifact": {
+    "status": "ok",
+    "elapsedMs": 8659,
+    "value": {
+      "title": "機材貸出 受付引継ぎ票（2026年11月13日）",
+      "body": "| 優先 | 案件 | 返却予定 | 借用班 | 点検状況 | 次の担当が確認すること |\n|---|---|---:|---|---|---|\n| 1 | EQ-41 | 10:30 | 研修班 | 未確認 | 返却状況を確認し、点検を実施して結果を記録する。点検完了までは「済み」として扱わない。 |\n| 2 | EQ-52 | 16:00 | 営業班 | 済み | 返却状況を確認する。 |\n\n**対応順**：返却予定が早いEQ-41から確認し、次にEQ-52へ。資料は2026年11月12日 09:00時点の情報です。明日の受付開始時に、返却状況と点検記録が更新されていないか確認してください。"
+    }
+  },
+  "calls": [
+    {
+      "lane": "reply",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 9209,
+      "outputTokens": 113,
+      "elapsedMs": 7895
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 15637,
+      "outputTokens": 1083,
+      "skillDecision": {
+        "stage": "draft",
+        "kind": "ready",
+        "strategy": "reuse",
+        "hasCorrection": false
+      },
+      "elapsedMs": 26549
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 12480,
+      "outputTokens": 777,
+      "skillDecision": {
+        "stage": "review",
+        "approved": false,
+        "reason": "定型表記・案件情報・着手順は資料と整合しますが、参照fixtureの負例assertが改変後の値を肯定するため誤った出力を拒否できず、自己完結した有効な正負テスト要件を満たしません。",
+        "hasCorrection": true
+      },
+      "elapsedMs": 18697
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 12315,
+      "outputTokens": 827,
+      "skillDecision": {
+        "stage": "review",
+        "approved": false,
+        "reason": "正確性と検証可能性に重大な欠陥があり、負例のassertが誤った状態で必ず失敗するため、例を直しても通常実行は成功せず、引継ぎ票作成の目的にも届きません。",
+        "hasCorrection": true
+      },
+      "elapsedMs": 19524
+    },
+    {
+      "lane": "artifact",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 8396,
+      "outputTokens": 248,
+      "elapsedMs": 8658
+    }
+  ]
+}

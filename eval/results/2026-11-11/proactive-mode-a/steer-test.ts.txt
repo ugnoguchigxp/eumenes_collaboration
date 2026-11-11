@@ -1,0 +1,80 @@
+import { expect, test } from "bun:test";
+import { harness } from "./api/application/toolchain/toolchain.fixture";
+import { configureTrialSteering } from "./api/domains/dialogue/service/trial-steering";
+
+test("the UI specialist receives only the authorized current supplement at its next inference boundary", async () => {
+  let sender: Parameters<NonNullable<Parameters<typeof configureTrialSteering>[0]>["onOpen"]>[0] | undefined;
+  let rounds = 0;
+  const observed: string[][] = [];
+  const admissions: string[] = [];
+  const h = await harness({ uiCompositions: true, webResearch: false, routeTool: "ui_create",
+    specialist(messages) {
+      rounds++;
+      observed.push(messages.filter((m) => m.content.startsWith("HOST_SUPPLEMENTS")).map((m) => m.content));
+      if (rounds === 1) {
+        const current = sender!;
+        const source = { ...current.scope, ref: "meeting-note", revision: "2", text: "一覧では確定ボタンを置かない。" };
+        current.store(source);
+        const event = { id: "notice-current", sourceRef: source.ref, sourceRevision: source.revision };
+        admissions.push(current.enqueue(event), current.enqueue(event));
+        admissions.push(current.enqueue({ ...event, id: "notice-old", sourceRevision: "1" }));
+        admissions.push(current.enqueue({ ...event, id: "notice-wrong-epoch" }, "wrong"));
+        current.store({ ...source, conversationId: "other", ref: "other-note", text: "別会話専用" });
+        admissions.push(current.enqueue({ ...event, id: "notice-other", sourceRef: "other-note" }));
+        return { action: "invoke", tool: "doc.write", arguments: { baseRevision: 0, title: "一覧", content: { view: "text-block", title: "一覧", body: "項目を表示します。" } } };
+      }
+      return { action: "reply", text: "一覧の定義を確認しました。" };
+    },
+  });
+  configureTrialSteering({ conversationId: "main", onOpen(next) { sender = next; } });
+  try {
+    for (const text of ["一覧画面を作ってください。", "確認した内容を教えてください。"]) {
+      const res = await h.request("/api/runs", { requestId: crypto.randomUUID(), conversationId: "main", text });
+      expect(res.status).toBe(202);
+      const { id } = await res.json() as { id: string };
+      expect((await h.dialogue.waitForTerminal(id, { timeoutMs: 10000 }))?.status).toBe("completed");
+    }
+    expect(admissions).toEqual(["accepted", "duplicate", "accepted", "generation_conflict", "accepted"]);
+    expect(rounds).toBe(3);
+    expect(observed[0]).toEqual([]);
+    const entry = observed[1]!;
+    expect(entry).toHaveLength(1);
+    expect(JSON.parse(entry[0]!.split("=")[1]!)).toEqual([{ ref: "meeting-note", revision: "2", text: "一覧では確定ボタンを置かない。" }]);
+    expect(observed[2]).toEqual([]);
+  } finally {
+    configureTrialSteering(undefined);
+    await h.close();
+  }
+});
+
+test("a source changed while inference is running cannot publish the returned reply", async () => {
+  let sender: Parameters<NonNullable<Parameters<typeof configureTrialSteering>[0]>["onOpen"]>[0] | undefined;
+  let rounds = 0;
+  const h = await harness({ uiCompositions: true, webResearch: false, routeTool: "ui_create",
+    specialist(messages) {
+      rounds++;
+      const current = sender!;
+      if (rounds === 1) {
+        current.store({ ...current.scope, ref: "verified", revision: "1", text: "仮の記録" });
+        expect(current.enqueue({ id: "notice", sourceRef: "verified", sourceRevision: "1" })).toBe("accepted");
+        return { action: "invoke", tool: "doc.write", arguments: { baseRevision: 0, title: "一覧", content: { view: "text-block", title: "一覧", body: "項目を表示します。" } } };
+      }
+      expect(messages.some((m) => m.content.startsWith("HOST_SUPPLEMENTS"))).toBe(true);
+      current.store({ ...current.scope, ref: "verified", revision: "2", text: "訂正済みの記録" });
+      return { action: "reply", text: "古い記録を採用しました。" };
+    },
+  });
+  configureTrialSteering({ conversationId: "main", onOpen(next) { sender = next; } });
+  try {
+    const res = await h.request("/api/runs", { requestId: crypto.randomUUID(), conversationId: "main", text: "一覧画面を作ってください。" });
+    expect(res.status).toBe(202);
+    const { id } = await res.json() as { id: string };
+    const run = await h.dialogue.waitForTerminal(id, { timeoutMs: 10000 });
+    expect(run?.status).toBe("failed");
+    expect(h.dialogue.answerText(id) ?? "").toBe("");
+    expect(rounds).toBe(2);
+  } finally {
+    configureTrialSteering(undefined);
+    await h.close();
+  }
+});

@@ -1,0 +1,153 @@
+{
+  "current": {
+    "completed": 6,
+    "attempted": 6,
+    "score": 17,
+    "max": 48,
+    "fields": 113,
+    "maxFields": 192,
+    "modelCalls": 12,
+    "inputTokens": 120410,
+    "outputTokens": 4517,
+    "trials": [
+      {
+        "case": "hard-02",
+        "arm": "current",
+        "repetition": 1,
+        "status": "completed",
+        "score": 4,
+        "max": 8,
+        "fields": 19,
+        "maxFields": 32,
+        "replyMs": 10206,
+        "completionMs": 19650,
+        "modelCalls": 2,
+        "inputTokens": 20068,
+        "outputTokens": 398,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "hard-04",
+        "arm": "current",
+        "repetition": 1,
+        "status": "completed",
+        "score": 0,
+        "max": 8,
+        "fields": 22,
+        "maxFields": 40,
+        "replyMs": 23210,
+        "completionMs": 37107,
+        "modelCalls": 2,
+        "inputTokens": 19806,
+        "outputTokens": 1458,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "hard-05",
+        "arm": "current",
+        "repetition": 1,
+        "status": "completed",
+        "score": 3,
+        "max": 8,
+        "fields": 13,
+        "maxFields": 24,
+        "replyMs": 17927,
+        "completionMs": 30310,
+        "modelCalls": 2,
+        "inputTokens": 20334,
+        "outputTokens": 1156,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "hard-02",
+        "arm": "current",
+        "repetition": 2,
+        "status": "completed",
+        "score": 3,
+        "max": 8,
+        "fields": 18,
+        "maxFields": 32,
+        "replyMs": 8884,
+        "completionMs": 17624,
+        "modelCalls": 2,
+        "inputTokens": 20066,
+        "outputTokens": 397,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "hard-05",
+        "arm": "current",
+        "repetition": 2,
+        "status": "completed",
+        "score": 2,
+        "max": 8,
+        "fields": 12,
+        "maxFields": 24,
+        "replyMs": 8231,
+        "completionMs": 16447,
+        "modelCalls": 2,
+        "inputTokens": 20334,
+        "outputTokens": 400,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "hard-04",
+        "arm": "current",
+        "repetition": 2,
+        "status": "completed",
+        "score": 5,
+        "max": 8,
+        "fields": 29,
+        "maxFields": 40,
+        "replyMs": 8630,
+        "completionMs": 22976,
+        "modelCalls": 2,
+        "inputTokens": 19802,
+        "outputTokens": 708,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      }
+    ]
+  }
+}

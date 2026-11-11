@@ -1,0 +1,17 @@
+{
+  "model": "gpt-6.1-sol",
+  "status": "completed",
+  "error": null,
+  "answer": "確認番号は KIOSK-27 です。",
+  "rounds": 2,
+  "liveCalls": 1,
+  "deliveries": [
+    [
+      {
+        "ref": "check-in-record",
+        "revision": "2",
+        "text": "受付手順の確認記録に記載されている確認番号は KIOSK-27 です。"
+      }
+    ]
+  ]
+}

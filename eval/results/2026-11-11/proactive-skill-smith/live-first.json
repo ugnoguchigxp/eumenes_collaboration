@@ -1,0 +1,15 @@
+{
+  "model": "gpt-6.1-sol",
+  "route": "codex-subscription",
+  "maxCalls": 6,
+  "calls": [
+    {
+      "lane": "reply",
+      "status": "ok",
+      "inputTokens": 9029,
+      "outputTokens": 190,
+      "elapsedMs": 9075
+    }
+  ],
+  "error": "trial_reply_invalid"
+}

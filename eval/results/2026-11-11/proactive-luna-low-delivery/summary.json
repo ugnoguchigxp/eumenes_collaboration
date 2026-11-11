@@ -1,0 +1,283 @@
+{
+  "current": {
+    "completed": 6,
+    "attempted": 6,
+    "quality": 24,
+    "qualityMax": 24,
+    "procedureCompliance": 0,
+    "procedureCases": 3,
+    "replyMedianMs": 6508.5,
+    "replySentenceOverruns": 2,
+    "completionMedianMs": 16748.5,
+    "calls": 12,
+    "inputTokens": 104611,
+    "outputTokens": 2069,
+    "reasoningTokens": 90,
+    "callsWithUsage": 12
+  },
+  "assisted": {
+    "completed": 6,
+    "attempted": 6,
+    "quality": 24,
+    "qualityMax": 24,
+    "procedureCompliance": 0,
+    "procedureCases": 3,
+    "replyMedianMs": 6602,
+    "replySentenceOverruns": 0,
+    "completionMedianMs": 69697.5,
+    "calls": 21,
+    "inputTokens": 233341,
+    "outputTokens": 12217,
+    "reasoningTokens": 0,
+    "callsWithUsage": 21
+  },
+  "selectors": {
+    "review": {
+      "selectedOnUseful": 0,
+      "useful": 3,
+      "usefulWithDecision": 3,
+      "selectedOnOther": 0,
+      "other": 3
+    },
+    "skill": {
+      "selectedOnUseful": 3,
+      "useful": 3,
+      "usefulWithDecision": 3,
+      "selectedOnOther": 1,
+      "other": 3
+    }
+  },
+  "pairs": [
+    {
+      "case": "01",
+      "title": "案内の短文化",
+      "current": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 6721,
+        "completionMs": 12593,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 5152,
+        "completionMs": 11266,
+        "status": "completed",
+        "calls": 2
+      },
+      "review": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "calls": 0,
+        "result": null,
+        "procedureReflected": null,
+        "query": null
+      }
+    },
+    {
+      "case": "02",
+      "title": "取消後の通知分岐",
+      "current": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 4737,
+        "completionMs": 16409,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 8567,
+        "completionMs": 70489,
+        "status": "completed",
+        "calls": 4
+      },
+      "review": {
+        "wanted": true,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": false,
+        "selected": true,
+        "started": true,
+        "calls": 2,
+        "result": "failed",
+        "procedureReflected": null,
+        "error": "semantic_review_failed",
+        "query": "機材貸出 取消後 通知分岐 確認票"
+      }
+    },
+    {
+      "case": "03",
+      "title": "機材貸出の受付引継ぎ",
+      "current": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 6296,
+        "completionMs": 17749,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 6652,
+        "completionMs": 72449,
+        "status": "completed",
+        "calls": 4
+      },
+      "review": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": true,
+        "selected": true,
+        "started": true,
+        "calls": 2,
+        "result": "failed",
+        "procedureReflected": false,
+        "error": "invalid_adaptation",
+        "query": "機材貸出の受付引継ぎ票"
+      }
+    },
+    {
+      "case": "04",
+      "title": "日次の欠品引継ぎ",
+      "current": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 9066,
+        "completionMs": 17088,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 6552,
+        "completionMs": 94004,
+        "status": "completed",
+        "calls": 5
+      },
+      "review": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": true,
+        "selected": true,
+        "started": true,
+        "calls": 3,
+        "result": "failed",
+        "procedureReflected": false,
+        "error": "semantic_review_failed",
+        "query": "欠品対応のシフト引継ぎ票"
+      }
+    },
+    {
+      "case": "05",
+      "title": "公開前の承認・例外",
+      "current": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 8154,
+        "completionMs": 17373,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 7112,
+        "completionMs": 68906,
+        "status": "completed",
+        "calls": 4
+      },
+      "review": {
+        "wanted": true,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": true,
+        "selected": true,
+        "started": true,
+        "calls": 2,
+        "result": "failed",
+        "procedureReflected": false,
+        "error": "semantic_review_failed",
+        "query": "公開判断と承認の担当交代引継ぎ"
+      }
+    },
+    {
+      "case": "06",
+      "title": "予約上限と重複判定",
+      "current": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 5230,
+        "completionMs": 13121,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 6305,
+        "completionMs": 15150,
+        "status": "completed",
+        "calls": 2
+      },
+      "review": {
+        "wanted": true,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "calls": 0,
+        "result": null,
+        "procedureReflected": null,
+        "query": null
+      }
+    }
+  ],
+  "commonCompleted": {
+    "pairs": 6,
+    "qualityMax": 24,
+    "currentQuality": 24,
+    "assistedQuality": 24
+  },
+  "pairQuality": {
+    "better": 0,
+    "equal": 6,
+    "worse": 0
+  }
+}

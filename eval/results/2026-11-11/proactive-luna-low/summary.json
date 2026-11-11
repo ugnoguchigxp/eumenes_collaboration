@@ -1,0 +1,261 @@
+{
+  "current": {
+    "completed": 4,
+    "attempted": 6,
+    "quality": 16,
+    "qualityMax": 24,
+    "procedureCompliance": 0,
+    "procedureCases": 3,
+    "replyMedianMs": 6806.5,
+    "completionMedianMs": 17707,
+    "calls": 10,
+    "inputTokens": 87558,
+    "outputTokens": 1601,
+    "reasoningTokens": 0,
+    "callsWithUsage": 10
+  },
+  "assisted": {
+    "completed": 5,
+    "attempted": 6,
+    "quality": 19,
+    "qualityMax": 24,
+    "procedureCompliance": 0,
+    "procedureCases": 3,
+    "replyMedianMs": 6489,
+    "completionMedianMs": 16491,
+    "calls": 12,
+    "inputTokens": 106165,
+    "outputTokens": 2553,
+    "reasoningTokens": 119,
+    "callsWithUsage": 12
+  },
+  "selectors": {
+    "review": {
+      "selectedOnUseful": 1,
+      "useful": 3,
+      "usefulWithDecision": 2,
+      "selectedOnOther": 0,
+      "other": 3
+    },
+    "skill": {
+      "selectedOnUseful": 0,
+      "useful": 3,
+      "usefulWithDecision": 2,
+      "selectedOnOther": 0,
+      "other": 3
+    }
+  },
+  "pairs": [
+    {
+      "case": "01",
+      "title": "案内の短文化",
+      "current": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 7478,
+        "completionMs": 13387,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 5308,
+        "completionMs": 12782,
+        "status": "completed",
+        "calls": 2
+      },
+      "review": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": false,
+        "selected": false,
+        "calls": 0,
+        "result": null,
+        "query": null
+      }
+    },
+    {
+      "case": "02",
+      "title": "取消後の通知分岐",
+      "current": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 5791,
+        "completionMs": 18621,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 3,
+        "procedure": null,
+        "replyMs": 8134,
+        "completionMs": 36274,
+        "status": "completed",
+        "calls": 3
+      },
+      "review": {
+        "wanted": true,
+        "selected": true,
+        "started": true,
+        "result": "completed",
+        "conditions": [
+          "gate"
+        ]
+      },
+      "skill": {
+        "wanted": false,
+        "selected": false,
+        "calls": 0,
+        "result": null,
+        "query": null
+      }
+    },
+    {
+      "case": "03",
+      "title": "機材貸出の受付引継ぎ",
+      "current": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 6135,
+        "completionMs": 17471,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 6103,
+        "completionMs": 16491,
+        "status": "completed",
+        "calls": 2
+      },
+      "review": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": true,
+        "selected": false,
+        "calls": 0,
+        "result": null,
+        "query": null
+      }
+    },
+    {
+      "case": "04",
+      "title": "日次の欠品引継ぎ",
+      "current": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 7623,
+        "completionMs": 17943,
+        "status": "completed",
+        "calls": 2
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": false,
+        "replyMs": 6489,
+        "completionMs": 15713,
+        "status": "completed",
+        "calls": 2
+      },
+      "review": {
+        "wanted": false,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": true,
+        "selected": false,
+        "calls": 0,
+        "result": null,
+        "query": null
+      }
+    },
+    {
+      "case": "05",
+      "title": "公開前の承認・例外",
+      "current": {
+        "score": 0,
+        "procedure": false,
+        "status": "failed",
+        "calls": 1
+      },
+      "assisted": {
+        "score": 0,
+        "procedure": false,
+        "status": "failed",
+        "calls": 1
+      },
+      "review": {
+        "wanted": true,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": true,
+        "selected": false,
+        "calls": 0,
+        "result": null,
+        "query": null
+      }
+    },
+    {
+      "case": "06",
+      "title": "予約上限と重複判定",
+      "current": {
+        "score": 0,
+        "procedure": null,
+        "status": "failed",
+        "calls": 1
+      },
+      "assisted": {
+        "score": 4,
+        "procedure": null,
+        "replyMs": 9162,
+        "completionMs": 17105,
+        "status": "completed",
+        "calls": 2
+      },
+      "review": {
+        "wanted": true,
+        "selected": false,
+        "started": false,
+        "result": null,
+        "conditions": []
+      },
+      "skill": {
+        "wanted": false,
+        "selected": false,
+        "calls": 0,
+        "result": null,
+        "query": null
+      }
+    }
+  ],
+  "commonCompleted": {
+    "pairs": 4,
+    "qualityMax": 16,
+    "currentQuality": 16,
+    "assistedQuality": 15
+  },
+  "pairQuality": {
+    "better": 1,
+    "equal": 4,
+    "worse": 1
+  }
+}

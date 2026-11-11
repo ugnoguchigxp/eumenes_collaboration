@@ -1,0 +1,591 @@
+{
+	"rubric_version": "1.1.0",
+	"depth": "deep",
+	"technical_profile": "library",
+	"target": {
+		"locator": "/Users/y.noguchi/Code/eumenes_collaboration",
+		"snapshot": "planned source snapshot derived from b03426226ef5ef6ead47c216a309bb48c2a420df",
+		"reviewed_at": "2026-11-07",
+		"stage": "conditional technical quality target without CI",
+		"scope": "Current library, generated instructions, tests, example adapters/storage, distribution and evaluation tooling. Library profile fixed before scoring. Eumenes inspected only at package/source/approval integration boundaries; product live paths not rerun. No code edits or paid model calls. Existing pack acceptance independently hash-checked, not rerun. Synthetic local timing only. CI excluded by existing user decision; no current CI success inferred. External docs checked on review date, feature comparison only; no competitor benchmark. Expected technical scenario only; confidence fields on target anchor 4 describe evidence that must be obtained, not present forecast confidence."
+	},
+	"evidence": [
+		{
+			"id": "E01",
+			"kind": "code",
+			"locator": "git HEAD b03426226ef5ef6ead47c216a309bb48c2a420df; package.json; src/index.ts; src/agent/instructions.ts",
+			"observed_at": "2026-11-07",
+			"observation": "Clean working tree; 0.3.0 private ESM TypeScript library. Core exports validation and context construction; I/O is in example/scripts. Runtime dependencies pinned to zod and s11tnext.",
+			"scope": "Current snapshot; Bun is declared runtime, cross-runtime portability not assumed."
+		},
+		{
+			"id": "E02",
+			"kind": "code",
+			"locator": "src/agent/state.ts; src/contracts/state.ts; src/contracts/json-limits.ts; src/agent/action.ts; src/agent/messages.ts; src/agent/plan.ts; src/agent/session.ts",
+			"observed_at": "2026-11-07",
+			"observation": "State proposals check registry existence/activeness, session/epoch/revisions, cycles, JSON/fact limits and composition. Separate original utterance, references and fixed instructions. Model semantics are not keyword-matched.",
+			"scope": "All principal core modules traced, including callers and failure paths; host registries remain trusted input."
+		},
+		{
+			"id": "E03",
+			"kind": "execution",
+			"locator": "reports/review-2026-11-07/verify.log",
+			"observed_at": "2026-11-07",
+			"observation": "Command bun run verify; exit 0; Bun 1.4.4 darwin arm64. Typecheck, formatting, lint, context consistency, 174 tests and 1275 assertions pass; eval inventory validates shape only. Includes SQLite contention, real process exit, revocation/replay and adapter cancellation tests.",
+			"scope": "Tests use temporary databases and fixture providers; no live inference or production services touched."
+		},
+		{
+			"id": "E04",
+			"kind": "execution",
+			"locator": "src/agent/state.ts:80; prior-turn Bun probe on identical b03426226ef5ef6ead47c216a309bb48c2a420df",
+			"observed_at": "2026-11-07",
+			"observation": "Constructed confirmed decision {publishApproved:true} with an active observation source was accepted; user source accepted; assistant source rejected with confirmation_evidence_required.",
+			"scope": "Contract-level deliberately wrong model output, not a live model injection exploit. Source contents are absent from StateHostContext; requiring a user ref alone would not prove consent."
+		},
+		{
+			"id": "E05",
+			"kind": "code",
+			"locator": "example/state-store.ts; example/forget.ts; example/adapters/external.ts; example/adapters/api-budget.ts; example/adapters/claude-model.ts; example/adapters/api-model.ts",
+			"observed_at": "2026-11-07",
+			"observation": "Reference host uses single writer/CAS/receipts, atomic forgetting/revocation, target and digest-bound grants, async fencing, bounded retries/timeouts and durable budget reservations. Model choices and prices in direct API adapter are evaluation-specific; HTTP release defaults are documented inference rather than billing guarantee.",
+			"scope": "Implementation and negative tests inspected; actual product and external provider behavior not established by fixtures."
+		},
+		{
+			"id": "E06",
+			"kind": "execution",
+			"locator": "reports/review-2026-11-07/artifact-check.json; dist/eumenes-collaboration-0.3.0.verification.json; reports/pack-check.json",
+			"observed_at": "2026-11-07",
+			"observation": "Read-only Python SHA-256/archive checks: archive hash, verification-report hash, every shipped manifest resource and every current manifest source resource match. Recorded strict pack status passed at fixed host baseline 5bf5ca556ad45a9c8a6b72f81aae85f7505e505c.",
+			"scope": "Full pack not rerun. Stored 27-stage acceptance includes 601 parity comparisons, 64 legacy specialist tests, isolated consumer checks/build. Checks establish integrity, not product adoption."
+		},
+		{
+			"id": "E07",
+			"kind": "execution",
+			"locator": "reports/review-2026-11-07/evaluation-check.json; reports/quality-2026-11-06/holdout-v2/{summary-v2.json,live.jsonl,live-protocol.json}; eval/protocol-v2.json; eval/live-v2.ts:525; eval/summarize-v2.ts",
+			"observed_at": "2026-11-07",
+			"observation": "Python verification exit 0: raw log and preregistration hashes match. Candidate cross-judge final-state majority passes 28/30 and 29/30; raw candidate session passes 85/90 and 87/90. Baseline repetition=1, candidate=3. Anthropic candidate judge kappa=0.557. Final state only is graded; no provider tool operations execute.",
+			"scope": "Historical paid synthetic run reanalysed without model calls; automatic judgments, limited tasks. Reports untracked; task file exists only at recorded scratchpad path, not tracked in repository."
+		},
+		{
+			"id": "E08",
+			"kind": "primary_doc",
+			"locator": "/Users/y.noguchi/Code/eumenes/spec/collaboration-integration-2026-11-05.md; spec/verification/collaboration-integration-2026-11-06/summary.json; api/domains/dialogue/service/specialist-source.ts; api/domains/collaboration/service/work-children.ts; Eumenes HEAD fb8eac06ba1e32891c51355c4e067d678e7fd555",
+			"observed_at": "2026-11-07",
+			"observation": "Product consumes 0.2.0 action contracts/instructions/messages; actual user manual/voice sources and separate user turn required for pipeline start. Recorded live UI partial edits/save/restart and pipeline confirmed-definition execution. Core state-proposal APIs are not called in inspected product source.",
+			"scope": "Sibling working tree has unrelated in-progress changes; no product-wide score or present live acceptance inferred; historical results are reported records."
+		},
+		{
+			"id": "E09",
+			"kind": "code",
+			"locator": "README.md:34; eval/README.md; spec/host-contract.md; spec/state-contract.md; spec/upgrading-0.3.md",
+			"observed_at": "2026-11-07",
+			"observation": "Current README says product integration is wholly unperformed, contrary to 0.2.0 product records; eval README says model/meaning/cost measurement not done despite completed v2 run. Detailed contracts and recovery docs do specify guarantees and limitations.",
+			"scope": "Stale entry-point statements are confirmed. Historical dated specs are not treated as present claims."
+		},
+		{
+			"id": "E10",
+			"kind": "execution",
+			"locator": "reports/review-2026-11-07/benchmark.json",
+			"observed_at": "2026-11-07",
+			"observation": "Current-snapshot Bun benchmark; exit 0; darwin arm64 1.4.4, 5 warmups and 30 measured iterations. p95 ordinary 20 facts 1.18ms; capacity 1000 15.28ms; 1000-link chain 20.07ms; 1000 facts with up to 64 edges 34.01ms, all below existing local 200ms budget.",
+			"scope": "Synthetic single-process validation only; no 2MiB payload saturation, concurrent load, database throughput or production model latency budget validated."
+		},
+		{
+			"id": "E11",
+			"kind": "execution",
+			"locator": "reports/review-2026-11-07/audit.log; bun.lock; bunfig.toml; LICENSE; node_modules/{zod,s11tnext,@noble/hashes}/package.json",
+			"observed_at": "2026-11-07",
+			"observation": "bun audit --production exit 0: no vulnerability matches in 3 packages. Exact dependency versions/registry lock hashes known; library MIT, zod MIT, s11tnext Apache-2.0, noble MIT. Release scripts restrict child env and refuse dirty-source provenance.",
+			"scope": "Registry audit does not prove absence of vulnerabilities; no full transitive license legal audit, no new vulnerability claims."
+		},
+		{
+			"id": "E12",
+			"kind": "external_observation",
+			"locator": "https://docs.langchain.com/oss/javascript/langgraph/persistence ; https://docs.langchain.com/oss/javascript/langgraph/interrupts ; https://docs.letta.com/v1-sdk/memory/memory-blocks",
+			"observed_at": "2026-11-07",
+			"observation": "Official LangGraph docs describe checkpoint/store persistence, resume and human-in-loop interrupts; side effects require idempotency. Official Letta legacy v1 docs describe persistent editable/read-only memory blocks. Therefore persistence/memory/human intervention are established capabilities; this project-specific source/revision/supersession/forget contracts are a focused combination.",
+			"scope": "Official documented-feature comparison only, not feature absence proof or comparative performance. Letta page explicitly v1 legacy. Third alternative is existing host plus structured model output and DB, traced in E08."
+		},
+		{
+			"id": "E13",
+			"kind": "primary_doc",
+			"locator": "spec/improvement-design-2026-11-06.md:9-10; spec/history/plan-2026-11-04.md; CHANGELOG.md; git log 2026-11-04..06",
+			"observed_at": "2026-11-07",
+			"observation": "Concrete UI/pipeline/external collaboration use cases, staged exit criteria, explicit budget/governance and correction records. Real runtime integration issues led to targeted repairs and acceptance checks. Development record spans only several days.",
+			"scope": "Single internal consumer; no sustained retention, onboarding time, economic baseline, independent adoption, long-term staffing or broad rollout evidence."
+		}
+	],
+	"mode": "technical",
+	"assessment_kind": "expected",
+	"baseline_snapshot": "b03426226ef5ef6ead47c216a309bb48c2a420df",
+	"scenario_conditions": [
+		"A〜Eの全受入条件を実施し、対応するcriterionの目標anchorを実際の証拠が満たす場合だけ成立する条件付き試算。未実装の改善を現状点へ加算しない。",
+		"CIは追加・実行・再実行・完了待ちをしない。評価profile、重み、適用範囲とanchor基準は現状評価と同じまま。testing.automationの目標は3であり4ではない。",
+		"F01〜F04が解消し、製品状態接続・代表的な変更影響・並行/障害/注入の境界試験を通す。新しい高重大度問題が出た場合は目標を再計算する。",
+		"有料評価と製品サーバー操作は今回実施しない。実施時はその時点の利用者承認、接続設定、保存済み予算台帳と権限の範囲に従う。"
+	],
+	"tracks": {
+		"technical": {
+			"dimensions": {
+				"architecture": {
+					"criteria": {
+						"boundaries": {
+							"status": "assessed",
+							"value": 4,
+							"confidence": "High",
+							"evidence_ids": ["E01", "E02", "E06"],
+							"rationale": "Pure core, I/O reference host and real package-consumer boundary are independently exercised.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"anchor_support": "Current source contracts plus executed representative negative, concurrency and lifecycle tests confirm the claimed boundary within declared library/example scope.",
+							"baseline_anchor": 4,
+							"target_status": "preserve_current_evidence"
+						},
+						"flow": {
+							"status": "assessed",
+							"value": 4,
+							"confidence": "High",
+							"evidence_ids": ["E02", "E03", "E05"],
+							"rationale": "条件付き目標: Exampleと製品の両writerで、状態・receipt・失効の一体確定、失敗時の全体rollback、忘却と再起動を同じ契約で確認する。",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。",
+							"baseline_anchor": 3,
+							"target_status": "required_not_verified",
+							"required_evidence": "Exampleと製品の両writerで、状態・receipt・失効の一体確定、失敗時の全体rollback、忘却と再起動を同じ契約で確認する。",
+							"phase": "B",
+							"anchor_support": "この最高評価は将来の受入証拠で高確度に確認できた場合だけ成立する。必要証拠: Exampleと製品の両writerで、状態・receipt・失効の一体確定、失敗時の全体rollback、忘却と再起動を同じ契約で確認する。"
+						},
+						"fit": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E08", "E10"],
+							"rationale": "Small bounded stateless core fits existing host; no second runtime. Production state-store fit remains to be established.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"baseline_anchor": 3,
+							"target_status": "preserve_current_evidence"
+						}
+					}
+				},
+				"correctness": {
+					"criteria": {
+						"contracts": {
+							"status": "assessed",
+							"value": 4,
+							"confidence": "High",
+							"evidence_ids": ["E02", "E03"],
+							"rationale": "Valid/invalid action/state/decision contracts and resource limits pass direct tests; semantic truth explicitly excluded.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"anchor_support": "Current source contracts plus executed representative negative, concurrency and lifecycle tests confirm the claimed boundary within declared library/example scope.",
+							"baseline_anchor": 4,
+							"target_status": "preserve_current_evidence"
+						},
+						"edge_cases": {
+							"status": "assessed",
+							"value": 4,
+							"confidence": "High",
+							"evidence_ids": ["E02", "E03"],
+							"rationale": "Cycle/size/unicode/serialization/forgery/forget/replacement boundaries validated, including regression cases.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"anchor_support": "Current source contracts plus executed representative negative, concurrency and lifecycle tests confirm the claimed boundary within declared library/example scope.",
+							"baseline_anchor": 4,
+							"target_status": "preserve_current_evidence"
+						},
+						"concurrency": {
+							"status": "assessed",
+							"value": 4,
+							"confidence": "High",
+							"evidence_ids": ["E03", "E05"],
+							"rationale": "条件付き目標: 実際のwriterに対する同時訂正、手編集、忘却、取消、世代変更、遅延推論、保存中断を試験し、部分保存・旧提案復活・重複実行がないことを確認する。",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。",
+							"baseline_anchor": 3,
+							"target_status": "required_not_verified",
+							"required_evidence": "実際のwriterに対する同時訂正、手編集、忘却、取消、世代変更、遅延推論、保存中断を試験し、部分保存・旧提案復活・重複実行がないことを確認する。",
+							"phase": "B",
+							"anchor_support": "この最高評価は将来の受入証拠で高確度に確認できた場合だけ成立する。必要証拠: 実際のwriterに対する同時訂正、手編集、忘却、取消、世代変更、遅延推論、保存中断を試験し、部分保存・旧提案復活・重複実行がないことを確認する。"
+						}
+					}
+				},
+				"security": {
+					"criteria": {
+						"access": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E02", "E04", "E05", "E08"],
+							"rationale": "条件付き目標: ホストの実際の承認操作から発行した証跡を保護対象と内容・版へ照合し、文書・観測・無関係発言・旧版・別session・忘却済み出所の流用を拒否する。",
+							"baseline_anchor": 2,
+							"target_status": "required_not_verified",
+							"required_evidence": "ホストの実際の承認操作から発行した証跡を保護対象と内容・版へ照合し、文書・観測・無関係発言・旧版・別session・忘却済み出所の流用を拒否する。",
+							"phase": "A",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。"
+						},
+						"input_secrets": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E02", "E03", "E11"],
+							"rationale": "Untrusted outputs guarded, source/text instruction layers separated, subprocess secrets excluded and leak tests pass.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"baseline_anchor": 3,
+							"target_status": "preserve_current_evidence"
+						},
+						"abuse": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E03", "E04", "E07"],
+							"rationale": "条件付き目標: 出所検証を維持し、不正なモデル提案を固定試験で拒否する。語句と場面を変えた未使用課題でも、途中の未承認確定と保護操作への到達を検査する。意味判断はLLMに残す。",
+							"baseline_anchor": 2,
+							"target_status": "required_not_verified",
+							"required_evidence": "出所検証を維持し、不正なモデル提案を固定試験で拒否する。語句と場面を変えた未使用課題でも、途中の未承認確定と保護操作への到達を検査する。意味判断はLLMに残す。",
+							"phase": "A,C",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。"
+						}
+					}
+				},
+				"reliability": {
+					"criteria": {
+						"failure": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E03", "E05"],
+							"rationale": "Partial errors/timeouts visible with preserved state; provider accounting status assumptions documented.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"baseline_anchor": 3,
+							"target_status": "preserve_current_evidence"
+						},
+						"recovery": {
+							"status": "assessed",
+							"value": 4,
+							"confidence": "High",
+							"evidence_ids": ["E03", "E05"],
+							"rationale": "Process-exit send/stop windows, restart, revoked-source replay and deduplication directly verified in example host.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"anchor_support": "Current source contracts plus executed representative negative, concurrency and lifecycle tests confirm the claimed boundary within declared library/example scope.",
+							"baseline_anchor": 4,
+							"target_status": "preserve_current_evidence"
+						},
+						"resilience": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E03", "E05", "E10"],
+							"rationale": "Lock timeout, resource ceilings, unknown spend and cancellation handled without automatic resend; production saturation not validated.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"baseline_anchor": 3,
+							"target_status": "preserve_current_evidence"
+						}
+					}
+				},
+				"maintainability": {
+					"criteria": {
+						"clarity": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E02", "E09"],
+							"rationale": "条件付き目標: READMEと評価入口を版別の状態索引に更新し、実装・固定試験・実モデル・製品接続・残作業を区別する。手順を別の作業環境から実行する。",
+							"baseline_anchor": 2,
+							"target_status": "required_not_verified",
+							"required_evidence": "READMEと評価入口を版別の状態索引に更新し、実装・固定試験・実モデル・製品接続・残作業を区別する。手順を別の作業環境から実行する。",
+							"phase": "D",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。"
+						},
+						"change": {
+							"status": "assessed",
+							"value": 4,
+							"confidence": "High",
+							"evidence_ids": ["E03", "E06", "E13"],
+							"rationale": "条件付き目標: 承認契約と状態接続という代表的変更で、コア/ホスト境界を保ち、無関係な行動・文脈出力の互換、旧版保存データ、非対応版の保留、移行と切戻しを検証する。導入者による契約の読み違いがないか別環境で確認する。",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。",
+							"baseline_anchor": 3,
+							"target_status": "required_not_verified",
+							"required_evidence": "承認契約と状態接続という代表的変更で、コア/ホスト境界を保ち、無関係な行動・文脈出力の互換、旧版保存データ、非対応版の保留、移行と切戻しを検証する。導入者による契約の読み違いがないか別環境で確認する。",
+							"phase": "A,B,D",
+							"anchor_support": "この最高評価は将来の受入証拠で高確度に確認できた場合だけ成立する。必要証拠: 承認契約と状態接続という代表的変更で、コア/ホスト境界を保ち、無関係な行動・文脈出力の互換、旧版保存データ、非対応版の保留、移行と切戻しを検証する。導入者による契約の読み違いがないか別環境で確認する。"
+						},
+						"debt": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E02", "E05", "E13"],
+							"rationale": "No utterance keyword classifiers remain; proportional interfaces, versioned errors and bounded known example/eval adapter complexity.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"baseline_anchor": 3,
+							"target_status": "preserve_current_evidence"
+						}
+					}
+				},
+				"common_components": {
+					"criteria": {
+						"duplication": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E02", "E08"],
+							"rationale": "Schemas/messages shared across example and product action consumers; state guards reused at writer boundary.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"baseline_anchor": 3,
+							"target_status": "preserve_current_evidence"
+						},
+						"reuse": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E03", "E11"],
+							"rationale": "Zod and generated instruction catalog reduce duplicate contract work with pinned tested dependencies.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"baseline_anchor": 3,
+							"target_status": "preserve_current_evidence"
+						},
+						"abstraction": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E05", "E08"],
+							"rationale": "Thin host-owned interfaces avoid copying execution runtime; actual consumer exists, state adapter not yet adopted.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"baseline_anchor": 3,
+							"target_status": "preserve_current_evidence"
+						}
+					}
+				},
+				"testing": {
+					"criteria": {
+						"risk_coverage": {
+							"status": "assessed",
+							"value": 4,
+							"confidence": "High",
+							"evidence_ids": ["E03", "E07"],
+							"rationale": "条件付き目標: 保護操作への未承認到達、状態訂正・失効、実writerの競合・中断、途中の誤確定を含む主要な信頼境界を試験する。実モデル/UI/製品DB経路の受入は固定試験と別に記録する。",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。",
+							"baseline_anchor": 3,
+							"target_status": "required_not_verified",
+							"required_evidence": "保護操作への未承認到達、状態訂正・失効、実writerの競合・中断、途中の誤確定を含む主要な信頼境界を試験する。実モデル/UI/製品DB経路の受入は固定試験と別に記録する。",
+							"phase": "A,B,C",
+							"anchor_support": "この最高評価は将来の受入証拠で高確度に確認できた場合だけ成立する。必要証拠: 保護操作への未承認到達、状態訂正・失効、実writerの競合・中断、途中の誤確定を含む主要な信頼境界を試験する。実モデル/UI/製品DB経路の受入は固定試験と別に記録する。"
+						},
+						"quality": {
+							"status": "assessed",
+							"value": 4,
+							"confidence": "High",
+							"evidence_ids": ["E03", "E07", "E13"],
+							"rationale": "条件付き目標: 期待する状態遷移を出力から独立に定義し、重要ガードを無効化した隔離コピーで試験が失敗することを確認する。旧新版の反復・採点方法を揃え、自動判定の不一致・安全違反・境界例を人が確認する。",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。",
+							"baseline_anchor": 3,
+							"target_status": "required_not_verified",
+							"required_evidence": "期待する状態遷移を出力から独立に定義し、重要ガードを無効化した隔離コピーで試験が失敗することを確認する。旧新版の反復・採点方法を揃え、自動判定の不一致・安全違反・境界例を人が確認する。",
+							"phase": "C",
+							"anchor_support": "この最高評価は将来の受入証拠で高確度に確認できた場合だけ成立する。必要証拠: 期待する状態遷移を出力から独立に定義し、重要ガードを無効化した隔離コピーで試験が失敗することを確認する。旧新版の反復・採点方法を揃え、自動判定の不一致・安全違反・境界例を人が確認する。"
+						},
+						"automation": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E03", "E06", "E07"],
+							"rationale": "条件付き目標: APIキー不要の固定/集計/配布検証を、宣言した資料だけで隔離したローカル環境から再現する。対象ソースhashと各検査結果・成果物hashを照合する。CIの追加・実行・待機は行わず、この項目の目標を3に留める。",
+							"baseline_anchor": 2,
+							"target_status": "required_not_verified",
+							"required_evidence": "APIキー不要の固定/集計/配布検証を、宣言した資料だけで隔離したローカル環境から再現する。対象ソースhashと各検査結果・成果物hashを照合する。CIの追加・実行・待機は行わず、この項目の目標を3に留める。",
+							"phase": "C,D",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。"
+						}
+					}
+				},
+				"supply_chain": {
+					"criteria": {
+						"dependencies": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E11", "E13"],
+							"rationale": "Pinned lockfile/source provenance and current production audit; observed versioned fixes and upgrade path.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"baseline_anchor": 3,
+							"target_status": "preserve_current_evidence"
+						},
+						"build_release": {
+							"status": "assessed",
+							"value": 4,
+							"confidence": "High",
+							"evidence_ids": ["E03", "E06", "E11"],
+							"rationale": "Archive/report/resource hashes verified now, source drift/dirty marks and failed stamps guarded by tests; recorded consumer extraction matches source.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"anchor_support": "Current source contracts plus executed representative negative, concurrency and lifecycle tests confirm the claimed boundary within declared library/example scope.",
+							"baseline_anchor": 4,
+							"target_status": "preserve_current_evidence"
+						},
+						"license": {
+							"status": "assessed",
+							"value": 2,
+							"confidence": "Medium",
+							"evidence_ids": ["E01", "E11"],
+							"rationale": "Root and runtime dependency distribution licenses/ownership identifiable; no comprehensive legal review claimed.",
+							"baseline_anchor": 2,
+							"target_status": "preserve_current_evidence"
+						}
+					}
+				},
+				"performance": {
+					"criteria": {
+						"budget": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E05", "E07", "E10"],
+							"rationale": "条件付き目標: 既存200msのコアp95上限を通常/1000件/深い置換/容量境界で確認する。製品の推論回数・待ち時間・費用の基準線と採否上限を評価前に固定し、悪化・予算不明・上限超過時は採用しない。",
+							"baseline_anchor": 2,
+							"target_status": "required_not_verified",
+							"required_evidence": "既存200msのコアp95上限を通常/1000件/深い置換/容量境界で確認する。製品の推論回数・待ち時間・費用の基準線と採否上限を評価前に固定し、悪化・予算不明・上限超過時は採用しない。",
+							"phase": "E",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。"
+						},
+						"hot_path": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E02", "E10"],
+							"rationale": "Linear-size state processing tested at 1000 facts and dense legal lineage; p95 34ms within local budget.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"baseline_anchor": 3,
+							"target_status": "preserve_current_evidence"
+						},
+						"measurement": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E07", "E10"],
+							"rationale": "条件付き目標: 0.3と候補を同じ入力・反復・機器条件で測り、近2MiB状態、複雑な置換関係、writer競合、実対話の待ち時間・費用を分けて報告する。基準線と再実行手順を固定する。",
+							"baseline_anchor": 2,
+							"target_status": "required_not_verified",
+							"required_evidence": "0.3と候補を同じ入力・反復・機器条件で測り、近2MiB状態、複雑な置換関係、writer競合、実対話の待ち時間・費用を分けて報告する。基準線と再実行手順を固定する。",
+							"phase": "E",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。"
+						}
+					}
+				},
+				"operability": {
+					"criteria": {
+						"signals": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E02", "E03", "E05"],
+							"rationale": "Typed failure codes, stale refs, orphaned facts and external uncertain/stopping states support privacy-conscious diagnosis.",
+							"countercheck": "Compared normal and negative paths, documented constraints and actual caller behavior; limits in linked evidence remain applicable.",
+							"baseline_anchor": 3,
+							"target_status": "preserve_current_evidence"
+						},
+						"lifecycle": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E06", "E09", "E13"],
+							"rationale": "条件付き目標: 宣言した資料だけで導入・版更新・非対応版保留・復旧・接続解除を再現する。古いDB復元による忘却の取消は行わない。",
+							"baseline_anchor": 2,
+							"target_status": "required_not_verified",
+							"required_evidence": "宣言した資料だけで導入・版更新・非対応版保留・復旧・接続解除を再現する。古いDB復元による忘却の取消は行わない。",
+							"phase": "B,D",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。"
+						},
+						"interaction": {
+							"status": "assessed",
+							"value": 3,
+							"confidence": "Medium",
+							"evidence_ids": ["E03", "E08", "E09"],
+							"rationale": "条件付き目標: 利用者が確定済み/提案/承認待ち/保存済み/忘却済みを区別でき、通常編集で承認を重ねずに作業できることを実UIで確認する。拒否・競合時に状態を失わず再開できる。",
+							"baseline_anchor": 2,
+							"target_status": "required_not_verified",
+							"required_evidence": "利用者が確定済み/提案/承認待ち/保存済み/忘却済みを区別でき、通常編集で承認を重ねずに作業できることを実UIで確認する。拒否・競合時に状態を失わず再開できる。",
+							"phase": "A,B,D",
+							"countercheck": "通常の成功だけでなく、拒否・競合・中断・異なる対象/語句で契約が維持されること、および現状の強みが退行しないことを検証する。"
+						}
+					}
+				}
+			}
+		}
+	},
+	"baseline_anchors": {
+		"architecture": {
+			"boundaries": 4,
+			"flow": 3,
+			"fit": 3
+		},
+		"correctness": {
+			"contracts": 4,
+			"edge_cases": 4,
+			"concurrency": 3
+		},
+		"security": {
+			"access": 2,
+			"input_secrets": 3,
+			"abuse": 2
+		},
+		"reliability": {
+			"failure": 3,
+			"recovery": 4,
+			"resilience": 3
+		},
+		"maintainability": {
+			"clarity": 2,
+			"change": 3,
+			"debt": 3
+		},
+		"common_components": {
+			"duplication": 3,
+			"reuse": 3,
+			"abstraction": 3
+		},
+		"testing": {
+			"risk_coverage": 3,
+			"quality": 3,
+			"automation": 2
+		},
+		"supply_chain": {
+			"dependencies": 3,
+			"build_release": 4,
+			"license": 2
+		},
+		"performance": {
+			"budget": 2,
+			"hot_path": 3,
+			"measurement": 2
+		},
+		"operability": {
+			"signals": 3,
+			"lifecycle": 2,
+			"interaction": 2
+		}
+	},
+	"claims": [
+		{
+			"id": "P01",
+			"type": "Assumption",
+			"statement": "After A–E acceptance, all listed target anchors are met; user does not request CI.",
+			"limitations": "This is a conditional target, not a prediction, completed work or current score."
+		}
+	],
+	"findings": [],
+	"assumed_fixes": [
+		{
+			"id": "F01",
+			"condition": "Observation-only or unrelated/stale approval cannot authorize protected decision/action; valid explicit approval succeeds, edits/revocation invalidate it.",
+			"status": "required_not_verified"
+		},
+		{
+			"id": "F02",
+			"condition": "Identical-output distributions cannot appear improved solely from different aggregation; an injected transient unauthorized confirmation is detected even if final facts recover.",
+			"status": "required_not_verified"
+		},
+		{
+			"id": "F03",
+			"condition": "Current entry documents agree with hash-identified records and distinguish 0.2 action adoption from 0.3 source-state work.",
+			"status": "required_not_verified"
+		},
+		{
+			"id": "F04",
+			"condition": "A clean checkout plus declared retrievable evidence reproduces summary without private scratchpad paths, credentials or paid calls.",
+			"status": "required_not_verified"
+		}
+	]
+}

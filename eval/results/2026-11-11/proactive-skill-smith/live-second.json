@@ -1,0 +1,164 @@
+{
+  "model": "gpt-6.1-sol",
+  "route": "codex-subscription",
+  "maxCalls": 6,
+  "calls": [
+    {
+      "lane": "reply",
+      "status": "ok",
+      "inputTokens": 9102,
+      "outputTokens": 194,
+      "elapsedMs": 8478
+    },
+    {
+      "lane": "evaluator",
+      "status": "ok",
+      "inputTokens": 9065,
+      "outputTokens": 220,
+      "elapsedMs": 11731
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "inputTokens": 9916,
+      "outputTokens": 60,
+      "elapsedMs": 8631
+    },
+    {
+      "lane": "skill-smith",
+      "status": "ok",
+      "inputTokens": 14603,
+      "outputTokens": 337,
+      "elapsedMs": 18387
+    }
+  ],
+  "reply": "現在の定義ではタイトルが「申込フォーム」で、合意条件の「予約フォーム」と異なるため、別担当にも確認を依頼します。画面は変更せず、既存の確認票の手順を探して、運用担当向けの短い確認票を作成します。",
+  "replyMs": 8482,
+  "requests": {
+    "review": {
+      "question": "現在の画面タイトル定義「申込フォーム」は、合意条件「予約フォーム」を満たしているか確認してください。",
+      "conditionIds": [
+        "heading"
+      ]
+    },
+    "skill": {
+      "goal": "現在の定義と合意条件をもとに、タイトルの不一致と部署必須・備考任意を確認できる運用担当向けの短い確認票を作成する。画面は変更しない。",
+      "query": "フォーム 運用 確認票 作成 手順"
+    }
+  },
+  "background": {
+    "review": {
+      "status": "ok",
+      "elapsedMs": 11747,
+      "value": {
+        "contractVersion": 1,
+        "evaluationId": "7f8f2aff-be5e-4d9b-8d3e-2b4136aa0496",
+        "rubric": {
+          "id": "workflow-correctness",
+          "version": 1
+        },
+        "target": {
+          "kind": "workflow",
+          "id": "example-reservation-form",
+          "version": "1",
+          "digest": "80e3e4cc7f61445c0c7465d1711e04795739ed6bef539adb404093a66f6fe9e7"
+        },
+        "inputDigest": "2e8072f55effc3a62ec51559da83787cc215935af174722c8bf412609bdcf438",
+        "scopeSelection": {
+          "version": 1,
+          "digestVersion": 2,
+          "digest": "7f76cb1f0f8b4caae4d90d6e70664fb45e92ce37d45898fc600470237eb96a45",
+          "conditionDigest": "dcf6f34f62e9c535c9e0b6b46fe50f06d133fc1b42cb7a1e9a103640b0d608db",
+          "conditionRevision": "c4bed88cb7813298a4161242540d392120507b6584d153fbcfc9cce2482ed497",
+          "targetDigest": "80e3e4cc7f61445c0c7465d1711e04795739ed6bef539adb404093a66f6fe9e7",
+          "target": {
+            "kind": "workflow",
+            "id": "example-reservation-form",
+            "version": "1"
+          },
+          "selected": [
+            {
+              "id": "workflow",
+              "kind": "json",
+              "version": "1",
+              "clipped": false,
+              "pointerRoot": ""
+            }
+          ],
+          "initialEvidenceIds": [],
+          "allowedEvidenceIds": [],
+          "availableEvidence": [],
+          "unknownEvidenceIds": [],
+          "requiredEvidenceIds": [],
+          "conditionIds": [
+            "heading"
+          ],
+          "unavailableConditionIds": []
+        },
+        "conditionSelection": {
+          "applied": [
+            "heading"
+          ],
+          "excluded": []
+        },
+        "conditions": "available",
+        "conditionRevision": "c4bed88cb7813298a4161242540d392120507b6584d153fbcfc9cce2482ed497",
+        "findings": [
+          {
+            "title": "画面タイトルが合意条件と異なる",
+            "problem": "画面タイトルは「申込フォーム」と定義されており、条件の「予約フォーム」と一致しません。",
+            "trigger": "この定義を使用して画面を表示した場合。",
+            "impact": "合意した画面タイトルで公開されません。",
+            "severity": "medium",
+            "primary": {
+              "evidenceId": "workflow",
+              "startLine": null,
+              "endLine": null,
+              "pointer": "/title"
+            },
+            "evidence": [],
+            "conditionId": "heading"
+          }
+        ],
+        "scopeChecks": [
+          {
+            "evidenceId": "workflow",
+            "status": "checked",
+            "reason": "提示されたワークフローのタイトル定義を確認しました。"
+          }
+        ],
+        "conditionChecks": [
+          {
+            "conditionId": "heading",
+            "status": "violated",
+            "reason": "要求された「予約フォーム」に対し、定義値は「申込フォーム」です。",
+            "evidence": [
+              {
+                "evidenceId": "workflow",
+                "startLine": null,
+                "endLine": null,
+                "pointer": "/title"
+              }
+            ]
+          }
+        ],
+        "status": "completed",
+        "issues": [],
+        "rejected": [],
+        "durationMs": 11742,
+        "model": "gpt-6.1-sol"
+      }
+    },
+    "skill": {
+      "status": "failed",
+      "elapsedMs": 27045,
+      "error": "skill_delivery_needs_input"
+    }
+  },
+  "checks": {
+    "review": true,
+    "skill": false,
+    "task": false
+  },
+  "error": "trial_acceptance_failed"
+}

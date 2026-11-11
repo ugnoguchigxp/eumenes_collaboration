@@ -1,0 +1,134 @@
+[
+  {
+    "id": "5de8fc7b-f95",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "受付見出しと一文に、時間と窓口名が揃う。"
+  },
+  {
+    "id": "617590ea-9ba",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "受付見出しと一文に、時間と窓口名が揃う。"
+  },
+  {
+    "id": "8ef7054d-326",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "a/cを適合、b/dを要修正とし、送信しない期待動作を示す。"
+  },
+  {
+    "id": "f9a7b21c-fdc",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "a/cを適合、b/dを要修正とし、送信しない期待動作を示す。"
+  },
+  {
+    "id": "2a340a58-156",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": true,
+    "note": "両機材の時刻と点検状態、EQ-41の優先、具体的な確認が揃う。冒頭に定型欄を記載。採点項目外だが、表題に明示されていない日付（11月13日）を補っている。"
+  },
+  {
+    "id": "ff31fc81-266",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": false,
+    "note": "両機材の時刻と点検状態、EQ-41の優先、具体的な確認が揃う。定型欄はない。"
+  },
+  {
+    "id": "47dfbe8a-c40",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": false,
+    "note": "両案件の在庫・時刻、S-18の優先と入荷未回答、確認行動が揃う。定型欄はない。"
+  },
+  {
+    "id": "8cd30476-75c",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": true,
+    "note": "両案件の在庫・時刻、S-18の優先と入荷未回答、確認行動が揃う。冒頭に定型欄を記載。"
+  },
+  {
+    "id": "c6d5980c-266",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": false,
+    "note": "P-03だけ公開に進め、他の3件の保留理由と次の行動を示す。定型欄はない。"
+  },
+  {
+    "id": "d96f6146-a7a",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": true,
+    "note": "P-03だけ公開に進め、他の3件の保留理由と次の行動を示す。冒頭に定型欄を記載。"
+  },
+  {
+    "id": "1e76f666-a73",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "全4件の判定と重複優先を明示する。"
+  },
+  {
+    "id": "5a05ea07-6b6",
+    "checks": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "procedure": null,
+    "note": "全4件の判定と重複優先を明示する。"
+  }
+]

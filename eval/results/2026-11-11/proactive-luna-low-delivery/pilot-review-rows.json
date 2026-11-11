@@ -1,0 +1,188 @@
+{
+  "result": {
+    "contractVersion": 1,
+    "evaluationId": "42716b21-a9f0-4520-8339-8191ca8a539d",
+    "rubric": {
+      "id": "workflow-correctness",
+      "version": 1
+    },
+    "target": {
+      "kind": "workflow",
+      "id": "02",
+      "version": "1",
+      "digest": "362da59ae51f6e99d894ae104c8880d36d741d3b14185a23cf0c61cdfc231ff3"
+    },
+    "inputDigest": "e1b8bc81a1560e4a17aed8c501c7e4f2e5ea1ce8e5f002dfe87f245e286b5e86",
+    "scopeSelection": {
+      "version": 1,
+      "digestVersion": 2,
+      "digest": "7f2b5e88fdd974cfbbf0503ef779b92a1139aaaf171068f1385e9050aecbb85f",
+      "conditionDigest": "772c5fe06bec311c3334d29aef8e03db7b6b4eecbaa4d984602c58687cf9de0d",
+      "conditionRevision": "ae4afce4cc1d241c1bf964cacc24a36f1286484478774b56bda2a14fd42dfe6c",
+      "targetDigest": "362da59ae51f6e99d894ae104c8880d36d741d3b14185a23cf0c61cdfc231ff3",
+      "target": {
+        "kind": "workflow",
+        "id": "02",
+        "version": "1"
+      },
+      "selected": [
+        {
+          "id": "json:438ab85cbe19bb7f53a1f119e7d22a3e2d4acc87490e86cc5391d832f1c8d252",
+          "kind": "json",
+          "version": "1",
+          "clipped": false,
+          "pointerRoot": "/rules/0"
+        },
+        {
+          "id": "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12",
+          "kind": "json",
+          "version": "1",
+          "clipped": false,
+          "pointerRoot": "/rules/1"
+        },
+        {
+          "id": "json:66813a7cc2636ea3f258cbf740bee152e7af1b369d3f2882b8236faf69c29880",
+          "kind": "json",
+          "version": "1",
+          "clipped": false,
+          "pointerRoot": "/rules/2"
+        },
+        {
+          "id": "json:e4acfe391e067e90c10c2620122493dd8064deff50933ae56b6958e19cc6ac4b",
+          "kind": "json",
+          "version": "1",
+          "clipped": false,
+          "pointerRoot": "/rules/3"
+        }
+      ],
+      "initialEvidenceIds": [],
+      "allowedEvidenceIds": [],
+      "availableEvidence": [],
+      "unknownEvidenceIds": [],
+      "requiredEvidenceIds": [],
+      "conditionIds": [
+        "gate"
+      ],
+      "unavailableConditionIds": []
+    },
+    "conditionSelection": {
+      "applied": [
+        "gate"
+      ],
+      "excluded": []
+    },
+    "conditions": "available",
+    "conditionRevision": "ae4afce4cc1d241c1bf964cacc24a36f1286484478774b56bda2a14fd42dfe6c",
+    "findings": [
+      {
+        "title": "通知辞退時にも取消通知を送信する",
+        "problem": "通知辞退ありの分岐が送信を許可しています。",
+        "trigger": "取消済み・未発送・通知辞退あり（rule b）。",
+        "impact": "辞退した利用者に取消通知が送られ、確定条件に違反します。",
+        "severity": "high",
+        "primary": {
+          "evidenceId": "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12",
+          "startLine": null,
+          "endLine": null,
+          "pointer": "/rules/1"
+        },
+        "evidence": [
+          {
+            "evidenceId": "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12",
+            "startLine": null,
+            "endLine": null,
+            "pointer": "/rules/1/send"
+          }
+        ],
+        "conditionId": "gate"
+      },
+      {
+        "title": "未取消の注文にも通知を送信する",
+        "problem": "取消条件が成り立たない分岐で送信を許可しています。",
+        "trigger": "未取消・未発送・通知辞退なし（rule d）。",
+        "impact": "取消されていない注文に取消通知が送られ、確定条件に違反します。",
+        "severity": "high",
+        "primary": {
+          "evidenceId": "json:e4acfe391e067e90c10c2620122493dd8064deff50933ae56b6958e19cc6ac4b",
+          "startLine": null,
+          "endLine": null,
+          "pointer": "/rules/3"
+        },
+        "evidence": [
+          {
+            "evidenceId": "json:e4acfe391e067e90c10c2620122493dd8064deff50933ae56b6958e19cc6ac4b",
+            "startLine": null,
+            "endLine": null,
+            "pointer": "/rules/3/send"
+          }
+        ],
+        "conditionId": "gate"
+      }
+    ],
+    "scopeChecks": [
+      {
+        "evidenceId": "json:438ab85cbe19bb7f53a1f119e7d22a3e2d4acc87490e86cc5391d832f1c8d252",
+        "status": "checked",
+        "reason": "取消済み・未発送・通知辞退なしの全条件を満たし、send=true は期待どおりです。"
+      },
+      {
+        "evidenceId": "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12",
+        "status": "checked",
+        "reason": "通知辞退ありのため送信すべきでないのに、send=true です。"
+      },
+      {
+        "evidenceId": "json:66813a7cc2636ea3f258cbf740bee152e7af1b369d3f2882b8236faf69c29880",
+        "status": "checked",
+        "reason": "発送済みのため送信すべきでなく、send=false は期待どおりです。"
+      },
+      {
+        "evidenceId": "json:e4acfe391e067e90c10c2620122493dd8064deff50933ae56b6958e19cc6ac4b",
+        "status": "checked",
+        "reason": "取消されていないため送信すべきでないのに、send=true です。"
+      }
+    ],
+    "conditionChecks": [
+      {
+        "conditionId": "gate",
+        "status": "violated",
+        "reason": "送信は取消済み・未発送・通知辞退なしのすべてを満たす場合だけ許可されるが、rule b と rule d で条件を満たさないのに send=true です。",
+        "evidence": [
+          {
+            "evidenceId": "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12",
+            "startLine": null,
+            "endLine": null,
+            "pointer": "/rules/1/send"
+          },
+          {
+            "evidenceId": "json:e4acfe391e067e90c10c2620122493dd8064deff50933ae56b6958e19cc6ac4b",
+            "startLine": null,
+            "endLine": null,
+            "pointer": "/rules/3/send"
+          }
+        ]
+      }
+    ],
+    "status": "completed",
+    "issues": [],
+    "rejected": [],
+    "durationMs": 20563,
+    "model": "gpt-6-luna",
+    "rowVerdicts": {
+      "json:438ab85cbe19bb7f53a1f119e7d22a3e2d4acc87490e86cc5391d832f1c8d252": "matches",
+      "json:29b1b4f71e654c7775cda547e1fd031deb0d09f1faa6cd339b31105fa4d03f12": "differs",
+      "json:66813a7cc2636ea3f258cbf740bee152e7af1b369d3f2882b8236faf69c29880": "matches",
+      "json:e4acfe391e067e90c10c2620122493dd8064deff50933ae56b6958e19cc6ac4b": "differs"
+    }
+  },
+  "calls": [
+    {
+      "lane": "evaluator",
+      "status": "ok",
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 9849,
+      "outputTokens": 827,
+      "elapsedMs": 20554
+    }
+  ]
+}

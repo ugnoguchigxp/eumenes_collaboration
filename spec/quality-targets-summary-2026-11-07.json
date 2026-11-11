@@ -1,0 +1,144 @@
+{
+	"rubric_version": "1.1.0",
+	"technical_profile": "library",
+	"mode": "technical",
+	"assessment_kind": "expected",
+	"target": {
+		"locator": "/Users/y.noguchi/Code/eumenes_collaboration",
+		"snapshot": "planned source snapshot derived from b03426226ef5ef6ead47c216a309bb48c2a420df",
+		"reviewed_at": "2026-11-07",
+		"stage": "conditional technical quality target without CI",
+		"scope": "Current library, generated instructions, tests, example adapters/storage, distribution and evaluation tooling. Library profile fixed before scoring. Eumenes inspected only at package/source/approval integration boundaries; product live paths not rerun. No code edits or paid model calls. Existing pack acceptance independently hash-checked, not rerun. Synthetic local timing only. CI excluded by existing user decision; no current CI success inferred. External docs checked on review date, feature comparison only; no competitor benchmark. Expected technical scenario only; confidence fields on target anchor 4 describe evidence that must be obtained, not present forecast confidence."
+	},
+	"depth": "deep",
+	"tracks": {
+		"technical": {
+			"raw_observed_score": 86.2,
+			"provisional_score": 86.2,
+			"score": null,
+			"score_status": "provisional",
+			"coverage_percent": 100.0,
+			"excluded_dimension_weight_percent": 0.0,
+			"raw_bounds": [86.2, 86.2],
+			"bounds": [86.2, 86.2],
+			"confidence": "Medium",
+			"required_dimensions_complete": true,
+			"incomplete_required_dimensions": [],
+			"unresolved_severe_suspicions": [],
+			"gates": [],
+			"production_readiness": "hypothetical: no blocker identified in reviewed scope",
+			"dimensions": {
+				"architecture": {
+					"status": "assessed",
+					"score": 9.2,
+					"coverage_percent": 100.0,
+					"bounds": [9.2, 9.2],
+					"base_weight": 12,
+					"confidence": "Medium",
+					"effective_weight_percent": 12.0
+				},
+				"correctness": {
+					"status": "assessed",
+					"score": 10.0,
+					"coverage_percent": 100.0,
+					"bounds": [10.0, 10.0],
+					"base_weight": 20,
+					"confidence": "High",
+					"effective_weight_percent": 20.0
+				},
+				"security": {
+					"status": "assessed",
+					"score": 7.5,
+					"coverage_percent": 100.0,
+					"bounds": [7.5, 7.5],
+					"base_weight": 10,
+					"confidence": "Medium",
+					"effective_weight_percent": 10.0
+				},
+				"reliability": {
+					"status": "assessed",
+					"score": 8.3,
+					"coverage_percent": 100.0,
+					"bounds": [8.3, 8.3],
+					"base_weight": 8,
+					"confidence": "Medium",
+					"effective_weight_percent": 8.0
+				},
+				"maintainability": {
+					"status": "assessed",
+					"score": 8.3,
+					"coverage_percent": 100.0,
+					"bounds": [8.3, 8.3],
+					"base_weight": 12,
+					"confidence": "Medium",
+					"effective_weight_percent": 12.0
+				},
+				"common_components": {
+					"status": "assessed",
+					"score": 7.5,
+					"coverage_percent": 100.0,
+					"bounds": [7.5, 7.5],
+					"base_weight": 5,
+					"confidence": "Medium",
+					"effective_weight_percent": 5.0
+				},
+				"testing": {
+					"status": "assessed",
+					"score": 9.2,
+					"coverage_percent": 100.0,
+					"bounds": [9.2, 9.2],
+					"base_weight": 15,
+					"confidence": "Medium",
+					"effective_weight_percent": 15.0
+				},
+				"supply_chain": {
+					"status": "assessed",
+					"score": 7.5,
+					"coverage_percent": 100.0,
+					"bounds": [7.5, 7.5],
+					"base_weight": 10,
+					"confidence": "Medium",
+					"effective_weight_percent": 10.0
+				},
+				"performance": {
+					"status": "assessed",
+					"score": 7.5,
+					"coverage_percent": 100.0,
+					"bounds": [7.5, 7.5],
+					"base_weight": 5,
+					"confidence": "Medium",
+					"effective_weight_percent": 5.0
+				},
+				"operability": {
+					"status": "assessed",
+					"score": 7.5,
+					"coverage_percent": 100.0,
+					"bounds": [7.5, 7.5],
+					"base_weight": 3,
+					"confidence": "Medium",
+					"effective_weight_percent": 3.0
+				}
+			}
+		}
+	},
+	"confirmed_findings": {
+		"Critical": 0,
+		"High": 0,
+		"Medium": 0,
+		"Low": 0
+	},
+	"priorities": {
+		"P0": 0,
+		"P1": 0,
+		"P2": 0,
+		"P3": 0
+	},
+	"suspected_findings": 0,
+	"baseline_snapshot": "b03426226ef5ef6ead47c216a309bb48c2a420df",
+	"scenario_conditions": [
+		"A〜Eの全受入条件を実施し、対応するcriterionの目標anchorを実際の証拠が満たす場合だけ成立する条件付き試算。未実装の改善を現状点へ加算しない。",
+		"CIは追加・実行・再実行・完了待ちをしない。評価profile、重み、適用範囲とanchor基準は現状評価と同じまま。testing.automationの目標は3であり4ではない。",
+		"F01〜F04が解消し、製品状態接続・代表的な変更影響・並行/障害/注入の境界試験を通す。新しい高重大度問題が出た場合は目標を再計算する。",
+		"有料評価と製品サーバー操作は今回実施しない。実施時はその時点の利用者承認、接続設定、保存済み予算台帳と権限の範囲に従う。"
+	]
+}

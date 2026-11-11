@@ -1,0 +1,102 @@
+{
+  "runName": "holdout-v2",
+  "dryRun": false,
+  "tasksPath": "/private/tmp/claude-660782498/-Users-y-noguchi-Code-eumenes-collaboration/a4af8dce-675e-448b-a602-e036e3861c3f/scratchpad/sealed/holdout-v2.json",
+  "tasksSha256": "842dfe2f811b785e4a2bc069428a501b9f4a8bfbf23ed37004163417d70956fa",
+  "selection": {
+    "split": "holdout",
+    "groups": null,
+    "limit": null,
+    "taskIds": [
+      "v2-structured-stall-roster",
+      "v2-structured-room-rules",
+      "v2-structured-pet-rates",
+      "v2-structured-library-ledger",
+      "v2-structured-member-migration",
+      "v2-structured-quiz-points",
+      "v2-ui-cafe-menu",
+      "v2-ui-event-banner",
+      "v2-ui-salon-booking",
+      "v2-ui-photo-portfolio",
+      "v2-ui-product-buttons",
+      "v2-ui-yoga-flyer",
+      "v2-pipeline-inquiry-routing",
+      "v2-pipeline-sales-dedupe",
+      "v2-pipeline-meeting-minutes",
+      "v2-pipeline-error-alert",
+      "v2-pipeline-translate-summary",
+      "v2-pipeline-stock-sync",
+      "v2-external-validation-request",
+      "v2-external-two-questions",
+      "v2-external-readme-followup",
+      "v2-external-session-correction",
+      "v2-external-stop-other",
+      "v2-external-answer-correction",
+      "v2-injection-study-plan",
+      "v2-injection-notice-report",
+      "v2-injection-inventory-memo",
+      "v2-injection-trial-log",
+      "v2-injection-product-draft",
+      "v2-injection-agent-questions"
+    ]
+  },
+  "preregistration": {
+    "path": "/Users/y.noguchi/Code/eumenes_collaboration/eval/protocol-v2.json",
+    "sha256": "0d405b7452ed0898e904cf3e876c9bd0226a5b693f6d56945e735844e314612c"
+  },
+  "git": {
+    "head": "7843627874c686ad2777ec0c3d0bc44ab604d29f",
+    "statusPorcelainSha256": "11a70e7212eeef995e72a79904004d4be483cfb05b6989442ea6b2f7249b595b",
+    "dirty": true
+  },
+  "workingTree": {
+    "src": {
+      "files": 13,
+      "sha256": "da65a3df232b93da1ed948314600eee794b39209dd82124a1e78e6b1c7408776"
+    },
+    "contexts": {
+      "files": 5,
+      "sha256": "b02a81fae974416363e12927374bc7b7a1b434a2207348af482ed29780ae64bd"
+    },
+    ".s11tnext": {
+      "files": 2,
+      "sha256": "a59380184170277965cdcfeb8acef6e32b2d6522d5f5387f51565e4474fd743e"
+    },
+    "example": {
+      "files": 28,
+      "sha256": "052b2256dd8de2a78a61917105ecb7d4ff45959b8ac52c3216dad8dc9bcbc156"
+    }
+  },
+  "models": {
+    "anthropic": "claude-haiku-5-5",
+    "openai": "gpt-6-luna"
+  },
+  "providers": [
+    "anthropic",
+    "openai"
+  ],
+  "arms": [
+    "baseline",
+    "candidate"
+  ],
+  "reps": {
+    "candidate": 3,
+    "baseline": 1
+  },
+  "baselineDir": "/Users/y.noguchi/Code/eumenes_collaboration/.work/evaluation-baseline-v2",
+  "armPackageVersions": {
+    "candidate": "0.3.0",
+    "baseline": "0.2.0"
+  },
+  "budget": {
+    "capUsd": 10,
+    "stopAtUsd": 9,
+    "db": "/Users/y.noguchi/Code/eumenes_collaboration/reports/quality-2026-11-06/api-budget.sqlite"
+  },
+  "concurrency": 2,
+  "maxOutputTokens": 2048,
+  "timeoutMs": 60000,
+  "maxRepairCallsPerTurn": 1,
+  "decisions": false,
+  "grading": "every session is graded by both providers; the grader sees conversation, material, expected, unresolved and facts only"
+}

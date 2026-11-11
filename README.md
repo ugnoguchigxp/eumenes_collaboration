@@ -21,6 +21,8 @@ bun run pack:check  # 実tgzを作り、固定commitの隔離Eumenesで互換を
 | --- | --- |
 | `createCollaborationContract` | hostの返答制約から、行動（reply / invoke / return / discard）のschema・`check`・`parse`・違反を返す |
 | `buildCollaborationMessages` / `turnContextSchema` | 固定指示・参照資料・現在の原文を分けてメッセージを組み立てる。入力は実行時に検査する |
+| `checkStateApproval` | hostが正式な承認操作から記録した証跡と、重要な決定・対象版・有効な利用者出所を照合する |
+| `createStatefulCollaborationContract` | 同じ推論で既存の行動と出所付き状態提案を返す任意の契約 |
 | `collaborationInstructions` | s11tnextで生成した共通の固定指示 |
 | `proposeStateUpdate` / `forgetStateSources` | 状態の更新提案と忘却を、版・出所・置換関係・資源で検査する。保存はしない |
 | `checkSessionDecision` / `checkPlan` / `checkBrowserChoice` | LLMの終了・工程・ブラウザの判断を検査する |
@@ -35,7 +37,7 @@ bun run pack:check  # 実tgzを作り、固定commitの隔離Eumenesで互換を
 
 - コードが保証するのは、構造・版・出所の実在と有効性・権限・資源の検査までです。引用された出所が意味として正しいかは、モデルに依存します（[脅威モデル](spec/threat-model.md)）。
 - 固定の試験に合格しても、実モデルの意味品質は保証されません。実API評価の結果と限界は、[改善設計書の実施記録](spec/improvement-design-2026-11-06.md) を参照してください。
-- 製品Eumenesへの取り込み、実renderer、実外部agent、製品DBの移行は、まだ実施していません。
+- 製品Eumenesへ0.4.0の出所付き状態を接続し、実モデル・実DB・実画面で部分訂正、保存、再起動、条件の忘却を確認しました。製品の既存の操作権限は維持しています。新しい承認照合APIの正式レビュー画面への接続と、新条件での大規模比較は別の受入です。確認範囲と保留事項は[実装記録](spec/quality-implementation-2026-11-07.md)を参照してください。
 
 ## 文書
 
@@ -45,7 +47,7 @@ bun run pack:check  # 実tgzを作り、固定commitの隔離Eumenesで互換を
 | [状態提案の契約](spec/state-contract.md) | 状態schemaと更新・忘却の規則 |
 | [脅威モデル](spec/threat-model.md) | 信頼境界、コードが保証すること、残存リスク |
 | [用語集](spec/glossary.md) | 日本語の用語と識別子の対応 |
-| [0.3.0への更新](spec/upgrading-0.3.md) / [0.2.0への更新](spec/upgrading-0.2.md) | 移行と復旧の手順 |
+| [0.4.0への更新](spec/upgrading-0.4.md) / [0.3.0への更新](spec/upgrading-0.3.md) / [0.2.0への更新](spec/upgrading-0.2.md) | 移行と復旧の手順 |
 | [example host](example/README.md) | モデル・保存・外部操作のadapterの例 |
 | [改善設計書](spec/improvement-design-2026-11-06.md) | 0.3.0の設計と実施記録 |
 | [CHANGELOG](CHANGELOG.md) | 版ごとの変更 |

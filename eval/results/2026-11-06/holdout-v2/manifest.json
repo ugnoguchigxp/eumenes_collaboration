@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "synthetic": true,
+  "run": "holdout-v2",
+  "rawLogSha256": "2e7513338a779b9d9b41e0fcf6865e808fdebf9e6726d7ec4d45ec448550ff28",
+  "files": {
+    "tasks.json": "842dfe2f811b785e4a2bc069428a501b9f4a8bfbf23ed37004163417d70956fa",
+    "protocol.json": "0d405b7452ed0898e904cf3e876c9bd0226a5b693f6d56945e735844e314612c",
+    "live-protocol.json": "b8b53b178503e5150cd081dc3fa2270bb3af90a7ab26a141125741cfcddf1962",
+    "api-budget-summary.json": "008173a4c7ea379d0b5f594188fb3a1e2a4406d6f2e5611b016e271745375140",
+    "live.jsonl.gz": "9d107acacee913a068176a0d46e9f1abb851a0460b76933cff2a4c9af595b376"
+  }
+}
