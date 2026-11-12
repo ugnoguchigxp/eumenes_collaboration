@@ -1,0 +1,98 @@
+[
+  {
+    "case": "cache-rules",
+    "id": "3650d6f7-774",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断の照合",
+      "body": "| ID | 現在齢（秒） | 期待動作 | 現行との一致・要修正 |\n|---|---:|---|---|\n| H-01 | 24 | SERVE | 一致 |\n| H-02 | 29 | SERVE | 要修正（現行 VALIDATE） |\n| H-03 | 17 | VALIDATE | 一致 |\n| H-04 | 42 | SERVE | 一致 |\n| H-05 | 42 | VALIDATE | 要修正（現行 SERVE） |\n| H-06 | 10 | GATEWAY | 一致 |\n| H-07 | 10 | VALIDATE | 要修正（現行 SERVE） |\n| H-08 | 58 | SERVE | 要修正（現行 VALIDATE） |"
+    }
+  },
+  {
+    "case": "cache-rules",
+    "id": "81d4d8bb-5f7",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断の照合",
+      "body": "| ID | 現在齢（秒） | 期待動作 | 現行との一致・要修正 |\n|---|---:|---|---|\n| H-01 | 28 | VALIDATE | 要修正（現行 24/SERVE） |\n| H-02 | 15 | VALIDATE | 一致（現行 29/VALIDATE）※動作は一致、現在齢は不一致 |\n| H-03 | 14 | VALIDATE | 要修正（現行 17/VALIDATE）※動作は一致、現在齢は不一致 |\n| H-04 | 42 | SERVE | 一致（現行 42/SERVE） |\n| H-05 | 42 | VALIDATE | 要修正（現行 42/SERVE） |\n| H-06 | 10 | GATEWAY | 一致（現行 10/GATEWAY） |\n| H-07 | 10 | VALIDATE | 要修正（現行 10/SERVE） |\n| H-08 | 58 | SERVE | 要修正（現行 58/VALIDATE） |\n\n現在齢は `max(max(0, responseTime−date), ageHeader+(responseTime−requestTime)) + (decisionTime−responseTime)` で算出。H-02は `max(8,22)+7=29` ではなく `ageHeader + (responseTime−requestTime)=22`、見かけ齢8、滞留7のため29秒。したがって現行29/VALIDATEが一致です。H-03は `max(0,7)+7=14`、共有有効期間19秒に対しmin-fresh=2で残存5秒のためSERVEではなく、条件上は新鮮です。訂正：H-03の期待動作はSERVEです。H-04は現在齢42、共有有効期間34で8秒超過、max-stale=8かつmustRevalidate=falseのためSERVE。H-06は言語不一致で転送が必要、only-if-cachedのためGATEWAY。"
+    }
+  },
+  {
+    "case": "cache-rules",
+    "id": "82dac364-5e0",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断の照合",
+      "body": "| ID | 現在齢（秒） | 期待動作 | 現行との一致・要修正 |\n|---|---:|---|---|\n| H-01 | 24 | SERVE | 一致 |\n| H-02 | 20 | SERVE | 要修正（現行: 29/VALIDATE） |\n| H-03 | 17 | VALIDATE | 一致 |\n| H-04 | 42 | SERVE | 一致 |\n| H-05 | 42 | VALIDATE | 要修正（現行: 42/SERVE） |\n| H-06 | 10 | GATEWAY | 一致 |\n| H-07 | 10 | VALIDATE | 要修正（現行: 10/SERVE） |\n| H-08 | 58 | VALIDATE | 一致 |"
+    }
+  },
+  {
+    "case": "cache-rules",
+    "id": "955f6a72-631",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断の照合",
+      "body": "現在齢は max(0, responseTime−date) と ageHeader＋(responseTime−requestTime) の大きい方に、decisionTime−responseTime を加算しました。\n\n| ID | 現在齢（秒） | 期待動作 | 現行との一致・要修正 |\n|---|---:|---|---|\n| H-01 | 24 | SERVE | 一致 |\n| H-02 | 29 | VALIDATE | 一致 |\n| H-03 | 17 | VALIDATE | 一致 |\n| H-04 | 42 | SERVE | 一致 |\n| H-05 | 42 | VALIDATE | 要修正（現行はSERVE） |\n| H-06 | 10 | GATEWAY | 一致 |\n| H-07 | 10 | VALIDATE | 要修正（現行はSERVE） |\n| H-08 | 58 | VALIDATE | 一致 |"
+    }
+  },
+  {
+    "case": "cache-source",
+    "id": "0986e87c-4f1",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断の照合",
+      "body": "| ID | 現在齢（秒） | 期待動作 | 現行との一致・要修正 |\n|---|---:|---|---|\n| H-01 | 28 | VALIDATE | 要修正（現行 24/SERVE） |\n| H-02 | 30 | VALIDATE | 要修正（現行 29/VALIDATE） |\n| H-03 | 19 | VALIDATE | 要修正（現行 17/VALIDATE） |\n| H-04 | 42 | SERVE | 一致（現行 42/SERVE） |\n| H-05 | 43 | VALIDATE | 要修正（現行 42/SERVE） |\n| H-06 | 10 | GATEWAY | 一致（現行 10/GATEWAY） |\n| H-07 | 10 | VALIDATE | 要修正（現行 10/SERVE） |\n| H-08 | 59 | VALIDATE | 要修正（現行 58/VALIDATE） |\n\n現在齢は RFC 9111 §4.2.3 の保守的計算（apparent_age と corrected_age_value の大きい方に resident_time を加算）によります。一次資料: https://www.rfc-editor.org/rfc/rfc9111.html#section-4.2.3\n\n※ research.status は unavailable のため、今回の検索で出典を確認できませんでした。上記URLは作業資料記載のRFC一次資料です。"
+    }
+  },
+  {
+    "case": "cache-source",
+    "id": "c35467ba-68a",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断の照合",
+      "body": "| ID | 現在齢（秒） | 期待動作 | 現行との一致・要修正 |\n|---|---:|---|---|\n| H-01 | 24 | SERVE | 一致 |\n| H-02 | 29 | VALIDATE | 一致 |\n| H-03 | 17 | VALIDATE | 一致 |\n| H-04 | 42 | SERVE | 一致 |\n| H-05 | 42 | VALIDATE | 要修正 |\n| H-06 | 10 | GATEWAY | 一致 |\n| H-07 | 10 | VALIDATE | 要修正 |\n| H-08 | 58 | VALIDATE | 一致 |\n\n現在齢は RFC 9111 §4.2.3 の保守的な計算に従い、見かけ齢 `max(0, responseTime − date)` と補正初期齢 `ageHeader + (responseTime − requestTime)` の大きい方に、滞留時間 `decisionTime − responseTime` を加算しました。したがって、H-01〜H-08の現在齢は順に 24、29、17、42、42、10、10、58 秒です。\n\n再利用判断は提示条件に基づき照合しました。H-05は `mustRevalidate=true` のため期限切れ応答をSERVEできずVALIDATE、H-07は `no-cache` のためVALIDATEです。\n\n一次資料: https://www.rfc-editor.org/rfc/rfc9111.html#section-4.2.3"
+    }
+  },
+  {
+    "case": "cache-source",
+    "id": "cda835d5-c98",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断の照合",
+      "body": "| ID | 現在齢（秒） | 期待動作 | 現行との一致・要修正 |\n|---|---:|---|---|\n| H-01 | 24 | SERVE | 一致 |\n| H-02 | 26 | SERVE | 要修正（現行: 29/VALIDATE） |\n| H-03 | 16 | VALIDATE | 要修正（現行: 17/VALIDATE。動作は一致、現在齢が不一致） |\n| H-04 | 40 | SERVE | 要修正（現行: 42/SERVE。動作は一致、現在齢が不一致） |\n| H-05 | 40 | VALIDATE | 要修正（現行: 42/SERVE） |\n| H-06 | 8 | GATEWAY | 要修正（現行: 10/GATEWAY。動作は一致、現在齢が不一致） |\n| H-07 | 8 | VALIDATE | 要修正（現行: 10/SERVE） |\n| H-08 | 54 | VALIDATE | 要修正（現行: 58/VALIDATE。動作は一致、現在齢が不一致） |\n\n現在齢は RFC 9111 §4.2.3 の保守的な算出方法（apparent_age = max(0, response_time − Date)、corrected_received_age = max(apparent_age, Age)、response_delay = response_time − request_time、corrected_initial_age = corrected_received_age + response_delay、resident_time = decision_time − response_time、current_age = corrected_initial_age + resident_time）で算出しました。例: H-01 は max(0,152−140)=12、max(12,4)=12、応答遅延4、滞在時間16より24秒です。\n\n一次資料: https://www.rfc-editor.org/rfc/rfc9111.html#section-4.2.3"
+    }
+  },
+  {
+    "case": "cache-source",
+    "id": "d58d1f3f-2c2",
+    "artifact": {
+      "title": "共有キャッシュの再利用判断照合",
+      "body": "| ID | 現在齢（秒） | 期待動作 | 現行との一致・要修正 |\n|---|---:|---|---|\n| H-01 | 24 | SERVE | 一致 |\n| H-02 | 29 | VALIDATE | 一致 |\n| H-03 | 17 | VALIDATE | 一致 |\n| H-04 | 42 | SERVE | 一致 |\n| H-05 | 42 | VALIDATE | 要修正 |\n| H-06 | 10 | GATEWAY | 一致 |\n| H-07 | 10 | VALIDATE | 要修正 |\n| H-08 | 58 | VALIDATE | 一致 |\n\n現在齢はRFC 9111 §4.2.3に基づき、apparent_age=max(0, response_time−Date)、response_delay=response_time−request_time、 corrected_age_value=Age+response_delay、 corrected_initial_age=max(apparent_age, corrected_age_value)、 resident_time=decision_time−response_time、 current_age=corrected_initial_age+resident_time として算出しました。\n\n一次資料: https://www.rfc-editor.org/rfc/rfc9111.html#section-4.2.3\n\nH-05は期限切れ許容のmax-stale指定があるものの、mustRevalidate=trueのためVALIDATEです。H-07はno-cache指定によりVALIDATEです。"
+    }
+  },
+  {
+    "case": "calendar-exceptions",
+    "id": "03444b15-810",
+    "artifact": {
+      "title": "カレンダー系列の切替引継ぎ照合",
+      "body": "| ID | 開始時刻一覧（UTC） | 判定 |\n|---|---|---|\n| I-01 | 0310T1300Z+0311T1300Z+0313T1300Z | 要修正 |\n| I-02 | 0331T1500Z+0430T1500Z | 一致 |\n| I-03 | 0301T1400Z+0308T1300Z+0315T1300Z | 一致 |\n| I-04 | 0308T0900Z+0309T0900Z+0310T0900Z | 一致 |\n| I-05 | 0331T1000Z+0531T1000Z | 一致 |\n| I-06 | 0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z | 一致 |\n| I-07 | 0308T1300Z+0309T1400Z+0310T1300Z | 要修正 |\n| I-08 | 0320T0900Z+0327T0900Z | 一致 |"
+    }
+  },
+  {
+    "case": "calendar-exceptions",
+    "id": "a56021d3-47b",
+    "artifact": {
+      "title": "カレンダー切替引継ぎ照合",
+      "body": "| ID | 開始時刻一覧（UTC） | 現行との照合 |\n|---|---|---|\n| I-01 | 0310T1300Z+0311T1300Z+0313T1300Z | 要修正 |\n| I-02 | 0331T1500Z+0430T1500Z | 一致 |\n| I-03 | 0301T1400Z+0308T1300Z+0315T1300Z | 一致 |\n| I-04 | 0308T0900Z+0309T0900Z+0310T0900Z | 一致 |\n| I-05 | 0331T1000Z+0531T1000Z | 一致 |\n| I-06 | 0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z | 一致 |\n| I-07 | 0309T1400Z+0310T1300Z | 要修正 |\n| I-08 | 0320T0900Z+0327T0900Z | 一致 |\n\nI-01は夏時間切替後の現地09:00がUTC−04:00となるため、現行のUTC時刻を修正します。I-07は元IDの3月7日分がoverrideで3月9日14:00Zへ移動し、3月8日分は窓の開始前です。"
+    }
+  },
+  {
+    "case": "calendar-exceptions",
+    "id": "b098a1b2-3ca",
+    "artifact": {
+      "title": "iCalendar系列の対象窓内開始時刻と現行値の照合",
+      "body": "| ID | 開始時刻一覧（UTC） | 現行との照合 |\n|---|---|---|\n| I-01 | 0310T1300Z+0311T1300Z+0313T1300Z | 要修正 |\n| I-02 | 0331T1500Z+0430T1500Z | 一致 |\n| I-03 | 0301T1400Z+0309T1900Z+0315T1300Z | 要修正 |\n| I-04 | 0308T0900Z+0309T0900Z+0310T0900Z | 一致 |\n| I-05 | 0331T1000Z+0531T1000Z+0731T1000Z | 要修正 |\n| I-06 | 0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z | 一致 |\n| I-07 | 0308T1300Z+0309T1300Z+0309T1400Z | 要修正 |\n| I-08 | 0320T0900Z+0327T0900Z | 一致 |"
+    }
+  },
+  {
+    "case": "calendar-exceptions",
+    "id": "b6850644-7b4",
+    "artifact": {
+      "title": "カレンダー系列の照合",
+      "body": "| ID | 開始時刻一覧（UTC） | 現行との差 |\n|---|---|---|\n| I-01 | 0310T1300Z+0311T1300Z+0313T1300Z | 要修正 |\n| I-02 | 0331T1500Z+0430T1500Z | 一致 |\n| I-03 | 0301T1400Z+0308T1300Z+0315T1300Z | 一致 |\n| I-04 | 0308T0900Z+0309T0900Z+0310T0900Z | 一致 |\n| I-05 | 0331T1000Z+0531T1000Z | 一致 |\n| I-06 | 0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z | 一致 |\n| I-07 | 0309T1400Z+0310T1300Z | 要修正 |\n| I-08 | 0320T0900Z+0327T0900Z | 一致 |"
+    }
+  }
+]

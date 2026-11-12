@@ -1,0 +1,58 @@
+{
+  "model": "gpt-6-luna",
+  "reasoning": "low",
+  "reply": "SQLiteの公式ドキュメントを確認し、接続直後の既定状態と有効化SQLを短い日本語の引継ぎメモにまとめます。",
+  "replyMs": 6054,
+  "requests": {
+    "review": null,
+    "skill": null,
+    "research": {
+      "goal": "SQLiteの外部キー制約が接続直後に通常有効か、および有効化するSQLを公式資料で確認し、引継ぎメモ用の出典候補を得る。",
+      "query": "SQLite official documentation foreign key support disabled by default PRAGMA foreign_keys = ON"
+    }
+  },
+  "backgroundMs": 11628,
+  "review": null,
+  "skill": null,
+  "artifact": {
+    "status": "ok",
+    "elapsedMs": 5803,
+    "value": {
+      "title": "SQLiteの外部キー制約：引継ぎメモ",
+      "body": "通常、外部キー制約は接続を開いた直後には無効です。有効にするには、接続ごとに次を実行してください。\n\n```sql\nPRAGMA foreign_keys = ON;\n```\n\n出典：SQLite公式ドキュメント https://www.sqlite.org/foreignkeys.html\n\n注：今回の資料では検索結果が利用できず、出典URLを確認できませんでした。"
+    }
+  },
+  "research": {
+    "status": "failed",
+    "elapsedMs": 5824,
+    "error": "cloud_agent_web_search_missing"
+  },
+  "calls": [
+    {
+      "lane": "reply",
+      "status": "ok",
+      "timeoutMs": 60000,
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 9035,
+      "outputTokens": 133,
+      "elapsedMs": 6047
+    },
+    {
+      "lane": "research",
+      "status": "failed",
+      "timeoutMs": 60000,
+      "elapsedMs": 5824
+    },
+    {
+      "lane": "artifact",
+      "status": "ok",
+      "timeoutMs": 60000,
+      "model": "gpt-6-luna",
+      "reasoningTokens": 0,
+      "inputTokens": 8382,
+      "outputTokens": 126,
+      "elapsedMs": 5802
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "tarball": "eumenes-evaluator-0.1.0-6aec373bc597.tgz",
+  "sha256": "f0dc0fd7e6821a9562c08b019224150f7fa65fb72b2d29e0e26cde63d6c6aa2d",
+  "packageVersion": "0.1.0",
+  "evaluatorCommit": "6aec373bc5974040695a45a8cc29b7e25221766e",
+  "collaborationCommit": "c77cbbd34fe1ac076f4907ab3a24e3805ca5b752",
+  "entryPoint": "/Users/y.noguchi/Code/eumenes_collaboration/.work/evaluator-tarball.qxgyth/consumer/node_modules/eumenes-evaluator/src/index.ts",
+  "previousRun": "eval/results/2026-11-11/proactive-luna-low-hard-review-120s"
+}

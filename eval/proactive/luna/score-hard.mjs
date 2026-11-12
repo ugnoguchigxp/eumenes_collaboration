@@ -49,11 +49,12 @@ function grade(task, body) {
 
 const read = (name) => readFile(join(directory, name), "utf8");
 const registration = JSON.parse(await read("registration.json"));
-if (registration.suite !== "hard") throw new Error("expected_hard_suite");
+if (!["hard", "border"].includes(registration.suite))
+	throw new Error("expected_scored_suite");
 const snapshot = await read("cases.mjs");
 if (
 	createHash("sha256").update(snapshot).digest("hex") !==
-	registration.hashes["eval/proactive/luna/hard-cases.mjs"]
+	registration.hashes[`eval/proactive/luna/${registration.suite}-cases.mjs`]
 )
 	throw new Error("unexpected_case_snapshot");
 const { cases } = await import(

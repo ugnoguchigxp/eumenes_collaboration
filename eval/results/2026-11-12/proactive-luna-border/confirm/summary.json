@@ -1,0 +1,120 @@
+{
+  "current": {
+    "completed": 2,
+    "attempted": 2,
+    "score": 10,
+    "max": 16,
+    "fields": 21,
+    "maxFields": 32,
+    "modelCalls": 4,
+    "inputTokens": 38904,
+    "outputTokens": 997,
+    "trials": [
+      {
+        "case": "calendar-exceptions",
+        "arm": "current",
+        "repetition": 1,
+        "status": "completed",
+        "score": 5,
+        "max": 8,
+        "fields": 10,
+        "maxFields": 16,
+        "replyMs": 9602,
+        "completionMs": 18407,
+        "modelCalls": 2,
+        "inputTokens": 19452,
+        "outputTokens": 500,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "calendar-exceptions",
+        "arm": "current",
+        "repetition": 2,
+        "status": "completed",
+        "score": 5,
+        "max": 8,
+        "fields": 11,
+        "maxFields": 16,
+        "replyMs": 7941,
+        "completionMs": 16825,
+        "modelCalls": 2,
+        "inputTokens": 19452,
+        "outputTokens": 497,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      }
+    ]
+  },
+  "assisted-research": {
+    "completed": 2,
+    "attempted": 2,
+    "score": 12,
+    "max": 16,
+    "fields": 27,
+    "maxFields": 32,
+    "modelCalls": 6,
+    "inputTokens": 64895,
+    "outputTokens": 3020,
+    "trials": [
+      {
+        "case": "calendar-exceptions",
+        "arm": "assisted-research",
+        "repetition": 1,
+        "status": "completed",
+        "score": 5,
+        "max": 8,
+        "fields": 12,
+        "maxFields": 16,
+        "replyMs": 9117,
+        "completionMs": 17954,
+        "modelCalls": 2,
+        "inputTokens": 19881,
+        "outputTokens": 513,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "calendar-exceptions",
+        "arm": "assisted-research",
+        "repetition": 2,
+        "status": "completed",
+        "score": 7,
+        "max": 8,
+        "fields": 15,
+        "maxFields": 16,
+        "replyMs": 13098,
+        "completionMs": 59038,
+        "modelCalls": 4,
+        "inputTokens": 45014,
+        "outputTokens": 2507,
+        "review": {
+          "selected": true,
+          "result": "completed"
+        },
+        "skill": {
+          "selected": true,
+          "result": "ok"
+        }
+      }
+    ]
+  }
+}

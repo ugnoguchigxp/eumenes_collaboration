@@ -15,6 +15,14 @@ export async function createTrialModel(host, model, calls, maxCalls, signal) {
 		const entry = { lane, status: "started", timeoutMs };
 		calls.push(entry);
 		const start = performance.now();
+		const recordUsage = (usage) => {
+			Object.assign(entry, {
+				model: usage.usageModel ?? null,
+				reasoningTokens: usage.reasoningTokens ?? null,
+				inputTokens: usage.inputTokens,
+				outputTokens: usage.outputTokens,
+			});
+		};
 		try {
 			const smith =
 				lane === "skill-smith"
@@ -44,7 +52,9 @@ export async function createTrialModel(host, model, calls, maxCalls, signal) {
 				credential: null,
 				messages,
 				reasoningEffort: "low",
-				...(lane === "research" ? { nativeWebSearch: true } : {}),
+				...(lane === "research"
+					? { nativeWebSearch: true, onUsage: recordUsage }
+					: {}),
 				outputSchema: smith
 					? smith.strictProviderSchema(request.outputSchema)
 					: request.outputSchema,
@@ -54,13 +64,8 @@ export async function createTrialModel(host, model, calls, maxCalls, signal) {
 					AbortSignal.timeout(timeoutMs),
 				]),
 			});
-			Object.assign(entry, {
-				status: "received",
-				model: answer.usageModel ?? null,
-				reasoningTokens: answer.reasoningTokens ?? null,
-				inputTokens: answer.inputTokens,
-				outputTokens: answer.outputTokens,
-			});
+			recordUsage(answer);
+			entry.status = "received";
 			const parsed = JSON.parse(
 				answer.text
 					.trim()

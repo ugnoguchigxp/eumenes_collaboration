@@ -1,0 +1,467 @@
+{
+  "before": {
+    "evaluator-only": {
+      "rows": 20,
+      "maxRows": 48,
+      "completed": 6,
+      "attempted": 6,
+      "fields": 127,
+      "maxFields": 192,
+      "replyMs": 9979,
+      "completionMs": 40243.5,
+      "reviewMs": 57085,
+      "reviewSelected": 3,
+      "reviewDelivered": 1,
+      "reviewTimedOut": 0,
+      "skillSelected": 0,
+      "skillDelivered": 0,
+      "modelCalls": 15,
+      "inputTokens": 158470,
+      "outputTokens": 10819,
+      "reviewInputTokens": 36947,
+      "reviewOutputTokens": 7363,
+      "cases": {
+        "hard-02": 9,
+        "hard-04": 5,
+        "hard-05": 6
+      }
+    },
+    "assisted": {
+      "rows": 21,
+      "maxRows": 48,
+      "completed": 6,
+      "attempted": 6,
+      "fields": 127,
+      "maxFields": 192,
+      "replyMs": 8881,
+      "completionMs": 33152.5,
+      "reviewMs": 43698,
+      "reviewSelected": 3,
+      "reviewDelivered": 1,
+      "reviewTimedOut": 0,
+      "skillSelected": 2,
+      "skillDelivered": 2,
+      "modelCalls": 17,
+      "inputTokens": 183515,
+      "outputTokens": 9994,
+      "reviewInputTokens": 37176,
+      "reviewOutputTokens": 6331,
+      "cases": {
+        "hard-02": 7,
+        "hard-04": 7,
+        "hard-05": 7
+      }
+    }
+  },
+  "after": {
+    "evaluator-only": {
+      "rows": 27,
+      "maxRows": 48,
+      "completed": 6,
+      "attempted": 6,
+      "fields": 142,
+      "maxFields": 192,
+      "replyMs": 8440,
+      "completionMs": 60572,
+      "reviewMs": 41792.5,
+      "reviewSelected": 4,
+      "reviewDelivered": 3,
+      "reviewTimedOut": 0,
+      "skillSelected": 0,
+      "skillDelivered": 0,
+      "modelCalls": 16,
+      "inputTokens": 179351,
+      "outputTokens": 12163,
+      "reviewInputTokens": 54169,
+      "reviewOutputTokens": 8850,
+      "cases": {
+        "hard-02": 12,
+        "hard-04": 8,
+        "hard-05": 7
+      }
+    },
+    "assisted": {
+      "rows": 23,
+      "maxRows": 48,
+      "completed": 6,
+      "attempted": 6,
+      "fields": 130,
+      "maxFields": 192,
+      "replyMs": 9183.5,
+      "completionMs": 44306,
+      "reviewMs": 40504,
+      "reviewSelected": 3,
+      "reviewDelivered": 1,
+      "reviewTimedOut": 0,
+      "skillSelected": 3,
+      "skillDelivered": 3,
+      "modelCalls": 18,
+      "inputTokens": 199163,
+      "outputTokens": 9474,
+      "reviewInputTokens": 41059,
+      "reviewOutputTokens": 5607,
+      "cases": {
+        "hard-02": 10,
+        "hard-04": 6,
+        "hard-05": 7
+      }
+    }
+  },
+  "review": {
+    "selected": 7,
+    "delivered": 4,
+    "reportedMismatches": 27,
+    "deliveredMismatches": 16,
+    "deliveredExpectedValuesCorrect": 13,
+    "totalMismatchesOnDeliveredTrials": 21,
+    "totalMismatchesOnSelectedTrials": 36,
+    "falsePositivesInDelivered": 1,
+    "falsePositivesInReturned": 1
+  },
+  "selected": [
+    {
+      "case": "hard-02",
+      "arm": "evaluator-only",
+      "repetition": 1,
+      "review": "completed",
+      "issues": [],
+      "reviewMs": 38976,
+      "conditionsSelected": 3,
+      "conditionsAvailable": 3,
+      "missed": [
+        "C-17"
+      ],
+      "details": [
+        {
+          "id": "C-11",
+          "offered": "SEND",
+          "expected": "SEND",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "C-13",
+          "offered": "OPT_OUT",
+          "expected": "OPT_OUT",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "C-15",
+          "offered": "EXPIRED",
+          "expected": "EXPIRED",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "C-16",
+          "offered": "SEND",
+          "expected": "NO_CANCEL",
+          "mismatch": true,
+          "expectedValueCorrect": false,
+          "artifactCorrect": false
+        },
+        {
+          "id": "C-18",
+          "offered": "SHIPPED",
+          "expected": "SHIPPED",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        }
+      ]
+    },
+    {
+      "case": "hard-04",
+      "arm": "evaluator-only",
+      "repetition": 1,
+      "review": "completed",
+      "issues": [],
+      "reviewMs": 38721,
+      "conditionsSelected": 3,
+      "conditionsAvailable": 3,
+      "missed": [
+        "S-07",
+        "S-08"
+      ],
+      "details": [
+        {
+          "id": "S-03",
+          "offered": "HOLD:1",
+          "expected": "ALLOCATE:A1=3+A5=3+A4=2",
+          "mismatch": true,
+          "expectedValueCorrect": false,
+          "artifactCorrect": false
+        },
+        {
+          "id": "S-04",
+          "offered": "ALLOCATE:A4=7",
+          "expected": "ALLOCATE:A4=5+B2=2",
+          "mismatch": true,
+          "expectedValueCorrect": false,
+          "artifactCorrect": false
+        }
+      ]
+    },
+    {
+      "case": "hard-05",
+      "arm": "assisted",
+      "repetition": 1,
+      "review": "incomplete",
+      "issues": [
+        {
+          "code": "scope_unverified"
+        }
+      ],
+      "reviewMs": 44378,
+      "conditionsSelected": 3,
+      "conditionsAvailable": 3,
+      "missed": [
+        "P-07"
+      ],
+      "details": [
+        {
+          "id": "P-01",
+          "offered": "CONTENT",
+          "expected": "CONTENT",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": false
+        },
+        {
+          "id": "P-03",
+          "offered": "READY",
+          "expected": "READY",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "P-04",
+          "offered": "EMBARGO",
+          "expected": "EMBARGO",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": false
+        },
+        {
+          "id": "P-05",
+          "offered": "READY",
+          "expected": "READY",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": false
+        }
+      ]
+    },
+    {
+      "case": "hard-02",
+      "arm": "assisted",
+      "repetition": 2,
+      "review": "completed",
+      "issues": [],
+      "reviewMs": 32119,
+      "conditionsSelected": 3,
+      "conditionsAvailable": 3,
+      "missed": [
+        "C-17"
+      ],
+      "details": [
+        {
+          "id": "C-11",
+          "offered": "SEND",
+          "expected": "SEND",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "C-13",
+          "offered": "OPT_OUT",
+          "expected": "OPT_OUT",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "C-15",
+          "offered": "EXPIRED",
+          "expected": "EXPIRED",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "C-16",
+          "offered": "NO_CANCEL",
+          "expected": "NO_CANCEL",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": false
+        },
+        {
+          "id": "C-18",
+          "offered": "SHIPPED",
+          "expected": "SHIPPED",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        }
+      ]
+    },
+    {
+      "case": "hard-05",
+      "arm": "evaluator-only",
+      "repetition": 1,
+      "review": "incomplete",
+      "issues": [
+        {
+          "code": "scope_unverified"
+        }
+      ],
+      "reviewMs": 55579,
+      "conditionsSelected": 3,
+      "conditionsAvailable": 3,
+      "missed": [
+        "P-03",
+        "P-07"
+      ],
+      "details": [
+        {
+          "id": "P-01",
+          "offered": "CONTENT",
+          "expected": "CONTENT",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "P-04",
+          "offered": "EMBARGO",
+          "expected": "EMBARGO",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": false
+        },
+        {
+          "id": "P-05",
+          "offered": "DEP",
+          "expected": "READY",
+          "mismatch": true,
+          "expectedValueCorrect": false,
+          "artifactCorrect": false
+        }
+      ]
+    },
+    {
+      "case": "hard-05",
+      "arm": "evaluator-only",
+      "repetition": 2,
+      "review": "completed",
+      "issues": [],
+      "reviewMs": 44609,
+      "conditionsSelected": 3,
+      "conditionsAvailable": 3,
+      "missed": [
+        "P-04"
+      ],
+      "details": [
+        {
+          "id": "P-01",
+          "offered": "CONTENT",
+          "expected": "CONTENT",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "P-03",
+          "offered": "READY",
+          "expected": "READY",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "P-05",
+          "offered": "READY",
+          "expected": "READY",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": false
+        },
+        {
+          "id": "P-06",
+          "offered": "READY",
+          "expected": "DEP",
+          "mismatch": false,
+          "expectedValueCorrect": false,
+          "artifactCorrect": false
+        },
+        {
+          "id": "P-07",
+          "offered": "DEP",
+          "expected": "DEP",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": false
+        }
+      ]
+    },
+    {
+      "case": "hard-05",
+      "arm": "assisted",
+      "repetition": 2,
+      "review": "incomplete",
+      "issues": [
+        {
+          "code": "scope_unverified"
+        }
+      ],
+      "reviewMs": 40504,
+      "conditionsSelected": 3,
+      "conditionsAvailable": 3,
+      "missed": [
+        "P-07"
+      ],
+      "details": [
+        {
+          "id": "P-01",
+          "offered": "CONTENT",
+          "expected": "CONTENT",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "P-03",
+          "offered": "READY",
+          "expected": "READY",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": true
+        },
+        {
+          "id": "P-04",
+          "offered": "EMBARGO",
+          "expected": "EMBARGO",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": false
+        },
+        {
+          "id": "P-05",
+          "offered": "READY",
+          "expected": "READY",
+          "mismatch": true,
+          "expectedValueCorrect": true,
+          "artifactCorrect": false
+        }
+      ]
+    }
+  ],
+  "formattingOnly": []
+}

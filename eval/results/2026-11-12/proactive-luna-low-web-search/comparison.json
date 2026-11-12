@@ -1,0 +1,120 @@
+{
+  "arms": {
+    "assisted": {
+      "score": 28,
+      "max": 48,
+      "fields": 144,
+      "maxFields": 192,
+      "completed": 6,
+      "attempted": 6,
+      "modelCalls": 15,
+      "inputTokens": 163705,
+      "outputTokens": 7133,
+      "replyMedianMs": 9162.0,
+      "completionMedianMs": 22156.5,
+      "callsByLane": {
+        "reply": 6,
+        "artifact": 6,
+        "evaluator": 2,
+        "skill-smith": 1
+      },
+      "callsWithUnknownUsage": 0,
+      "review": {
+        "selected": 2,
+        "delivered": 2,
+        "errors": {},
+        "elapsedMedianMs": 38381.0
+      },
+      "skill": {
+        "selected": 1,
+        "delivered": 1,
+        "errors": {},
+        "elapsedMedianMs": 7711
+      },
+      "research": {
+        "selected": 0,
+        "delivered": 0,
+        "errors": {},
+        "elapsedMedianMs": null
+      },
+      "researchSources": 0
+    },
+    "assisted-research": {
+      "score": 18,
+      "max": 48,
+      "fields": 127,
+      "maxFields": 192,
+      "completed": 6,
+      "attempted": 6,
+      "modelCalls": 17,
+      "inputTokens": 188815,
+      "outputTokens": 10741,
+      "replyMedianMs": 9223.5,
+      "completionMedianMs": 41704.0,
+      "callsByLane": {
+        "reply": 6,
+        "artifact": 6,
+        "evaluator": 3,
+        "skill-smith": 2
+      },
+      "callsWithUnknownUsage": 0,
+      "review": {
+        "selected": 3,
+        "delivered": 1,
+        "errors": {},
+        "elapsedMedianMs": 45461
+      },
+      "skill": {
+        "selected": 2,
+        "delivered": 2,
+        "errors": {},
+        "elapsedMedianMs": 9149.0
+      },
+      "research": {
+        "selected": 0,
+        "delivered": 0,
+        "errors": {},
+        "elapsedMedianMs": null
+      },
+      "researchSources": 0
+    }
+  },
+  "pairedRows": [
+    {
+      "case": "hard-02",
+      "repetition": 1,
+      "withoutSearch": 3,
+      "withSearch": 6
+    },
+    {
+      "case": "hard-02",
+      "repetition": 2,
+      "withoutSearch": 5,
+      "withSearch": 4
+    },
+    {
+      "case": "hard-04",
+      "repetition": 1,
+      "withoutSearch": 4,
+      "withSearch": 1
+    },
+    {
+      "case": "hard-04",
+      "repetition": 2,
+      "withoutSearch": 4,
+      "withSearch": 2
+    },
+    {
+      "case": "hard-05",
+      "repetition": 1,
+      "withoutSearch": 7,
+      "withSearch": 2
+    },
+    {
+      "case": "hard-05",
+      "repetition": 2,
+      "withoutSearch": 5,
+      "withSearch": 3
+    }
+  ]
+}

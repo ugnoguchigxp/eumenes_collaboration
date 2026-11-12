@@ -1,0 +1,21 @@
+{
+  "evaluator": {
+    "tarball": "eumenes-evaluator-0.1.0-6aec373bc597.tgz",
+    "sha256": "f0dc0fd7e6821a9562c08b019224150f7fa65fb72b2d29e0e26cde63d6c6aa2d",
+    "evaluatorCommit": "6aec373bc5974040695a45a8cc29b7e25221766e",
+    "packageVersion": "0.1.0"
+  },
+  "skillSmithCommit": "c907cb70a230c6ef9f9c658f4998160854de8e21",
+  "contextStillCommit": "ef415db3a043115f9d48034b2af29f6a1462e8df",
+  "collaborationBaseCommit": "c77cbbd34fe1ac076f4907ab3a24e3805ca5b752",
+  "host": "web-research-host",
+  "hostAdapterHashes": {
+    "api/domains/inference/adapters/cloud-agents.ts": "e72a9aeeee4c3afa1eba89db3f6470236bce99fc69a60aed5db092c563f1cf76",
+    "api/domains/inference/adapters/cloud-agent-codex.ts": "3f85cf793f6a75869d7eaba738e1d5b6a00b830de4506de90060c7867af2f6ad",
+    "api/domains/inference/adapters/codex-app-server.ts": "3ba3564c4e22eecf73008c2c0aa1e04a02122e4d1c4185307c25078ac5e6e6c9",
+    "api/domains/inference/adapters/codex-transport.ts": "d703956dfbdade620b8f52dbdc9d04a25c47c99992b6d3ea30063bfa02b26520",
+    "api/domains/inference/adapters/codex-sdk.ts": "8f75d1a5d79fa6c98db4a6f62055e6c63fcb0640a43fe6e6385ff5b5dca4e420",
+    "api/domains/web-research/adapters/codex-search.ts": "acbfb630ee65e013e5ca9f9ed87517d26ec72785ff14baf116c40ff3d10d9fa4"
+  },
+  "codexCliVersion": "0.162.1"
+}

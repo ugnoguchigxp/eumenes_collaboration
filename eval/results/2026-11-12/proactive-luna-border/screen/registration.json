@@ -1,0 +1,80 @@
+{
+  "model": "gpt-6-luna",
+  "reasoning": "low",
+  "route": "codex-subscription",
+  "cases": [
+    {
+      "id": "cache-rules",
+      "order": [
+        "current",
+        "assisted-research"
+      ],
+      "orders": [
+        [
+          "current",
+          "assisted-research"
+        ],
+        [
+          "assisted-research",
+          "current"
+        ]
+      ]
+    },
+    {
+      "id": "cache-source",
+      "order": [
+        "assisted-research",
+        "current"
+      ],
+      "orders": [
+        [
+          "assisted-research",
+          "current"
+        ],
+        [
+          "current",
+          "assisted-research"
+        ]
+      ]
+    },
+    {
+      "id": "calendar-exceptions",
+      "order": [
+        "current",
+        "assisted-research"
+      ],
+      "orders": [
+        [
+          "current",
+          "assisted-research"
+        ],
+        [
+          "assisted-research",
+          "current"
+        ]
+      ]
+    }
+  ],
+  "repetitions": 2,
+  "concurrentPairs": 2,
+  "maxCallsPerArm": {
+    "current": 2,
+    "assisted-research": 7
+  },
+  "maxCallsTotal": 54,
+  "armTimeoutMs": 240000,
+  "perCallTimeoutMs": 60000,
+  "evaluatorTimeoutMs": 120000,
+  "researchTimeoutMs": 60000,
+  "researchMode": "live",
+  "artifactCriteriaPerCase": 8,
+  "suite": "border",
+  "hashes": {
+    "eval/proactive/luna/border-cases.mjs": "544f4ff7b108498bb3e16f44ece46488ceeba1e129dc7bfc419063291aa2faa5",
+    "eval/proactive/luna/run.mjs": "b313a815995d80038d2c9697ceebbd94623d8c73ea50e999d7891d63b17caa11",
+    "example/proactive/codex.mjs": "2d88fbd5a73eef344522f9d75b68aa887f2a0a05ec50bb2d888473fc1087bbc0",
+    "example/proactive/services.mjs": "cbfd4b269a4554230b1ff188325ef24438ea0fd7f1efa3904a975b6a0b2f707b",
+    "example/proactive/session.ts": "89820090f149a5fce1cd4df01ef4099be8e49754733aebf26820f2495c98c8e5",
+    "example/proactive/research.mjs": "887282eddebf4f8635f7a8fa1b8aa76b586c43f6588000507341946aa18bae71"
+  }
+}

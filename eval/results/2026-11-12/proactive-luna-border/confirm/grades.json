@@ -1,0 +1,538 @@
+[
+  {
+    "case": "calendar-exceptions",
+    "id": "16cd04a5-5e0",
+    "checks": [
+      {
+        "id": "I-01",
+        "expected": [
+          "0310T1300Z+0311T1300Z+0313T1300Z",
+          "要修正"
+        ],
+        "observed": [
+          "0310T1300Z+0311T1300Z+0313T1300Z",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-02",
+        "expected": [
+          "0331T1500Z+0430T1500Z",
+          "一致"
+        ],
+        "observed": [
+          "0331T1500Z+0430T1500Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-03",
+        "expected": [
+          "0301T1400Z+0309T1900Z+0315T1300Z",
+          "要修正"
+        ],
+        "observed": [
+          "0301T1400Z+0308T1300Z+0315T1300Z",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "I-04",
+        "expected": [
+          "0308T0900Z+0309T0900Z+0310T0900Z",
+          "一致"
+        ],
+        "observed": [
+          "0308T0900Z+0309T0900Z+0310T0900Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-05",
+        "expected": [
+          "0331T1000Z+0531T1000Z+0731T1000Z",
+          "要修正"
+        ],
+        "observed": [
+          "0331T1000Z+0531T1000Z",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "I-06",
+        "expected": [
+          "0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z",
+          "一致"
+        ],
+        "observed": [
+          "0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-07",
+        "expected": [
+          "0308T1300Z+0309T1300Z+0309T1400Z",
+          "要修正"
+        ],
+        "observed": [
+          "0308T1300Z+0309T1400Z",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "I-08",
+        "expected": [
+          "0320T0900Z+0327T0900Z",
+          "一致"
+        ],
+        "observed": [
+          "0320T0900Z+0327T0900Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "calendar-exceptions",
+    "id": "59a477ae-054",
+    "checks": [
+      {
+        "id": "I-01",
+        "expected": [
+          "0310T1300Z+0311T1300Z+0313T1300Z",
+          "要修正"
+        ],
+        "observed": [
+          "0310T1300Z+0311T1300Z+0313T1300Z",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-02",
+        "expected": [
+          "0331T1500Z+0430T1500Z",
+          "一致"
+        ],
+        "observed": [
+          "0331T1500Z+0430T1500Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-03",
+        "expected": [
+          "0301T1400Z+0309T1900Z+0315T1300Z",
+          "要修正"
+        ],
+        "observed": [
+          "0301T1400Z+0308T1300Z+0315T1300Z",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "I-04",
+        "expected": [
+          "0308T0900Z+0309T0900Z+0310T0900Z",
+          "一致"
+        ],
+        "observed": [
+          "0308T0900Z+0309T0900Z+0310T0900Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-05",
+        "expected": [
+          "0331T1000Z+0531T1000Z+0731T1000Z",
+          "要修正"
+        ],
+        "observed": [
+          "0331T1000Z+0531T1000Z",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "I-06",
+        "expected": [
+          "0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z",
+          "一致"
+        ],
+        "observed": [
+          "0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-07",
+        "expected": [
+          "0308T1300Z+0309T1300Z+0309T1400Z",
+          "要修正"
+        ],
+        "observed": [
+          "0308T1300Z+0309T1300Z+0310T1300Z",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "I-08",
+        "expected": [
+          "0320T0900Z+0327T0900Z",
+          "一致"
+        ],
+        "observed": [
+          "0320T0900Z+0327T0900Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "calendar-exceptions",
+    "id": "acafc816-4d0",
+    "checks": [
+      {
+        "id": "I-01",
+        "expected": [
+          "0310T1300Z+0311T1300Z+0313T1300Z",
+          "要修正"
+        ],
+        "observed": [
+          "0310T1300Z+0311T1300Z+0313T1300Z",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-02",
+        "expected": [
+          "0331T1500Z+0430T1500Z",
+          "一致"
+        ],
+        "observed": [
+          "0331T1500Z+0430T1500Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-03",
+        "expected": [
+          "0301T1400Z+0309T1900Z+0315T1300Z",
+          "要修正"
+        ],
+        "observed": [
+          "0301T1400Z+0309T1900Z+0315T1300Z",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-04",
+        "expected": [
+          "0308T0900Z+0309T0900Z+0310T0900Z",
+          "一致"
+        ],
+        "observed": [
+          "0308T0900Z+0309T0900Z+0310T0900Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-05",
+        "expected": [
+          "0331T1000Z+0531T1000Z+0731T1000Z",
+          "要修正"
+        ],
+        "observed": [
+          "0331T1000Z+0531T1000Z+0731T1000Z",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-06",
+        "expected": [
+          "0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z",
+          "一致"
+        ],
+        "observed": [
+          "0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-07",
+        "expected": [
+          "0308T1300Z+0309T1300Z+0309T1400Z",
+          "要修正"
+        ],
+        "observed": [
+          "0308T1300Z+0309T1300Z",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "I-08",
+        "expected": [
+          "0320T0900Z+0327T0900Z",
+          "一致"
+        ],
+        "observed": [
+          "0320T0900Z+0327T0900Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "calendar-exceptions",
+    "id": "ed9fbbcd-991",
+    "checks": [
+      {
+        "id": "I-01",
+        "expected": [
+          "0310T1300Z+0311T1300Z+0313T1300Z",
+          "要修正"
+        ],
+        "observed": [
+          "0310T1300Z+0311T1300Z+0313T1300Z",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-02",
+        "expected": [
+          "0331T1500Z+0430T1500Z",
+          "一致"
+        ],
+        "observed": [
+          "0331T1500Z+0430T1500Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-03",
+        "expected": [
+          "0301T1400Z+0309T1900Z+0315T1300Z",
+          "要修正"
+        ],
+        "observed": [
+          "0301T1400Z+0308T1300Z+0309T1900Z+0315T1300Z",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "I-04",
+        "expected": [
+          "0308T0900Z+0309T0900Z+0310T0900Z",
+          "一致"
+        ],
+        "observed": [
+          "0308T0900Z+0309T0900Z+0310T0900Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-05",
+        "expected": [
+          "0331T1000Z+0531T1000Z+0731T1000Z",
+          "要修正"
+        ],
+        "observed": [
+          "0331T1000Z+0531T1000Z",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "I-06",
+        "expected": [
+          "0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z",
+          "一致"
+        ],
+        "observed": [
+          "0301T1200Z+0303T1200Z+0315T1200Z+0317T1200Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "I-07",
+        "expected": [
+          "0308T1300Z+0309T1300Z+0309T1400Z",
+          "要修正"
+        ],
+        "observed": [
+          "0308T1300Z+0309T1400Z+0310T1300Z",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "I-08",
+        "expected": [
+          "0320T0900Z+0327T0900Z",
+          "一致"
+        ],
+        "observed": [
+          "0320T0900Z+0327T0900Z",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  }
+]

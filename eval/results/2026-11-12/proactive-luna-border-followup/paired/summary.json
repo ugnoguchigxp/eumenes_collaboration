@@ -1,0 +1,304 @@
+{
+  "current": {
+    "completed": 6,
+    "attempted": 6,
+    "score": 5,
+    "max": 48,
+    "fields": 49,
+    "maxFields": 120,
+    "modelCalls": 12,
+    "inputTokens": 112908,
+    "outputTokens": 3608,
+    "trials": [
+      {
+        "case": "sqlite-rehearsal",
+        "arm": "current",
+        "repetition": 1,
+        "status": "completed",
+        "score": 1,
+        "max": 8,
+        "fields": 9,
+        "maxFields": 24,
+        "replyMs": 23476,
+        "completionMs": 32724,
+        "modelCalls": 2,
+        "inputTokens": 19084,
+        "outputTokens": 1276,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "subtitle-handoff",
+        "arm": "current",
+        "repetition": 1,
+        "status": "completed",
+        "score": 0,
+        "max": 8,
+        "fields": 2,
+        "maxFields": 16,
+        "replyMs": 6980,
+        "completionMs": 18413,
+        "modelCalls": 2,
+        "inputTokens": 18550,
+        "outputTokens": 520,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "sqlite-rehearsal",
+        "arm": "current",
+        "repetition": 2,
+        "status": "completed",
+        "score": 0,
+        "max": 8,
+        "fields": 11,
+        "maxFields": 24,
+        "replyMs": 8486,
+        "completionMs": 18879,
+        "modelCalls": 2,
+        "inputTokens": 19086,
+        "outputTokens": 489,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "subtitle-handoff",
+        "arm": "current",
+        "repetition": 2,
+        "status": "completed",
+        "score": 2,
+        "max": 8,
+        "fields": 10,
+        "maxFields": 16,
+        "replyMs": 9738,
+        "completionMs": 21091,
+        "modelCalls": 2,
+        "inputTokens": 18554,
+        "outputTokens": 520,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "sqlite-rehearsal",
+        "arm": "current",
+        "repetition": 3,
+        "status": "completed",
+        "score": 0,
+        "max": 8,
+        "fields": 7,
+        "maxFields": 24,
+        "replyMs": 5632,
+        "completionMs": 14247,
+        "modelCalls": 2,
+        "inputTokens": 19084,
+        "outputTokens": 315,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      },
+      {
+        "case": "subtitle-handoff",
+        "arm": "current",
+        "repetition": 3,
+        "status": "completed",
+        "score": 2,
+        "max": 8,
+        "fields": 10,
+        "maxFields": 16,
+        "replyMs": 8211,
+        "completionMs": 18030,
+        "modelCalls": 2,
+        "inputTokens": 18550,
+        "outputTokens": 488,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": false,
+          "result": null
+        }
+      }
+    ]
+  },
+  "assisted-research": {
+    "completed": 6,
+    "attempted": 6,
+    "score": 10,
+    "max": 48,
+    "fields": 57,
+    "maxFields": 120,
+    "modelCalls": 21,
+    "inputTokens": 220015,
+    "outputTokens": 9784,
+    "trials": [
+      {
+        "case": "subtitle-handoff",
+        "arm": "assisted-research",
+        "repetition": 1,
+        "status": "completed",
+        "score": 3,
+        "max": 8,
+        "fields": 9,
+        "maxFields": 16,
+        "replyMs": 9021,
+        "completionMs": 55695,
+        "modelCalls": 4,
+        "inputTokens": 43051,
+        "outputTokens": 2466,
+        "review": {
+          "selected": true,
+          "result": "completed"
+        },
+        "skill": {
+          "selected": true,
+          "result": "ok"
+        }
+      },
+      {
+        "case": "sqlite-rehearsal",
+        "arm": "assisted-research",
+        "repetition": 2,
+        "status": "completed",
+        "score": 1,
+        "max": 8,
+        "fields": 13,
+        "maxFields": 24,
+        "replyMs": 6508,
+        "completionMs": 25372,
+        "modelCalls": 3,
+        "inputTokens": 30105,
+        "outputTokens": 509,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": true,
+          "result": "ok"
+        }
+      },
+      {
+        "case": "sqlite-rehearsal",
+        "arm": "assisted-research",
+        "repetition": 1,
+        "status": "completed",
+        "score": 2,
+        "max": 8,
+        "fields": 13,
+        "maxFields": 24,
+        "replyMs": 9980,
+        "completionMs": 74771,
+        "modelCalls": 4,
+        "inputTokens": 45152,
+        "outputTokens": 3457,
+        "review": {
+          "selected": true,
+          "result": "completed"
+        },
+        "skill": {
+          "selected": true,
+          "result": "ok"
+        }
+      },
+      {
+        "case": "sqlite-rehearsal",
+        "arm": "assisted-research",
+        "repetition": 3,
+        "status": "completed",
+        "score": 2,
+        "max": 8,
+        "fields": 12,
+        "maxFields": 24,
+        "replyMs": 6383,
+        "completionMs": 21315,
+        "modelCalls": 3,
+        "inputTokens": 30560,
+        "outputTokens": 497,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": true,
+          "result": "ok"
+        }
+      },
+      {
+        "case": "subtitle-handoff",
+        "arm": "assisted-research",
+        "repetition": 2,
+        "status": "completed",
+        "score": 2,
+        "max": 8,
+        "fields": 7,
+        "maxFields": 16,
+        "replyMs": 6906,
+        "completionMs": 30291,
+        "modelCalls": 3,
+        "inputTokens": 29208,
+        "outputTokens": 835,
+        "review": {
+          "selected": false,
+          "result": null
+        },
+        "skill": {
+          "selected": true,
+          "result": "ok"
+        }
+      },
+      {
+        "case": "subtitle-handoff",
+        "arm": "assisted-research",
+        "repetition": 3,
+        "status": "completed",
+        "score": 0,
+        "max": 8,
+        "fields": 3,
+        "maxFields": 16,
+        "replyMs": 10972,
+        "completionMs": 50318,
+        "modelCalls": 4,
+        "inputTokens": 41939,
+        "outputTokens": 2020,
+        "review": {
+          "selected": true,
+          "result": "incomplete"
+        },
+        "skill": {
+          "selected": true,
+          "result": "ok"
+        }
+      }
+    ]
+  }
+}

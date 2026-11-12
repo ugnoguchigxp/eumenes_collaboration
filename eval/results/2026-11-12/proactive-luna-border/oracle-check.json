@@ -1,0 +1,46 @@
+{
+  "calendarOracle": "python-dateutil 2.9.0.post0",
+  "cacheOracle": "independent formula and decision checks",
+  "verified": {
+    "cache-rules": [
+      "H-01",
+      "H-02",
+      "H-03",
+      "H-04",
+      "H-05",
+      "H-06",
+      "H-07",
+      "H-08"
+    ],
+    "cache-source": [
+      "H-01",
+      "H-02",
+      "H-03",
+      "H-04",
+      "H-05",
+      "H-06",
+      "H-07",
+      "H-08"
+    ],
+    "cache-handoff": [
+      "K-01",
+      "K-02",
+      "K-03",
+      "K-04",
+      "K-05",
+      "K-06",
+      "K-07",
+      "K-08"
+    ],
+    "calendar-exceptions": [
+      "I-01",
+      "I-02",
+      "I-03",
+      "I-04",
+      "I-05",
+      "I-06",
+      "I-07",
+      "I-08"
+    ]
+  }
+}

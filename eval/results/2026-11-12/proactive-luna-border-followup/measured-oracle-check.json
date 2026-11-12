@@ -1,0 +1,147 @@
+{
+  "sqliteVersion": "3.51.0",
+  "cases": {
+    "sqlite-rehearsal": {
+      "T-01": {
+        "rows": [
+          10,
+          20,
+          30
+        ],
+        "errors": {
+          "3": "FOREIGN KEY constraint failed"
+        },
+        "inTransaction": false
+      },
+      "T-02": {
+        "rows": [
+          10,
+          20,
+          50
+        ],
+        "errors": {
+          "6": "FOREIGN KEY constraint failed"
+        },
+        "inTransaction": false
+      },
+      "T-03": {
+        "rows": [
+          10,
+          20,
+          50
+        ],
+        "errors": {
+          "4": "UNIQUE constraint failed: c.qty",
+          "5": "no such savepoint: s",
+          "7": "cannot commit - no transaction is active"
+        },
+        "inTransaction": false
+      },
+      "T-04": {
+        "rows": [
+          20,
+          30
+        ],
+        "errors": {},
+        "inTransaction": false
+      },
+      "T-05": {
+        "rows": [
+          10,
+          20,
+          30,
+          40
+        ],
+        "errors": {
+          "4": "UNIQUE constraint failed: c.qty"
+        },
+        "inTransaction": false
+      },
+      "T-06": {
+        "rows": [
+          10,
+          20,
+          30
+        ],
+        "errors": {
+          "4": "UNIQUE constraint failed: c.qty"
+        },
+        "inTransaction": false
+      },
+      "T-07": {
+        "rows": [
+          20,
+          30
+        ],
+        "errors": {
+          "4": "FOREIGN KEY constraint failed",
+          "5": "no such savepoint: absent"
+        },
+        "inTransaction": false
+      },
+      "T-08": {
+        "rows": [
+          10,
+          20,
+          40
+        ],
+        "errors": {},
+        "inTransaction": false
+      }
+    },
+    "subtitle-handoff": {
+      "S-01": {
+        "decision": "FIX_TIME",
+        "timeValid": false,
+        "referenceVerified": true,
+        "currentVersionApproved": false
+      },
+      "S-02": {
+        "decision": "HOLD_SOURCE",
+        "timeValid": true,
+        "referenceVerified": false,
+        "currentVersionApproved": false
+      },
+      "S-03": {
+        "decision": "PASS",
+        "timeValid": true,
+        "referenceVerified": true,
+        "currentVersionApproved": true
+      },
+      "S-04": {
+        "decision": "FIX_TIME",
+        "timeValid": false,
+        "referenceVerified": true,
+        "currentVersionApproved": true
+      },
+      "S-05": {
+        "decision": "PASS",
+        "lineCount": 2,
+        "longestLine": 14,
+        "charsPerSecond": 13,
+        "gapMs": 200
+      },
+      "S-06": {
+        "decision": "FIX_LINE",
+        "lineCount": 2,
+        "longestLine": 15,
+        "charsPerSecond": 12,
+        "gapMs": 199
+      },
+      "S-07": {
+        "decision": "FIX_RATE",
+        "lineCount": 2,
+        "longestLine": 13,
+        "charsPerSecond": 13.125,
+        "gapMs": 300
+      },
+      "S-08": {
+        "decision": "FIX_GAP",
+        "lineCount": 2,
+        "longestLine": 12,
+        "charsPerSecond": 12,
+        "gapMs": 199
+      }
+    }
+  }
+}

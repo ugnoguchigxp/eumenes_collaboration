@@ -1,0 +1,51 @@
+{
+  "sdk": "0.160.0",
+  "cli": "codex-cli 0.162.1",
+  "model": "gpt-6-luna",
+  "reasoning": "low",
+  "searchMode": "live",
+  "result": [
+    {
+      "structured": true,
+      "completed": true,
+      "completedWebSearchEvents": 0,
+      "eventTypes": [
+        "thread.started",
+        "item.completed/error",
+        "turn.started",
+        "item.completed/agent_message",
+        "turn.completed"
+      ],
+      "usage": {
+        "input_tokens": 41948,
+        "cached_input_tokens": 33408,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 187,
+        "reasoning_output_tokens": 47
+      },
+      "response": "{\"hits\":[]}",
+      "elapsedMs": 10947
+    },
+    {
+      "structured": false,
+      "completed": true,
+      "completedWebSearchEvents": 0,
+      "eventTypes": [
+        "thread.started",
+        "item.completed/error",
+        "turn.started",
+        "item.completed/agent_message",
+        "turn.completed"
+      ],
+      "usage": {
+        "input_tokens": 55833,
+        "cached_input_tokens": 46080,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 184,
+        "reasoning_output_tokens": 0
+      },
+      "response": "I couldn’t run the built-in web search because its execution tool is unavailable, so I can’t verify a search result or provide a source URL.",
+      "elapsedMs": 12412
+    }
+  ]
+}

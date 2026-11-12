@@ -1,0 +1,187 @@
+{
+  "subtitle-handoff": {
+    "current": {
+      "score": 4,
+      "payloadScore": 8,
+      "max": 16,
+      "modelCalls": 4,
+      "inputTokens": 36618,
+      "outputTokens": 614,
+      "guideDecisionScore": 0,
+      "guideAbstentions": 8,
+      "perfect": 0,
+      "replyMedianMs": 7848.5,
+      "completionMedianMs": 17148.5,
+      "selected": {
+        "review": 0,
+        "skill": 0,
+        "research": 0
+      },
+      "delivered": {
+        "review": 0,
+        "skill": 0,
+        "research": 0
+      },
+      "runs": [
+        {
+          "repetition": 1,
+          "score": 4,
+          "payloadScore": 4,
+          "max": 8,
+          "correctIds": [
+            "S-01",
+            "S-02",
+            "S-03",
+            "S-04"
+          ],
+          "payloadCorrectIds": [
+            "S-01",
+            "S-02",
+            "S-03",
+            "S-04"
+          ],
+          "replyMs": 9209,
+          "completionMs": 19054,
+          "modelCalls": 2,
+          "inputTokens": 18310,
+          "outputTokens": 304,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": false,
+          "skillResult": null,
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null,
+          "guideDecisionScore": 0,
+          "guideAbstentions": 4
+        },
+        {
+          "repetition": 2,
+          "score": 0,
+          "payloadScore": 4,
+          "max": 8,
+          "correctIds": [],
+          "payloadCorrectIds": [
+            "S-01",
+            "S-02",
+            "S-03",
+            "S-04"
+          ],
+          "replyMs": 6488,
+          "completionMs": 15243,
+          "modelCalls": 2,
+          "inputTokens": 18308,
+          "outputTokens": 310,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": false,
+          "skillResult": null,
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null,
+          "guideDecisionScore": 0,
+          "guideAbstentions": 4
+        }
+      ]
+    },
+    "assisted-research": {
+      "score": 13,
+      "payloadScore": 13,
+      "max": 16,
+      "modelCalls": 6,
+      "inputTokens": 57804,
+      "outputTokens": 1002,
+      "guideDecisionScore": 5,
+      "guideAbstentions": 0,
+      "perfect": 0,
+      "replyMedianMs": 9229.0,
+      "completionMedianMs": 27834.0,
+      "selected": {
+        "review": 0,
+        "skill": 2,
+        "research": 0
+      },
+      "delivered": {
+        "review": 0,
+        "skill": 2,
+        "research": 0
+      },
+      "runs": [
+        {
+          "repetition": 1,
+          "score": 7,
+          "payloadScore": 7,
+          "max": 8,
+          "correctIds": [
+            "S-01",
+            "S-02",
+            "S-03",
+            "S-04",
+            "S-05",
+            "S-06",
+            "S-07"
+          ],
+          "payloadCorrectIds": [
+            "S-01",
+            "S-02",
+            "S-03",
+            "S-04",
+            "S-05",
+            "S-06",
+            "S-07"
+          ],
+          "replyMs": 7881,
+          "completionMs": 26499,
+          "modelCalls": 3,
+          "inputTokens": 28884,
+          "outputTokens": 477,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": true,
+          "skillResult": "ok",
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null,
+          "guideDecisionScore": 3,
+          "guideAbstentions": 0
+        },
+        {
+          "repetition": 2,
+          "score": 6,
+          "payloadScore": 6,
+          "max": 8,
+          "correctIds": [
+            "S-01",
+            "S-02",
+            "S-03",
+            "S-04",
+            "S-07",
+            "S-08"
+          ],
+          "payloadCorrectIds": [
+            "S-01",
+            "S-02",
+            "S-03",
+            "S-04",
+            "S-07",
+            "S-08"
+          ],
+          "replyMs": 10577,
+          "completionMs": 29169,
+          "modelCalls": 3,
+          "inputTokens": 28920,
+          "outputTokens": 525,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": true,
+          "skillResult": "ok",
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null,
+          "guideDecisionScore": 2,
+          "guideAbstentions": 0
+        }
+      ]
+    }
+  }
+}

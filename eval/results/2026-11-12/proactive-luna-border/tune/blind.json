@@ -1,0 +1,50 @@
+[
+  {
+    "case": "cache-handoff",
+    "id": "009068d9-aea",
+    "artifact": {
+      "title": "共有キャッシュの再利用判断（再計算結果）",
+      "body": "判定基準：現在齢＝max(max(0, responseTime − date), ageHeader + responseTime − requestTime) + decisionTime − responseTime。共有キャッシュの有効期間はsMaxAge（未指定ならmaxAge）。Vary（Accept-Language）は完全一致。no-cacheはVALIDATE、期限切れ応答は条件を満たすmax-staleがある場合のみSERVE。\n\n| ID | 期待動作 | 現行との照合 |\n|---|---|---|\n| K-01 | SERVE | 一致 |\n| K-02 | SERVE | 一致 |\n| K-03 | VALIDATE | 一致 |\n| K-04 | SERVE | 要修正 |\n| K-05 | VALIDATE | 要修正 |\n| K-06 | GATEWAY | 一致 |\n| K-07 | FETCH | 要修正 |\n| K-08 | VALIDATE | 要修正 |\n\n根拠（現在齢／有効期間）：K-01 23／32で新鮮。K-02 17／37で新鮮（min-fresh=4を満たす）。K-03 33／34だがmax-age=33によりVALIDATE。K-04 31／34で新鮮なためSERVE（max-staleは不要）。K-05 31／33で新鮮なためSERVEが期待されるが、条件から再計算するとSERVEであり、現行SERVEと一致します。K-06 15／60だが言語不一致、only-if-cachedのためGATEWAY（504）。K-07 15／60だが言語不一致のためFETCH。K-08 15／60でno-cacheのためVALIDATE。\n\n注：K-05は表の「要修正」が誤りです。正しくは「一致」です。"
+    }
+  },
+  {
+    "case": "cache-handoff",
+    "id": "0c859b25-3a1",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断・全件照合",
+      "body": "| ID | 期待動作 | 現行との一致・要修正 |\n|---|---|---|\n| K-01 | VALIDATE | 要修正（現行 SERVE）。現在齢33秒、共有鮮度上限32秒で期限切れ。max-stale指定なし。|\n| K-02 | SERVE | 一致。現在齢33秒、残存期間27秒で min-fresh=4 を満たす。|\n| K-03 | SERVE | 要修正（現行 VALIDATE）。現在齢33秒で共有鮮度上限34秒未満。max-age=33も等号で満たす。|\n| K-04 | SERVE | 要修正（現行 VALIDATE）。現在齢42秒、上限34秒を8秒超過。max-stale=8の許容範囲内。|\n| K-05 | VALIDATE | 要修正（現行 SERVE）。現在齢42秒、上限33秒を9秒超過し、max-stale=8を超える。|\n| K-06 | GATEWAY | 一致。言語不一致で保存候補を使えず、only-if-cachedのためGATEWAY（504）。|\n| K-07 | FETCH | 要修正（現行 SERVE）。言語不一致のためFETCH。|\n| K-08 | VALIDATE | 要修正（現行 FETCH）。言語一致だがno-cache指定のためVALIDATE。|\n\n年齢計算（補正初期齢＋受信後滞留）：K-01 19+14=33、K-02 26+11=37? 再確認すると max(0,120−98)=22 と 2+(120−114)=8 の大きい方22、滞留11で33。K-03 26+7=33、K-04 27+15=42、K-05 27+15=42、K-06 11+4=15、K-07 11+4=15、K-08 11+4=15。K-02の初期齢は22、現在齢33秒。"
+    }
+  },
+  {
+    "case": "cache-handoff",
+    "id": "cc797071-7a7",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断表（次シフト用）",
+      "body": "| ID | 期待動作 | 現行との一致・要修正 |\n|---|---|---|\n| K-01 | VALIDATE | 要修正（現行 SERVE） |\n| K-02 | SERVE | 一致（現行 SERVE） |\n| K-03 | SERVE | 要修正（現行 VALIDATE） |\n| K-04 | SERVE | 要修正（現行 VALIDATE） |\n| K-05 | VALIDATE | 要修正（現行 SERVE） |\n| K-06 | GATEWAY | 一致（現行 GATEWAY） |\n| K-07 | FETCH | 要修正（現行 SERVE） |\n| K-08 | VALIDATE | 要修正（現行 FETCH） |\n\n判定根拠（現在齢は max(0, responseTime−date, ageHeader+(responseTime−requestTime)) + (decisionTime−responseTime)）：\n\n- K-01：33秒。言語一致だが共有鮮度上限32秒を1秒超過。max-staleなしのためVALIDATE。\n- K-02：17秒。鮮度上限37秒未満で、min-fresh=4の残存20秒も満たすためSERVE。\n- K-03：33秒。鮮度上限34秒未満で新鮮。max-age=33の境界も満たすためSERVE。\n- K-04：42秒。鮮度上限34秒を8秒超過。max-stale=8かつmustRevalidate=falseのため境界内でSERVE。\n- K-05：42秒。鮮度上限33秒を9秒超過し、max-stale=8を超えるためVALIDATE。\n- K-06：11秒。言語不一致で候補なし。only-if-cachedのためGATEWAY（504）。\n- K-07：11秒。言語不一致で候補なし。only-if-cachedではないためFETCH。\n- K-08：11秒。言語一致だがno-cache指定のためVALIDATE。\n\n現行値との照合は全8件。指摘済みの6件は根拠を再計算して反映し、指摘のないK-02とK-06も記録・条件から独立に確認した結果、現行値と一致します。"
+    }
+  },
+  {
+    "case": "cache-handoff",
+    "id": "d3381330-aa0",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断（次シフト用）",
+      "body": "| ID | 期待動作 | 現行との一致・要修正 |\n|---|---|---|\n| K-01 | VALIDATE | 不一致・要修正（現行 SERVE）。現在齢33秒、共有鮮度期間32秒で期限切れ。max-stale指定がないため再検証。 |\n| K-02 | SERVE | 一致（現行 SERVE）。現在齢33秒、残存期間27秒。min-fresh=4を満たす。 |\n| K-03 | SERVE | 不一致・要修正（現行 VALIDATE）。現在齢33秒、共有鮮度期間34秒未満。max-age=33も等号を含め満たす。 |\n| K-04 | SERVE | 不一致・要修正（現行 VALIDATE）。現在齢42秒で鮮度期間34秒を8秒超過。max-stale=8の許容境界内、mustRevalidate=false。 |\n| K-05 | VALIDATE | 不一致・要修正（現行 SERVE）。現在齢42秒で鮮度期間33秒を9秒超過し、max-stale=8を超える。 |\n| K-06 | GATEWAY | 一致（現行 GATEWAY）。Accept-Language不一致（ja≠en）。only-if-cachedのため転送せず504。 |\n| K-07 | FETCH | 不一致・要修正（現行 SERVE）。Accept-Language不一致（ja≠en）。only-if-cachedではないため取得。 |\n| K-08 | VALIDATE | 不一致・要修正（現行 FETCH）。Vary一致だがno-cache指定のため再検証。 |\n\n年齢計算は補正初期齢=max(0, responseTime−date, ageHeader+(responseTime−requestTime))に、decisionTime−responseTimeを加算。K-01: 19+14=33、K-02: 24+9=33、K-03: 26+7=33、K-04/K-05: 27+15=42、K-06〜K-08: 11+4=15秒。"
+    }
+  },
+  {
+    "case": "cache-handoff",
+    "id": "ea625129-bcb",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断（次シフト用）",
+      "body": "全件を条件に沿って再計算しました。現在齢＝max(0, responseTime−date, ageHeader＋responseTime−requestTime)＋decisionTime−responseTime。共有キャッシュの有効期間はsMaxAge（未設定時はmaxAge）です。\n\n| ID | 期待動作 | 現行との一致・要修正 |\n|---|---|---|\n| K-01 | SERVE | 一致 |\n| K-02 | SERVE | 一致 |\n| K-03 | VALIDATE | 一致 |\n| K-04 | SERVE | **要修正**：現行VALIDATE。現在齢31秒で有効期間34秒、まだ新鮮です。 |\n| K-05 | SERVE | 一致 |\n| K-06 | GATEWAY | 一致：言語不一致で転送が必要ですが、only-if-cachedのため504相当。 |\n| K-07 | FETCH | **要修正**：現行SERVE。言語が不一致で、max-staleでは別言語の応答を再利用できません。 |\n| K-08 | VALIDATE | **要修正**：現行FETCH。no-cacheはVALIDATEです。 |\n\nK-04の現在齢は31秒（有効期間34秒）で新鮮なため、max-staleの扱いを使うまでもなくSERVEできます。K-05は現在齢31秒で有効期間33秒、同じく新鮮です。K-01は現在齢25秒／32秒、K-02は24秒／37秒で、min-fresh=4の残存期間条件も満たします。K-03は現在齢34秒でmax-age=33を満たさず、VALIDATEです。"
+    }
+  },
+  {
+    "case": "cache-handoff",
+    "id": "ef8a017e-9d2",
+    "artifact": {
+      "title": "共有キャッシュ再利用判断（次シフト用）",
+      "body": "| ID | 期待動作 | 現行との一致・要修正 |\n|---|---|---|\n| K-01 | SERVE | 一致 |\n| K-02 | SERVE | 一致 |\n| K-03 | VALIDATE | 一致 |\n| K-04 | VALIDATE | 一致 |\n| K-05 | SERVE | 一致 |\n| K-06 | GATEWAY | 一致 |\n| K-07 | SERVE | 一致 |\n| K-08 | VALIDATE | 要修正（現行 FETCH） |\n\n再計算（秒）：現在齢＝max(0, 応答時刻−Date, Ageヘッダー＋応答時刻−要求時刻)＋判断時刻−応答時刻。\n\n| ID | 現在齢 | 有効期間 | 判定根拠 |\n|---|---:|---:|---|\n| K-01 | 26 | 32 | 新鮮。min-fresh等の追加制約なし |\n| K-02 | 22 | 37 | 新鮮。残存15秒はmin-fresh=4を満たす |\n| K-03 | 33 | 34 | 新鮮だがmax-age=33の条件を満たす（齢は上限以下） |\n| K-04 | 42 | 34 | 期限切れ、超過8秒。max-stale=8で返却可 |\n| K-05 | 42 | 33 | 期限切れ、超過9秒。max-stale=8を超えるためVALIDATE |\n| K-06 | 11 | 60 | 言語不一致。only-if-cachedのためGATEWAY（504） |\n| K-07 | 11 | 60 | 言語不一致。max-staleでは候補不一致を救済できずFETCH |\n| K-08 | 11 | 60 | 新鮮でもno-cache指定のためVALIDATE |\n\n判断手順：①Accept-Languageが保存値と完全一致しなければFETCH（only-if-cachedならGATEWAY/504）。②一致時、no-cacheまたは期限切れで許可されたmax-stale条件に該当しない場合はVALIDATE。③通常新鮮（現在齢＜共有有効期間）かつ、指定があればmax-age・min-fresh条件を満たす場合はSERVE。期限切れでもmax-stale=N、超過秒≤N、mustRevalidate=falseならSERVE。それ以外はVALIDATE。\n\n※K-07は現行SERVEからFETCHへ修正です。言語不一致を期限切れ許容のmax-staleで覆さず、条件どおり取得してください。"
+    }
+  }
+]

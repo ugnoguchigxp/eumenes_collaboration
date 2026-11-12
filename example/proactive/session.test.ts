@@ -81,7 +81,12 @@ test("optional calls remain absent when the model returns no requests", async ()
 		{
 			async infer() {
 				return {
-					output: { text: "確認しました。", review: null, skill: null },
+					output: {
+						text: "確認しました。",
+						review: null,
+						skill: null,
+						research: null,
+					},
 					costUsd: 0,
 				};
 			},
@@ -94,10 +99,17 @@ test("optional calls remain absent when the model returns no requests", async ()
 			async skill() {
 				throw Error("unexpected_skill");
 			},
+			async research() {
+				throw Error("unexpected_research");
+			},
 		},
 		AbortSignal.timeout(1000),
 	);
-	expect(await trial.runBackground()).toEqual({ review: null, skill: null });
+	expect(await trial.runBackground()).toEqual({
+		review: null,
+		skill: null,
+		research: null,
+	});
 });
 
 test("three sentences preserve valid review and artifact work", async () => {

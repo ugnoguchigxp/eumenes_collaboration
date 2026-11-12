@@ -1,0 +1,546 @@
+[
+  {
+    "case": "subtitle-handoff",
+    "id": "71d30d88-ecd",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "observed": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "PASS",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_RATE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_GAP",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "FIX_RATE",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_RATE",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "FIX_GAP",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_GAP",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "subtitle-handoff",
+    "id": "75cb1eb3-14c",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "observed": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "PASS",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "PASS",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "FIX_RATE",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_RATE",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "FIX_GAP",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "subtitle-handoff",
+    "id": "a049bded-586",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "PASS",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "observed": [
+          "HOLD_SOURCE",
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "fields": [
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "PASS",
+          "FIX_LINE",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "FIX_TIME",
+          "一致"
+        ],
+        "fields": [
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "HOLD_GUIDE",
+          "FIX_RATE",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "observed": [
+          "HOLD_GUIDE",
+          "PASS",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "FIX_RATE",
+          "要修正"
+        ],
+        "observed": [
+          "HOLD_GUIDE",
+          "PASS",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "FIX_GAP",
+          "要修正"
+        ],
+        "observed": [
+          "HOLD_GUIDE",
+          "FIX_LINE",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "subtitle-handoff",
+    "id": "e861f1f0-dcb",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "observed": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "PASS",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "HOLD_GUIDE",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "observed": [
+          "HOLD_GUIDE",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "FIX_RATE",
+          "要修正"
+        ],
+        "observed": [
+          "HOLD_GUIDE",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "FIX_GAP",
+          "要修正"
+        ],
+        "observed": [
+          "HOLD_GUIDE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  }
+]

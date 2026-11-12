@@ -1,0 +1,782 @@
+[
+  {
+    "case": "cache-handoff",
+    "id": "009068d9-aea",
+    "checks": [
+      {
+        "id": "K-01",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "SERVE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-02",
+        "expected": [
+          "SERVE",
+          "一致"
+        ],
+        "observed": [
+          "SERVE",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-03",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-04",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [
+          "SERVE",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-05",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-06",
+        "expected": [
+          "GATEWAY",
+          "一致"
+        ],
+        "observed": [
+          "GATEWAY",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-07",
+        "expected": [
+          "FETCH",
+          "要修正"
+        ],
+        "observed": [
+          "FETCH",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-08",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "cache-handoff",
+    "id": "0c859b25-3a1",
+    "checks": [
+      {
+        "id": "K-01",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "要修正（現行SERVE）。現在齢33秒、共有鮮度上限32秒で期限切れ。max-stale指定なし。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-02",
+        "expected": [
+          "SERVE",
+          "一致"
+        ],
+        "observed": [
+          "SERVE",
+          "一致。現在齢33秒、残存期間27秒でmin-fresh=4を満たす。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-03",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [
+          "SERVE",
+          "要修正（現行VALIDATE）。現在齢33秒で共有鮮度上限34秒未満。max-age=33も等号で満たす。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-04",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [
+          "SERVE",
+          "要修正（現行VALIDATE）。現在齢42秒、上限34秒を8秒超過。max-stale=8の許容範囲内。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-05",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "要修正（現行SERVE）。現在齢42秒、上限33秒を9秒超過し、max-stale=8を超える。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-06",
+        "expected": [
+          "GATEWAY",
+          "一致"
+        ],
+        "observed": [
+          "GATEWAY",
+          "一致。言語不一致で保存候補を使えず、only-if-cachedのためGATEWAY（504）。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-07",
+        "expected": [
+          "FETCH",
+          "要修正"
+        ],
+        "observed": [
+          "FETCH",
+          "要修正（現行SERVE）。言語不一致のためFETCH。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-08",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "要修正（現行FETCH）。言語一致だがno-cache指定のためVALIDATE。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "cache-handoff",
+    "id": "cc797071-7a7",
+    "checks": [
+      {
+        "id": "K-01",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "要修正（現行SERVE）"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-02",
+        "expected": [
+          "SERVE",
+          "一致"
+        ],
+        "observed": [
+          "SERVE",
+          "一致（現行SERVE）"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-03",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [
+          "SERVE",
+          "要修正（現行VALIDATE）"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-04",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [
+          "SERVE",
+          "要修正（現行VALIDATE）"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-05",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "要修正（現行SERVE）"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-06",
+        "expected": [
+          "GATEWAY",
+          "一致"
+        ],
+        "observed": [
+          "GATEWAY",
+          "一致（現行GATEWAY）"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-07",
+        "expected": [
+          "FETCH",
+          "要修正"
+        ],
+        "observed": [
+          "FETCH",
+          "要修正（現行SERVE）"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-08",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "要修正（現行FETCH）"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "cache-handoff",
+    "id": "d3381330-aa0",
+    "checks": [
+      {
+        "id": "K-01",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "不一致・要修正（現行SERVE）。現在齢33秒、共有鮮度期間32秒で期限切れ。max-stale指定がないため再検証。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-02",
+        "expected": [
+          "SERVE",
+          "一致"
+        ],
+        "observed": [
+          "SERVE",
+          "一致（現行SERVE）。現在齢33秒、残存期間27秒。min-fresh=4を満たす。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-03",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [
+          "SERVE",
+          "不一致・要修正（現行VALIDATE）。現在齢33秒、共有鮮度期間34秒未満。max-age=33も等号を含め満たす。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-04",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [
+          "SERVE",
+          "不一致・要修正（現行VALIDATE）。現在齢42秒で鮮度期間34秒を8秒超過。max-stale=8の許容境界内、mustRevalidate=false。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-05",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "不一致・要修正（現行SERVE）。現在齢42秒で鮮度期間33秒を9秒超過し、max-stale=8を超える。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-06",
+        "expected": [
+          "GATEWAY",
+          "一致"
+        ],
+        "observed": [
+          "GATEWAY",
+          "一致（現行GATEWAY）。Accept-Language不一致（ja≠en）。only-if-cachedのため転送せず504。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-07",
+        "expected": [
+          "FETCH",
+          "要修正"
+        ],
+        "observed": [
+          "FETCH",
+          "不一致・要修正（現行SERVE）。Accept-Language不一致（ja≠en）。only-if-cachedではないため取得。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-08",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "不一致・要修正（現行FETCH）。Vary一致だがno-cache指定のため再検証。"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "cache-handoff",
+    "id": "ea625129-bcb",
+    "checks": [
+      {
+        "id": "K-01",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "SERVE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-02",
+        "expected": [
+          "SERVE",
+          "一致"
+        ],
+        "observed": [
+          "SERVE",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "K-03",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-04",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [
+          "SERVE",
+          "要修正：現行VALIDATE。現在齢31秒で有効期間34秒、まだ新鮮です。"
+        ],
+        "fields": [
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-05",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "SERVE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-06",
+        "expected": [
+          "GATEWAY",
+          "一致"
+        ],
+        "observed": [
+          "GATEWAY",
+          "一致：言語不一致で転送が必要ですが、only-if-cachedのため504相当。"
+        ],
+        "fields": [
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-07",
+        "expected": [
+          "FETCH",
+          "要修正"
+        ],
+        "observed": [
+          "FETCH",
+          "要修正：現行SERVE。言語が不一致で、max-staleでは別言語の応答を再利用できません。"
+        ],
+        "fields": [
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-08",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [
+          "VALIDATE",
+          "要修正：現行FETCH。no-cacheはVALIDATEです。"
+        ],
+        "fields": [
+          true,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "cache-handoff",
+    "id": "ef8a017e-9d2",
+    "checks": [
+      {
+        "id": "K-01",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-02",
+        "expected": [
+          "SERVE",
+          "一致"
+        ],
+        "observed": [],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-03",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-04",
+        "expected": [
+          "SERVE",
+          "要修正"
+        ],
+        "observed": [],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-05",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-06",
+        "expected": [
+          "GATEWAY",
+          "一致"
+        ],
+        "observed": [],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-07",
+        "expected": [
+          "FETCH",
+          "要修正"
+        ],
+        "observed": [],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "K-08",
+        "expected": [
+          "VALIDATE",
+          "要修正"
+        ],
+        "observed": [],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  }
+]

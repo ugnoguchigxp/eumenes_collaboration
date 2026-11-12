@@ -1,0 +1,410 @@
+{
+  "sqlite-rehearsal": {
+    "current": {
+      "score": 1,
+      "payloadScore": 1,
+      "max": 24,
+      "modelCalls": 6,
+      "inputTokens": 57254,
+      "outputTokens": 2080,
+      "perfect": 0,
+      "replyMedianMs": 8486,
+      "completionMedianMs": 18879,
+      "selected": {
+        "review": 0,
+        "skill": 0,
+        "research": 0
+      },
+      "delivered": {
+        "review": 0,
+        "skill": 0,
+        "research": 0
+      },
+      "runs": [
+        {
+          "repetition": 1,
+          "score": 1,
+          "payloadScore": 1,
+          "max": 8,
+          "correctIds": [
+            "T-01"
+          ],
+          "payloadCorrectIds": [
+            "T-01"
+          ],
+          "replyMs": 23476,
+          "completionMs": 32724,
+          "modelCalls": 2,
+          "inputTokens": 19084,
+          "outputTokens": 1276,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": false,
+          "skillResult": null,
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null
+        },
+        {
+          "repetition": 2,
+          "score": 0,
+          "payloadScore": 0,
+          "max": 8,
+          "correctIds": [],
+          "payloadCorrectIds": [],
+          "replyMs": 8486,
+          "completionMs": 18879,
+          "modelCalls": 2,
+          "inputTokens": 19086,
+          "outputTokens": 489,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": false,
+          "skillResult": null,
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null
+        },
+        {
+          "repetition": 3,
+          "score": 0,
+          "payloadScore": 0,
+          "max": 8,
+          "correctIds": [],
+          "payloadCorrectIds": [],
+          "replyMs": 5632,
+          "completionMs": 14247,
+          "modelCalls": 2,
+          "inputTokens": 19084,
+          "outputTokens": 315,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": false,
+          "skillResult": null,
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null
+        }
+      ]
+    },
+    "assisted-research": {
+      "score": 5,
+      "payloadScore": 5,
+      "max": 24,
+      "modelCalls": 10,
+      "inputTokens": 105817,
+      "outputTokens": 4463,
+      "perfect": 0,
+      "replyMedianMs": 6508,
+      "completionMedianMs": 25372,
+      "selected": {
+        "review": 1,
+        "skill": 3,
+        "research": 0
+      },
+      "delivered": {
+        "review": 1,
+        "skill": 3,
+        "research": 0
+      },
+      "runs": [
+        {
+          "repetition": 1,
+          "score": 2,
+          "payloadScore": 2,
+          "max": 8,
+          "correctIds": [
+            "T-01",
+            "T-08"
+          ],
+          "payloadCorrectIds": [
+            "T-01",
+            "T-08"
+          ],
+          "replyMs": 9980,
+          "completionMs": 74771,
+          "modelCalls": 4,
+          "inputTokens": 45152,
+          "outputTokens": 3457,
+          "reviewSelected": true,
+          "reviewResult": "completed",
+          "skillSelected": true,
+          "skillResult": "ok",
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null
+        },
+        {
+          "repetition": 2,
+          "score": 1,
+          "payloadScore": 1,
+          "max": 8,
+          "correctIds": [
+            "T-05"
+          ],
+          "payloadCorrectIds": [
+            "T-05"
+          ],
+          "replyMs": 6508,
+          "completionMs": 25372,
+          "modelCalls": 3,
+          "inputTokens": 30105,
+          "outputTokens": 509,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": true,
+          "skillResult": "ok",
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null
+        },
+        {
+          "repetition": 3,
+          "score": 2,
+          "payloadScore": 2,
+          "max": 8,
+          "correctIds": [
+            "T-02",
+            "T-04"
+          ],
+          "payloadCorrectIds": [
+            "T-02",
+            "T-04"
+          ],
+          "replyMs": 6383,
+          "completionMs": 21315,
+          "modelCalls": 3,
+          "inputTokens": 30560,
+          "outputTokens": 497,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": true,
+          "skillResult": "ok",
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null
+        }
+      ]
+    }
+  },
+  "subtitle-handoff": {
+    "assisted-research": {
+      "score": 5,
+      "payloadScore": 10,
+      "max": 24,
+      "modelCalls": 11,
+      "inputTokens": 114198,
+      "outputTokens": 5321,
+      "guideDecisionScore": 0,
+      "guideAbstentions": 1,
+      "perfect": 0,
+      "replyMedianMs": 9021,
+      "completionMedianMs": 50318,
+      "selected": {
+        "review": 2,
+        "skill": 3,
+        "research": 0
+      },
+      "delivered": {
+        "review": 1,
+        "skill": 3,
+        "research": 0
+      },
+      "runs": [
+        {
+          "repetition": 1,
+          "score": 3,
+          "payloadScore": 4,
+          "max": 8,
+          "correctIds": [
+            "S-01",
+            "S-02",
+            "S-03"
+          ],
+          "payloadCorrectIds": [
+            "S-01",
+            "S-02",
+            "S-03",
+            "S-04"
+          ],
+          "replyMs": 9021,
+          "completionMs": 55695,
+          "modelCalls": 4,
+          "inputTokens": 43051,
+          "outputTokens": 2466,
+          "reviewSelected": true,
+          "reviewResult": "completed",
+          "skillSelected": true,
+          "skillResult": "ok",
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null,
+          "guideDecisionScore": 0,
+          "guideAbstentions": 0
+        },
+        {
+          "repetition": 2,
+          "score": 2,
+          "payloadScore": 3,
+          "max": 8,
+          "correctIds": [
+            "S-01",
+            "S-02"
+          ],
+          "payloadCorrectIds": [
+            "S-01",
+            "S-02",
+            "S-04"
+          ],
+          "replyMs": 6906,
+          "completionMs": 30291,
+          "modelCalls": 3,
+          "inputTokens": 29208,
+          "outputTokens": 835,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": true,
+          "skillResult": "ok",
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null,
+          "guideDecisionScore": 0,
+          "guideAbstentions": 1
+        },
+        {
+          "repetition": 3,
+          "score": 0,
+          "payloadScore": 3,
+          "max": 8,
+          "correctIds": [],
+          "payloadCorrectIds": [
+            "S-01",
+            "S-02",
+            "S-04"
+          ],
+          "replyMs": 10972,
+          "completionMs": 50318,
+          "modelCalls": 4,
+          "inputTokens": 41939,
+          "outputTokens": 2020,
+          "reviewSelected": true,
+          "reviewResult": "incomplete",
+          "skillSelected": true,
+          "skillResult": "ok",
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null,
+          "guideDecisionScore": 0,
+          "guideAbstentions": 0
+        }
+      ]
+    },
+    "current": {
+      "score": 4,
+      "payloadScore": 7,
+      "max": 24,
+      "modelCalls": 6,
+      "inputTokens": 55654,
+      "outputTokens": 1528,
+      "guideDecisionScore": 0,
+      "guideAbstentions": 12,
+      "perfect": 0,
+      "replyMedianMs": 8211,
+      "completionMedianMs": 18413,
+      "selected": {
+        "review": 0,
+        "skill": 0,
+        "research": 0
+      },
+      "delivered": {
+        "review": 0,
+        "skill": 0,
+        "research": 0
+      },
+      "runs": [
+        {
+          "repetition": 1,
+          "score": 0,
+          "payloadScore": 2,
+          "max": 8,
+          "correctIds": [],
+          "payloadCorrectIds": [
+            "S-02",
+            "S-04"
+          ],
+          "replyMs": 6980,
+          "completionMs": 18413,
+          "modelCalls": 2,
+          "inputTokens": 18550,
+          "outputTokens": 520,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": false,
+          "skillResult": null,
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null,
+          "guideDecisionScore": 0,
+          "guideAbstentions": 4
+        },
+        {
+          "repetition": 2,
+          "score": 2,
+          "payloadScore": 3,
+          "max": 8,
+          "correctIds": [
+            "S-01",
+            "S-02"
+          ],
+          "payloadCorrectIds": [
+            "S-01",
+            "S-02",
+            "S-04"
+          ],
+          "replyMs": 9738,
+          "completionMs": 21091,
+          "modelCalls": 2,
+          "inputTokens": 18554,
+          "outputTokens": 520,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": false,
+          "skillResult": null,
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null,
+          "guideDecisionScore": 0,
+          "guideAbstentions": 4
+        },
+        {
+          "repetition": 3,
+          "score": 2,
+          "payloadScore": 2,
+          "max": 8,
+          "correctIds": [
+            "S-02",
+            "S-04"
+          ],
+          "payloadCorrectIds": [
+            "S-02",
+            "S-04"
+          ],
+          "replyMs": 8211,
+          "completionMs": 18030,
+          "modelCalls": 2,
+          "inputTokens": 18550,
+          "outputTokens": 488,
+          "reviewSelected": false,
+          "reviewResult": null,
+          "skillSelected": false,
+          "skillResult": null,
+          "researchSelected": false,
+          "researchResult": null,
+          "researchError": null,
+          "guideDecisionScore": 0,
+          "guideAbstentions": 4
+        }
+      ]
+    }
+  }
+}

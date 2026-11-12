@@ -1,0 +1,1074 @@
+[
+  {
+    "case": "sqlite-rehearsal",
+    "id": "6f024c06-7bc",
+    "checks": [
+      {
+        "id": "T-01",
+        "expected": [
+          "10+20+30",
+          "要修正"
+        ],
+        "observed": [
+          "10+20",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-02",
+        "expected": [
+          "10+20+50",
+          "一致"
+        ],
+        "observed": [
+          "10+20+50",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-03",
+        "expected": [
+          "10+20+50",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+30+50",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-04",
+        "expected": [
+          "20+30",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+30",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-05",
+        "expected": [
+          "10+20+30+40",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+30+50",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-06",
+        "expected": [
+          "10+20+30",
+          "一致"
+        ],
+        "observed": [
+          "10+20+30",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-07",
+        "expected": [
+          "20+30",
+          "一致"
+        ],
+        "observed": [
+          "20",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-08",
+        "expected": [
+          "10+20+40",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+30+40",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "sqlite-rehearsal",
+    "id": "7ceadae8-9bf",
+    "checks": [
+      {
+        "id": "T-01",
+        "expected": [
+          "10+20+30",
+          "要修正"
+        ],
+        "observed": [
+          "10+20",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-02",
+        "expected": [
+          "10+20+50",
+          "一致"
+        ],
+        "observed": [
+          "10+20+50",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-03",
+        "expected": [
+          "10+20+50",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+30+50",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-04",
+        "expected": [
+          "20+30",
+          "要修正"
+        ],
+        "observed": [
+          "10+20",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-05",
+        "expected": [
+          "10+20+30+40",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+30",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-06",
+        "expected": [
+          "10+20+30",
+          "一致"
+        ],
+        "observed": [
+          "10+20+30",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-07",
+        "expected": [
+          "20+30",
+          "一致"
+        ],
+        "observed": [
+          "20+30",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-08",
+        "expected": [
+          "10+20+40",
+          "要修正"
+        ],
+        "observed": [
+          "30+40",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "sqlite-rehearsal",
+    "id": "963c0374-58e",
+    "checks": [
+      {
+        "id": "T-01",
+        "expected": [
+          "10+20+30",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+30",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-02",
+        "expected": [
+          "10+20+50",
+          "一致"
+        ],
+        "observed": [
+          "10+20+50",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-03",
+        "expected": [
+          "10+20+50",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+50",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-04",
+        "expected": [
+          "20+30",
+          "要修正"
+        ],
+        "observed": [
+          "20+30",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-05",
+        "expected": [
+          "10+20+30+40",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+30+40",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-06",
+        "expected": [
+          "10+20+30",
+          "一致"
+        ],
+        "observed": [
+          "10+20+30",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-07",
+        "expected": [
+          "20+30",
+          "一致"
+        ],
+        "observed": [
+          "20",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-08",
+        "expected": [
+          "10+20+40",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+40",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      }
+    ]
+  },
+  {
+    "case": "sqlite-rehearsal",
+    "id": "e1f7b415-6c2",
+    "checks": [
+      {
+        "id": "T-01",
+        "expected": [
+          "10+20+30",
+          "要修正"
+        ],
+        "observed": [
+          "10+20",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-02",
+        "expected": [
+          "10+20+50",
+          "一致"
+        ],
+        "observed": [
+          "10+20+50",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-03",
+        "expected": [
+          "10+20+50",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+50",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-04",
+        "expected": [
+          "20+30",
+          "要修正"
+        ],
+        "observed": [
+          "20+30",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-05",
+        "expected": [
+          "10+20+30+40",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+30+40",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "T-06",
+        "expected": [
+          "10+20+30",
+          "一致"
+        ],
+        "observed": [
+          "10+20",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-07",
+        "expected": [
+          "20+30",
+          "一致"
+        ],
+        "observed": [
+          "20+30",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "T-08",
+        "expected": [
+          "10+20+40",
+          "要修正"
+        ],
+        "observed": [
+          "10+20+30+40",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "subtitle-handoff",
+    "id": "0236da1d-470",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "observed": [
+          "PASS",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "observed": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_RATE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "FIX_RATE",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "FIX_GAP",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "subtitle-handoff",
+    "id": "1134da13-22c",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "observed": [
+          "HOLD_SOURCE",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "observed": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_RATE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "observed": [
+          "PASS",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "FIX_RATE",
+          "要修正"
+        ],
+        "observed": [
+          "HOLD_GUIDE",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "FIX_GAP",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "subtitle-handoff",
+    "id": "6c1f7cd8-ce1",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "observed": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_RATE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "FIX_RATE",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "FIX_GAP",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case": "subtitle-handoff",
+    "id": "fa60607d-d4c",
+    "checks": [
+      {
+        "id": "S-01",
+        "expected": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "要修正"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-02",
+        "expected": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "observed": [
+          "HOLD_SOURCE",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-03",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-04",
+        "expected": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "observed": [
+          "FIX_TIME",
+          "一致"
+        ],
+        "fields": [
+          true,
+          true
+        ],
+        "correct": true
+      },
+      {
+        "id": "S-05",
+        "expected": [
+          "PASS",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_RATE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-06",
+        "expected": [
+          "FIX_LINE",
+          "要修正"
+        ],
+        "observed": [
+          "PASS",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-07",
+        "expected": [
+          "FIX_RATE",
+          "要修正"
+        ],
+        "observed": [
+          "HOLD_GUIDE",
+          "要修正"
+        ],
+        "fields": [
+          false,
+          true
+        ],
+        "correct": false
+      },
+      {
+        "id": "S-08",
+        "expected": [
+          "FIX_GAP",
+          "要修正"
+        ],
+        "observed": [
+          "FIX_LINE",
+          "一致"
+        ],
+        "fields": [
+          false,
+          false
+        ],
+        "correct": false
+      }
+    ]
+  }
+]

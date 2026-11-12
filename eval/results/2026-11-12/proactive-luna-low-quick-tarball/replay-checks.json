@@ -1,0 +1,50 @@
+[
+  {
+    "case": "hard-02",
+    "repetition": 1,
+    "status": "completed",
+    "findings": 6,
+    "handedOff": true,
+    "inputMatched": true
+  },
+  {
+    "case": "hard-04",
+    "repetition": 1,
+    "status": "incomplete",
+    "findings": 0,
+    "handedOff": false,
+    "inputMatched": true
+  },
+  {
+    "case": "hard-05",
+    "repetition": 1,
+    "status": "completed",
+    "findings": 5,
+    "handedOff": true,
+    "inputMatched": true
+  },
+  {
+    "case": "hard-02",
+    "repetition": 2,
+    "status": "completed",
+    "findings": 6,
+    "handedOff": true,
+    "inputMatched": true
+  },
+  {
+    "case": "hard-04",
+    "repetition": 2,
+    "status": "completed",
+    "findings": 4,
+    "handedOff": true,
+    "inputMatched": true
+  },
+  {
+    "case": "hard-05",
+    "repetition": 2,
+    "status": "completed",
+    "findings": 5,
+    "handedOff": true,
+    "inputMatched": true
+  }
+]
