@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-12",
+  "eumenesCommit": "b59dda83f76d6f51ea8e88f6072f7d83eb6cd299",
+  "prerequisites": [
+    "../pipeline-review-correction/pipeline-baseline.patch",
+    "../pipeline-review-correction/pipeline-review.patch"
+  ],
+  "lockfileSha256": "b55f19f76963bd99cb1afc5942db81420d43a6cd47d2ebad554d1c09cfcad7f3",
+  "artifacts": {
+    "interact": {
+      "artifact": "eumenes-interact-0.1.3-eumenes.2-a88153a824ec.tgz",
+      "sha256": "a88153a824ecb0ecc01e152dd52e19842d3880754d7da3a3f6103e572f769d2c"
+    },
+    "evaluator": {
+      "artifact": "eumenes-evaluator-0.1.0-1178a3fad04b.tgz",
+      "sha256": "1178a3fad04b8708b9cb1f0c8dd7ece50056ab317c3f5ba6b5afa037d943b708"
+    },
+    "collaboration": {
+      "artifact": "eumenes-collaboration-0.4.0-ce0d56eedc6a.tgz",
+      "sha256": "ce0d56eedc6ada0e67e8aff39daba2ae29caddb4e328c1041620135d2a12450c"
+    }
+  },
+  "bindings": {
+    "baseline": "binding:collaboration.interact@2",
+    "final": "binding:collaboration.interact@3"
+  },
+  "evaluation": {
+    "depth": "quick",
+    "deadlineMs": 120000,
+    "selection": "optional"
+  },
+  "provider": {
+    "model": "gpt-6-luna",
+    "reasoningEffort": "low",
+    "route": "native Codex adapter with ChatGPT login",
+    "bun": "1.4.4",
+    "codexCli": "0.162.1"
+  },
+  "maxModelCallsPerTrial": 18,
+  "hostFiles": {
+    "interact-quality.patch": "829d24a5aa18856d441d317d081a53f0f10115bb2e5ca32dc2220ab99a0b4672",
+    "live-runner.ts.txt": "0799d2126878ace4d94b9c6372fc191a82232c0223afd1e121ba364f272c43da"
+  }
+}

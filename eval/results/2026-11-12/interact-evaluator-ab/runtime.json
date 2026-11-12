@@ -1,0 +1,44 @@
+{
+  "eumenesCommit": "b59dda83f76d6f51ea8e88f6072f7d83eb6cd299",
+  "lockfileSha256": "b55f19f76963bd99cb1afc5942db81420d43a6cd47d2ebad554d1c09cfcad7f3",
+  "artifacts": {
+    "interact": {
+      "artifact": "eumenes-interact-0.1.3-eumenes.2-a88153a824ec.tgz",
+      "sha256": "a88153a824ecb0ecc01e152dd52e19842d3880754d7da3a3f6103e572f769d2c"
+    },
+    "evaluator": {
+      "artifact": "eumenes-evaluator-0.1.0-1178a3fad04b.tgz",
+      "sha256": "1178a3fad04b8708b9cb1f0c8dd7ece50056ab317c3f5ba6b5afa037d943b708"
+    },
+    "collaboration": {
+      "artifact": "eumenes-collaboration-0.4.0-ce0d56eedc6a.tgz",
+      "sha256": "ce0d56eedc6ada0e67e8aff39daba2ae29caddb4e328c1041620135d2a12450c"
+    }
+  },
+  "basePatches": {
+    "../pipeline-review-correction/pipeline-baseline.patch": "601d0e3c94b100ad5e7aee0462a93329764f1fc74cdc5d65e44c5fd217798b88",
+    "../pipeline-review-correction/pipeline-review.patch": "384a811b61222ce8cfda4b3fd359994750c9b17bc744a925c130b51a62d72d00",
+    "../interact-quality/interact-quality.patch": "829d24a5aa18856d441d317d081a53f0f10115bb2e5ca32dc2220ab99a0b4672",
+    "../interact-condition-repair/interact-condition-repair.patch": "c676e66047f7e14b7552192744e2634863a50a59bac5a41a678e881b973f1ea2"
+  },
+  "binding": "binding:collaboration.interact@3",
+  "provider": {
+    "model": "gpt-6-luna",
+    "reasoningEffort": "low",
+    "route": "native Codex adapter with ChatGPT login",
+    "bun": "1.4.4",
+    "codexCli": "0.162.1"
+  },
+  "maxModelCallsPerTrial": 18,
+  "hostFiles": {
+    "live-runner.ts.txt": "643caf4b8dff09cd2387d8b7c977744760905bdccd5dc31430ea11b4044c51ed",
+    "pilot-runner.ts.txt": "3e160ca43c64749fc6936ee1fd7b855d4f71cb63aa39ace559e35a26aac0d4b0",
+    "score.py": "896950e79139867393556ce55f450b02382cbe6f63ae655c1af13ea63cb136a7"
+  },
+  "pilotRepetitionsPerCaseAndArm": 2,
+  "finalRepetitionsPerCaseAndArm": 1,
+  "records": {
+    "live.jsonl.gz": "96ce43be11c1921bfad098d875ac89b0a13bc64bc3ff7d6db8862cde181217ab",
+    "pilot.jsonl.gz": "b8e6cdb1669b17090961536f27f95810b6fb3f674f03e58e935337bff64f6cc7"
+  }
+}

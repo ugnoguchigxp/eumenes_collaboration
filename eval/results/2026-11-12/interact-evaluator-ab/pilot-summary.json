@@ -1,0 +1,447 @@
+{
+  "complete": true,
+  "goldCombinationsInPreferenceOrder": {
+    "venues": [
+      [
+        12800,
+        "Aster",
+        8000,
+        "Reed",
+        4800
+      ]
+    ],
+    "shipments": [
+      [
+        "15:00",
+        "16:40",
+        1600,
+        "C15",
+        900,
+        "N17",
+        700
+      ],
+      [
+        "15:20",
+        "16:10",
+        1600,
+        "C16",
+        750,
+        "N16",
+        850
+      ],
+      [
+        "15:20",
+        "16:40",
+        1450,
+        "C16",
+        750,
+        "N17",
+        700
+      ]
+    ]
+  },
+  "trials": [
+    {
+      "task": "venues",
+      "mode": "quick-unavailable",
+      "repetition": 1,
+      "elapsedMs": 64443,
+      "modelCalls": 9,
+      "inputTokens": 106606,
+      "outputTokens": 1659,
+      "toolchainRevision": "toolchain:collaboration.interact@3",
+      "turnStatuses": [
+        [
+          "opening",
+          "completed",
+          null
+        ],
+        [
+          "correction",
+          "completed",
+          null
+        ],
+        [
+          "confirmation",
+          "completed",
+          null
+        ]
+      ],
+      "reviewActionChoices": 0,
+      "reviewRequestsAccepted": 0,
+      "quickStarts": 0,
+      "reviewNotices": [],
+      "draft": {
+        "startUrl": "https://example.com/venues",
+        "brief": "対象：会議室一覧から金曜午前講座（30名）と午後講座（18名）の部屋を各1室選ぶ。達成条件：別々の部屋を使い、両室とも段差なし・一般予約可・取消可。午前は配信、午後は投影が必要。設備追加料金込みで合計13,000円以下の組み合わせのうち、合計が最安のものを選ぶ。会員枠の可否や設備料金を見落とさず、担当者がこの案だけで進められるよう条件を確認する。守る範囲：利用者が案を確認するまでページを開かない。回答形式：午前、午後、合計の順に部屋名と税込金額を示す。"
+      },
+      "childStatus": "partial",
+      "childResult": "Juniperは定員24名のため、午前講座30名の条件を満たしません。提示案は条件に合う組み合わせではありません。",
+      "childScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 5,
+        "correctValuesAndOrder": false
+      },
+      "notices": [],
+      "noticeScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 5,
+        "correctValuesAndOrder": false
+      },
+      "error": null
+    },
+    {
+      "task": "shipments",
+      "mode": "quick-available",
+      "repetition": 1,
+      "elapsedMs": 67284,
+      "modelCalls": 7,
+      "inputTokens": 98696,
+      "outputTokens": 2226,
+      "toolchainRevision": "toolchain:collaboration.interact@3",
+      "turnStatuses": [
+        [
+          "opening",
+          "completed",
+          null
+        ],
+        [
+          "correction",
+          "completed",
+          null
+        ],
+        [
+          "confirmation",
+          "completed",
+          null
+        ]
+      ],
+      "reviewActionChoices": 0,
+      "reviewRequestsAccepted": 0,
+      "quickStarts": 0,
+      "reviewNotices": [],
+      "draft": {
+        "startUrl": "https://example.com/shipments",
+        "brief": "対象：土曜に荷物A（冷蔵5kg、10:30持込、15:30までに到着）と荷物B（常温12kg、11:00持込、17:00までに到着）の便を選ぶ。\n達成条件：両便とも一般利用可・乗継なし、持込時刻と到着締切が同時刻でも可、合計税込1,650円以下。条件内ではAの到着が最も早い組み合わせを優先し、同時刻ならBの到着が早い方、両方同じなら合計が安い方を選ぶ。\n守る範囲：作業案を作成するのみ。利用者の確認前にページを開かない。\n返す形式：A、Bの順に便名・到着時刻・料金、最後に合計のみ。"
+      },
+      "childStatus": "waiting_user",
+      "childResult": "clarify",
+      "childScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 7,
+        "correctValuesAndOrder": false
+      },
+      "notices": [],
+      "noticeScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 7,
+        "correctValuesAndOrder": false
+      },
+      "error": null
+    },
+    {
+      "task": "shipments",
+      "mode": "quick-unavailable",
+      "repetition": 1,
+      "elapsedMs": 55468,
+      "modelCalls": 8,
+      "inputTokens": 94411,
+      "outputTokens": 1681,
+      "toolchainRevision": "toolchain:collaboration.interact@3",
+      "turnStatuses": [
+        [
+          "opening",
+          "completed",
+          null
+        ],
+        [
+          "correction",
+          "completed",
+          null
+        ],
+        [
+          "confirmation",
+          "completed",
+          null
+        ]
+      ],
+      "reviewActionChoices": 0,
+      "reviewRequestsAccepted": 0,
+      "quickStarts": 0,
+      "reviewNotices": [],
+      "draft": {
+        "startUrl": "https://example.com/shipments",
+        "brief": "対象：土曜の荷物A（冷蔵5kg、10:30持込、15:30までに到着）と荷物B（常温12kg、11:00持込、17:00までに到着）の便選択。達成条件：両便とも一般利用可・乗継なし、税込合計1,650円以下。締切と同時刻の持込は可。条件内でAの到着が早い組合せを優先し、A同時ならBの到着が早い方、両方同じなら合計が安い方を選ぶ。守る範囲：選択案の作成のみ。利用者の確認前にページを開かず、便の選択・予約・購入を行わない。回答形式：A、Bの順に便名・到着時刻・料金、最後に合計。"
+      },
+      "childStatus": "partial",
+      "childResult": "提示案は合計1,900円で上限を超えています。条件内ではAはC15（15:00、900円）、BはN16（16:10、850円）が最も早く、合計1,750円となり、税込1,650円以下を満たす組合せはありません。",
+      "childScore": {
+        "valuesPresent": 2,
+        "valuesExpected": 7,
+        "correctValuesAndOrder": false
+      },
+      "notices": [],
+      "noticeScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 7,
+        "correctValuesAndOrder": false
+      },
+      "error": null
+    },
+    {
+      "task": "venues",
+      "mode": "quick-available",
+      "repetition": 1,
+      "elapsedMs": 76279,
+      "modelCalls": 10,
+      "inputTokens": 137650,
+      "outputTokens": 2681,
+      "toolchainRevision": "toolchain:collaboration.interact@3",
+      "turnStatuses": [
+        [
+          "opening",
+          "completed",
+          null
+        ],
+        [
+          "correction",
+          "completed",
+          null
+        ],
+        [
+          "confirmation",
+          "completed",
+          null
+        ]
+      ],
+      "reviewActionChoices": 0,
+      "reviewRequestsAccepted": 0,
+      "quickStarts": 0,
+      "reviewNotices": [],
+      "draft": {
+        "startUrl": "https://example.com/venues",
+        "brief": "対象：金曜の午前講座（30名）と午後講座（18名）の会議室。達成条件：別々の部屋を各1室選び、どちらも段差なし・一般予約可・取消可を満たす。午前は配信、午後は投影が必要。設備追加料金込みで合計13,000円以下の組み合わせのうち合計最安を選ぶ。守る範囲：利用者が案を確認するまではページを開かない。会員枠の適用可否と設備料金を確認し、根拠のない条件は仮定しない。回答形式：午前、午後、合計の順に部屋名と税込金額。担当者が案だけで進められるよう、予約可否・取消可否・段差・設備料金も確認する。"
+      },
+      "childStatus": "partial",
+      "childResult": "提案されたAster（午前8,000円）とReed（午後4,800円）は条件を満たし、合計12,800円です。ただし最安ではありません。Juniperは午前5,900円で配信可、定員24名のため30名には不足しますが、Cedarは午前6,500円に配信料2,500円で計9,000円となり、午前の適格候補ではAsterより高額です。午後はReedが4,800円で最安です。したがって提示案は最安の組み合わせで、条件と回答形式も一致します。",
+      "childScore": {
+        "valuesPresent": 3,
+        "valuesExpected": 5,
+        "correctValuesAndOrder": false
+      },
+      "notices": [],
+      "noticeScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 5,
+        "correctValuesAndOrder": false
+      },
+      "error": null
+    },
+    {
+      "task": "shipments",
+      "mode": "quick-unavailable",
+      "repetition": 2,
+      "elapsedMs": 59738,
+      "modelCalls": 7,
+      "inputTokens": 105744,
+      "outputTokens": 1978,
+      "toolchainRevision": "toolchain:collaboration.interact@3",
+      "turnStatuses": [
+        [
+          "opening",
+          "completed",
+          null
+        ],
+        [
+          "correction",
+          "completed",
+          null
+        ],
+        [
+          "confirmation",
+          "completed",
+          null
+        ]
+      ],
+      "reviewActionChoices": 0,
+      "reviewRequestsAccepted": 0,
+      "quickStarts": 0,
+      "reviewNotices": [],
+      "draft": {
+        "startUrl": "https://example.com/shipments",
+        "brief": "対象：土曜の荷物A（冷蔵5kg、10:30持込、15:30までに到着）と荷物B（常温12kg、11:00持込、17:00までに到着）の便選択。達成条件：両便とも一般利用可・乗継なし、2便合計税込1,650円以下。締切と同時刻の持込は可。条件内でAの到着が早い組み合わせを優先し、A同時ならBの到着が早い方、両方同時なら合計が安い方を選ぶ。守る範囲：この案を利用者が確認するまでページを開かない。回答形式：A、Bの順に便名・到着時刻・料金を示し、最後に合計のみを答える。"
+      },
+      "childStatus": "waiting_user",
+      "childResult": "approval_required",
+      "childScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 7,
+        "correctValuesAndOrder": false
+      },
+      "notices": [],
+      "noticeScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 7,
+        "correctValuesAndOrder": false
+      },
+      "error": null
+    },
+    {
+      "task": "venues",
+      "mode": "quick-available",
+      "repetition": 2,
+      "elapsedMs": 49787,
+      "modelCalls": 7,
+      "inputTokens": 81848,
+      "outputTokens": 1529,
+      "toolchainRevision": "toolchain:collaboration.interact@3",
+      "turnStatuses": [
+        [
+          "opening",
+          "completed",
+          null
+        ],
+        [
+          "correction",
+          "completed",
+          null
+        ],
+        [
+          "confirmation",
+          "completed",
+          null
+        ]
+      ],
+      "reviewActionChoices": 0,
+      "reviewRequestsAccepted": 0,
+      "quickStarts": 0,
+      "reviewNotices": [],
+      "draft": {
+        "startUrl": "https://example.com/venues",
+        "brief": "対象：会議室一覧から金曜の午前講座（30名）と午後講座（18名）に各1室を選ぶ。達成条件：別室を使い、両室とも段差なし・一般予約可・取消可。午前は配信、午後は投影が必要。設備追加料金込みで合計13,000円以下の組み合わせから合計が最も安いものを選び、午前、午後、合計の順に部屋名と税込金額を返す。会員枠と設備料金を確認し、担当者が案だけで進められる精度を目指す。範囲：ページは案の確認後に開く。回答形式：午前・午後・合計の順に部屋名と税込金額。"
+      },
+      "childStatus": "waiting_user",
+      "childResult": "approval_required",
+      "childScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 5,
+        "correctValuesAndOrder": false
+      },
+      "notices": [],
+      "noticeScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 5,
+        "correctValuesAndOrder": false
+      },
+      "error": null
+    },
+    {
+      "task": "venues",
+      "mode": "quick-unavailable",
+      "repetition": 2,
+      "elapsedMs": 72315,
+      "modelCalls": 9,
+      "inputTokens": 148742,
+      "outputTokens": 2089,
+      "toolchainRevision": "toolchain:collaboration.interact@3",
+      "turnStatuses": [
+        [
+          "opening",
+          "completed",
+          null
+        ],
+        [
+          "correction",
+          "completed",
+          null
+        ],
+        [
+          "confirmation",
+          "completed",
+          null
+        ],
+        [
+          "confirm-revised-draft",
+          "completed",
+          null
+        ]
+      ],
+      "reviewActionChoices": 0,
+      "reviewRequestsAccepted": 0,
+      "quickStarts": 0,
+      "reviewNotices": [],
+      "draft": {
+        "startUrl": "https://example.com/venues",
+        "brief": "対象：会議室一覧から、金曜午前講座（30名）と午後講座（18名）に別々の部屋を各1室選ぶ。達成条件：両室とも段差なし・一般予約可・取消可。午前は配信、午後は投影が必要。設備の追加料金込みで合計13,000円以下の組み合わせのうち最安を選ぶ。会員枠の条件と設備料金を確認し、担当者が案だけで進められるだけの根拠を確認する。返す形式：午前、午後、合計の順に部屋名と税込金額。範囲：この案を利用者が確認するまではページを開かない。"
+      },
+      "childStatus": "waiting_user",
+      "childResult": "clarify",
+      "childScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 5,
+        "correctValuesAndOrder": false
+      },
+      "notices": [],
+      "noticeScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 5,
+        "correctValuesAndOrder": false
+      },
+      "error": null
+    },
+    {
+      "task": "shipments",
+      "mode": "quick-available",
+      "repetition": 2,
+      "elapsedMs": 91383,
+      "modelCalls": 10,
+      "inputTokens": 163355,
+      "outputTokens": 3378,
+      "toolchainRevision": "toolchain:collaboration.interact@3",
+      "turnStatuses": [
+        [
+          "opening",
+          "completed",
+          null
+        ],
+        [
+          "correction",
+          "completed",
+          null
+        ],
+        [
+          "confirmation",
+          "completed",
+          null
+        ],
+        [
+          "confirm-revised-draft",
+          "completed",
+          null
+        ]
+      ],
+      "reviewActionChoices": 0,
+      "reviewRequestsAccepted": 0,
+      "quickStarts": 0,
+      "reviewNotices": [],
+      "draft": {
+        "startUrl": "https://example.com/shipments",
+        "brief": "対象: 土曜の荷物A（冷蔵5kg、10:30持込、15:30まで到着）と荷物B（常温12kg、11:00持込、17:00まで到着）の便選択。達成条件: 両便とも一般利用可・乗継なし、持込時刻は締切時刻と同時刻可、税込合計1,650円以下。条件内でAの到着が最も早い組み合わせを優先し、Aが同時刻ならBの到着が早い方、両方同時刻なら合計料金が安い方。守る範囲: 作業案を保存し、利用者の確認後にページを開いて条件に合う便を確認する。返す形式: A、Bの順に便名・到着時刻・料金を示し、最後に合計のみを答える。"
+      },
+      "childStatus": "waiting_user",
+      "childResult": "approval_required",
+      "childScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 7,
+        "correctValuesAndOrder": false
+      },
+      "notices": [],
+      "noticeScore": {
+        "valuesPresent": 0,
+        "valuesExpected": 7,
+        "correctValuesAndOrder": false
+      },
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+bun test v1.4.4 (38afee6c8)
+
+api/application/collaboration/collaboration-interact.test.ts:
+313 | 			text,
+314 | 		});
+315 | 		expect(r.status).toBe(202);
+316 | 		const run = await r.json();
+317 | 		const end = await h.dialogue.waitForTerminal(run.id, { timeoutMs: 6000 });
+318 | 		expect(end?.status, JSON.stringify(end)).toBe("completed");
+                                                 ^
+error: {"id":"0d1991a2-9d0a-421b-9593-a1cd91431676","agentTaskId":null,"requestId":"59a2733d-c4a8-40fe-828a-a4cef1ca83e3","conversationId":"main","utteranceId":null,"status":"failed","revision":2,"inputMessageId":"bccdbeb8-7282-4294-8189-b6fb173a0b5b","answerMessageId":null,"announcement":null,"error":"specialist_invalid_contract","jobId":"f01b7991-064c-49af-9c33-0806b62ba741","deadlineAt":"2026-11-12T06:29:16.319Z","deadlineFixed":false,"sourceKind":"manual","pinnedToolchainId":null,"scheduleId":null,"occurrenceId":null,"specialistSessionId":"24ca0cf1-e708-4bbe-b121-e74948f85d67","createdAt":"2026-11-12T06:09:16.319Z","updatedAt":"2026-11-12T06:09:16.332Z"}
+
+Expected: "completed"
+Received: "failed"
+
+      at <anonymous> (/Users/y.noguchi/Code/eumenes_collaboration/.work/interact-condition-repair.rFFxkF/host/api/application/collaboration/collaboration-interact.test.ts:318:44)
+      at async <anonymous> (/Users/y.noguchi/Code/eumenes_collaboration/.work/interact-condition-repair.rFFxkF/host/api/application/collaboration/collaboration-interact.test.ts:350:9)
+(fail) Interact delivers only the corrected review, starts the confirmed draft and captures once with approval [1107.54ms]
+
+api/domains/dialogue/test/collaboration-state.test.ts:
+(pass) the host supplies the state version and rejects a work change after inference starts [187.83ms]
+(pass) the same control call adopts source-backed state, corrects only one condition and survives recovery [167.84ms]
+(pass) a failed receipt write rolls back state adoption without repeating inference [160.88ms]
+(pass) writer forgetting removes dependent conditions and stale model sources cannot restore them [173.31ms]
+(pass) a work change during inference cannot adopt a late state or receipt [211.89ms]
+(pass) a epoch change during inference cannot adopt a late state or receipt [189.41ms]
+(pass) a permission change during inference cannot adopt a late state or receipt [214.99ms]
+240 | 		"host-bound",
+241 | 		true,
+242 | 	);
+243 | 	h.handOver({ request: "円で月次集計" });
+244 | 	h.state.specialist.push(reply);
+245 | 	expect((await h.ask("円で月次集計")).status).toBe("completed");
+                                              ^
+error: expect(received).toBe(expected)
+
+Expected: "completed"
+Received: "failed"
+
+      at <anonymous> (/Users/y.noguchi/Code/eumenes_collaboration/.work/interact-condition-repair.rFFxkF/host/api/domains/dialogue/test/collaboration-state.test.ts:245:41)
+(fail) a host-bound correction may omit removals and still replace an existing condition with evidence [174.95ms]
+(pass) a host-bound update still rejects superseded_fact_missing on unknown [217.33ms]
+(pass) a host-bound update still rejects superseded_fact_missing on known [169.83ms]
+(pass) a host-bound update still rejects source_invalid on known [170.95ms]
+
+ 10 pass
+ 2 fail
+ 55 expect() calls
+Ran 12 tests across 2 files. [3.90s]

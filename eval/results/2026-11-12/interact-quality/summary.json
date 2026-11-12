@@ -1,0 +1,96 @@
+{
+  "baselineAfterSharedControlFix": [
+    {
+      "task": "hours",
+      "mode": "baseline",
+      "elapsedMs": 32635,
+      "toolchainRevision": "toolchain:collaboration.interact@2",
+      "workRevision": 0,
+      "childStatus": null,
+      "childResult": null,
+      "completedConversationNotices": [],
+      "quickStarted": 0,
+      "operatorCalls": 0,
+      "completionChecks": 0,
+      "modelCalls": 5,
+      "inputTokens": 58215,
+      "outputTokens": 722,
+      "navigated": 0,
+      "userTurns": [
+        "opening",
+        "correction",
+        "confirmation"
+      ]
+    },
+    {
+      "task": "rates",
+      "mode": "baseline",
+      "elapsedMs": 45709,
+      "toolchainRevision": "toolchain:collaboration.interact@2",
+      "workRevision": 1,
+      "childStatus": "waiting_user",
+      "childResult": "clarify",
+      "completedConversationNotices": [],
+      "quickStarted": 0,
+      "operatorCalls": 1,
+      "completionChecks": 0,
+      "modelCalls": 7,
+      "inputTokens": 68010,
+      "outputTokens": 1669,
+      "navigated": 1,
+      "userTurns": [
+        "opening",
+        "correction",
+        "confirmation"
+      ]
+    }
+  ],
+  "final": [
+    {
+      "task": "rates",
+      "mode": "draft",
+      "elapsedMs": 54043,
+      "toolchainRevision": "toolchain:collaboration.interact@3",
+      "workRevision": 1,
+      "childStatus": null,
+      "childResult": null,
+      "completedConversationNotices": [],
+      "quickStarted": 0,
+      "operatorCalls": 0,
+      "completionChecks": 0,
+      "modelCalls": 5,
+      "inputTokens": 90115,
+      "outputTokens": 1627,
+      "navigated": 0,
+      "userTurns": [
+        "opening",
+        "correction",
+        "confirmation"
+      ]
+    },
+    {
+      "task": "hours",
+      "mode": "draft",
+      "elapsedMs": 52942,
+      "toolchainRevision": "toolchain:collaboration.interact@3",
+      "workRevision": 3,
+      "childStatus": "completed",
+      "childResult": "配送窓口 17:45\n受取窓口 16:10",
+      "completedConversationNotices": [
+        "確認できた結果は、配送窓口 17:45、受取窓口 16:10です。"
+      ],
+      "quickStarted": 0,
+      "operatorCalls": 2,
+      "completionChecks": 1,
+      "modelCalls": 7,
+      "inputTokens": 79790,
+      "outputTokens": 1422,
+      "navigated": 1,
+      "userTurns": [
+        "opening",
+        "correction",
+        "confirmation"
+      ]
+    }
+  ]
+}

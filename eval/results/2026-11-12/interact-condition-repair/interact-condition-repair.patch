@@ -1,0 +1,362 @@
+diff --git a/api/application/collaboration/collaboration-interact.test.ts b/api/application/collaboration/collaboration-interact.test.ts
+index d30d013..42f6503 100644
+--- a/api/application/collaboration/collaboration-interact.test.ts
++++ b/api/application/collaboration/collaboration-interact.test.ts
+@@ -271,12 +271,12 @@ test("Interact delivers only the corrected review, starts the confirmed draft an
+ 			const stateUpdate = {
+ 				upserts: [
+ 					{
+-						id: correcting ? "current-scope" : "original-scope",
++						id: "capture-scope",
+ 						kind: "condition",
+ 						status: "confirmed",
+ 						value: correcting ? correctedScope : originalScope,
+ 						sourceRefs: [host.sources.at(-1).ref],
+-						supersedes: correcting ? ["original-scope"] : [],
++						supersedes: correcting ? ["capture-scope"] : [],
+ 					},
+ 				],
+ 				removals: [],
+@@ -390,7 +390,7 @@ test("Interact delivers only the corrected review, starts the confirmed draft an
+ 			]),
+ 		});
+ 		expect(reviews[1]?.conditions).toMatchObject([
+-			{ id: "current-scope", text: correctedScope },
++			{ id: "capture-scope", text: correctedScope },
+ 		]);
+ 		expect(step).toBe(0);
+ 		const started = await say(confirm);
+diff --git a/api/domains/dialogue/service/collaboration-state.ts b/api/domains/dialogue/service/collaboration-state.ts
+index 66e1607..57b52f3 100644
+--- a/api/domains/dialogue/service/collaboration-state.ts
++++ b/api/domains/dialogue/service/collaboration-state.ts
+@@ -3,6 +3,7 @@ import type { Database } from "bun:sqlite";
+ import { hash as sourceDigest } from "../../capabilities";
+ import {
+ 	collaborationStateSchema,
++	stateProposalSchema,
+ 	forgetStateSources,
+ 	proposeStateUpdate,
+ 	withinJsonLimits,
+@@ -225,6 +226,38 @@ export function stateUpdateBase(
+ 	};
+ }
+ 
++export const hostBoundStateChanges = stateProposalSchema
++	.pick({ upserts: true, removals: true })
++	.partial();
++
++export function bindStateChanges(
++	snapshot: ReturnType<typeof collaborationSnapshot>,
++	changes:
++		| Partial<
++				Pick<
++					import("eumenes-collaboration").StateProposal,
++					"upserts" | "removals"
++				>
++		  >
++		| null
++		| undefined,
++) {
++	const existing = new Set(snapshot.state.facts.map(({ id }) => id));
++	return {
++		...stateUpdateBase(snapshot),
++		// An existing ID is updated in place. A redundant self-link has no lineage to record.
++		upserts: (changes?.upserts ?? []).map((fact) =>
++			existing.has(fact.id) && fact.supersedes.includes(fact.id)
++				? {
++						...fact,
++						supersedes: fact.supersedes.filter((id) => id !== fact.id),
++					}
++				: fact,
++		),
++		removals: changes?.removals ?? [],
++	};
++}
++
+ export function collaborationReference(
+ 	snapshot: ReturnType<typeof collaborationSnapshot>,
+ 	hostBound: boolean,
+diff --git a/api/domains/dialogue/service/specialist-prompt.ts b/api/domains/dialogue/service/specialist-prompt.ts
+index 01b6765..68aceac 100644
+--- a/api/domains/dialogue/service/specialist-prompt.ts
++++ b/api/domains/dialogue/service/specialist-prompt.ts
+@@ -17,6 +17,8 @@ import {
+ 	spokenReplyMeasure,
+ } from "../../delivery";
+ 
++import { hostBoundStateChanges } from "./collaboration-state";
++
+ export type { SpecialistAction } from "eumenes-collaboration";
+ 
+ /** Common collaboration decisions; delivery limits remain the host's contract. */
+@@ -28,6 +30,8 @@ const replyPolicy = {
+ 	description:
+ 		"短い返答。replyでは必須。invokeでは操作が成功したときの返答（任意）。音声で聞かれるため通常一文、補足込みでも二文・300字以内。制作物や実装内容は読み上げない。",
+ };
++const { $schema: _schema, ...hostBoundStateSchema } =
++	hostBoundStateChanges.toJSONSchema();
+ const contract = createCollaborationContract(replyPolicy);
+ export const statefulSpecialistContract =
+ 	createStatefulCollaborationContract(replyPolicy);
+@@ -58,8 +62,6 @@ export function specialistControl(
+ 			? statefulSpecialistContract.outputSchema
+ 			: contract.outputSchema;
+ 	const hostBound = set.agent.collaborationState === "host-bound" && !replyOnly;
+-	const stateFields = statefulSpecialistContract.outputSchema.properties
+-		.stateUpdate.properties as Record<string, unknown>;
+ 	const outputSchema = replyOnly
+ 		? {
+ 				...schema,
+@@ -79,15 +81,7 @@ export function specialistControl(
+ 					required: schema.required?.filter((field) => field !== "stateUpdate"),
+ 					properties: {
+ 						...schema.properties,
+-						stateUpdate: {
+-							type: "object",
+-							properties: {
+-								upserts: stateFields.upserts,
+-								removals: stateFields.removals,
+-							},
+-							required: ["upserts", "removals"],
+-							additionalProperties: false,
+-						},
++						stateUpdate: hostBoundStateSchema,
+ 					},
+ 				}
+ 			: schema;
+@@ -113,7 +107,7 @@ export function specialistControl(
+ 					"\n" +
+ 					collaborationInstructions.state +
+ 					(hostBound
+-						? "\n今回記録すべき状態の変更がある場合だけ、stateUpdateにupsertsとremovalsを返します。ホストが版と作業参照を結び付けます。"
++						? "\n記録する差分がある場合だけstateUpdateを返します。使う変更一覧だけを指定できます。既存IDの内容を更新する場合は同じIDと空のsupersedes、新しいIDで置き換える場合はsupersedesに旧IDを指定します。ホストが版と作業参照を結び付けます。"
+ 						: "\nstateUpdateには今回のSTATE_UPDATE_BASEをそのまま使い、意味のある変更があればupsertsとremovalsだけを編集します。expectedRevisionは更新前の値なので増やしません。workは操作前の版を保持します。") +
+ 					"同じ出力のactionで次の一手を示し、未観測の結果は確定しません。"
+ 				: rules,
+@@ -128,9 +122,10 @@ export const correctionMessage = (
+ 	raw: string,
+ 	violations: ReturnType<typeof specialistViolations>,
+ 	callsLeft: number,
++	hints: readonly string[] = [],
+ ) =>
+ 	rejectedOutputMessage(
+-		[collaborationInstructions.correction, HOST_RULES].join("\n"),
++		[collaborationInstructions.correction, HOST_RULES, ...hints].join("\n"),
+ 		raw,
+ 		violations,
+ 		callsLeft,
+diff --git a/api/domains/dialogue/service/specialist-turn.ts b/api/domains/dialogue/service/specialist-turn.ts
+index 920633f..458592b 100644
+--- a/api/domains/dialogue/service/specialist-turn.ts
++++ b/api/domains/dialogue/service/specialist-turn.ts
+@@ -55,7 +55,8 @@ import {
+ 	collaborationSnapshot,
+ 	collaborationReference,
+ 	adoptCollaborationState,
+-	stateUpdateBase,
++	bindStateChanges,
++	hostBoundStateChanges,
+ } from "./collaboration-state";
+ 
+ const log = getLogger("dialogue");
+@@ -166,9 +167,7 @@ function assertTurnCurrent(deps: DialogueDeps, tx: Database, input: TurnInput) {
+ 
+ /** State adoption shares the turn's live-run, cancellation and receipt boundary. */
+ const stateChanges = z.looseObject({
+-	stateUpdate: stateProposalSchema
+-		.pick({ upserts: true, removals: true })
+-		.nullish(),
++	stateUpdate: hostBoundStateChanges.nullish(),
+ });
+ const fullStateUpdate = z.looseObject({ stateUpdate: stateProposalSchema });
+ 
+@@ -193,16 +192,16 @@ async function statefulAction(
+ 		value: unknown;
+ 		receipt: Receipt;
+ 		call: number;
+-		baseline?: ReturnType<typeof stateUpdateBase>;
++		snapshot?: ReturnType<typeof collaborationSnapshot>;
+ 	},
+ ) {
+ 	let value = output.value;
+-	if (output.baseline) {
++	if (output.snapshot) {
+ 		const proposal = stateChanges.safeParse(value);
+ 		if (!proposal.success) return proposalRefusal(proposal.error);
+ 		value = {
+ 			...proposal.data,
+-			stateUpdate: { ...output.baseline, ...proposal.data.stateUpdate },
++			stateUpdate: bindStateChanges(output.snapshot, proposal.data.stateUpdate),
+ 		};
+ 	}
+ 	const checked = statefulSpecialistContract.check(value);
+@@ -250,7 +249,7 @@ function stateReference(
+ 	);
+ 	return {
+ 		content: reference + collaborationReference(snapshot, hostBound),
+-		baseline: hostBound ? stateUpdateBase(snapshot) : undefined,
++		snapshot: hostBound ? snapshot : undefined,
+ 	};
+ }
+ 
+@@ -270,17 +269,27 @@ function specialistRepair(
+ 	violations: Parameters<typeof correctionMessage>[1],
+ 	callsLeft: number,
+ ) {
+-	const message = correctionMessage(raw, violations, callsLeft);
++	const hints: string[] = [];
++	if (
++		input.set.agent.collaborationState === "host-bound" &&
++		violations.some(
++			(issue) => "path" in issue && /^stateUpdate(?:\.|$)/.test(issue.path),
++		)
++	)
++		hints.push(
++			"状態の差分を修正し、実行する操作が変わらなければ同じaction・tool・argumentsを返します。使わない変更一覧は省略できます。出所と条件IDは最新の参照から確認します。",
++		);
+ 	const singleSentence =
+ 		input.structuredOutput &&
+ 		violations.some(
+ 			(issue) => "path" in issue && issue.path.startsWith("text."),
+ 		);
+ 	if (singleSentence)
+-		message.content +=
+-			"\n要点を first の一文にまとめ、second は null にします。原文の引用と観測値は正確に保ちます。";
++		hints.push(
++			"要点を first の一文にまとめ、second は null にします。原文の引用と観測値は正確に保ちます。",
++		);
+ 	return {
+-		message,
++		message: correctionMessage(raw, violations, callsLeft, hints),
+ 		singleSentence,
+ 	};
+ }
+@@ -447,7 +456,7 @@ export function createSpecialistTurnHandler(
+ 		const stillMine = (tx: Database) => assertTurnCurrent(deps, tx, input);
+ 		for (let call = 1; call <= max; call++) {
+ 			signal.throwIfAborted();
+-			const { requestId, baseline } = await store.write((tx) => {
++			const { requestId, snapshot } = await store.write((tx) => {
+ 				stillMine(tx);
+ 				const state = stateReference(deps, tx, input, reference);
+ 				messages[1] = {
+@@ -463,7 +472,7 @@ export function createSpecialistTurnHandler(
+ 						? { attemptMs: input.set.timeLimits.inferenceMs }
+ 						: {}),
+ 				});
+-				return { requestId, baseline: state.baseline };
++				return { requestId, snapshot: state.snapshot };
+ 			});
+ 			// The provider session lives as long as the specialist session; it is released when that ends.
+ 			const receipt = await larm.executeControl!(
+@@ -503,7 +512,7 @@ export function createSpecialistTurnHandler(
+ 						value,
+ 						receipt,
+ 						call,
+-						baseline,
++						snapshot,
+ 					});
+ 					if (checked.ok) action = checked.action;
+ 					else if ("violations" in checked) issues = checked.violations;
+diff --git a/api/domains/dialogue/test/collaboration-state.test.ts b/api/domains/dialogue/test/collaboration-state.test.ts
+index 0ecf2bb..f046bd9 100644
+--- a/api/domains/dialogue/test/collaboration-state.test.ts
++++ b/api/domains/dialogue/test/collaboration-state.test.ts
+@@ -22,6 +22,7 @@ type Input = {
+ async function harness(
+ 	upserts: (input: Input) => CollaborationFact[],
+ 	mode: true | "host-bound" = true,
++	omitRemovals = false,
+ ) {
+ 	const h = await setup({ agent: { ...NO_AGENT, collaborationState: mode } });
+ 	open.push(h);
+@@ -54,7 +55,7 @@ async function harness(
+ 							}
+ 						: {}),
+ 					upserts: upserts({ state, host }),
+-					removals: [],
++					...(omitRemovals && state.facts.length ? {} : { removals: [] }),
+ 				},
+ 			}),
+ 		};
+@@ -227,3 +228,79 @@ for (const change of ["work", "epoch", "permission"] as const) {
+ 		expect(h.state.specialistPrompts).toHaveLength(change === "work" ? 2 : 1);
+ 	});
+ }
++
++test("a host-bound correction may omit removals and still replace an existing condition with evidence", async () => {
++	const h = await harness(
++		({ state, host }) => {
++			const ref = host.sources.at(-1)!.ref;
++			return state.facts.length
++				? [fact("period-new", "weekly", ref, ["period"])]
++				: [fact("currency", "JPY", ref), fact("period", "monthly", ref)];
++		},
++		"host-bound",
++		true,
++	);
++	h.handOver({ request: "円で月次集計" });
++	h.state.specialist.push(reply);
++	expect((await h.ask("円で月次集計")).status).toBe("completed");
++	const session = h.session()!;
++	const before = h.dialogue.specialistCollaborationState(
++		session.id,
++	) as CollaborationState;
++	h.state.specialist.push(reply);
++	expect((await h.ask("集計を週次に訂正")).status).toBe("completed");
++	const after = h.dialogue.specialistCollaborationState(
++		session.id,
++	) as CollaborationState;
++	expect(after.facts.find(({ id }) => id === "currency")).toEqual(
++		before.facts[0],
++	);
++	expect(after.facts.find(({ id }) => id === "period")?.status).toBe(
++		"retracted",
++	);
++	expect(after.facts.find(({ id }) => id === "period-new")?.value).toBe(
++		"weekly",
++	);
++	expect(h.state.specialistPrompts).toHaveLength(2);
++});
++
++test.each([
++	{
++		id: "unknown",
++		supersedes: ["unknown"],
++		source: "active",
++		reason: "superseded_fact_missing",
++	},
++	{
++		id: "known",
++		supersedes: ["known", "unknown"],
++		source: "active",
++		reason: "superseded_fact_missing",
++	},
++	{
++		id: "known",
++		supersedes: ["known"],
++		source: "unregistered",
++		reason: "source_invalid",
++	},
++])(
++	"a host-bound update still rejects $reason on $id",
++	async ({ id, supersedes, source, reason }) => {
++		const h = await harness(({ state, host }) => {
++			const ref = host.sources.at(-1)!.ref;
++			if (!state.facts.length) return [fact("known", "before", ref)];
++			return [
++				fact(id, "after", source === "active" ? ref : source, [...supersedes]),
++			];
++		}, "host-bound");
++		h.handOver({ request: "条件を記録" });
++		h.state.specialist.push(reply);
++		expect((await h.ask("条件を記録")).status).toBe("completed");
++		const session = h.session()!;
++		const before = h.dialogue.specialistCollaborationState(session.id);
++		h.state.specialist.push(reply, reply);
++		expect((await h.ask("条件を訂正")).status).toBe("failed");
++		expect(h.dialogue.specialistCollaborationState(session.id)).toEqual(before);
++		expect(h.state.specialistPrompts.at(-1)?.at(-1)?.content).toContain(reason);
++	},
++);

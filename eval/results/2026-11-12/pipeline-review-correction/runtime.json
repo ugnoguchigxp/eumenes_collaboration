@@ -1,0 +1,47 @@
+{
+  "date": "2026-11-12",
+  "eumenesCommit": "b59dda83f76d6f51ea8e88f6072f7d83eb6cd299",
+  "lockfileSha256": "b55f19f76963bd99cb1afc5942db81420d43a6cd47d2ebad554d1c09cfcad7f3",
+  "artifacts": {
+    "collaboration": {
+      "artifact": "eumenes-collaboration-0.4.0-ce0d56eedc6a.tgz",
+      "sha256": "ce0d56eedc6ada0e67e8aff39daba2ae29caddb4e328c1041620135d2a12450c"
+    },
+    "pipeline": {
+      "artifact": "eumenes-pipeline-0.1.0-a859fd16ce46.tgz",
+      "sha256": "4c60c46ab77040b3ff4ed23433ca0ae9bd2e689efb8ea1db67da9234d8570f4f"
+    },
+    "evaluator": {
+      "artifact": "eumenes-evaluator-0.1.0-1178a3fad04b.tgz",
+      "sha256": "1178a3fad04b8708b9cb1f0c8dd7ece50056ab317c3f5ba6b5afa037d943b708"
+    }
+  },
+  "evaluator": {
+    "depth": "quick",
+    "deadlineMs": 120000
+  },
+  "binding": {
+    "baseline": "binding:collaboration.pipeline@3",
+    "tested": "binding:collaboration.pipeline@4"
+  },
+  "provider": {
+    "model": "gpt-6-luna",
+    "reasoningEffort": "low",
+    "route": "native Codex adapter with ChatGPT login",
+    "credentialOverride": null,
+    "bun": "1.4.4",
+    "codexCli": "0.162.1"
+  },
+  "limits": {
+    "maxModelCallsPerPipelineTurn": 4,
+    "finalRoundPerTrialProviderCalls": 7,
+    "finalRoundTrialCount": 6,
+    "parallelTrials": 2,
+    "providerCallsAllRounds": 68
+  },
+  "hostFiles": {
+    "pipeline-baseline.patch": "601d0e3c94b100ad5e7aee0462a93329764f1fc74cdc5d65e44c5fd217798b88",
+    "pipeline-review.patch": "384a811b61222ce8cfda4b3fd359994750c9b17bc744a925c130b51a62d72d00",
+    "live-runner.ts.txt": "d4bb3c7e138ff6b24d65057deb6a89c398cf89faee509dd749125874fef1ec8e"
+  }
+}

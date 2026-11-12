@@ -1,0 +1,150 @@
+{
+  "configuration": {
+    "kind": "configuration",
+    "model": "gpt-6-luna",
+    "reasoningEffort": "low",
+    "budget": 18,
+    "cases": [
+      {
+        "id": "rates",
+        "page": "入場料金表\n東館 一般 1,200円 夜間 800円\n西館 一般 1,500円 夜間 950円\n別館 一般 600円 夜間 400円",
+        "opening": "https://example.com/rates の料金表で、東館と西館の一般料金を施設名と金額だけで答える作業案を一緒に作ってください。今は準備までで、ページを開くのは私が確認してからにしてください。東館と西館を取り違えると見積りを出し直すので、順序は東館、西館でお願いします。",
+        "correction": "一般料金ではなく、両方とも夜間料金に訂正します。対象と順序、回答形式は同じです。",
+        "expected": [
+          "東館",
+          "800",
+          "西館",
+          "950"
+        ]
+      },
+      {
+        "id": "hours",
+        "page": "受付時間\n配送窓口 火曜 10:00〜16:30 水曜 11:00〜17:45\n受取窓口 火曜 09:00〜15:15 水曜 09:30〜16:10\n電話窓口 水曜 08:00〜18:30",
+        "opening": "https://example.com/hours で、配送窓口と受取窓口の火曜の受付終了時刻を調べたいです。まず作業案を出して、私の確認後にページを見てください。答えは配送、受取の順で、窓口名と終了時刻だけにしてください。開始時刻や電話窓口は含めないでください。",
+        "correction": "曜日だけ水曜に訂正します。終了時刻だけ、配送、受取の順はそのままです。",
+        "expected": [
+          "配送",
+          "17:45",
+          "受取",
+          "16:10"
+        ]
+      }
+    ],
+    "confirmation": "その作業案で始めてください。ページを開いて、確認できた結果を答えてください。",
+    "route": "Codex subscription, fixed parent routing and isolated synthetic pages; native specialist, Quick, operator and completion inference"
+  },
+  "trials": [
+    {
+      "task": "hours",
+      "elapsedMs": 49250,
+      "draft": {
+        "startUrl": "https://example.com/hours",
+        "brief": "対象：配送窓口と受取窓口。達成条件：ページで水曜の受付終了時刻を確認する。範囲：開始時刻と電話窓口は含めない。回答形式：配送、受取の順に、窓口名と終了時刻だけ。"
+      },
+      "childStatus": "completed",
+      "childResult": "配送窓口 17:45\n受取窓口 16:10",
+      "conversationNotices": [
+        "確認できた結果は、配送窓口 17:45、受取窓口 16:10です。"
+      ],
+      "quickStarts": 0,
+      "omittedRemovalsInEdit": true,
+      "modelCalls": 9,
+      "inputTokens": 91438,
+      "outputTokens": 1202,
+      "models": [
+        "gpt-6-luna"
+      ],
+      "turns": [
+        {
+          "phase": "opening",
+          "id": "0fbad09d-1ba6-4da3-97a8-a7589ea25fb9",
+          "startMs": 1335,
+          "endMs": 14616,
+          "status": "completed",
+          "error": null,
+          "answer": "作業案を保存しました。 対象は配送窓口・受取窓口の火曜の受付終了時刻で、確認後にページを見て、指定順と形式で回答します。"
+        },
+        {
+          "phase": "correction",
+          "id": "183a8457-2ec6-4e32-925d-9871edc34e86",
+          "startMs": 16129,
+          "endMs": 29821,
+          "status": "completed",
+          "error": null,
+          "answer": "作業案を水曜に更新しました。 対象は配送・受取窓口の水曜の受付終了時刻で、確認後にページを見ます。"
+        },
+        {
+          "phase": "confirmation",
+          "id": "80647d73-6805-460b-8c2a-d8882f27bbff",
+          "startMs": 29829,
+          "endMs": 33342,
+          "status": "completed",
+          "error": null,
+          "answer": "確認済みの作業案で開始します。"
+        }
+      ],
+      "completionVerdicts": [
+        {
+          "outcome": "achieved",
+          "explanation": "ページで確認できた水曜の受付終了時刻を、指定順・形式で回答しています。"
+        }
+      ]
+    },
+    {
+      "task": "rates",
+      "elapsedMs": 62509,
+      "draft": {
+        "startUrl": "https://example.com/rates",
+        "brief": "対象：料金表の東館と西館。達成条件：各施設の夜間料金を確認する。範囲：ページを開くのは利用者の確認後。取り違え防止のため東館、西館の順。回答形式：施設名と金額だけ。"
+      },
+      "childStatus": "completed",
+      "childResult": "東館 800円\n西館 950円",
+      "conversationNotices": [
+        "確認できた結果は、東館 800円、西館 950円です。"
+      ],
+      "quickStarts": 0,
+      "omittedRemovalsInEdit": true,
+      "modelCalls": 9,
+      "inputTokens": 106200,
+      "outputTokens": 1570,
+      "models": [
+        "gpt-6-luna"
+      ],
+      "turns": [
+        {
+          "phase": "opening",
+          "id": "2e4e485d-099d-4dbe-858d-6d28d7744d60",
+          "startMs": 1901,
+          "endMs": 22832,
+          "status": "completed",
+          "error": null,
+          "answer": "作業案を保存しました。 対象は東館・西館の一般料金で、東館から順に確認し、回答は施設名と金額だけです。"
+        },
+        {
+          "phase": "correction",
+          "id": "1147cd42-df5a-475a-926d-028767df36e5",
+          "startMs": 24346,
+          "endMs": 36596,
+          "status": "completed",
+          "error": null,
+          "answer": "作業案を更新しました。 対象と順序は維持し、夜間料金を東館、西館の順に確認する案です。"
+        },
+        {
+          "phase": "confirmation",
+          "id": "6000c30c-8582-4c3e-b7cf-88b149af3a6e",
+          "startMs": 36604,
+          "endMs": 42866,
+          "status": "completed",
+          "error": null,
+          "answer": "対象版2の作業を開始するようブラウザ担当に渡しました。"
+        }
+      ],
+      "completionVerdicts": [
+        {
+          "outcome": "achieved",
+          "explanation": "東館と西館の夜間料金を順に確認でき、回答も指定形式に一致しています。"
+        }
+      ]
+    }
+  ]
+}

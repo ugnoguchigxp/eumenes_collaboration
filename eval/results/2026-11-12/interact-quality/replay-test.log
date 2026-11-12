@@ -1,0 +1,9 @@
+bun test v1.4.4 (38afee6c8)
+
+api/application/collaboration/collaboration-interact.test.ts:
+(pass) Interact delivers only the corrected review, starts the confirmed draft and captures once with approval [5002.25ms]
+
+ 1 pass
+ 0 fail
+ 53 expect() calls
+Ran 1 test across 1 file. [6.49s]

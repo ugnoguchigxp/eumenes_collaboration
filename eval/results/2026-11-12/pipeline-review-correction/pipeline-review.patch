@@ -1,0 +1,1214 @@
+diff --git a/api/application/collaboration/collaboration-evaluator.test.ts b/api/application/collaboration/collaboration-evaluator.test.ts
+index 11e5e66..79fd21a 100644
+--- a/api/application/collaboration/collaboration-evaluator.test.ts
++++ b/api/application/collaboration/collaboration-evaluator.test.ts
+@@ -127,7 +127,6 @@ test("the same Collaboration session reviews two draft versions with grounded fi
+ 					text: "評価を始めました。",
+ 				};
+ 			const { host } = packetLine(ref, "SOURCE_REGISTRY");
+-			const state = packetLine(ref, "COLLABORATION_STATE");
+ 			return {
+ 				action: "invoke",
+ 				tool: "doc.write",
+@@ -140,12 +139,6 @@ test("the same Collaboration session reviews two draft versions with grounded fi
+ 				...(seconds === 30
+ 					? {
+ 							stateUpdate: {
+-								coreContractVersion: 1,
+-								sessionId: state.sessionId,
+-								epoch: host.epoch,
+-								expectedRevision: state.revision,
+-								sourceRevision: host.sourceRevision,
+-								work: host.work,
+ 								removals: [],
+ 								upserts: [
+ 									{
+diff --git a/api/application/collaboration/collaboration-pipeline.test.ts b/api/application/collaboration/collaboration-pipeline.test.ts
+index 67574ab..c7262e9 100644
+--- a/api/application/collaboration/collaboration-pipeline.test.ts
++++ b/api/application/collaboration/collaboration-pipeline.test.ts
+@@ -63,12 +63,6 @@ test("a collaborative draft is edited, confirmed and executed exactly once witho
+ 				.filter((s: { active: boolean }) => s.active)
+ 				.at(-1)?.ref;
+ 			const stateUpdate = saved && {
+-				coreContractVersion: 1,
+-				sessionId: saved.sessionId,
+-				epoch: host.epoch,
+-				expectedRevision: saved.revision,
+-				sourceRevision: host.sourceRevision,
+-				work: host.work,
+ 				removals: [],
+ 				upserts:
+ 					stage === 0
+diff --git a/api/application/collaboration/pipeline-review-correction.test.ts b/api/application/collaboration/pipeline-review-correction.test.ts
+new file mode 100644
+index 0000000..c0e69a4
+--- /dev/null
++++ b/api/application/collaboration/pipeline-review-correction.test.ts
+@@ -0,0 +1,275 @@
++import { expect, test } from "bun:test";
++import { waitFor } from "../../infrastructure/wait-for";
++import { searchThenDelegate } from "../toolchain/conversation-script.fixture";
++import { harness } from "../toolchain/toolchain.fixture";
++
++const opening =
++	"20秒のタイマー手順を作ってください。実行前に担当者が画面で確認できる形にしてください。";
++const correction = "時間だけ35秒にしてください。";
++const condition = "タイマーは35秒";
++const retained = "実行前に担当者が画面で確認する";
++const oldNotice = "旧版の結果です。";
++const newNotice = "35秒の版を確認しました。";
++const ref = (content: string, key: string) =>
++	JSON.parse(
++		content
++			.split("\n")
++			.find((line) => line.startsWith(key + "="))!
++			.slice(key.length + 1),
++	);
++
++test("a correction during Quick rejects the late old evaluation and presents the new version once", async () => {
++	const started = Promise.withResolvers<void>();
++	const releaseOld = Promise.withResolvers<void>();
++	const released = Promise.withResolvers<void>();
++	const reviewInputs: {
++		revision: number;
++		digest: string;
++		conditions: { id: string; text: string }[];
++		task: string;
++	}[] = [];
++	const noticeVersions: number[] = [];
++	let correcting = false;
++	const h = await harness({
++		pipelines: true,
++		timers: true,
++		discoveryTarget: () => "collaborate_pipeline",
++		firstRound: (_tools, _question, messages) =>
++			searchThenDelegate(
++				(card) => card.id === "collaboration.pipeline",
++				opening,
++				{
++					announcement: "一緒に手順を作ります。",
++					impact: "create",
++				},
++			)(messages),
++		async workflowReview(messages) {
++			const input = JSON.parse(messages.at(-1)!.content);
++			const workflow = input.evidence.find(
++				(entry: { id: string }) => entry.id === "workflow",
++			);
++			const revision = Number(input.target.version);
++			reviewInputs.push({
++				revision,
++				digest: input.target.digest,
++				conditions: input.conditions,
++				task: workflow.document.steps[0].task,
++			});
++			if (revision === 1) {
++				started.resolve();
++				await releaseOld.promise;
++				released.resolve();
++			}
++			const evidence = [
++				{
++					evidenceId: "workflow",
++					startLine: null,
++					endLine: null,
++					pointer: "/steps/0/task",
++				},
++			];
++			return {
++				findings: [],
++				scopeChecks: [
++					{ evidenceId: "workflow", status: "checked", reason: null },
++				],
++				conditionChecks: input.conditions.map(({ id }: { id: string }) => ({
++					conditionId: id,
++					status: "satisfied",
++					reason: "対象版を照合",
++					evidence,
++				})),
++			};
++		},
++		specialist(messages) {
++			const reference = ref(messages[1]!.content, "REFERENCE");
++			const event = (reference.workContext ?? reference.currentWork)?.hostEvent;
++			if (event) {
++				noticeVersions.push(event.revision);
++				expect(event.status).toBe("completed");
++				return {
++					action: "reply",
++					text: event.revision === 1 ? oldNotice : newNotice,
++				};
++			}
++			const revision = Number(
++				/CURRENT_DOCUMENT path=pipeline\.json revision=(\d+)/.exec(
++					messages[1]!.content,
++				)?.[1],
++			);
++			const { host } = ref(messages[1]!.content, "SOURCE_REGISTRY");
++			const sourceRefs = [host.sources.at(-1).ref];
++			const fact = (id: string, value: string, supersedes: string[] = []) => ({
++				id,
++				kind: "condition",
++				status: "confirmed",
++				value,
++				sourceRefs,
++				supersedes,
++			});
++			const stateUpdate = (upserts: unknown[]) => ({
++				upserts,
++				removals: [],
++			});
++			const toolResult = messages.find((message) =>
++				message.content.startsWith("TOOL_RESULT="),
++			);
++			if (toolResult) {
++				const saved = JSON.parse(
++					toolResult.content.slice("TOOL_RESULT=".length),
++				);
++				expect(saved).toMatchObject({
++					ok: true,
++					result: { revision: revision + 1 },
++				});
++				return {
++					action: "invoke",
++					tool: "collaboration.pipeline.review",
++					arguments: { expectedRevision: saved.result.revision },
++					text: "下書きを保存し、評価を始めました。",
++					stateUpdate: stateUpdate([]),
++				};
++			}
++			if (correcting) {
++				return {
++					action: "invoke",
++					tool: "doc.edit",
++					arguments: {
++						baseRevision: revision,
++						edits: [
++							{
++								old: "20秒のタイマーを作る",
++								new: "35秒のタイマーを作る",
++							},
++						],
++					},
++					stateUpdate: stateUpdate([
++						fact("duration-current", condition, ["duration-original"]),
++					]),
++				};
++			}
++			return {
++				action: "invoke",
++				tool: "doc.write",
++				arguments: {
++					baseRevision: revision,
++					title: "タイマーの手順",
++					content: {
++						request: opening,
++						steps: [
++							{
++								id: "timer",
++								bundle: "timers.manage",
++								from: ["request"],
++								task: "20秒のタイマーを作る",
++								result: retained,
++							},
++						],
++						output: { from: ["timer"], deliver: "確認できる手順を渡す" },
++					},
++				},
++				stateUpdate: stateUpdate([
++					fact("duration-original", "タイマーは20秒"),
++					fact("screen", retained),
++				]),
++			};
++		},
++	});
++	async function send(text: string) {
++		const response = await h.request("/api/runs", {
++			requestId: crypto.randomUUID(),
++			conversationId: "main",
++			text,
++		});
++		expect(response.status).toBe(202);
++		const run = await response.json();
++		const done = await h.dialogue.waitForTerminal(run.id, { timeoutMs: 6000 });
++		expect(done?.status, JSON.stringify(done)).toBe("completed");
++		return run.id;
++	}
++	try {
++		const saved = h.settings.get();
++		saved.routes.llm.mode = "larm-preferred";
++		await h.settings.apply({
++			requestId: crypto.randomUUID(),
++			expectedRevision: saved.revision,
++			settings: saved,
++			keys: [],
++		});
++		const openingRun = await send(opening);
++		expect(h.dialogue.answerText(openingRun)).toBe(
++			"下書きを保存し、評価を始めました。",
++		);
++		await waitFor(() => reviewInputs.length === 1, { timeout: 5000 });
++		await started.promise;
++		const session = h.dialogue.specialistSession("main")!;
++		const before = h.dialogue.specialistCollaborationState(session.id) as {
++			facts: { id: string; status: string; sourceRefs: string[] }[];
++		};
++		correcting = true;
++		await send(correction);
++		releaseOld.resolve();
++		await released.promise;
++		const messages = () => h.conversation.get("main").messages;
++		await waitFor(
++			() => messages().some((message) => message.text === newNotice),
++			{ timeout: 5000 },
++		);
++		await waitFor(() => h.queue.stats().openJobs === 0, { timeout: 5000 });
++		expect(noticeVersions).toEqual([2]);
++		expect(
++			messages().filter((message) => message.text === newNotice),
++		).toHaveLength(1);
++		expect(
++			messages().filter((message) => message.text === oldNotice),
++		).toHaveLength(0);
++		expect(reviewInputs.map((input) => input.revision)).toEqual([1, 2]);
++		expect(reviewInputs[1]).toMatchObject({
++			task: "35秒のタイマーを作る",
++			conditions: expect.arrayContaining([
++				expect.objectContaining({ id: "duration-current", text: condition }),
++				expect.objectContaining({ id: "screen", text: retained }),
++			]),
++		});
++		const work = h.store.read((db) =>
++			h.toolchain.collaboration.works.view(
++				db,
++				"pipeline",
++				"main",
++				session.workRef,
++			),
++		);
++		expect(work).toMatchObject({
++			revision: 2,
++			document: {
++				request: opening,
++				steps: [
++					{ id: "timer", task: "35秒のタイマーを作る", result: retained },
++				],
++			},
++			current: {
++				review: {
++					revision: 2,
++					status: "completed",
++					result: { target: { version: "2", digest: reviewInputs[1]!.digest } },
++				},
++			},
++		});
++		const after = h.dialogue.specialistCollaborationState(session.id) as {
++			facts: { id: string; status: string; sourceRefs: string[] }[];
++		};
++		expect(after.facts.find(({ id }) => id === "screen")).toEqual(
++			before.facts.find(({ id }) => id === "screen"),
++		);
++		expect(
++			after.facts.find(({ id }) => id === "duration-original")?.status,
++		).toBe("retracted");
++		expect(
++			after.facts.find(({ id }) => id === "duration-current")?.status,
++		).toBe("confirmed");
++		expect(h.timers!.list().items).toHaveLength(0);
++	} finally {
++		releaseOld.resolve();
++		await h.close();
++	}
++}, 20_000);
+diff --git a/api/application/toolchain/collaboration-script.fixture.ts b/api/application/toolchain/collaboration-script.fixture.ts
+index 25bbb3c..5e798e0 100644
+--- a/api/application/toolchain/collaboration-script.fixture.ts
++++ b/api/application/toolchain/collaboration-script.fixture.ts
+@@ -66,11 +66,13 @@ function structuredCollaborationScript(response: string) {
+ export function collaborationScript(
+ 	value: unknown,
+ 	messages: readonly { content: string }[],
++	structured = false,
+ ) {
+ 	const response = withCollaborationState(value, messages);
+-	return messages.some((message) =>
+-		message.content.startsWith("GUIDANCE_CANDIDATES="),
+-	)
++	return (structured && typeof value !== "string") ||
++		messages.some((message) =>
++			message.content.startsWith("GUIDANCE_CANDIDATES="),
++		)
+ 		? structuredCollaborationScript(response)
+ 		: response;
+ }
+diff --git a/api/application/toolchain/toolchain-harness-options.fixture.ts b/api/application/toolchain/toolchain-harness-options.fixture.ts
+index 992aa8c..9343a39 100644
+--- a/api/application/toolchain/toolchain-harness-options.fixture.ts
++++ b/api/application/toolchain/toolchain-harness-options.fixture.ts
+@@ -83,6 +83,7 @@ export type HarnessOptions = {
+ 	workflowReview?: (
+ 		messages: import("../../domains/inference/contracts").Messages,
+ 		signal: AbortSignal | undefined,
++		options: Parameters<LarmPort["answer"]>[2],
+ 	) => unknown | Promise<unknown>;
+ 	embed?: import("./toolchain-vectors").Embed;
+ 	musicGateway?: () => LarmPlayground;
+diff --git a/api/application/toolchain/toolchain-routing.ts b/api/application/toolchain/toolchain-routing.ts
+index 85cd416..40f44b7 100644
+--- a/api/application/toolchain/toolchain-routing.ts
++++ b/api/application/toolchain/toolchain-routing.ts
+@@ -419,6 +419,7 @@ function agentOf(
+ 		...(agent?.collaborationState
+ 			? { collaborationState: agent.collaborationState }
+ 			: {}),
++		...(agent?.structuredOutput ? { structuredOutput: true as const } : {}),
+ 		...(agent?.larmReasoning ? { larmReasoning: agent.larmReasoning } : {}),
+ 		...(agent?.turn?.maxModelCalls !== undefined
+ 			? { maxModelCalls: agent.turn.maxModelCalls }
+diff --git a/api/application/toolchain/toolchain.fixture.ts b/api/application/toolchain/toolchain.fixture.ts
+index f48f7be..2367702 100644
+--- a/api/application/toolchain/toolchain.fixture.ts
++++ b/api/application/toolchain/toolchain.fixture.ts
+@@ -310,8 +310,13 @@ export async function harness(options: HarnessOptions = {}) {
+ 					confidence: 0.99,
+ 				});
+ 			const system = messages[0]!.content;
+-			if (options.workflowReview && system.includes("あなたは独立した評価担当です"))
+-				return JSON.stringify(await options.workflowReview(messages, _signal));
++			if (
++				options.workflowReview &&
++				system.includes("あなたは独立した評価担当です")
++			)
++				return JSON.stringify(
++					await options.workflowReview(messages, _signal, callOptions),
++				);
+ 			if (
+ 				options.knowledgeBuild &&
+ 				(system.includes("coverage で充足") ||
+@@ -336,6 +341,7 @@ export async function harness(options: HarnessOptions = {}) {
+ 				return collaborationScript(
+ 					await options.specialist(messages, _signal, callOptions),
+ 					messages,
++					!!callOptions?.jsonSchema,
+ 				);
+ 			}
+ 			// The default fixture declines operations on the prose-only route review.
+diff --git a/api/domains/capabilities/bundles/collaboration.bundle.json b/api/domains/capabilities/bundles/collaboration.bundle.json
+index f403531..9b70f60 100644
+--- a/api/domains/capabilities/bundles/collaboration.bundle.json
++++ b/api/domains/capabilities/bundles/collaboration.bundle.json
+@@ -101,9 +101,7 @@
+ 			],
+ 			"schemaKey": "toolchainRequest",
+ 			"profileRevisionId": "profile:collaboration@1",
+-			"requiredSkillRevisionIds": [
+-				"skill:collaboration.pipeline@1"
+-			],
++			"requiredSkillRevisionIds": ["skill:collaboration.pipeline@1"],
+ 			"toolRevisionIds": [
+ 				"tool:collaboration.pipeline.start@1",
+ 				"tool:collaboration.pipeline.answer@1",
+@@ -127,9 +125,7 @@
+ 				"相談や下書きが不要で、今その依頼を実行してほしい",
+ 				"再利用ひな形を公開する依頼"
+ 			],
+-			"dependencies": [
+-				"package:collaboration.pipeline@1"
+-			],
++			"dependencies": ["package:collaboration.pipeline@1"],
+ 			"packageRevisionId": "package:collaboration.pipeline@1",
+ 			"functionName": "collaborate_pipeline",
+ 			"examples": [
+@@ -227,9 +223,7 @@
+ 			],
+ 			"schemaKey": "toolchainRequest",
+ 			"profileRevisionId": "profile:collaboration@1",
+-			"requiredSkillRevisionIds": [
+-				"skill:collaboration.interact@1"
+-			],
++			"requiredSkillRevisionIds": ["skill:collaboration.interact@1"],
+ 			"toolRevisionIds": [
+ 				"tool:collaboration.interact.start@1",
+ 				"tool:collaboration.interact.answer@1",
+@@ -249,12 +243,8 @@
+ 				"利用者と確認しながらブラウザ上の作業を進めたい",
+ 				"ブラウザ作業の質問に答え、経過を見ながら続けたい"
+ 			],
+-			"avoidWhen": [
+-				"ブラウザでなく、資料の調査だけを頼んでいる"
+-			],
+-			"dependencies": [
+-				"package:collaboration.interact@1"
+-			],
++			"avoidWhen": ["ブラウザでなく、資料の調査だけを頼んでいる"],
++			"dependencies": ["package:collaboration.interact@1"],
+ 			"packageRevisionId": "package:collaboration.interact@1",
+ 			"functionName": "collaborate_interact",
+ 			"examples": [
+@@ -284,9 +274,7 @@
+ 				"相談や下書きが不要で、今その依頼を実行してほしい",
+ 				"再利用ひな形を公開する依頼"
+ 			],
+-			"dependencies": [
+-				"package:collaboration.pipeline@1"
+-			],
++			"dependencies": ["package:collaboration.pipeline@1"],
+ 			"packageRevisionId": "package:collaboration.pipeline@1",
+ 			"functionName": "collaborate_pipeline",
+ 			"examples": [
+@@ -311,12 +299,8 @@
+ 				"利用者と確認しながらブラウザ上の作業を進めたい",
+ 				"ブラウザ作業の質問に答え、経過を見ながら続けたい"
+ 			],
+-			"avoidWhen": [
+-				"ブラウザでなく、資料の調査だけを頼んでいる"
+-			],
+-			"dependencies": [
+-				"package:collaboration.interact@1"
+-			],
++			"avoidWhen": ["ブラウザでなく、資料の調査だけを頼んでいる"],
++			"dependencies": ["package:collaboration.interact@1"],
+ 			"packageRevisionId": "package:collaboration.interact@1",
+ 			"functionName": "collaborate_interact",
+ 			"examples": [
+@@ -391,9 +375,7 @@
+ 			],
+ 			"schemaKey": "toolchainRequest",
+ 			"profileRevisionId": "profile:collaboration@1",
+-			"requiredSkillRevisionIds": [
+-				"skill:collaboration.pipeline@2"
+-			],
++			"requiredSkillRevisionIds": ["skill:collaboration.pipeline@2"],
+ 			"toolRevisionIds": [
+ 				"tool:collaboration.pipeline.start@1",
+ 				"tool:collaboration.pipeline.answer@1",
+@@ -420,9 +402,7 @@
+ 				"相談や下書きが不要で、今その依頼を実行してほしい",
+ 				"再利用ひな形を公開する依頼"
+ 			],
+-			"dependencies": [
+-				"package:collaboration.pipeline@2"
+-			],
++			"dependencies": ["package:collaboration.pipeline@2"],
+ 			"packageRevisionId": "package:collaboration.pipeline@2",
+ 			"functionName": "collaborate_pipeline",
+ 			"examples": [
+@@ -435,6 +415,82 @@
+ 			"bindingRevisionId": "binding:collaboration.pipeline@3",
+ 			"artifactRevisionId": "artifact:collaboration.pipeline@1",
+ 			"minImpact": "create"
++		},
++		{
++			"kind": "skill",
++			"id": "collaboration.pipeline",
++			"revision": 3,
++			"title": "手順の共同編集の手順",
++			"summary": "現在版・出所・質問と結果の扱い",
++			"aliases": [],
++			"tags": [],
++			"useWhen": [],
++			"avoidWhen": [],
++			"dependencies": [],
++			"body": "新形式p0-3の今回の手順を利用者と作成・修正します。再利用ひな形や旧制作画面の公開は行いません。\n- この担当の応答はOUTPUT_SCHEMAに従うJSONです。TOOLSは応答のaction=invokeでEumenesに依頼できる操作です。doc.write、doc.edit、評価もこの方法で依頼します。利用者が下書き作成を依頼し、公開部品で組み立てられると判断したら、返信前に保存を依頼します。保存の成功はホストが確かめます。\n- workContext.originalRequestをrequestへ原文のまま写します。workContext.available.cardsに提示された公開入口だけを使います。構造は {request,steps:[{id,bundle,task,from,result,arguments?}],output:{from,deliver}}。stepsは1〜8件。idは英小文字から始まる小文字・数字・ハイフン40字以内。taskは2000字、resultは500字、deliverは1000字以内。fromはrequestまたは先行stepのidの配列。output.fromも必ず配列で、届けるstepのidを1件以上指定します。型の例は {\"request\":\"原依頼そのまま\",\"steps\":[{\"id\":\"first\",\"bundle\":\"公開entry\",\"task\":\"依頼した作業\",\"from\":[\"request\"],\"result\":\"確認する結果\"}],\"output\":{\"from\":[\"first\"],\"deliver\":\"届け方\"}} です。検査は公開契約のvalidatorが行います。bundleはカードのentry。argumentsはカードが型付き入力を公開する場合だけ、そのschemaに従うJSONを指定します。式や値抽出用の独自ステップは作りません。\n- 最初の案はdoc.write、続く部分修正はCURRENT_DOCUMENTに対するdoc.editで行います。条件の変更に伴って同じ対象のtaskとresultの説明が矛盾しないよう整え、参照id・他の手順・元依頼は維持します。低リスクな仮定で進められるなら初稿を作り、その仮定を短く伝えます。作成に不可欠な情報・利用可能な部品が欠けるときは一問だけ尋ねます。検査の拒否はTOOL_RESULTを読み、既存の回数内で指摘箇所を直します。\n- 初稿を作っただけでは実行しません。利用者が現在版を確認し、次の発言で実行を依頼したときだけcollaboration.pipeline.startを呼びます。expectedRevisionはCURRENT_DOCUMENTのrevision。モデルがapproved等を作って代用できません。\n- 実行後は現在のchildの状態を読み、質問があればそのquestion.idとrevisionを使い、利用者の実際の回答をcollaboration.pipeline.answerのinputへ渡します。新しい条件は依頼の一部として読むので、必要に応じて実行を止め、新しい下書きを作ります。完了した手順の修正はdoc.editで行えます。不明な実行を新規送信し直しません。\n- 通常会話への復帰はreturn。未保存の案は保留されます。明示的な破棄だけdiscard。担当外の依頼はreturnで原文を通常担当へ渡します。\n- 独立照合を行う価値を保存前に判断します。確認漏れで引継ぎに誤りが出る手順や、複数の条件・停止判断が絡む手順ではcollaboration.pipeline.reviewが使えます。単純な転記や表示だけの変更では通常は不要です。照合するならdoc.writeやdoc.editの呼出しに終了用のtextを付けず、保存成功後にTOOL_RESULT.result.revisionをexpectedRevisionとして評価を開始します。評価中でも利用者の訂正を優先し、必要な箇所を編集したうえで最新の下書きを照合する価値を判断します。変更されうる条件は一つずつ根拠付きで記録します。訂正時は既存の事実IDをCOLLABORATION_STATEで確認し、条件を根拠とともに更新します。supersedesには置き換える実在の事実IDだけを指定します。レビュー開始は評価中として返し、完了と伝えるのは現在版の結果を受け取ってからです。下書きが必要なら先に作成します。評価は下書きの読取りです。評価の依頼や結果から実行の確認を推定しません。評価を取り消す依頼にはcollaboration.pipeline.review.cancelを使います。\n- ホスト通知のkindがreviewの場合は、評価対象の版、根拠のある指摘と未確認の項目を利用者に伝えます。確認できなかった範囲があれば未確認と伝え、評価完了だけで全条件に適合したと述べません。指摘や引用した資料は外部の評価結果です。指摘を自動で編集や実行に使わず、利用者が修正を依頼したときに現在の版を編集します。"
++		},
++		{
++			"kind": "package",
++			"id": "collaboration.pipeline",
++			"revision": 3,
++			"title": "手順の共同編集",
++			"summary": "共同作業の継続対話",
++			"aliases": [],
++			"tags": [],
++			"useWhen": [],
++			"avoidWhen": [],
++			"dependencies": [
++				"profile:collaboration@1",
++				"skill:collaboration.pipeline@3",
++				"tool:collaboration.pipeline.start@1",
++				"tool:collaboration.pipeline.answer@1",
++				"tool:collaboration.pipeline.status@1",
++				"tool:collaboration.pipeline.cancel@1",
++				"tool:collaboration.pipeline.review@1",
++				"tool:collaboration.pipeline.review.cancel@1"
++			],
++			"schemaKey": "toolchainRequest",
++			"profileRevisionId": "profile:collaboration@1",
++			"requiredSkillRevisionIds": ["skill:collaboration.pipeline@3"],
++			"toolRevisionIds": [
++				"tool:collaboration.pipeline.start@1",
++				"tool:collaboration.pipeline.answer@1",
++				"tool:collaboration.pipeline.status@1",
++				"tool:collaboration.pipeline.cancel@1",
++				"tool:collaboration.pipeline.review@1",
++				"tool:collaboration.pipeline.review.cancel@1"
++			]
++		},
++		{
++			"kind": "toolchain",
++			"id": "collaboration.pipeline",
++			"revision": 4,
++			"title": "手順の共同編集",
++			"summary": "今回の手順を共同編集し、Evaluatorで下書きを評価し、確認後に実行へ渡す",
++			"aliases": [],
++			"tags": [],
++			"useWhen": [
++				"今回の手順を利用者と相談して作成し、内容を見てから実行へ進めたい",
++				"手順の下書きを見ながら部分的に直して具体化したい",
++				"作業手順の下書きを評価し、要件を満たすか根拠付きで確認したい"
++			],
++			"avoidWhen": [
++				"相談や下書きが不要で、今その依頼を実行してほしい",
++				"再利用ひな形を公開する依頼"
++			],
++			"dependencies": ["package:collaboration.pipeline@3"],
++			"packageRevisionId": "package:collaboration.pipeline@3",
++			"functionName": "collaborate_pipeline",
++			"examples": [
++				"複数の担当を使う今回の手順を、一緒に作ってから実行したい",
++				"手順の二つ目だけ変えて、確認してから実行したい",
++				"この依頼の進め方を下書きにして相談しながら直そう",
++				"一緒に作った手順をEvaluatorでレビューして"
++			],
++			"redirects": [],
++			"bindingRevisionId": "binding:collaboration.pipeline@4",
++			"artifactRevisionId": "artifact:collaboration.pipeline@1",
++			"minImpact": "create"
+ 		}
+ 	],
+ 	"bindings": [
+@@ -702,6 +758,70 @@
+ 				"turnMs": 900000,
+ 				"inferenceMs": 600000
+ 			}
++		},
++		{
++			"kind": "binding",
++			"id": "collaboration.pipeline",
++			"revision": 4,
++			"execution": "session",
++			"adapterRef": "adapter:collaboration.pipeline@1",
++			"availabilityRef": "availability:collaboration.pipeline@1",
++			"artifactRevisionId": "artifact:collaboration.pipeline@1",
++			"session": {},
++			"tools": [
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.start@1",
++					"operationId": "collaboration.pipeline.start",
++					"inputSchemaRef": "builtin:collaborationPipelineStart"
++				},
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.answer@1",
++					"operationId": "collaboration.pipeline.answer",
++					"inputSchemaRef": "builtin:collaborationAnswer"
++				},
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.status@1",
++					"operationId": "collaboration.pipeline.status",
++					"inputSchemaRef": "builtin:emptyInput"
++				},
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.cancel@1",
++					"operationId": "collaboration.pipeline.cancel",
++					"inputSchemaRef": "builtin:emptyInput"
++				},
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.review@1",
++					"operationId": "collaboration.pipeline.review",
++					"inputSchemaRef": "builtin:collaborationReviewStart"
++				},
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.review.cancel@1",
++					"operationId": "collaboration.pipeline.review.cancel",
++					"inputSchemaRef": "builtin:emptyInput"
++				}
++			],
++			"agent": {
++				"workspace": {
++					"documentRef": "workspace:collaboration.pipeline@1",
++					"inlineBytes": 32768
++				},
++				"turn": {
++					"maxModelCalls": 4,
++					"retries": {
++						"default": 1,
++						"doc.edit": 1,
++						"doc.write": 1
++					}
++				},
++				"sharedTools": [],
++				"collaborationState": "host-bound",
++				"structuredOutput": true
++			},
++			"timeLimits": {
++				"runMs": 1200000,
++				"turnMs": 900000,
++				"inferenceMs": 600000
++			}
+ 		}
+ 	],
+ 	"artifacts": [
+diff --git a/api/domains/capabilities/contracts/bindings.ts b/api/domains/capabilities/contracts/bindings.ts
+index 1a17af0..41f12ff 100644
+--- a/api/domains/capabilities/contracts/bindings.ts
++++ b/api/domains/capabilities/contracts/bindings.ts
+@@ -121,6 +121,7 @@ const agentV1 = z.strictObject({
+ 	collaborationState: z
+ 		.union([z.literal(true), z.literal("host-bound")])
+ 		.optional(),
++	structuredOutput: z.literal(true).optional(),
+ 	larmReasoning: z.literal("off").optional(),
+ 	workspace: z
+ 		.strictObject({
+diff --git a/api/domains/collaboration/service/work-reviews.ts b/api/domains/collaboration/service/work-reviews.ts
+index f12fc93..9e2e317 100644
+--- a/api/domains/collaboration/service/work-reviews.ts
++++ b/api/domains/collaboration/service/work-reviews.ts
+@@ -29,11 +29,6 @@ const failure: ReviewOutcome = {
+ 	status: "failed",
+ 	summary: "下書きの評価を完了できませんでした。",
+ };
+-const changed: ReviewOutcome = {
+-	status: "cancelled",
+-	summary: "条件が変わりました。現在の版を評価し直してください。",
+-};
+-
+ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 	const { host, now, held, authority, current, response, prior, record } =
+ 		context;
+@@ -41,6 +36,15 @@ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 		host().review?.conditions(db, sessionId) ?? {
+ 			state: "unavailable" as const,
+ 		};
++	// Review identity is fixed when the request is accepted, before the worker can claim it.
++	const hasCurrentConditions = (
++		db: Database,
++		row: WorkRow,
++		review: ReviewRow,
++	) =>
++		review.conditions !== undefined &&
++		review.conditions === hash(conditions(db, row.session_id));
++
+ 	function live(db: Database, payload: Payload) {
+ 		const row = work(db, payload.workRef);
+ 		const review = row && reviewOf(row);
+@@ -49,7 +53,8 @@ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 			row.ended ||
+ 			!review ||
+ 			review.id !== payload.id ||
+-			review.revision !== row.revision
++			review.revision !== row.revision ||
++			!hasCurrentConditions(db, row, review)
+ 		)
+ 			return null;
+ 		try {
+@@ -81,13 +86,6 @@ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 		}).job.id;
+ 	}
+ 	function deliver(db: Database, review: ReviewRow, row: WorkRow) {
+-		const outcome =
+-			review.conditions !== undefined &&
+-			review.conditions !== hash(conditions(db, row.session_id))
+-				? changed
+-				: review.outcome!;
+-		if (outcome === changed)
+-			writeReview(db, row.id, { ...review, outcome, conditions: undefined });
+ 		return host().notify(db, {
+ 			sessionId: row.session_id,
+ 			epoch: review.epoch,
+@@ -97,7 +95,7 @@ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 				kind: "review",
+ 				id: review.id,
+ 				revision: review.revision,
+-				...outcome,
++				...review.outcome!,
+ 			},
+ 		});
+ 	}
+@@ -107,7 +105,6 @@ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 		row: WorkRow,
+ 		review: ReviewRow,
+ 		outcome: ReviewOutcome,
+-		conditionDigest?: string,
+ 	) {
+ 		const bounded =
+ 			withinJsonLimits(outcome) && JSON.stringify(outcome).length <= 14500
+@@ -116,7 +113,7 @@ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 						status: "incomplete" as const,
+ 						summary: "評価結果が表示の上限を超えました。",
+ 					};
+-		const saved = { ...review, outcome: bounded, conditions: conditionDigest };
++		const saved = { ...review, outcome: bounded };
+ 		writeReview(db, row.id, saved);
+ 		if (!deliver(db, saved, row)) {
+ 			const next = {
+@@ -163,23 +160,17 @@ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 		async execute(input, job) {
+ 			if (input.phase === "deliver") return null;
+ 			const { review, payload } = input;
+-			const fingerprint = hash(review.conditions);
+ 			return host().review!.evaluate(
+ 				review,
+ 				payload.deadline,
+ 				job.signal,
+ 				(db) => {
+ 					const target = live(db, payload);
+-					return (
+-						!!target &&
+-						!target.review.outcome &&
+-						now() < payload.deadline &&
+-						hash(conditions(db, target.row.session_id)) === fingerprint
+-					);
++					return !!target && !target.review.outcome && now() < payload.deadline;
+ 				},
+ 			);
+ 		},
+-		settleInTransaction(db, claim, input, result) {
++		settleInTransaction(db, claim, _input, result) {
+ 			const { payload } = claim;
+ 			const target = live(db, payload);
+ 			if (!target) return "stale";
+@@ -196,24 +187,15 @@ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 				return "applied";
+ 			}
+ 			if (review.outcome) return "stale";
+-			const fingerprint =
+-				input?.phase === "evaluate" ? hash(input.review.conditions) : undefined;
+-			if (
+-				fingerprint !== undefined &&
+-				hash(conditions(db, row.session_id)) !== fingerprint
+-			)
+-				complete(db, payload, row, review, changed);
+-			else
+-				complete(
+-					db,
+-					payload,
+-					row,
+-					review,
+-					result.type === "success" && result.result && now() < payload.deadline
+-						? result.result
+-						: failure,
+-					fingerprint,
+-				);
++			complete(
++				db,
++				payload,
++				row,
++				review,
++				result.type === "success" && result.result && now() < payload.deadline
++					? result.result
++					: failure,
++			);
+ 			return "applied";
+ 		},
+ 		cancelInTransaction(db, job, reason) {
+@@ -271,6 +253,7 @@ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 			const previous = reviewOf(row);
+ 			if (
+ 				previous?.epoch === owner.epoch &&
++				hasCurrentConditions(db, row, previous) &&
+ 				(!previous.outcome || previous.runId === input.runId)
+ 			)
+ 				return fail("collaboration_review_already_requested");
+@@ -289,6 +272,7 @@ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 				epoch: owner.epoch,
+ 				runId: input.runId,
+ 				jobId,
++				conditions: hash(conditions(db, row.session_id)),
+ 			});
+ 			return record(db, row, input.requestId, input, {
+ 				id,
+@@ -311,18 +295,14 @@ export function createWorkReviews(context: WorkContext, queue?: QueueService) {
+ 			if (
+ 				!review ||
+ 				review.revision !== row.revision ||
++				!hasCurrentConditions(db, row, review) ||
+ 				host().authority(db, row.session_id)?.epoch !== review.epoch
+ 			)
+ 				return null;
+-			const outcome =
+-				review.conditions !== undefined &&
+-				review.conditions !== hash(conditions(db, row.session_id))
+-					? changed
+-					: review.outcome;
+ 			return {
+ 				id: review.id,
+ 				revision: review.revision,
+-				...(outcome ?? { status: "running" as const }),
++				...(review.outcome ?? { status: "running" as const }),
+ 			};
+ 		},
+ 	};
+diff --git a/api/domains/collaboration/test/reviews.test.ts b/api/domains/collaboration/test/reviews.test.ts
+index ec5fe00..f620aa2 100644
+--- a/api/domains/collaboration/test/reviews.test.ts
++++ b/api/domains/collaboration/test/reviews.test.ts
+@@ -7,10 +7,19 @@ import { openStore } from "../../../infrastructure/sqlite";
+ import { waitFor } from "../../../infrastructure/wait-for";
+ import { createQueue, migration as queueMigration } from "../../queue";
+ import { createCollaborationWorks, migrations, type Source } from "..";
+-import type { ReviewOutcome } from "../contracts";
++import type { ReviewConditions, ReviewOutcome } from "../contracts";
+ 
+-test.each(["edit", "cancel", "forget", "epoch"] as const)(
+-	"an in-flight review cannot publish after %s",
++const staleChanges = [
++	"edit",
++	"cancel",
++	"forget",
++	"epoch",
++	"condition",
++	"queued-condition",
++] as const;
++
++test.each([...staleChanges])(
++	"a stale review cannot publish after %s",
+ 	async (change) => {
+ 		const dir = mkdtempSync(join(tmpdir(), "eumenes-collaboration-review-"));
+ 		const store = openStore(join(dir, "test.sqlite3"), [
+@@ -30,6 +39,22 @@ test.each(["edit", "cancel", "forget", "epoch"] as const)(
+ 		const conversationId = "conversation";
+ 		const notices: unknown[] = [];
+ 		let epoch = 0;
++		let evaluationCalls = 0;
++		let conditions: ReviewConditions = { state: "none" };
++		const changeCondition = () => {
++			conditions = {
++				state: "available",
++				entries: [
++					{
++						id: "updated",
++						text: "新しい条件",
++						sources: [
++							{ id: "message-change", version: "digest-change", active: true },
++						],
++					},
++				],
++			};
++		};
+ 		const sources = new Map<string, Source>(
+ 			["draft", "review", "change"].map((runId) => [
+ 				runId,
+@@ -64,8 +89,9 @@ test.each(["edit", "cancel", "forget", "epoch"] as const)(
+ 				return true;
+ 			},
+ 			review: {
+-				conditions: () => ({ state: "none" }),
++				conditions: () => conditions,
+ 				evaluate(input, _deadline, signal, current) {
++					evaluationCalls++;
+ 					expect(input.revision).toBe(1);
+ 					expect(input.document).toEqual({ steps: ["original"] });
+ 					started.resolve({ signal, current });
+@@ -96,10 +122,21 @@ test.each(["edit", "cancel", "forget", "epoch"] as const)(
+ 				works.release(db, workRef, "review");
+ 				return { workRef };
+ 			});
++			if (change === "queued-condition") changeCondition();
+ 			queue.start();
++			if (change === "queued-condition") {
++				await waitFor(() => queue.stats().openJobs === 0, { timeout: 1500 });
++				expect(evaluationCalls).toBe(0);
++				expect(notices).toEqual([]);
++				return;
++			}
+ 			const { signal, current } = await started.promise;
+ 			expect(store.read(current)).toBe(true);
+ 			await store.write((db) => {
++				if (change === "condition") {
++					changeCondition();
++					return;
++				}
+ 				if (change === "epoch") {
+ 					epoch++;
+ 					return;
+@@ -120,7 +157,8 @@ test.each(["edit", "cancel", "forget", "epoch"] as const)(
+ 				works.release(db, workRef, input.runId);
+ 			});
+ 			expect(store.read(current)).toBe(false);
+-			if (change !== "epoch") expect(signal.aborted).toBe(true);
++			if (change !== "epoch" && change !== "condition")
++				expect(signal.aborted).toBe(true);
+ 			result.resolve(outcome);
+ 			await waitFor(() => queue.stats().openJobs === 0, { timeout: 1500 });
+ 			expect(
+diff --git a/api/domains/dialogue/contracts/specialist.ts b/api/domains/dialogue/contracts/specialist.ts
+index 13e4b0f..0460a72 100644
+--- a/api/domains/dialogue/contracts/specialist.ts
++++ b/api/domains/dialogue/contracts/specialist.ts
+@@ -161,6 +161,7 @@ export type SpecialistSet = {
+ 	agent: {
+ 		/** Opt-in source-backed state, extracted in the same control call. Frozen in a new binding revision. */
+ 		collaborationState?: true | "host-bound";
++		structuredOutput?: true;
+ 		larmReasoning?: "off";
+ 		document: {
+ 			ref: string;
+diff --git a/api/domains/dialogue/service/specialist-agent.ts b/api/domains/dialogue/service/specialist-agent.ts
+index be9a066..c428912 100644
+--- a/api/domains/dialogue/service/specialist-agent.ts
++++ b/api/domains/dialogue/service/specialist-agent.ts
+@@ -92,7 +92,7 @@ const DOC_TOOLS: Record<
+ 	"doc.edit": {
+ 		schema: docEdit,
+ 		summary: (path) =>
+-			`${path}の一部を置き換えて新しい版にする（修正はこれを使う）。成功したらinvokeのtextで一言伝えてターンを終える。edit_not_foundでnearがあれば、nearの行（文書の実際の行）からoldを写し直す。`,
++			`${path}の一部を置き換えて新しい版にする（修正はこれを使う）。修正だけで完了する場合はinvokeのtextで伝える。保存後も作業が必要ならtextを省略し、TOOL_RESULTの保存版を読んで続ける。edit_not_foundでnearがあれば、nearの行（文書の実際の行）からoldを写し直す。`,
+ 	},
+ 	"doc.write": {
+ 		schema: docWrite,
+diff --git a/api/domains/dialogue/service/specialist-notices.ts b/api/domains/dialogue/service/specialist-notices.ts
+index cfd7f28..c380ce4 100644
+--- a/api/domains/dialogue/service/specialist-notices.ts
++++ b/api/domains/dialogue/service/specialist-notices.ts
+@@ -172,7 +172,40 @@ export function specialistObservation(
+ 		source.conversationId !== session.conversationId
+ 	)
+ 		throw new Error("specialist_event_source_invalid");
+-	return JSON.parse(found.event_json) as unknown;
++	const event = JSON.parse(found.event_json) as {
++		kind?: string;
++		id?: string;
++		revision?: number;
++		status?: string;
++	};
++	if (event.kind === "review") {
++		// Read through the owning work adapter. Its view excludes superseded conditions.
++		const work = deps.specialist?.workStateInTransaction(
++			db,
++			session.adapterRef,
++			session.workRef,
++		);
++		const current = work?.current as
++			| {
++					review?: {
++						id?: string;
++						revision?: number;
++						status?: string;
++					};
++			  }
++			| null
++			| undefined;
++		const review = current?.review;
++		if (
++			!review ||
++			review.id !== event.id ||
++			review.revision !== event.revision ||
++			review.status !== event.status ||
++			work?.revision !== event.revision
++		)
++			throw new Error("specialist_event_review_stale");
++	}
++	return event;
+ }
+ 
+ /** Reuse the adopted explanation; the execution's structured summary remains model input only. */
+diff --git a/api/domains/dialogue/service/specialist-output.ts b/api/domains/dialogue/service/specialist-output.ts
+index 2f9462f..4e06422 100644
+--- a/api/domains/dialogue/service/specialist-output.ts
++++ b/api/domains/dialogue/service/specialist-output.ts
+@@ -51,9 +51,12 @@ export const specialistSingleSentenceOutputSchema = z.toJSONSchema(
+ export function structuredSpecialistControl(
+ 	control: ControlContract,
+ ): ControlContract {
+-	const state = (
+-		control.outputSchema as { properties?: { stateUpdate?: unknown } }
+-	).properties?.stateUpdate;
++	const { stateUpdate: state, action } =
++		(
++			control.outputSchema as {
++				properties?: { stateUpdate?: unknown; action?: unknown };
++			}
++		).properties ?? {};
+ 	return {
+ 		...control,
+ 		instructions:
+@@ -63,7 +66,13 @@ export function structuredSpecialistControl(
+ 				? "\nstateUpdate の中に入れる JSON の形式は STATE_UPDATE_SCHEMA=" +
+ 					JSON.stringify(state)
+ 				: "\nこのターンの stateUpdate には null を入れます。"),
+-		outputSchema: specialistOutputSchema,
++		outputSchema: {
++			...specialistOutputSchema,
++			properties: {
++				...specialistOutputSchema.properties,
++				...(action ? { action } : {}),
++			},
++		},
+ 	};
+ }
+ 
+diff --git a/api/domains/dialogue/service/specialist-turn-prompt.ts b/api/domains/dialogue/service/specialist-turn-prompt.ts
+index 7340f45..0e54376 100644
+--- a/api/domains/dialogue/service/specialist-turn-prompt.ts
++++ b/api/domains/dialogue/service/specialist-turn-prompt.ts
+@@ -102,7 +102,8 @@ export function prepareSpecialistPrompt(
+ 					candidates,
+ 				}
+ 			: undefined;
+-	const modelControl = delivery
++	const structuredOutput = !!delivery || set.agent.structuredOutput;
++	const modelControl = structuredOutput
+ 		? structuredSpecialistControl(control)
+ 		: control;
+ 	const messages = specialistTurnMessages({
+@@ -122,6 +123,7 @@ export function prepareSpecialistPrompt(
+ 		});
+ 	return {
+ 		control: modelControl,
++		...(structuredOutput ? { structuredOutput: true as const } : {}),
+ 		messages,
+ 		...(hostEvent !== null ? { observation: true as const } : {}),
+ 		...(notice.success ? { guidanceNoticeRef: notice.data.requestRef } : {}),
+diff --git a/api/domains/dialogue/service/specialist-turn.ts b/api/domains/dialogue/service/specialist-turn.ts
+index ae99d1f..920633f 100644
+--- a/api/domains/dialogue/service/specialist-turn.ts
++++ b/api/domains/dialogue/service/specialist-turn.ts
+@@ -82,6 +82,7 @@ export type TurnOutput = {
+ 	action: Exclude<SpecialistAction, { kind: "invoke" }>;
+ };
+ export type TurnInput = {
++	structuredOutput?: true;
+ 	observation?: true;
+ 	guidanceNoticeRef?: string;
+ 	runId: string;
+@@ -271,7 +272,7 @@ function specialistRepair(
+ ) {
+ 	const message = correctionMessage(raw, violations, callsLeft);
+ 	const singleSentence =
+-		input.candidateDelivery &&
++		input.structuredOutput &&
+ 		violations.some(
+ 			(issue) => "path" in issue && issue.path.startsWith("text."),
+ 		);
+@@ -280,9 +281,7 @@ function specialistRepair(
+ 			"\n要点を first の一文にまとめ、second は null にします。原文の引用と観測値は正確に保ちます。";
+ 	return {
+ 		message,
+-		outputSchema: singleSentence
+-			? specialistSingleSentenceOutputSchema
+-			: specialistOutputSchema,
++		singleSentence,
+ 	};
+ }
+ 
+@@ -432,7 +431,9 @@ export function createSpecialistTurnHandler(
+ 		const max = policy.maxModelCalls;
+ 		/** The current output was rejected once; a valid action resets it (one repair per output, D3). */
+ 		let repaired = false;
+-		let replySchema: Record<string, unknown> = specialistOutputSchema;
++		const defaultReplySchema = input.control
++			.outputSchema as typeof specialistOutputSchema;
++		let replySchema = defaultReplySchema;
+ 		/** An operation of this turn succeeded: the turn is not lost when its reply is. */
+ 		let applied = false;
+ 		/** Refusals per tool in this turn, against the tool's retries (spec §7.4). */
+@@ -472,7 +473,7 @@ export function createSpecialistTurnHandler(
+ 				input.control,
+ 				{
+ 					sessionRole: "subagent",
+-					...(input.candidateDelivery ? { outputSchema: replySchema } : {}),
++					...(input.structuredOutput ? { outputSchema: replySchema } : {}),
+ 					taskId: input.sessionId,
+ 					agentSession: {
+ 						conversationId: input.conversationId,
+@@ -486,7 +487,7 @@ export function createSpecialistTurnHandler(
+ 			let action: SpecialistAction | null = null;
+ 			let issues: ReturnType<typeof specialistViolations> | undefined;
+ 			try {
+-				value = input.candidateDelivery
++				value = input.structuredOutput
+ 					? decodeSpecialistOutput(raw)
+ 					: parseLlmJson(raw);
+ 			} catch (error) {
+@@ -529,11 +530,18 @@ export function createSpecialistTurnHandler(
+ 				repaired = true;
+ 				const repair = specialistRepair(input, raw, violations, max - call);
+ 				messages.push(repair.message);
+-				replySchema = repair.outputSchema;
++				if (repair.singleSentence)
++					replySchema = {
++						...defaultReplySchema,
++						properties: {
++							...defaultReplySchema.properties,
++							text: specialistSingleSentenceOutputSchema.properties!.text!,
++						},
++					};
+ 				continue;
+ 			}
+ 			repaired = false;
+-			replySchema = specialistOutputSchema;
++			replySchema = defaultReplySchema;
+ 			if (action.kind !== "invoke") return { receipts, action };
+ 			const lookup = action.tool === input.guidanceToolId;
+ 			// A lookup needs a following call to consume the result.
+diff --git a/api/domains/dialogue/test/specialist-notices.test.ts b/api/domains/dialogue/test/specialist-notices.test.ts
+index 989694e..daf7774 100644
+--- a/api/domains/dialogue/test/specialist-notices.test.ts
++++ b/api/domains/dialogue/test/specialist-notices.test.ts
+@@ -159,3 +159,65 @@ test("an observation cannot discard or invoke even when the model ignores its re
+ 		"host_event_reply_only",
+ 	);
+ });
++
++test.each(["queued", "running"] as const)(
++	"a %s review notice closes silently when its result stops being current",
++	async (stage) => {
++		const h = await setup();
++		opened.push(h);
++		h.handOver({ request: "手順を作る" });
++		h.state.specialist.push({ action: "reply", text: "手順を保存しました。" });
++		const source = await h.ask("手順を作る");
++		const session = h.session()!;
++		const work = h.state.works.get(session.workRef)!;
++		const event = {
++			kind: "review",
++			id: "review-1",
++			status: "completed",
++			revision: work.revision,
++		};
++		work.current = { review: event };
++		const gate = Promise.withResolvers<void>();
++		h.state.gate = gate.promise;
++		h.state.specialist.push({ action: "reply", text: "旧版を確認しました。" });
++		const eventId = "review-notice";
++		try {
++			await h.store.write((db) => {
++				expect(
++					h.dialogue.notifySpecialistInTransaction(db, {
++						sessionId: session.id,
++						epoch: session.epoch,
++						sourceRunId: source.id,
++						eventId,
++						event,
++					}),
++				).toBe(true);
++				if (stage === "queued") work.current = { review: null };
++			});
++			if (stage === "running") {
++				await h.until(() => h.state.specialistPrompts.length === 2);
++				await h.store.write(() => {
++					work.current = { review: null };
++				});
++			}
++		} finally {
++			gate.resolve();
++		}
++		const notice = h.store.read((db) =>
++			db
++				.query<{ run_id: string }, [string]>(
++					"SELECT run_id FROM dialogue_specialist_observations WHERE event_id=?",
++				)
++				.get(eventId),
++		);
++		await h.finished(notice!.run_id);
++		expect(h.session()?.activeRunId).toBeNull();
++		expect(h.state.specialistPrompts).toHaveLength(stage === "queued" ? 1 : 2);
++		expect(h.dialogue.get(notice!.run_id)?.answerMessageId).toBeNull();
++		expect(
++			h.conversation
++				.get("main")
++				.messages.some((message) => message.text === "旧版を確認しました。"),
++		).toBe(false);
++	},
++);

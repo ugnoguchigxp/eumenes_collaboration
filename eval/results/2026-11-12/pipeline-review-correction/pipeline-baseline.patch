@@ -1,0 +1,1746 @@
+diff --git a/api/application/collaboration/collaboration-adapter.ts b/api/application/collaboration/collaboration-adapter.ts
+--- a/api/application/collaboration/collaboration-adapter.ts
++++ b/api/application/collaboration/collaboration-adapter.ts
+@@ -55,6 +55,24 @@
+ 						},
+ 					] as const,
+ 			),
++			...(kind === "pipeline"
++				? ([
++						[
++							operation(kind, "review"),
++							{
++								inputSchemaRef: "builtin:collaborationReviewStart",
++								effect: "write" as const,
++							},
++						],
++						[
++							operation(kind, "review.cancel"),
++							{
++								inputSchemaRef: "builtin:emptyInput",
++								effect: "write" as const,
++							},
++						],
++					] as const)
++				: []),
+ 		]),
+ 		queries: new Set([query]),
+ 		inputAdapters: new Map(),
+@@ -140,6 +158,20 @@
+ 			} else if (request.operationName === operation(kind, "cancel")) {
+ 				works.cancel(db, bound);
+ 				value = works.state(db, origin.workRef);
++			} else if (
++				kind === "pipeline" &&
++				request.operationName === operation(kind, "review")
++			) {
++				const args = collaborationInputs.collaborationReviewStart.parse(
++					request.input,
++				);
++				value = works.review(db, { ...bound, ...args });
++			} else if (
++				kind === "pipeline" &&
++				request.operationName === operation(kind, "review.cancel")
++			) {
++				works.cancelReview(db, bound);
++				value = works.state(db, origin.workRef);
+ 			} else if (request.operationName === operation(kind, "status"))
+ 				value = works.state(db, origin.workRef);
+ 			else throw new Error("collaboration_operation_unknown");
+@@ -158,6 +190,7 @@
+ 			const draft = pipelineDefinition.safeParse(state?.document);
+ 			const steps = draft.success ? draft.data.steps : [];
+ 			const child = state?.current.child;
++			const review = state?.current.review;
+ 			const status = child
+ 				? {
+ 						running: "実行中",
+@@ -192,17 +225,31 @@
+ 										: child
+ 											? "作業の状態は上に表示しています。"
+ 											: "会話で内容を具体化します。"),
+-								sections: steps.length
+-									? [
+-											{
+-												title: "現在の手順",
+-												items: steps.map(
+-													(step, index) =>
+-														`${index + 1}. ${step.task}\n確認する結果: ${step.result}`,
+-												),
+-											},
+-										]
+-									: [],
++								sections: [
++									...(steps.length
++										? [
++												{
++													title: "現在の手順",
++													items: steps.map(
++														(step, index) =>
++															`${index + 1}. ${step.task}\n確認する結果: ${step.result}`,
++													),
++												},
++											]
++										: []),
++									...(review
++										? [
++												{
++													title: "下書きの評価",
++													items: [
++														review.status === "running"
++															? "評価中"
++															: review.summary,
++													],
++												},
++											]
++										: []),
++								],
+ 							},
+ 						},
+ 					}
+diff --git a/api/application/collaboration/collaboration-backends.ts b/api/application/collaboration/collaboration-backends.ts
+--- a/api/application/collaboration/collaboration-backends.ts
++++ b/api/application/collaboration/collaboration-backends.ts
+@@ -103,6 +103,7 @@
+ 	capabilities: Capabilities;
+ 	execution: ToolchainExecutionPort;
+ 	interact?: CollaborationInteract;
++	review?: Ports["review"];
+ 	interactAvailable(db: Database): boolean;
+ }): Ports {
+ 	const { dialogue, agents, execution, interact } = deps;
+@@ -133,6 +134,7 @@
+ 		return interact;
+ 	};
+ 	return {
++		review: deps.review,
+ 		report: (db, sessionId, childId) =>
+ 			dialogue.specialistResultTextInTransaction(db, sessionId, childId),
+ 		source: (db, runId) =>
+diff --git a/api/application/collaboration/collaboration-evaluator.test.ts b/api/application/collaboration/collaboration-evaluator.test.ts
+new file mode 100644
+--- /dev/null
++++ b/api/application/collaboration/collaboration-evaluator.test.ts
+@@ -0,0 +1,287 @@
++import { expect, test } from "bun:test";
++import { waitFor } from "../../infrastructure/wait-for";
++import { searchThenDelegate } from "../toolchain/conversation-script.fixture";
++import { harness } from "../toolchain/toolchain.fixture";
++
++const request = "20秒のタイマーの手順を一緒に作ってください";
++const condition = "タイマーは20秒に設定する";
++const location = {
++	evidenceId: "workflow",
++	startLine: null,
++	endLine: null,
++	pointer: "/steps/0/task",
++};
++const finding = {
++	title: "タイマーの時間が長い",
++	problem: "手順は30秒を指定しています。",
++	trigger: "手順を実行した場合",
++	impact: "通知が10秒遅れます。",
++	severity: "medium",
++	primary: location,
++	evidence: [location],
++	conditionId: "duration",
++};
++const draft = (seconds: number) => ({
++	request,
++	steps: [
++		{
++			id: "timer",
++			bundle: "timers.manage",
++			task: `${seconds}秒のタイマーを作る`,
++			from: ["request"],
++			result: "作成済みタイマー",
++		},
++	],
++	output: { from: ["timer"], deliver: "作成したタイマーを伝える" },
++});
++test("the same Collaboration session reviews two draft versions with grounded findings and confirmed conditions", async () => {
++	const requests: {
++		version: string;
++		seconds: string;
++		conditions: unknown[];
++	}[] = [];
++	const notices: { revision: number; result: unknown }[] = [];
++	const diagnostics: string[] = [];
++	const packetLine = (content: string, key: string) => {
++		const line = content.split("\n").find((line) => line.startsWith(`${key}=`));
++		if (!line) {
++			diagnostics.push(`missing ${key}: ${content.slice(0, 1800)}`);
++			throw new Error(`missing ${key}`);
++		}
++		return JSON.parse(line.slice(key.length + 1));
++	};
++	let seconds = 30;
++	let operation: "write" | "review" = "write";
++	const h = await harness({
++		pipelines: true,
++		timers: true,
++		discoveryTarget: () => "collaborate_pipeline",
++		firstRound: (_tools, _question, messages) =>
++			searchThenDelegate(
++				(card) => card.id === "collaboration.pipeline",
++				request,
++				{
++					announcement: "一緒に手順を作ります。",
++					impact: "create",
++				},
++			)(messages),
++		workflowReview(messages) {
++			const input = JSON.parse(messages.at(-1)!.content);
++			const task = input.evidence.find(
++				(entry: { id: string }) => entry.id === "workflow",
++			).document.steps[0].task;
++			requests.push({
++				version: input.target.version,
++				seconds: task,
++				conditions: input.conditions,
++			});
++			const correct = task.includes("20秒");
++			return {
++				findings: correct ? [] : [finding],
++				scopeChecks: [
++					{ evidenceId: "workflow", status: "checked", reason: null },
++				],
++				conditionChecks: [
++					{
++						conditionId: "duration",
++						status: correct ? "satisfied" : "violated",
++						reason: task,
++						evidence: [location],
++					},
++				],
++			};
++		},
++		specialist(messages) {
++			const ref = messages[1]!.content;
++			const reference = packetLine(ref, "REFERENCE");
++			const event = (reference.workContext ?? reference.currentWork)?.hostEvent;
++			if (event) {
++				expect(event.kind).toBe("review");
++				notices.push(event);
++				return {
++					action: "reply",
++					text: `下書きの版${event.revision}を確認しました。`,
++				};
++			}
++			const revision = Number(
++				/CURRENT_DOCUMENT path=pipeline\.json revision=(\d+)/.exec(
++					messages.map((message) => message.content).join("\n"),
++				)?.[1],
++			);
++			const performed = messages.some((message) =>
++				message.content.startsWith("TOOL_RESULT="),
++			);
++			if (performed)
++				return {
++					action: "reply",
++					text:
++						operation === "review"
++							? "評価を始めました。"
++							: "手順を書きました。",
++				};
++			if (operation === "review")
++				return {
++					action: "invoke",
++					tool: "collaboration.pipeline.review",
++					arguments: { expectedRevision: revision },
++					text: "評価を始めました。",
++				};
++			const { host } = packetLine(ref, "SOURCE_REGISTRY");
++			const state = packetLine(ref, "COLLABORATION_STATE");
++			return {
++				action: "invoke",
++				tool: "doc.write",
++				arguments: {
++					baseRevision: revision,
++					title: "タイマーの手順",
++					content: draft(seconds),
++				},
++				text: "手順を書きました。",
++				...(seconds === 30
++					? {
++							stateUpdate: {
++								coreContractVersion: 1,
++								sessionId: state.sessionId,
++								epoch: host.epoch,
++								expectedRevision: state.revision,
++								sourceRevision: host.sourceRevision,
++								work: host.work,
++								removals: [],
++								upserts: [
++									{
++										id: "duration",
++										kind: "condition",
++										status: "confirmed",
++										value: condition,
++										sourceRefs: [host.sources.at(-1).ref],
++										supersedes: [],
++									},
++								],
++							},
++						}
++					: {}),
++			};
++		},
++	});
++	const say = async (text: string) => {
++		const res = await h.request("/api/runs", {
++			conversationId: "main",
++			requestId: crypto.randomUUID(),
++			text,
++		});
++		expect(res.status).toBe(202);
++		const run = await res.json();
++		const done = await h.dialogue.waitForTerminal(run.id, { timeoutMs: 6000 });
++		expect(done?.status, JSON.stringify(done) + diagnostics.join("\n")).toBe(
++			"completed",
++		);
++		return h.dialogue.answerText(run.id);
++	};
++	const waitForNotice = (version: number) =>
++		waitFor(
++			() =>
++				h.conversation
++					.get("main")
++					.messages.some(
++						(message) =>
++							message.text === `下書きの版${version}を確認しました。`,
++					),
++			{ timeout: 6000 },
++		);
++	const sections = async () => {
++		const res = await h.request(
++			"/api/toolchain-artifacts/artifact:collaboration.pipeline@1/sources/collaboration?params=" +
++				encodeURIComponent(JSON.stringify({ conversationId: "main" })),
++		);
++		expect(res.status).toBe(200);
++		return (await res.json()).data.work.sections;
++	};
++	try {
++		const saved = h.settings.get();
++		saved.routes.llm.mode = "larm-preferred";
++		await h.settings.apply({
++			requestId: crypto.randomUUID(),
++			expectedRevision: saved.revision,
++			settings: saved,
++			keys: [],
++		});
++		expect(await say(request)).toBe("手順を書きました。");
++		const session = h.dialogue.specialistSession("main")!;
++		const current = () =>
++			h.store.read((db) =>
++				h.toolchain.collaboration.works.state(db, session.workRef),
++			);
++		const first = current()!.revision;
++		operation = "review";
++		expect(await say("Evaluatorで今の下書きをレビューして")).toBe(
++			"評価を始めました。",
++		);
++		await waitForNotice(first).catch((error: unknown) => {
++			throw new Error(
++				JSON.stringify({
++					requests,
++					notices,
++					work: current()?.current,
++					diagnostics,
++				}),
++				{ cause: error },
++			);
++		});
++		expect(notices[0]).toMatchObject({
++			revision: first,
++			status: "completed",
++			result: {
++				findings: [finding],
++				conditionChecks: [{ conditionId: "duration", status: "violated" }],
++			},
++		});
++		expect(requests[0]).toMatchObject({
++			version: String(first),
++			seconds: "30秒のタイマーを作る",
++			conditions: [
++				{
++					id: "duration",
++					text: condition,
++					sources: [
++						{
++							id: h.conversation
++								.get("main")
++								.messages.find((m) => m.text === request)!.id,
++							version: expect.stringMatching(/^[0-9a-f]{64}$/),
++						},
++					],
++				},
++			],
++		});
++		expect(await sections()).toContainEqual({
++			title: "下書きの評価",
++			items: ["評価が完了しました。指摘は1件です。"],
++		});
++		seconds = 20;
++		operation = "write";
++		expect(await say("指摘どおり20秒に修正して")).toBe("手順を書きました。");
++		expect(current()!.current.review).toBeNull();
++		expect(await sections()).not.toContainEqual(
++			expect.objectContaining({ title: "下書きの評価" }),
++		);
++		const second = current()!.revision;
++		expect(second).toBe(first + 1);
++		operation = "review";
++		expect(await say("修正した版をもう一度評価して")).toBe(
++			"評価を始めました。",
++		);
++		await waitForNotice(second);
++		expect(notices[1]).toMatchObject({
++			revision: second,
++			status: "completed",
++			result: {
++				findings: [],
++				conditionChecks: [{ conditionId: "duration", status: "satisfied" }],
++			},
++		});
++		expect(h.dialogue.specialistSession("main")?.id).toBe(session.id);
++		expect(h.timers!.list().items).toHaveLength(0);
++	} finally {
++		await h.close();
++	}
++}, 20_000);
+diff --git a/api/application/collaboration/collaboration-host.ts b/api/application/collaboration/collaboration-host.ts
+--- a/api/application/collaboration/collaboration-host.ts
++++ b/api/application/collaboration/collaboration-host.ts
+@@ -15,7 +15,7 @@
+ 	queue: QueueService,
+ 	schedules?: SchedulerAdapterPorts,
+ ) {
+-	const works = createCollaborationWorks();
++	const works = createCollaborationWorks(Date.now, queue);
+ 	let afterCommit = () => {};
+ 	const watch = registerCollaborationFollowup(queue, works, () =>
+ 		afterCommit(),
+diff --git a/api/application/collaboration/collaboration-wiring.ts b/api/application/collaboration/collaboration-wiring.ts
+--- a/api/application/collaboration/collaboration-wiring.ts
++++ b/api/application/collaboration/collaboration-wiring.ts
+@@ -1,6 +1,7 @@
+ import type { ToolchainExecutionPort } from "../../domains/tool-runtime";
+ import type { TaskExecutionHost } from "../toolchain/task-execution-port";
+ import { collaborationBackends } from "./collaboration-backends";
++import { workflowReviewer } from "../evaluator/workflow-review";
+ 
+ /** Attach public lifecycle ports only after the shared execution port is ready. */
+ export function configureCollaboration(
+@@ -8,6 +9,7 @@
+ 	execution: ToolchainExecutionPort,
+ ) {
+ 	if (!host.collaboration) return;
++	const evaluate = workflowReviewer(host.store, host.inference);
+ 	host.collaboration.configure(
+ 		collaborationBackends({
+ 			dialogue: host.dialogue,
+@@ -15,6 +17,7 @@
+ 			capabilities: host.capabilities,
+ 			execution,
+ 			interact: host.interact,
++			review: evaluate ? {evaluate, conditions: host.dialogue.specialistReviewConditionsInTransaction} : undefined,
+ 			interactAvailable: (db) =>
+ 				host.registry
+ 					.all()
+diff --git a/api/application/evaluator/workflow-review.ts b/api/application/evaluator/workflow-review.ts
+new file mode 100644
+--- /dev/null
++++ b/api/application/evaluator/workflow-review.ts
+@@ -0,0 +1,156 @@
++import {
++	evaluate,
++	fingerprint,
++	requestSchema,
++	targetDigests,
++	type EvaluationRequest,
++} from "eumenes-evaluator";
++import type { ReviewPort } from "../../domains/collaboration";
++import type { InferencePort } from "../../domains/inference";
++import type { SqliteStore } from "../../infrastructure/sqlite";
++
++const MAX_OUTPUT_TOKENS = 2048;
++
++/** Evaluator's own prompt, rubric and validation run on Eumenes' saved subagent inference route. */
++export function workflowReviewer(
++	store: SqliteStore,
++	inference: InferencePort,
++): ReviewPort["evaluate"] | undefined {
++	const {
++		captureUserControlInTransaction,
++		executeControl,
++		acceptInTransaction,
++	} = inference;
++	if (
++		!captureUserControlInTransaction ||
++		!executeControl ||
++		!acceptInTransaction
++	)
++		return undefined;
++	return async (input, deadline, signal, current) => {
++		const draft = {
++			kind: "workflow" as const,
++			id: input.workRef,
++			version: String(input.revision),
++			document: input.document as Extract<
++				EvaluationRequest["target"],
++				{ kind: "workflow" }
++			>["document"],
++		};
++		const target = { ...draft, ...targetDigests(draft) };
++		const { id, version, digest } = target;
++		const conditionInput: EvaluationRequest["conditions"] =
++			input.conditions.state === "available"
++				? {
++						state: "available",
++						revision: fingerprint(input.conditions),
++						entries: input.conditions.entries.map((entry) => ({
++							...entry,
++							status: "confirmed",
++							appliesTo: { id, version, digest },
++						})),
++					}
++				: input.conditions.state === "unavailable"
++					? {
++							state: "unavailable",
++							reason: "出所を確認できる確定条件が取得できませんでした。",
++						}
++					: { state: "none" };
++		const request = requestSchema.parse({
++			contractVersion: 1,
++			evaluationId: input.id,
++			rubric: { id: "workflow-correctness", version: 1 },
++			target,
++			originalRequest:
++				input.source.request === input.request
++					? input.source.request
++					: `元の依頼\n${input.source.request}\n\n今回の評価依頼\n${input.request}`,
++			scope: ["workflow"],
++			evidence: [],
++			conditions: conditionInput,
++			limits: {
++				timeoutMs: Math.max(1, Math.min(120_000, deadline - Date.now())),
++				maxInputBytes: 96_000,
++				maxOutputTokens: MAX_OUTPUT_TOKENS,
++			},
++		});
++		const result = await evaluate(request, {
++			depth: "quick",
++			signal,
++			model: {
++				async complete(model, reviewSignal) {
++					const messages = [
++						{ role: "system" as const, content: model.system },
++						{ role: "user" as const, content: model.prompt },
++					];
++					const used = inference.countControlTokens?.(messages) ?? null;
++					const window = inference.savedLlmContextWindow?.() ?? null;
++					if (
++						used !== null &&
++						window !== null &&
++						used + model.maxOutputTokens > window
++					)
++						throw new Error("context_window_exceeded");
++					const requestId = await store.write((db) => {
++						if (!current(db)) throw new Error("collaboration_review_stale");
++						return captureUserControlInTransaction(db, {
++							subject: `evaluator:${input.id}`,
++							deadline,
++							maxOutputTokens: model.maxOutputTokens,
++							route: "subagent",
++							structuredOutput: true,
++						});
++					});
++					let accepted = false;
++					try {
++						const receipt = await executeControl(
++							requestId,
++							messages,
++							reviewSignal,
++							undefined,
++							{
++								sessionRole: "auxiliary",
++								outputSchema: model.outputSchema,
++								cloudOutputSchema: model.outputSchema,
++							},
++						);
++						if (typeof receipt.value !== "string")
++							throw new Error("invalid_evaluator_output");
++						accepted = await store.write(
++							(db) =>
++								current(db) &&
++								!reviewSignal.aborted &&
++								acceptInTransaction(db, receipt),
++						);
++						if (!accepted) throw new Error("permission_revoked");
++						return { text: receipt.value };
++					} finally {
++						if (!accepted)
++							await store.write((db) =>
++								inference.cancelRequestsInTransaction?.(db, [requestId]),
++							);
++					}
++				},
++			},
++		});
++		const status = result.status === "expired" ? "failed" : result.status;
++		const summary =
++			status === "completed"
++				? `評価が完了しました。指摘は${result.findings.length}件です。`
++				: status === "incomplete"
++					? `評価に未確認の項目があります。確認できた指摘は${result.findings.length}件です。`
++					: "下書きの評価を完了できませんでした。";
++		return {
++			status,
++			summary,
++			result: {
++				target: result.target,
++				findings: result.findings,
++				scopeChecks: result.scopeChecks,
++				conditionChecks: result.conditionChecks,
++				conditions: result.conditions,
++				issues: result.issues.map(({ code }) => code),
++			},
++		};
++	};
++}
+diff --git a/api/application/toolchain/toolchain-harness-options.fixture.ts b/api/application/toolchain/toolchain-harness-options.fixture.ts
+--- a/api/application/toolchain/toolchain-harness-options.fixture.ts
++++ b/api/application/toolchain/toolchain-harness-options.fixture.ts
+@@ -79,6 +79,10 @@
+ 		messages: import("../../domains/inference/contracts").Messages,
+ 		signal: AbortSignal | undefined,
+ 		options: Parameters<LarmPort["answer"]>[2],
++	) => unknown | Promise<unknown>;
++	workflowReview?: (
++		messages: import("../../domains/inference/contracts").Messages,
++		signal: AbortSignal | undefined,
+ 	) => unknown | Promise<unknown>;
+ 	embed?: import("./toolchain-vectors").Embed;
+ 	musicGateway?: () => LarmPlayground;
+diff --git a/api/application/toolchain/toolchain.fixture.ts b/api/application/toolchain/toolchain.fixture.ts
+--- a/api/application/toolchain/toolchain.fixture.ts
++++ b/api/application/toolchain/toolchain.fixture.ts
+@@ -310,6 +310,8 @@
+ 					confidence: 0.99,
+ 				});
+ 			const system = messages[0]!.content;
++			if (options.workflowReview && system.includes("あなたは独立した評価担当です"))
++				return JSON.stringify(await options.workflowReview(messages, _signal));
+ 			if (
+ 				options.knowledgeBuild &&
+ 				(system.includes("coverage で充足") ||
+diff --git a/api/domains/capabilities/bundles/collaboration.bundle.json b/api/domains/capabilities/bundles/collaboration.bundle.json
+--- a/api/domains/capabilities/bundles/collaboration.bundle.json
++++ b/api/domains/capabilities/bundles/collaboration.bundle.json
+@@ -101,7 +101,9 @@
+ 			],
+ 			"schemaKey": "toolchainRequest",
+ 			"profileRevisionId": "profile:collaboration@1",
+-			"requiredSkillRevisionIds": ["skill:collaboration.pipeline@1"],
++			"requiredSkillRevisionIds": [
++				"skill:collaboration.pipeline@1"
++			],
+ 			"toolRevisionIds": [
+ 				"tool:collaboration.pipeline.start@1",
+ 				"tool:collaboration.pipeline.answer@1",
+@@ -125,7 +127,9 @@
+ 				"相談や下書きが不要で、今その依頼を実行してほしい",
+ 				"再利用ひな形を公開する依頼"
+ 			],
+-			"dependencies": ["package:collaboration.pipeline@1"],
++			"dependencies": [
++				"package:collaboration.pipeline@1"
++			],
+ 			"packageRevisionId": "package:collaboration.pipeline@1",
+ 			"functionName": "collaborate_pipeline",
+ 			"examples": [
+@@ -223,7 +227,9 @@
+ 			],
+ 			"schemaKey": "toolchainRequest",
+ 			"profileRevisionId": "profile:collaboration@1",
+-			"requiredSkillRevisionIds": ["skill:collaboration.interact@1"],
++			"requiredSkillRevisionIds": [
++				"skill:collaboration.interact@1"
++			],
+ 			"toolRevisionIds": [
+ 				"tool:collaboration.interact.start@1",
+ 				"tool:collaboration.interact.answer@1",
+@@ -243,8 +249,12 @@
+ 				"利用者と確認しながらブラウザ上の作業を進めたい",
+ 				"ブラウザ作業の質問に答え、経過を見ながら続けたい"
+ 			],
+-			"avoidWhen": ["ブラウザでなく、資料の調査だけを頼んでいる"],
+-			"dependencies": ["package:collaboration.interact@1"],
++			"avoidWhen": [
++				"ブラウザでなく、資料の調査だけを頼んでいる"
++			],
++			"dependencies": [
++				"package:collaboration.interact@1"
++			],
+ 			"packageRevisionId": "package:collaboration.interact@1",
+ 			"functionName": "collaborate_interact",
+ 			"examples": [
+@@ -274,7 +284,9 @@
+ 				"相談や下書きが不要で、今その依頼を実行してほしい",
+ 				"再利用ひな形を公開する依頼"
+ 			],
+-			"dependencies": ["package:collaboration.pipeline@1"],
++			"dependencies": [
++				"package:collaboration.pipeline@1"
++			],
+ 			"packageRevisionId": "package:collaboration.pipeline@1",
+ 			"functionName": "collaborate_pipeline",
+ 			"examples": [
+@@ -299,8 +311,12 @@
+ 				"利用者と確認しながらブラウザ上の作業を進めたい",
+ 				"ブラウザ作業の質問に答え、経過を見ながら続けたい"
+ 			],
+-			"avoidWhen": ["ブラウザでなく、資料の調査だけを頼んでいる"],
+-			"dependencies": ["package:collaboration.interact@1"],
++			"avoidWhen": [
++				"ブラウザでなく、資料の調査だけを頼んでいる"
++			],
++			"dependencies": [
++				"package:collaboration.interact@1"
++			],
+ 			"packageRevisionId": "package:collaboration.interact@1",
+ 			"functionName": "collaborate_interact",
+ 			"examples": [
+@@ -313,6 +329,112 @@
+ 			"artifactRevisionId": "artifact:collaboration.interact@1",
+ 			"minImpact": "create",
+ 			"general": true
++		},
++		{
++			"kind": "skill",
++			"id": "collaboration.pipeline",
++			"revision": 2,
++			"title": "手順の共同編集の手順",
++			"summary": "現在版・出所・質問と結果の扱い",
++			"aliases": [],
++			"tags": [],
++			"useWhen": [],
++			"avoidWhen": [],
++			"dependencies": [],
++			"body": "新形式p0-3の今回の手順を利用者と作成・修正します。再利用ひな形や旧制作画面の公開は行いません。\n- workContext.originalRequestをrequestへ原文のまま写します。workContext.available.cardsに提示された公開入口だけを使います。構造は {request,steps:[{id,bundle,task,from,result,arguments?}],output:{from,deliver}}。stepsは1〜8件。idは英小文字から始まる小文字・数字・ハイフン40字以内。taskは2000字、resultは500字、deliverは1000字以内。fromはrequestまたは先行stepのidの配列。output.fromも必ず配列で、届けるstepのidを1件以上指定します。型の例は {\"request\":\"原依頼そのまま\",\"steps\":[{\"id\":\"first\",\"bundle\":\"公開entry\",\"task\":\"依頼した作業\",\"from\":[\"request\"],\"result\":\"確認する結果\"}],\"output\":{\"from\":[\"first\"],\"deliver\":\"届け方\"}} です。検査は公開契約のvalidatorが行います。bundleはカードのentry。argumentsはカードが型付き入力を公開する場合だけ、そのschemaに従うJSONを指定します。式や値抽出用の独自ステップは作りません。\n- 最初の案はdoc.write、続く部分修正はCURRENT_DOCUMENTに対するdoc.editで行います。条件の変更に伴って同じ対象のtaskとresultの説明が矛盾しないよう整え、参照id・他の手順・元依頼は維持します。低リスクな仮定で進められるなら初稿を作り、その仮定を短く伝えます。作成に不可欠な情報・利用可能な部品が欠けるときは一問だけ尋ねます。検査の拒否はTOOL_RESULTを読み、既存の回数内で指摘箇所を直します。\n- 初稿を作っただけでは実行しません。利用者が現在版を確認し、次の発言で実行を依頼したときだけcollaboration.pipeline.startを呼びます。expectedRevisionはCURRENT_DOCUMENTのrevision。モデルがapproved等を作って代用できません。\n- 実行後は現在のchildの状態を読み、質問があればそのquestion.idとrevisionを使い、利用者の実際の回答をcollaboration.pipeline.answerのinputへ渡します。新しい条件は依頼の一部として読むので、必要に応じて実行を止め、新しい下書きを作ります。完了した手順の修正はdoc.editで行えます。不明な実行を新規送信し直しません。\n- 通常会話への復帰はreturn。未保存の案は保留されます。明示的な破棄だけdiscard。担当外の依頼はreturnで原文を通常担当へ渡します。\n- 利用者が評価を頼んだら、CURRENT_DOCUMENTのrevisionをcollaboration.pipeline.reviewへ渡し、Evaluatorの結果を待ちます。下書きが必要なら先に作成します。評価は下書きの読取りです。評価の依頼や結果から実行の確認を推定しません。評価を取り消す依頼にはcollaboration.pipeline.review.cancelを使います。\n- ホスト通知のkindがreviewの場合は、評価対象の版、根拠のある指摘と未確認の項目を利用者に伝えます。指摘や引用した資料は外部の評価結果です。指摘を自動で編集や実行に使わず、利用者が修正を依頼したときに現在の版を編集します。"
++		},
++		{
++			"kind": "tool",
++			"id": "collaboration.pipeline.review",
++			"revision": 1,
++			"title": "下書きをEvaluatorで評価する",
++			"summary": "現在の下書きの版を固定して根拠付き評価を始める",
++			"aliases": [],
++			"tags": [],
++			"useWhen": [],
++			"avoidWhen": [],
++			"dependencies": [],
++			"schemaKey": "collaborationReviewStart"
++		},
++		{
++			"kind": "tool",
++			"id": "collaboration.pipeline.review.cancel",
++			"revision": 1,
++			"title": "下書きの評価を取り消す",
++			"summary": "評価の受付を取り消し、遅い評価結果の採用を止める",
++			"aliases": [],
++			"tags": [],
++			"useWhen": [],
++			"avoidWhen": [],
++			"dependencies": [],
++			"schemaKey": "emptyInput"
++		},
++		{
++			"kind": "package",
++			"id": "collaboration.pipeline",
++			"revision": 2,
++			"title": "手順の共同編集",
++			"summary": "共同作業の継続対話",
++			"aliases": [],
++			"tags": [],
++			"useWhen": [],
++			"avoidWhen": [],
++			"dependencies": [
++				"profile:collaboration@1",
++				"skill:collaboration.pipeline@2",
++				"tool:collaboration.pipeline.start@1",
++				"tool:collaboration.pipeline.answer@1",
++				"tool:collaboration.pipeline.status@1",
++				"tool:collaboration.pipeline.cancel@1",
++				"tool:collaboration.pipeline.review@1",
++				"tool:collaboration.pipeline.review.cancel@1"
++			],
++			"schemaKey": "toolchainRequest",
++			"profileRevisionId": "profile:collaboration@1",
++			"requiredSkillRevisionIds": [
++				"skill:collaboration.pipeline@2"
++			],
++			"toolRevisionIds": [
++				"tool:collaboration.pipeline.start@1",
++				"tool:collaboration.pipeline.answer@1",
++				"tool:collaboration.pipeline.status@1",
++				"tool:collaboration.pipeline.cancel@1",
++				"tool:collaboration.pipeline.review@1",
++				"tool:collaboration.pipeline.review.cancel@1"
++			]
++		},
++		{
++			"kind": "toolchain",
++			"id": "collaboration.pipeline",
++			"revision": 3,
++			"title": "手順の共同編集",
++			"summary": "今回の手順を共同編集し、Evaluatorで下書きを評価し、確認後に実行へ渡す",
++			"aliases": [],
++			"tags": [],
++			"useWhen": [
++				"今回の手順を利用者と相談して作成し、内容を見てから実行へ進めたい",
++				"手順の下書きを見ながら部分的に直して具体化したい",
++				"作業手順の下書きを評価し、要件を満たすか根拠付きで確認したい"
++			],
++			"avoidWhen": [
++				"相談や下書きが不要で、今その依頼を実行してほしい",
++				"再利用ひな形を公開する依頼"
++			],
++			"dependencies": [
++				"package:collaboration.pipeline@2"
++			],
++			"packageRevisionId": "package:collaboration.pipeline@2",
++			"functionName": "collaborate_pipeline",
++			"examples": [
++				"複数の担当を使う今回の手順を、一緒に作ってから実行したい",
++				"手順の二つ目だけ変えて、確認してから実行したい",
++				"この依頼の進め方を下書きにして相談しながら直そう",
++				"一緒に作った手順をEvaluatorでレビューして"
++			],
++			"redirects": [],
++			"bindingRevisionId": "binding:collaboration.pipeline@3",
++			"artifactRevisionId": "artifact:collaboration.pipeline@1",
++			"minImpact": "create"
+ 		}
+ 	],
+ 	"bindings": [
+@@ -507,6 +629,69 @@
+ 						"default": 1,
+ 						"doc.edit": 1,
+ 						"doc.write": 0
++					}
++				},
++				"sharedTools": [],
++				"collaborationState": true
++			},
++			"timeLimits": {
++				"runMs": 1200000,
++				"turnMs": 900000,
++				"inferenceMs": 600000
++			}
++		},
++		{
++			"kind": "binding",
++			"id": "collaboration.pipeline",
++			"revision": 3,
++			"execution": "session",
++			"adapterRef": "adapter:collaboration.pipeline@1",
++			"availabilityRef": "availability:collaboration.pipeline@1",
++			"artifactRevisionId": "artifact:collaboration.pipeline@1",
++			"session": {},
++			"tools": [
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.start@1",
++					"operationId": "collaboration.pipeline.start",
++					"inputSchemaRef": "builtin:collaborationPipelineStart"
++				},
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.answer@1",
++					"operationId": "collaboration.pipeline.answer",
++					"inputSchemaRef": "builtin:collaborationAnswer"
++				},
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.status@1",
++					"operationId": "collaboration.pipeline.status",
++					"inputSchemaRef": "builtin:emptyInput"
++				},
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.cancel@1",
++					"operationId": "collaboration.pipeline.cancel",
++					"inputSchemaRef": "builtin:emptyInput"
++				},
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.review@1",
++					"operationId": "collaboration.pipeline.review",
++					"inputSchemaRef": "builtin:collaborationReviewStart"
++				},
++				{
++					"toolRevisionId": "tool:collaboration.pipeline.review.cancel@1",
++					"operationId": "collaboration.pipeline.review.cancel",
++					"inputSchemaRef": "builtin:emptyInput"
++				}
++			],
++			"agent": {
++				"workspace": {
++					"documentRef": "workspace:collaboration.pipeline@1",
++					"inlineBytes": 32768
++				},
++				"turn": {
++					"maxModelCalls": 4,
++					"retries": {
++						"default": 1,
++						"doc.edit": 1,
++						"doc.write": 1
+ 					}
+ 				},
+ 				"sharedTools": [],
+diff --git a/api/domains/capabilities/contracts/collaboration.ts b/api/domains/capabilities/contracts/collaboration.ts
+--- a/api/domains/capabilities/contracts/collaboration.ts
++++ b/api/domains/capabilities/contracts/collaboration.ts
+@@ -5,6 +5,7 @@
+ 	collaborationPipelineStart: z.strictObject({
+ 		expectedRevision: z.number().int().min(0),
+ 	}),
++	collaborationReviewStart: z.strictObject({expectedRevision: z.number().int().min(0)}),
+ 	collaborationInteractStart: z.strictObject({
+ 		expectedRevision: z.number().int().min(0),
+ 		startUrl: z.url().max(2048),
+diff --git a/api/domains/collaboration/contracts/index.ts b/api/domains/collaboration/contracts/index.ts
+--- a/api/domains/collaboration/contracts/index.ts
++++ b/api/domains/collaboration/contracts/index.ts
+@@ -49,7 +49,41 @@
+ 	epoch: number;
+ 	active: boolean;
+ };
++export type ReviewConditions =
++	| { state: "none" | "unavailable" }
++	| {
++			state: "available";
++			entries: {
++				id: string;
++				text: string;
++				sources: { id: string; version: string; active: boolean }[];
++			}[];
++	  };
++export type ReviewInput = {
++	id: string;
++	workRef: string;
++	revision: number;
++	document: unknown;
++	source: Source;
++	request: string;
++	conditions: ReviewConditions;
++};
++export type ReviewOutcome = {
++	status: "completed" | "incomplete" | "failed" | "cancelled";
++	summary: string;
++	result?: unknown;
++};
++export type ReviewPort = {
++	conditions(db: Database, sessionId: string): ReviewConditions;
++	evaluate(
++		input: ReviewInput,
++		deadline: number,
++		signal: AbortSignal,
++		current: (db: Database) => boolean,
++	): Promise<ReviewOutcome>;
++};
+ export type Ports = {
++	review?: ReviewPort;
+ 	/** The owning specialist's adopted explanation of this exact child's terminal result. */
+ 	report?(db: Database, sessionId: string, childId: string): string | null;
+ 	source(db: Database, runId: string): Source | null;
+@@ -103,7 +137,7 @@
+ 			epoch: number;
+ 			sourceRunId: string;
+ 			eventId: string;
+-			event: ChildView;
++			event: ChildView | (ReviewOutcome & { kind: "review"; id: string; revision: number });
+ 		},
+ 	): boolean;
+ };
+diff --git a/api/domains/collaboration/index.ts b/api/domains/collaboration/index.ts
+--- a/api/domains/collaboration/index.ts
++++ b/api/domains/collaboration/index.ts
+@@ -1,6 +1,13 @@
+ export { migrations } from "./repository";
+ export { createCollaborationWorks } from "./service/work";
+-export type { Ports, Source, ChildView, CollaborationKind } from "./contracts";
++export type {
++	Ports,
++	Source,
++	ChildView,
++	CollaborationKind,
++	ReviewConditions,
++	ReviewPort,
++} from "./contracts";
+ export type CollaborationWorks = ReturnType<
+ 	typeof import("./service/work").createCollaborationWorks
+ >;
+diff --git a/api/domains/collaboration/repository/index.ts b/api/domains/collaboration/repository/index.ts
+--- a/api/domains/collaboration/repository/index.ts
++++ b/api/domains/collaboration/repository/index.ts
+@@ -1,6 +1,6 @@
+ import type { Database } from "bun:sqlite";
+ import type { Migration } from "../../../infrastructure/sqlite";
+-import type { WorkKind, SourceRef } from "../contracts";
++import type { WorkKind, SourceRef, ReviewOutcome } from "../contracts";
+ 
+ export const migrations: readonly Migration[] = [
+ 	{
+@@ -29,7 +29,21 @@
+ 		after: ["collaboration/0001-works"],
+ 		sql: "ALTER TABLE collaboration_works ADD COLUMN last_start_message_id TEXT;",
+ 	},
++	{
++		id: "collaboration/0003-review",
++		after: ["collaboration/0002-start-message"],
++		sql: "ALTER TABLE collaboration_works ADD COLUMN review_json TEXT;",
++	},
+ ];
++export type ReviewRow = {
++	id: string;
++	revision: number;
++	epoch: number;
++	runId: string;
++	jobId: string;
++	conditions?: string;
++	outcome?: ReviewOutcome;
++};
+ export type WorkRow = {
+ 	id: string;
+ 	session_id: string;
+@@ -45,6 +59,7 @@
+ 	child_digest: string | null;
+ 	child_json: string | null;
+ 	rejected_json: string | null;
++	review_json: string | null;
+ 	last_answer_message_id: string | null;
+ 	last_start_message_id: string | null;
+ 	created_at: number;
+@@ -68,6 +83,18 @@
+ 		.all();
+ export const sourceRef = (row: WorkRow): SourceRef | null =>
+ 	row.source_json ? JSON.parse(row.source_json) : null;
++export const reviewOf = (row: WorkRow): ReviewRow | null =>
++	row.review_json ? JSON.parse(row.review_json) : null;
++export function writeReview(
++	db: Database,
++	workId: string,
++	review: ReviewRow | null,
++) {
++	db.query("UPDATE collaboration_works SET review_json=? WHERE id=?").run(
++		review ? JSON.stringify(review) : null,
++		workId,
++	);
++}
+ export const sources = (db: Database, workId: string) =>
+ 	db
+ 		.query<{ message_id: string; run_id: string; digest: string }, [string]>(
+diff --git a/api/domains/collaboration/service/work-context.ts b/api/domains/collaboration/service/work-context.ts
+--- a/api/domains/collaboration/service/work-context.ts
++++ b/api/domains/collaboration/service/work-context.ts
+@@ -14,7 +14,7 @@
+ export const terminal = (view: ChildView) =>
+ 	view.status !== "running" && view.status !== "waiting_user";
+ 
+-export function createWorkContext(host: () => Ports, now: () => number) {
++export function createWorkContext(host: () => Ports, now: () => number, invalidateReview?: (db: Database, row: WorkRow) => void) {
+ 	function current(db: Database, row: WorkRow): Source {
+ 		const ref = sourceRef(row);
+ 		const source = ref && host().source(db, ref.runId);
+@@ -145,6 +145,7 @@
+ 		return answer;
+ 	}
+ 	function purge(db: Database, row: WorkRow, erase = false) {
++		invalidateReview?.(db, row);
+ 		const ref = sourceRef(row),
+ 			source = ref && host().source(db, ref.runId);
+ 		if (ref && row.child_id && row.kind !== "schedule")
+diff --git a/api/domains/collaboration/service/work-reviews.ts b/api/domains/collaboration/service/work-reviews.ts
+new file mode 100644
+--- /dev/null
++++ b/api/domains/collaboration/service/work-reviews.ts
+@@ -0,0 +1,329 @@
++import type { Database } from "bun:sqlite";
++import { withinJsonLimits } from "eumenes-collaboration";
++import { z } from "zod";
++import type { QueueService } from "../../queue";
++import type { ReviewInput, ReviewOutcome } from "../contracts";
++import {
++	reviewOf,
++	work,
++	writeReview,
++	type ReviewRow,
++	type WorkRow,
++} from "../repository";
++import { fail, hash, json, type WorkContext } from "./work-context";
++
++const KIND = "collaboration.review";
++const REVIEW_MS = 120_000;
++const DELIVERY_MS = 300_000;
++const payloadSchema = z.strictObject({
++	workRef: z.uuid(),
++	id: z.uuid(),
++	phase: z.enum(["evaluate", "deliver"]),
++	deadline: z.number(),
++});
++type Payload = z.infer<typeof payloadSchema>;
++type Prepared =
++	| { phase: "deliver" }
++	| { phase: "evaluate"; payload: Payload; review: ReviewInput };
++const failure: ReviewOutcome = {
++	status: "failed",
++	summary: "下書きの評価を完了できませんでした。",
++};
++const changed: ReviewOutcome = {
++	status: "cancelled",
++	summary: "条件が変わりました。現在の版を評価し直してください。",
++};
++
++export function createWorkReviews(context: WorkContext, queue?: QueueService) {
++	const { host, now, held, authority, current, response, prior, record } =
++		context;
++	const conditions = (db: Database, sessionId: string) =>
++		host().review?.conditions(db, sessionId) ?? {
++			state: "unavailable" as const,
++		};
++	function live(db: Database, payload: Payload) {
++		const row = work(db, payload.workRef);
++		const review = row && reviewOf(row);
++		if (
++			!row ||
++			row.ended ||
++			!review ||
++			review.id !== payload.id ||
++			review.revision !== row.revision
++		)
++			return null;
++		try {
++			const source = current(db, row);
++			if (authority(db, row).epoch !== review.epoch) return null;
++			const user = response(db, row, review.runId);
++			return { row, review, source, user };
++		} catch {
++			return null;
++		}
++	}
++	function enqueue(
++		db: Database,
++		payload: Payload,
++		dedupeKey: string,
++		at = now(),
++	) {
++		return queue!.enqueueInTransaction(db, {
++			scope: "collaboration",
++			kind: KIND,
++			payload,
++			dedupeKey,
++			subjectRef: payload.workRef,
++			lane: "background",
++			concurrencyKey: `collaboration-review:${payload.workRef}`,
++			deadlineAtMs: payload.deadline,
++			availableAtMs: at,
++			maxAttempts: 1,
++		}).job.id;
++	}
++	function deliver(db: Database, review: ReviewRow, row: WorkRow) {
++		const outcome =
++			review.conditions !== undefined &&
++			review.conditions !== hash(conditions(db, row.session_id))
++				? changed
++				: review.outcome!;
++		if (outcome === changed)
++			writeReview(db, row.id, { ...review, outcome, conditions: undefined });
++		return host().notify(db, {
++			sessionId: row.session_id,
++			epoch: review.epoch,
++			sourceRunId: review.runId,
++			eventId: `collaboration-review:${review.id}`,
++			event: {
++				kind: "review",
++				id: review.id,
++				revision: review.revision,
++				...outcome,
++			},
++		});
++	}
++	function complete(
++		db: Database,
++		payload: Payload,
++		row: WorkRow,
++		review: ReviewRow,
++		outcome: ReviewOutcome,
++		conditionDigest?: string,
++	) {
++		const bounded =
++			withinJsonLimits(outcome) && JSON.stringify(outcome).length <= 14500
++				? outcome
++				: {
++						status: "incomplete" as const,
++						summary: "評価結果が表示の上限を超えました。",
++					};
++		const saved = { ...review, outcome: bounded, conditions: conditionDigest };
++		writeReview(db, row.id, saved);
++		if (!deliver(db, saved, row)) {
++			const next = {
++				...payload,
++				phase: "deliver" as const,
++				deadline: now() + DELIVERY_MS,
++			};
++			enqueue(db, next, `${review.id}:deliver`, now() + 1000);
++		}
++	}
++	queue?.registerHandler<Payload, Prepared, ReviewOutcome | null>({
++		kind: KIND,
++		payloadVersions: [1],
++		schema: payloadSchema,
++		recovery: "interrupt",
++		prepareInTransaction(db, claim) {
++			const target = live(db, claim.payload);
++			if (!target)
++				return { status: "stale", reason: "collaboration_review_stale" };
++			if (claim.payload.phase === "deliver")
++				return target.review.outcome
++					? { status: "ready", input: { phase: "deliver" } }
++					: { status: "stale", reason: "collaboration_review_pending" };
++			if (target.review.outcome || !host().review)
++				return { status: "stale", reason: "collaboration_review_stale" };
++			const { row, source, user, review } = target;
++			return {
++				status: "ready",
++				input: {
++					phase: "evaluate",
++					payload: claim.payload,
++					review: {
++						id: review.id,
++						workRef: row.id,
++						revision: row.revision,
++						document: json(row.document_json),
++						source,
++						request: user.request,
++						conditions: conditions(db, row.session_id),
++					},
++				},
++			};
++		},
++		async execute(input, job) {
++			if (input.phase === "deliver") return null;
++			const { review, payload } = input;
++			const fingerprint = hash(review.conditions);
++			return host().review!.evaluate(
++				review,
++				payload.deadline,
++				job.signal,
++				(db) => {
++					const target = live(db, payload);
++					return (
++						!!target &&
++						!target.review.outcome &&
++						now() < payload.deadline &&
++						hash(conditions(db, target.row.session_id)) === fingerprint
++					);
++				},
++			);
++		},
++		settleInTransaction(db, claim, input, result) {
++			const { payload } = claim;
++			const target = live(db, payload);
++			if (!target) return "stale";
++			const { row, review } = target;
++			if (payload.phase === "deliver") {
++				if (
++					!review.outcome ||
++					result.type !== "success" ||
++					now() >= payload.deadline
++				)
++					return "stale";
++				if (!deliver(db, review, row))
++					enqueue(db, payload, `${claim.jobId}:retry`, now() + 1000);
++				return "applied";
++			}
++			if (review.outcome) return "stale";
++			const fingerprint =
++				input?.phase === "evaluate" ? hash(input.review.conditions) : undefined;
++			if (
++				fingerprint !== undefined &&
++				hash(conditions(db, row.session_id)) !== fingerprint
++			)
++				complete(db, payload, row, review, changed);
++			else
++				complete(
++					db,
++					payload,
++					row,
++					review,
++					result.type === "success" && result.result && now() < payload.deadline
++						? result.result
++						: failure,
++					fingerprint,
++				);
++			return "applied";
++		},
++		cancelInTransaction(db, job, reason) {
++			if (job.payload.phase !== "evaluate") return;
++			const target = live(db, job.payload);
++			if (target && !target.review.outcome)
++				complete(
++					db,
++					job.payload,
++					target.row,
++					target.review,
++					reason === "deadline_exceeded"
++						? failure
++						: {
++								status: "cancelled",
++								summary: "下書きの評価を中止しました。",
++							},
++				);
++		},
++		afterCommit: () => queue.wake(),
++	});
++
++	function invalidate(db: Database, row: WorkRow) {
++		const review = reviewOf(row);
++		if (!review) return;
++		writeReview(db, row.id, null);
++		if (
++			!review.outcome &&
++			queue?.cancelInTransaction(db, review.jobId, "review_superseded")
++				?.wasRunning
++		)
++			queueMicrotask(() => queue.flushCancellations([review.jobId]));
++	}
++	return {
++		start(
++			db: Database,
++			input: {
++				workRef: string;
++				sessionId: string;
++				runId: string;
++				requestId: string;
++				expectedRevision: number;
++			},
++		) {
++			const row = held(db, input.workRef, input.sessionId, input.runId);
++			const owner = authority(db, row);
++			response(db, row, input.runId);
++			const replay = prior(db, row, input.requestId, input);
++			if (replay) return replay;
++			if (row.kind !== "pipeline" || !queue || !host().review)
++				return fail("collaboration_review_unavailable");
++			if (row.revision !== input.expectedRevision)
++				return fail("revision_conflict");
++			if (!row.document_json) return fail("collaboration_review_draft_missing");
++			const previous = reviewOf(row);
++			if (
++				previous?.epoch === owner.epoch &&
++				(!previous.outcome || previous.runId === input.runId)
++			)
++				return fail("collaboration_review_already_requested");
++			if (previous) invalidate(db, row);
++			const id = crypto.randomUUID();
++			const payload: Payload = {
++				workRef: row.id,
++				id,
++				phase: "evaluate",
++				deadline: now() + REVIEW_MS,
++			};
++			const jobId = enqueue(db, payload, id);
++			writeReview(db, row.id, {
++				id,
++				revision: row.revision,
++				epoch: owner.epoch,
++				runId: input.runId,
++				jobId,
++			});
++			return record(db, row, input.requestId, input, {
++				id,
++				revision: row.revision,
++				status: "running",
++			});
++		},
++		cancel(
++			db: Database,
++			input: { workRef: string; sessionId: string; runId: string },
++		) {
++			const row = held(db, input.workRef, input.sessionId, input.runId);
++			authority(db, row);
++			response(db, row, input.runId);
++			invalidate(db, row);
++		},
++		invalidate,
++		view(db: Database, row: WorkRow) {
++			const review = reviewOf(row);
++			if (
++				!review ||
++				review.revision !== row.revision ||
++				host().authority(db, row.session_id)?.epoch !== review.epoch
++			)
++				return null;
++			const outcome =
++				review.conditions !== undefined &&
++				review.conditions !== hash(conditions(db, row.session_id))
++					? changed
++					: review.outcome;
++			return {
++				id: review.id,
++				revision: review.revision,
++				...(outcome ?? { status: "running" as const }),
++			};
++		},
++	};
++}
+diff --git a/api/domains/collaboration/service/work.ts b/api/domains/collaboration/service/work.ts
+--- a/api/domains/collaboration/service/work.ts
++++ b/api/domains/collaboration/service/work.ts
+@@ -1,5 +1,6 @@
+ import type { Database } from "bun:sqlite";
+ import { withinJsonLimits } from "eumenes-collaboration";
++import type { QueueService } from "../../queue";
+ import type {
+ 	Check,
+ 	ChildView,
+@@ -18,19 +19,44 @@
+ } from "../repository";
+ import { createWorkContext, fail, json, terminal } from "./work-context";
+ import { createChildOperations } from "./work-children";
++import { createWorkReviews } from "./work-reviews";
+ 
+ /** Canonical work only. Dialogue owns sessions; existing execution domains own child work. */
+-export function createCollaborationWorks(now: () => number = Date.now) {
++export function createCollaborationWorks(now: () => number = Date.now, queue?: QueueService) {
+ 	let ports: Ports | undefined;
+ 	const host = () => ports ?? fail("collaboration_unavailable");
+-	const context = createWorkContext(host, now);
+-	const { current, live, held, state, authority, response, purge } = context;
++	const context = createWorkContext(host, now, (db, row) =>
++		reviews.invalidate(db, row),
++	);
++	const reviews = createWorkReviews(context, queue);
++	const { current, live, held, authority, response, purge } = context;
++	const state = (db: Database, row: WorkRow) => {
++		const view = context.state(db, row);
++		const review = reviews.view(db, row);
++		return {
++			...view,
++			current: { ...view.current, review },
++			context: review
++				? {
++						...view.context,
++						review: {
++							revision: review.revision,
++							status: review.status,
++							summary: "summary" in review ? review.summary : undefined,
++						},
++					}
++				: view.context,
++		};
++	};
++
+ 	return {
+ 		configure(value: Ports) {
+ 			ports = value;
+ 		},
+ 		available: (db: Database, kind: CollaborationKind) =>
+ 			ports?.available(db, kind) ?? false,
++		review: reviews.start,
++		cancelReview: reviews.cancel,
+ 		open(
+ 			db: Database,
+ 			kind: WorkKind,
+@@ -169,6 +195,7 @@
+ 				current(db, row),
+ 			);
+ 			if (!checked.ok) fail("collaboration_definition_invalid");
++			reviews.invalidate(db, row);
+ 			db.query(
+ 				"UPDATE collaboration_works SET document_json=?,title=?,revision=revision+1,rejected_json=NULL,child_id=NULL,child_epoch=NULL,child_digest=NULL,child_json=NULL,updated_at=? WHERE id=?",
+ 			).run(
+diff --git a/api/domains/collaboration/test/migrations.test.ts b/api/domains/collaboration/test/migrations.test.ts
+--- a/api/domains/collaboration/test/migrations.test.ts
++++ b/api/domains/collaboration/test/migrations.test.ts
+@@ -14,7 +14,7 @@
+ 	);
+ });
+ 
+-test("upgrading an existing work preserves it and adds the start reference once", async () => {
++test("upgrading an existing work preserves it and adds empty start and review slots", async () => {
+ 	const dir = mkdtempSync(join(tmpdir(), "eumenes-collaboration-upgrade-"));
+ 	const path = join(dir, "test.sqlite3");
+ 	try {
+@@ -32,7 +32,7 @@
+ 					db
+ 						.query(
+ 							`SELECT title, document_json, last_answer_message_id,
+- last_start_message_id, created_at, updated_at FROM collaboration_works WHERE id='w1'`,
++ last_start_message_id, review_json, created_at, updated_at FROM collaboration_works WHERE id='w1'`,
+ 						)
+ 						.get(),
+ 				),
+@@ -41,6 +41,7 @@
+ 				document_json: '{"request":"kept"}',
+ 				last_answer_message_id: "answer1",
+ 				last_start_message_id: null,
++				review_json: null,
+ 				created_at: 1,
+ 				updated_at: 2,
+ 			});
+diff --git a/api/domains/collaboration/test/reviews.test.ts b/api/domains/collaboration/test/reviews.test.ts
+new file mode 100644
+--- /dev/null
++++ b/api/domains/collaboration/test/reviews.test.ts
+@@ -0,0 +1,137 @@
++import { expect, test } from "bun:test";
++import type { Database } from "bun:sqlite";
++import { mkdtempSync, rmSync } from "node:fs";
++import { tmpdir } from "node:os";
++import { join } from "node:path";
++import { openStore } from "../../../infrastructure/sqlite";
++import { waitFor } from "../../../infrastructure/wait-for";
++import { createQueue, migration as queueMigration } from "../../queue";
++import { createCollaborationWorks, migrations, type Source } from "..";
++import type { ReviewOutcome } from "../contracts";
++
++test.each(["edit", "cancel", "forget", "epoch"] as const)(
++	"an in-flight review cannot publish after %s",
++	async (change) => {
++		const dir = mkdtempSync(join(tmpdir(), "eumenes-collaboration-review-"));
++		const store = openStore(join(dir, "test.sqlite3"), [
++			{ id: "dialogue/0001-init", sql: "SELECT 1" },
++			queueMigration,
++			...migrations,
++		]);
++		const queue = createQueue(store);
++		const works = createCollaborationWorks(Date.now, queue);
++		const result = Promise.withResolvers<ReviewOutcome>();
++		const started = Promise.withResolvers<{
++			signal: AbortSignal;
++			current: (db: Database) => boolean;
++		}>();
++		const outcome = { status: "completed", summary: "評価しました" } as const;
++		const sessionId = "session";
++		const conversationId = "conversation";
++		const notices: unknown[] = [];
++		let epoch = 0;
++		const sources = new Map<string, Source>(
++			["draft", "review", "change"].map((runId) => [
++				runId,
++				{
++					runId,
++					messageId: `message-${runId}`,
++					digest: `digest-${runId}`,
++					conversationId,
++					request: runId,
++					specialistSessionId: sessionId,
++					specialistEpoch: 0,
++				},
++			]),
++		);
++		works.configure({
++			source: (_db, runId) => sources.get(runId) ?? null,
++			authority: () => ({ conversationId, epoch, active: true }),
++			available: () => true,
++			context: () => ({}),
++			check: (_db, _kind, value) => ({ ok: true, value }),
++			start: () => {
++				throw new Error("unexpected_execution");
++			},
++			view: () => null,
++			cancel() {},
++			forget() {},
++			answer: () => {
++				throw new Error("unexpected_execution");
++			},
++			notify: (_db, notice) => {
++				notices.push(notice);
++				return true;
++			},
++			review: {
++				conditions: () => ({ state: "none" }),
++				evaluate(input, _deadline, signal, current) {
++					expect(input.revision).toBe(1);
++					expect(input.document).toEqual({ steps: ["original"] });
++					started.resolve({ signal, current });
++					return result.promise;
++				},
++			},
++		});
++		try {
++			const { workRef } = await store.write((db) => {
++				const { workRef } = works.open(db, "pipeline", sessionId, null);
++				works.begin(db, workRef, "draft");
++				works.commit(db, {
++					workRef,
++					sessionId,
++					runId: "draft",
++					baseRevision: 0,
++					value: { steps: ["original"] },
++				});
++				works.release(db, workRef, "draft");
++				works.begin(db, workRef, "review");
++				works.review(db, {
++					workRef,
++					sessionId,
++					runId: "review",
++					requestId: "review",
++					expectedRevision: 1,
++				});
++				works.release(db, workRef, "review");
++				return { workRef };
++			});
++			queue.start();
++			const { signal, current } = await started.promise;
++			expect(store.read(current)).toBe(true);
++			await store.write((db) => {
++				if (change === "epoch") {
++					epoch++;
++					return;
++				}
++				if (change === "forget") {
++					works.forget(db, ["message-review"]);
++					return;
++				}
++				const input = { workRef, sessionId, runId: "change" };
++				works.begin(db, workRef, input.runId);
++				if (change === "edit")
++					works.commit(db, {
++						...input,
++						baseRevision: 1,
++						value: { steps: ["changed"] },
++					});
++				else works.cancelReview(db, input);
++				works.release(db, workRef, input.runId);
++			});
++			expect(store.read(current)).toBe(false);
++			if (change !== "epoch") expect(signal.aborted).toBe(true);
++			result.resolve(outcome);
++			await waitFor(() => queue.stats().openJobs === 0, { timeout: 1500 });
++			expect(
++				store.read((db) => works.state(db, workRef)?.current.review ?? null),
++			).toBeNull();
++			expect(notices).toEqual([]);
++		} finally {
++			result.resolve(outcome);
++			await queue.close(1000);
++			await store.close();
++			rmSync(dir, { recursive: true, force: true });
++		}
++	},
++);
+diff --git a/api/domains/dialogue/service/collaboration-state.ts b/api/domains/dialogue/service/collaboration-state.ts
+--- a/api/domains/dialogue/service/collaboration-state.ts
++++ b/api/domains/dialogue/service/collaboration-state.ts
+@@ -13,6 +13,7 @@
+ import {
+ 	collaborationState,
+ 	collaborationSources,
++	type SourceRow,
+ } from "../repository/collaboration-state";
+ import type { DialogueDeps } from "./context";
+ import { specialistExecutionSource } from "./specialist-source";
+@@ -22,6 +23,64 @@
+ const fail = (reason: string): never => {
+ 	throw new Error(reason);
+ };
++
++function activeSource(
++	deps: DialogueDeps,
++	db: Database,
++	conversationId: string,
++	source: SourceRow,
++) {
++	const message = deps.conversation.messageInTransaction(
++		db,
++		source.message_id,
++	)?.message;
++	return (
++		!!source.active &&
++		message?.role === "user" &&
++		message.conversationId === conversationId &&
++		sourceDigest(message.text) === source.digest &&
++		!deps.memory?.isSourceRevokedInTransaction(db, source.message_id)
++	);
++}
++
++/** The reviewer sees only confirmed conditions with live user-message provenance. */
++export function specialistReviewConditions(
++	deps: DialogueDeps,
++	db: Database,
++	sessionId: string,
++) {
++	const session = sessionById(db, sessionId);
++	const saved = collaborationState(db, sessionId);
++	if (!session || !saved) return { state: "unavailable" as const };
++	const state = collaborationStateSchema.safeParse(JSON.parse(saved.body));
++	if (!state.success) return { state: "unavailable" as const };
++	const facts = state.data.facts.filter(
++		(fact) => fact.kind === "condition" && fact.status === "confirmed",
++	);
++	if (!facts.length) return { state: "none" as const };
++	const known = new Map(
++		collaborationSources(db, sessionId).map((source) => [source.ref, source]),
++	);
++	const entries = [];
++	for (const fact of facts) {
++		const sources = [];
++		for (const ref of fact.sourceRefs) {
++			const source = known.get(ref);
++			if (!source || !activeSource(deps, db, session.conversationId, source))
++				return { state: "unavailable" as const };
++			sources.push({
++				id: source.message_id,
++				version: source.digest,
++				active: true,
++			});
++		}
++		const text =
++			typeof fact.value === "string" ? fact.value : JSON.stringify(fact.value);
++		if (!text || text.length > 12000) return { state: "unavailable" as const };
++		entries.push({ id: fact.id, text, sources });
++	}
++	return { state: "available" as const, entries };
++}
+ 
+ /** Only real message versions are registered; the same message edited later has a new source ref. */
+ export function collaborationSnapshot(
+@@ -74,18 +133,7 @@
+ 	let sourceRevision = row.source_revision;
+ 	const invalid = new Set<string>();
+ 	for (const source of collaborationSources(db, session.id)) {
+-		const message = deps.conversation.messageInTransaction(
+-			db,
+-			source.message_id,
+-		)?.message;
+-		if (
+-			!source.active ||
+-			!message ||
+-			message.role !== "user" ||
+-			message.conversationId !== session.conversationId ||
+-			sourceDigest(message.text) !== source.digest ||
+-			deps.memory?.isSourceRevokedInTransaction(db, source.message_id)
+-		)
++		if (!activeSource(deps, db, session.conversationId, source))
+ 			invalid.add(source.ref);
+ 	}
+ 	// Inactive refs stay inactive, but need not bump the generation on every read.
+diff --git a/api/domains/dialogue/service/specialist-host.ts b/api/domains/dialogue/service/specialist-host.ts
+--- a/api/domains/dialogue/service/specialist-host.ts
++++ b/api/domains/dialogue/service/specialist-host.ts
+@@ -8,10 +8,15 @@
+ 	specialistResultText,
+ } from "./specialist-notices";
+ import { forgetSessionObservations } from "../repository/specialist-observations";
++import { specialistReviewConditions } from "./collaboration-state";
+ 
+ /** Public host integration for session-scoped sources and child observations. */
+ export function createSpecialistHost(deps: DialogueDeps) {
+ 	return {
++		specialistReviewConditionsInTransaction: (
++			db: Database,
++			sessionId: string,
++		) => specialistReviewConditions(deps, db, sessionId),
+ 		specialistCollaborationState: (sessionId: string): unknown =>
+ 			deps.store.read((db) => {
+ 				const row = collaborationState(db, sessionId);

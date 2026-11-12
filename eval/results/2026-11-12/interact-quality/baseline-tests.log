@@ -1,0 +1,32 @@
+bun test v1.4.4 (38afee6c8)
+
+api/application/collaboration/collaboration-interact.test.ts:
+(pass) interact pilot stays unavailable by default; an enabled fixture returns capture approval and its result to the same specialist and forget erases it [4879.73ms]
+
+api/domains/browser/test/interact.test.ts:
+(pass) queue executes public parts, verifies completion, persists only metadata [35.30ms]
+(pass) idempotent admission is owner/conversation scoped and rejects changed payload [19.05ms]
+(pass) incomplete operation JSON triggers a retry before the repaired read runs [24.43ms]
+(pass) confirmation is bound to question/revision/generation and consumes exactly once [24.97ms]
+(pass) denial never sends the pending effect [22.38ms]
+(pass) answers cannot reset the overall model-call budget [27.65ms]
+(pass) parent-linked answers/forget must use the parent's lifecycle [26.30ms]
+(pass) capture requires explicit approval; resource ownership, WebP and forget propagate [24.11ms]
+(pass) unverified or missing completion evidence never becomes completed [22.65ms]
+(pass) review failure yields partial [22.76ms]
+(pass) an unknown dispatch is recorded once, never replayed [19.85ms]
+(pass) cancel during an ignored inference abort releases queue and cannot accept late completion [38.01ms]
+(pass) cancel during completion review prevents a completed result [37.57ms]
+(pass) expiry and revoked source end the saved run without adopting output [23.77ms]
+(pass) restart sweeps transient-context runs to failure and never resumes operations [39.07ms]
+(pass) a changed capture target asks again before any bytes are saved [26.76ms]
+(pass) a revoked source cancels late output [24.26ms]
+(pass) cancellation during cleanup cannot publish completed [19.64ms]
+(pass) capture TTL, metadata TTL and orphan cleanup remove their owned records/files [24.31ms]
+(pass) a read redirected to a forbidden destination is withheld from inference [22.34ms]
+(pass) a capture that navigates during acquisition is never published [25.43ms]
+
+ 22 pass
+ 0 fail
+ 82 expect() calls
+Ran 22 tests across 2 files. [6.00s]

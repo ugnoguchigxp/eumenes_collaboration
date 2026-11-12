@@ -1,0 +1,29 @@
+bun test v1.4.4 (38afee6c8)
+
+api/domains/collaboration/test/reviews.test.ts:
+(pass) an in-flight review cannot publish after edit [31.74ms]
+(pass) an in-flight review cannot publish after cancel [20.36ms]
+(pass) an in-flight review cannot publish after forget [13.95ms]
+(pass) an in-flight review cannot publish after epoch [11.99ms]
+
+api/application/collaboration/collaboration-evaluator.test.ts:
+(pass) the same Collaboration session reviews two draft versions with grounded findings and confirmed conditions [1090.31ms]
+
+api/domains/dialogue/test/collaboration-state.test.ts:
+(pass) the host supplies the state version and rejects a work change after inference starts [139.24ms]
+(pass) the same control call adopts source-backed state, corrects only one condition and survives recovery [120.36ms]
+(pass) a failed receipt write rolls back state adoption without repeating inference [121.12ms]
+(pass) writer forgetting removes dependent conditions and stale model sources cannot restore them [128.82ms]
+(pass) a work change during inference cannot adopt a late state or receipt [113.62ms]
+(pass) a epoch change during inference cannot adopt a late state or receipt [113.27ms]
+(pass) a permission change during inference cannot adopt a late state or receipt [116.17ms]
+
+api/domains/dialogue/test/specialist-notices.test.ts:
+(pass) the screen reuses only an adopted terminal explanation of the same session and child, and forget removes it [126.50ms]
+(pass) a persisted observation resumes the same specialist without adding a user message or granting a tool [126.27ms]
+(pass) an observation cannot discard or invoke even when the model ignores its reply-only schema [121.13ms]
+
+ 15 pass
+ 0 fail
+ 107 expect() calls
+Ran 15 tests across 4 files. [3.02s]

@@ -1,0 +1,22 @@
+bun test v1.4.4 (38afee6c8)
+
+api/application/collaboration/collaboration-interact.test.ts:
+(pass) Interact delivers only the corrected review, starts the confirmed draft and captures once with approval [5443.01ms]
+
+api/domains/dialogue/test/collaboration-state.test.ts:
+(pass) the host supplies the state version and rejects a work change after inference starts [174.75ms]
+(pass) the same control call adopts source-backed state, corrects only one condition and survives recovery [138.68ms]
+(pass) a failed receipt write rolls back state adoption without repeating inference [163.52ms]
+(pass) writer forgetting removes dependent conditions and stale model sources cannot restore them [137.80ms]
+(pass) a work change during inference cannot adopt a late state or receipt [112.74ms]
+(pass) a epoch change during inference cannot adopt a late state or receipt [104.17ms]
+(pass) a permission change during inference cannot adopt a late state or receipt [103.98ms]
+(pass) a host-bound correction may omit removals and still replace an existing condition with evidence [125.90ms]
+(pass) a host-bound update still rejects superseded_fact_missing on unknown [132.54ms]
+(pass) a host-bound update still rejects superseded_fact_missing on known [130.10ms]
+(pass) a host-bound update still rejects source_invalid on known [130.30ms]
+
+ 12 pass
+ 0 fail
+ 104 expect() calls
+Ran 12 tests across 2 files. [8.52s]

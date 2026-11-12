@@ -1,0 +1,123 @@
+bun test v1.4.4 (38afee6c8)
+
+api/domains/collaboration/test/work.test.ts:
+(pass) a draft keeps its source and revision; only a separate real user turn can launch it, with idempotent receipt [3.33ms]
+(pass) questions and terminal results notify once; a host event cannot answer and stale question revisions are rejected [1.24ms]
+(pass) epoch withdrawal cancels the owned child and forget of any contributing turn purges work and receipts [0.82ms]
+(pass) a withdrawn originating source is still enough identity to cancel, without authorizing another send [0.64ms]
+(pass) a start input cannot approve its own question or launch a second child; suspended waiting work is cancelled [0.62ms]
+(pass) a different session in the same conversation cannot contribute to this work [0.52ms]
+
+api/domains/collaboration/test/reviews.test.ts:
+(pass) a stale review cannot publish after edit [26.27ms]
+(pass) a stale review cannot publish after cancel [12.47ms]
+(pass) a stale review cannot publish after forget [12.97ms]
+(pass) a stale review cannot publish after epoch [11.58ms]
+(pass) a stale review cannot publish after condition [10.51ms]
+(pass) a stale review cannot publish after queued-condition [10.47ms]
+
+api/domains/collaboration/test/migrations.test.ts:
+(pass) the applied first migration retains its deployed checksum [0.02ms]
+(pass) upgrading an existing work preserves it and adds empty start, review and draft-source slots [19.90ms]
+
+api/application/collaboration/pipeline-review-correction.test.ts:
+(pass) a correction during Quick rejects the late old evaluation and presents the new version once [974.47ms]
+
+api/application/collaboration/collaboration-repair.test.ts:
+(pass) an incorrectly scalar output.from is refused with its position and repaired within the same bounded draft turn [787.76ms]
+
+api/application/collaboration/collaboration-evaluator.test.ts:
+(pass) the same Collaboration session reviews two draft versions with grounded findings and confirmed conditions [905.63ms]
+
+api/application/collaboration/collaboration-interact.test.ts:
+(pass) Interact delivers only the corrected review, starts the confirmed draft and captures once with approval [4911.46ms]
+
+api/application/collaboration/collaboration-pipeline.test.ts:
+(pass) a collaborative draft is edited, confirmed and executed exactly once without recomposing, then reported to the same session [2864.76ms]
+
+api/application/evaluator/vendor.test.ts:
+(pass) Eumenes pins the evaluator archive and resolves it through its package install [2.26ms]
+(pass) Quick completes from the evaluator installed in Eumenes [2.13ms]
+(pass) Standard sends a supplement enqueued during investigation through Eumenes Steer [3.38ms]
+
+api/domains/dialogue/test/specialist-notices.test.ts:
+(pass) the screen reuses only an adopted terminal explanation of the same session and child, and forget removes it [104.20ms]
+(pass) a persisted observation resumes the same specialist without adding a user message or granting a tool [101.32ms]
+(pass) an observation cannot discard or invoke even when the model ignores its reply-only schema [97.31ms]
+(pass) a queued review notice closes silently when its result stops being current [1111.12ms]
+(pass) a running review notice closes silently when its result stops being current [1128.35ms]
+
+api/domains/dialogue/test/collaboration-state.test.ts:
+(pass) the host supplies the state version and rejects a work change after inference starts [103.03ms]
+(pass) the same control call adopts source-backed state, corrects only one condition and survives recovery [101.12ms]
+(pass) a failed receipt write rolls back state adoption without repeating inference [97.94ms]
+(pass) writer forgetting removes dependent conditions and stale model sources cannot restore them [98.31ms]
+(pass) a work change during inference cannot adopt a late state or receipt [94.23ms]
+(pass) a epoch change during inference cannot adopt a late state or receipt [94.04ms]
+(pass) a permission change during inference cannot adopt a late state or receipt [99.31ms]
+(pass) a host-bound correction may omit removals and still replace an existing condition with evidence [109.38ms]
+(pass) a host-bound update still rejects superseded_fact_missing on unknown [113.15ms]
+(pass) a host-bound update still rejects superseded_fact_missing on known [101.18ms]
+(pass) a host-bound update still rejects source_invalid on known [99.25ms]
+
+api/domains/dialogue/test/collaboration-control.test.ts:
+(pass) the same collaboration control takes a binding's tools without inventing extra operations [0.12ms]
+(pass) the host passes the current request separately and the package encloses the current document [0.13ms]
+(pass) a three-sentence operation reply is rejected and its repair repeats the host delivery limits [0.28ms]
+
+api/domains/dialogue/test/specialist-turn.test.ts:
+(pass) a malformed output is repaired once with the rejected output as data; a second one fails the run [105.54ms]
+(pass) a rejected output is logged with where it broke the contract, never with what it said [103.68ms]
+(pass) a host-bound repair gets the JSON failure or the field that failed validation [112.27ms]
+(pass) a repair call says where the output broke the contract: schema path and kind, or the reply's measured length, never an internal code name [116.22ms]
+(pass) a turn is bounded by its model calls; the last one must carry its reply, and work changed before the limit is reported by the host [102.25ms]
+(pass) refusals beyond the tool's retries end the turn with the host's words [103.89ms]
+(pass) a refused or invalid operation is data for the next call, never a crash [107.44ms]
+(pass) the specialist is not given memory, World, the main prompt or the conversation's persona [98.20ms]
+(pass) a toolchain's own time limits: the run lasts its run time from the hand-over, each call gets its turn and inference time, and an utterance addressed to it gets the run time too [99.29ms]
+(pass) the specialist turn never calls the conversation model, and a failed turn does not either [124.18ms]
+(pass) HTTP: the session, its commands and their errors [139.51ms]
+(pass) HTTP: an utterance while a turn holds the work is accepted and queued [108.56ms]
+(pass) the addressee the screen showed must still listen: otherwise nothing is stored (409 addressee_changed) [112.95ms]
+(pass) a saved item older than the recent choices is offered, accepted and shown when it is on screen [252.01ms]
+(pass) a refusal's short repair hint reaches the specialist, truncated [151.89ms]
+
+api/domains/browser/test/interact.test.ts:
+(pass) queue executes public parts, verifies completion, persists only metadata [52.65ms]
+(pass) idempotent admission is owner/conversation scoped and rejects changed payload [25.56ms]
+(pass) incomplete operation JSON triggers a retry before the repaired read runs [32.18ms]
+(pass) confirmation is bound to question/revision/generation and consumes exactly once [38.68ms]
+(pass) denial never sends the pending effect [33.05ms]
+(pass) answers cannot reset the overall model-call budget [34.28ms]
+(pass) parent-linked answers/forget must use the parent's lifecycle [33.70ms]
+(pass) capture requires explicit approval; resource ownership, WebP and forget propagate [35.54ms]
+(pass) unverified or missing completion evidence never becomes completed [31.15ms]
+(pass) review failure yields partial [29.59ms]
+(pass) an unknown dispatch is recorded once, never replayed [28.58ms]
+(pass) cancel during an ignored inference abort releases queue and cannot accept late completion [41.72ms]
+(pass) cancel during completion review prevents a completed result [46.50ms]
+(pass) expiry and revoked source end the saved run without adopting output [29.56ms]
+(pass) restart sweeps transient-context runs to failure and never resumes operations [48.37ms]
+(pass) a changed capture target asks again before any bytes are saved [36.46ms]
+(pass) a revoked source cancels late output [31.75ms]
+(pass) cancellation during cleanup cannot publish completed [29.73ms]
+(pass) capture TTL, metadata TTL and orphan cleanup remove their owned records/files [34.70ms]
+(pass) a read redirected to a forbidden destination is withheld from inference [30.49ms]
+(pass) a capture that navigates during acquisition is never published [30.69ms]
+
+api/domains/browser/test/interact-migrations.test.ts:
+(pass) the applied interact migration retains its deployed checksum [0.03ms]
+(pass) capture upgrade preserves old files without inventing their missing metadata [28.82ms]
+
+api/application/browser/interact-inference.test.ts:
+(pass) shared control receives the canonical Skill, typed schema and unchanged reference data [18.31ms]
+(pass) a late control receipt is cancelled rather than accepted under revoked authority [42.91ms]
+(pass) the wire translation neither interprets free text nor invents approval [0.23ms]
+(pass) pilot stays unavailable to ordinary conversation discovery [27.94ms]
+(pass) the existing child contract resumes the same run and preserves partial status [40.13ms]
+(pass) capture resource navigation resolves the exact image and enforces conversation scope [36.06ms]
+
+ 85 pass
+ 0 fail
+ 509 expect() calls
+Ran 85 tests across 16 files. [17.65s]

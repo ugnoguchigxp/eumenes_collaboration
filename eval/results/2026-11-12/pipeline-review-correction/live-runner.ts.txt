@@ -1,0 +1,338 @@
+import { appendFileSync, mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { searchThenDelegate } from "./api/application/toolchain/conversation-script.fixture";
+import { harness } from "./api/application/toolchain/toolchain.fixture";
+import { sessionEvents } from "./api/domains/dialogue/repository/specialist";
+import {
+	createCloudAgents,
+	type CloudAgents,
+} from "./api/domains/inference/adapters/cloud-agents";
+import { createCodexHost } from "./api/domains/inference/adapters/codex-host";
+import { waitFor } from "./api/infrastructure/wait-for";
+
+const output = Bun.argv[2];
+if (!output)
+	throw new Error("usage: bun pipeline-review-live.ts RESULTS.jsonl");
+const write = (row: unknown) =>
+	appendFileSync(output, JSON.stringify(row) + "\n");
+const model = "gpt-6-luna";
+const reasoningEffort = "low";
+const perTrial = 7;
+const repetitions = 2;
+const cases = [
+	{
+		id: "handoff",
+		opening:
+			"夜勤の担当者に渡す、タイマーを1つ開始する手順を下書きしてください。「加熱待ち」という名前で20秒です。3分の既定値を使うと工程をやり直すことになります。担当者は開始前に名前と秒数を画面で照合します。まだ実行しないでください。",
+		correction:
+			"加熱待ちの時間だけ35秒でした。タイマーの名前と開始前に画面で照合する条件はそのままです。",
+		race: true,
+	},
+	{
+		id: "two-stations",
+		opening:
+			"引継ぎでタイマーを2つ開始する手順を下書きしてください。先に「計量A」を25秒で、次に「計量B」を60秒で開始します。順序と名前が入れ替わると誤った作業に進むため、名前と秒数の対応が分かる手順にしてください。タイマーはまだ開始しません。",
+		correction:
+			"計量Aだけ45秒に訂正します。計量Bは60秒のまま、名前と開始順もそのままです。",
+		race: true,
+	},
+	{
+		id: "title-only",
+		opening:
+			"20秒のタイマーを1つ作る手順を下書きしてください。タイトルは「朝のタイマー」で、実行はまだしません。",
+		correction: "タイトルだけ「朝の準備」に変えてください。",
+		race: false,
+	},
+] as const;
+const sdkHome = mkdtempSync(join(tmpdir(), "pipeline-review-codex-"));
+const codexHost = createCodexHost(process.env, { home: sdkHome });
+if (!codexHost) throw new Error("codex_cli_unavailable");
+const cloud = createCloudAgents(process.env, { codexHost });
+type Call = Parameters<CloudAgents["run"]>[0];
+type Phase = "specialist" | "notice" | "quick";
+let totalCalls = 0;
+
+async function trial(task: (typeof cases)[number], repetition: number) {
+	const start = performance.now();
+	const elapsed = () => Math.round(performance.now() - start);
+	const trialLimit = AbortSignal.timeout(300_000);
+	const usage: Record<string, unknown>[] = [];
+	const reviews: Array<{
+		id: string;
+		revision: number;
+		digest: string;
+		conditions: unknown;
+		evidence: unknown;
+		startedMs: number;
+		returnedMs?: number;
+		aborted?: boolean;
+		result?: unknown;
+	}> = [];
+	const correctionGate = Promise.withResolvers<void>();
+	let correctionReceivedMs: number | undefined;
+	const turns: Record<string, unknown>[] = [];
+	let calls = 0;
+	async function complete(
+		phase: Phase,
+		messages: Call["messages"],
+		signal?: AbortSignal,
+		schema?: Call["outputSchema"],
+	) {
+		if (calls >= perTrial) throw new Error("trial_model_budget_exhausted");
+		const seq = ++calls;
+		totalCalls++;
+		const startMs = elapsed();
+		try {
+			const result = await cloud.run({
+				kind: "codex-sdk",
+				credential: null,
+				baseUrl: "https://api.openai.com/v1",
+				model,
+				reasoningEffort,
+				messages,
+				...(schema ? { outputSchema: schema } : {}),
+				signal: AbortSignal.any([
+					trialLimit,
+					signal ?? AbortSignal.timeout(90_000),
+					AbortSignal.timeout(90_000),
+				]),
+			});
+			let action: unknown;
+			try {
+				action = JSON.parse(result.text);
+			} catch {
+				action = result.text;
+			}
+			usage.push({
+				seq,
+				phase,
+				startMs,
+				endMs: elapsed(),
+				model: result.usageModel,
+				input: result.inputTokens,
+				output: result.outputTokens,
+				costUsd: result.costUsd ?? null,
+				...(phase !== "quick" ? { action } : {}),
+			});
+			return result.text;
+		} catch (error) {
+			usage.push({
+				seq,
+				phase,
+				startMs,
+				endMs: elapsed(),
+				error: error instanceof Error ? error.message : String(error),
+			});
+			throw error;
+		}
+	}
+	const h = await harness({
+		pipelines: true,
+		timers: true,
+		discoveryTarget: () => "collaborate_pipeline",
+		firstRound: (_tools, _question, messages) =>
+			searchThenDelegate(
+				(card) => card.id === "collaboration.pipeline",
+				task.opening,
+				{ announcement: "手順の下書きを作ります。", impact: "create" },
+			)(messages),
+		async specialist(messages, signal, options) {
+			const refLine = messages[1]?.content
+				.split("\n")
+				.find((line) => line.startsWith("REFERENCE="));
+			const ref = refLine
+				? JSON.parse(refLine.slice("REFERENCE=".length))
+				: null;
+			const phase = (ref?.workContext ?? ref?.currentWork)?.hostEvent
+				? "notice"
+				: "specialist";
+			const output = await complete(
+				phase,
+				messages,
+				signal,
+				options?.jsonSchema,
+			);
+			const attempt = usage.at(-1);
+			if (attempt?.phase === phase) {
+				attempt.optionalReviewSkill = messages[0]?.content.includes(
+					"独立照合を行う価値を保存前に判断します",
+				);
+				attempt.hostBound =
+					messages[0]?.content.includes("ホストが版と作業参照を結び付けます");
+			}
+			return output;
+		},
+		async workflowReview(messages, signal, options) {
+			const input = JSON.parse(messages.at(-1)!.content);
+			const review: (typeof reviews)[number] = {
+				id: input.evaluationId,
+				revision: Number(input.target.version),
+				digest: input.target.digest,
+				conditions: input.conditions,
+				evidence: input.evidence,
+				startedMs: elapsed(),
+			};
+			reviews.push(review);
+			const hold =
+				task.race &&
+				review.revision === 1 &&
+				correctionReceivedMs === undefined;
+			try {
+				const raw = await complete(
+					"quick",
+					messages,
+					hold ? undefined : signal,
+					options?.jsonSchema,
+				);
+				review.result = JSON.parse(
+					raw.trim().replace(/^```(?:json)?\s*|\s*```$/g, ""),
+				);
+				if (hold) await correctionGate.promise;
+				return review.result;
+			} finally {
+				review.returnedMs = elapsed();
+				review.aborted = signal?.aborted ?? false;
+			}
+		},
+	});
+	function snapshot() {
+		const session = h.dialogue.specialistSession("main");
+		if (!session) return null;
+		return h.store.read((db) => ({
+			binding: db
+				.query<{ binding_revision_id: string }, [string]>(
+					"SELECT binding_revision_id FROM dialogue_specialist_sessions WHERE id=?",
+				)
+				.get(session.id)?.binding_revision_id,
+			work: h.toolchain.collaboration.works.view(
+				db,
+				"pipeline",
+				"main",
+				session.workRef,
+			),
+			state: h.dialogue.specialistCollaborationState(session.id),
+			tools: sessionEvents(db, session.id).filter(
+				(event) => event.kind === "tool",
+			),
+			notices: db
+				.query(
+					`SELECT o.event_json, r.id, r.status, r.answer_message_id
+				FROM dialogue_specialist_observations o JOIN dialogue_runs r ON r.id=o.run_id
+				WHERE r.specialist_session_id=? AND json_extract(o.event_json, '$.kind')='review'
+				ORDER BY r.seq`,
+				)
+				.all(session.id),
+		}));
+	}
+	async function send(text: string, correction: boolean) {
+		const sentMs = elapsed();
+		const response = await h.request("/api/runs", {
+			requestId: crypto.randomUUID(),
+			conversationId: "main",
+			text,
+		});
+		if (response.status !== 202) throw new Error("run_http_" + response.status);
+		const { id } = await response.json();
+		if (correction) correctionReceivedMs = elapsed();
+		const run = await h.dialogue.waitForTerminal(id, { timeoutMs: 130_000 });
+		turns.push({
+			id,
+			sentMs,
+			endMs: elapsed(),
+			status: run?.status ?? "timeout",
+			error: run?.error ?? null,
+			answer: h.dialogue.answerText(id),
+			snapshot: snapshot(),
+		});
+		return run?.status === "completed";
+	}
+	let error: string | undefined;
+	try {
+		const saved = h.settings.get();
+		saved.routes.llm.mode = "larm-preferred";
+		await h.settings.apply({
+			requestId: crypto.randomUUID(),
+			expectedRevision: saved.revision,
+			settings: saved,
+			keys: [],
+		});
+		if (await send(task.opening, false)) {
+			if (task.race && !reviews.length) {
+				await waitFor(() => reviews.length > 0, {
+					timeout: 3000,
+					interval: 50,
+				}).catch(() => undefined);
+			}
+			try {
+				await send(task.correction, true);
+			} finally {
+				correctionGate.resolve();
+			}
+		}
+		await waitFor(() => h.queue.stats().openJobs === 0, {
+			timeout: 145_000,
+			interval: 100,
+		});
+	} catch (failure) {
+		error = failure instanceof Error ? failure.message : String(failure);
+	} finally {
+		correctionGate.resolve();
+		const final = snapshot();
+		const messages = h.conversation.get("main").messages;
+		write({
+			id: task.id,
+			repetition,
+			elapsedMs: elapsed(),
+			correctionReceivedMs,
+			turns,
+			reviews,
+			final,
+			messages,
+			usage,
+			error,
+		});
+		console.log(
+			JSON.stringify({
+				id: task.id,
+				repetition,
+				elapsedMs: elapsed(),
+				calls,
+				versions: reviews.map(({ revision }) => revision),
+				notices: final?.notices,
+				error,
+			}),
+		);
+		await h.close();
+	}
+}
+
+write({
+	kind: "configuration",
+	model,
+	reasoningEffort,
+	quickDeadlineMs: 120_000,
+	perTrial,
+	totalLimit: perTrial * repetitions * cases.length,
+	cases,
+	route:
+		"Eumenes Codex SDK subscription; scripted Pipeline dispatch; native specialist, Quick and notice inference",
+});
+const jobs = cases.flatMap((task) =>
+	Array.from({ length: repetitions }, (_, i) => ({ task, repetition: i + 1 })),
+);
+let next = 0;
+try {
+	await Promise.all(
+		Array.from({ length: 2 }, async () => {
+			while (next < jobs.length) {
+				const { task, repetition } = jobs[next++]!;
+				await trial(task, repetition);
+			}
+		}),
+	);
+	write({ kind: "end", totalCalls });
+} finally {
+	await cloud.close?.();
+	rmSync(sdkHome, { recursive: true, force: true });
+}

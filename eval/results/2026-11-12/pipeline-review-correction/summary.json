@@ -1,0 +1,599 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "trials": 6,
+      "breakdown": [
+        {
+          "case": "handoff",
+          "repetition": 1,
+          "elapsedMs": 56182,
+          "firstReplyMs": 38726,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 2,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 5,
+          "inputTokens": 62375,
+          "outputTokens": 2057,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "handoff",
+          "repetition": 2,
+          "elapsedMs": 41058,
+          "firstReplyMs": 20275,
+          "turnStatuses": [
+            "completed",
+            "failed"
+          ],
+          "workRevision": 1,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 3,
+          "inputTokens": 46618,
+          "outputTokens": 1403,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "title-only",
+          "repetition": 1,
+          "elapsedMs": 19108,
+          "firstReplyMs": null,
+          "turnStatuses": [
+            "failed"
+          ],
+          "workRevision": 0,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 3,
+          "inputTokens": 34618,
+          "outputTokens": 632,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "title-only",
+          "repetition": 2,
+          "elapsedMs": 28053,
+          "firstReplyMs": 20090,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": null,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 4,
+          "inputTokens": 45292,
+          "outputTokens": 961,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "two-stations",
+          "repetition": 1,
+          "elapsedMs": 24945,
+          "firstReplyMs": null,
+          "turnStatuses": [
+            "failed"
+          ],
+          "workRevision": 0,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 2,
+          "inputTokens": 23194,
+          "outputTokens": 1065,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "two-stations",
+          "repetition": 2,
+          "elapsedMs": 53386,
+          "firstReplyMs": 33243,
+          "turnStatuses": [
+            "completed",
+            "failed"
+          ],
+          "workRevision": 1,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 4,
+          "inputTokens": 48537,
+          "outputTokens": 2123,
+          "models": [
+            "gpt-6-luna"
+          ]
+        }
+      ],
+      "completeProviderCalls": 21,
+      "modelCalls": 21,
+      "inputTokens": 260634,
+      "outputTokens": 8241,
+      "trialsChoosingReview": 0,
+      "trialsWithAcceptedReview": 0,
+      "quickStarts": 0,
+      "reviewNoticesPresented": 0,
+      "draftSavedTrials": 3,
+      "twoVersionTrials": 1,
+      "medianTrialMs": 34555.5,
+      "medianFirstReplyMs": 26759.0
+    },
+    {
+      "round": 2,
+      "trials": 6,
+      "breakdown": [
+        {
+          "case": "handoff",
+          "repetition": 1,
+          "elapsedMs": 5791,
+          "firstReplyMs": null,
+          "turnStatuses": [
+            "failed"
+          ],
+          "workRevision": 0,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 1,
+          "inputTokens": 10816,
+          "outputTokens": 13,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "handoff",
+          "repetition": 2,
+          "elapsedMs": 30955,
+          "firstReplyMs": 11699,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 1,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 3,
+          "inputTokens": 44667,
+          "outputTokens": 869,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "title-only",
+          "repetition": 1,
+          "elapsedMs": 17486,
+          "firstReplyMs": 9960,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 0,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 2,
+          "inputTokens": 42927,
+          "outputTokens": 174,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "title-only",
+          "repetition": 2,
+          "elapsedMs": 24335,
+          "firstReplyMs": 20659,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 1,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 4,
+          "inputTokens": 55182,
+          "outputTokens": 684,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "two-stations",
+          "repetition": 1,
+          "elapsedMs": 21707,
+          "firstReplyMs": 7674,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": null,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 2,
+          "inputTokens": 32872,
+          "outputTokens": 505,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "two-stations",
+          "repetition": 2,
+          "elapsedMs": 24481,
+          "firstReplyMs": 17066,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 1,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 2,
+          "inputTokens": 44478,
+          "outputTokens": 643,
+          "models": [
+            "gpt-6-luna"
+          ]
+        }
+      ],
+      "completeProviderCalls": 14,
+      "modelCalls": 14,
+      "inputTokens": 230942,
+      "outputTokens": 2888,
+      "trialsChoosingReview": 0,
+      "trialsWithAcceptedReview": 0,
+      "quickStarts": 0,
+      "reviewNoticesPresented": 0,
+      "draftSavedTrials": 3,
+      "twoVersionTrials": 0,
+      "medianTrialMs": 23021.0,
+      "medianFirstReplyMs": 11699
+    },
+    {
+      "round": 3,
+      "trials": 6,
+      "breakdown": [
+        {
+          "case": "handoff",
+          "repetition": 1,
+          "elapsedMs": 18376,
+          "firstReplyMs": null,
+          "turnStatuses": [
+            "failed"
+          ],
+          "workRevision": 0,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 2,
+          "inputTokens": 33506,
+          "outputTokens": 510,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "handoff",
+          "repetition": 2,
+          "elapsedMs": 35457,
+          "firstReplyMs": 21159,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 1,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 3,
+          "inputTokens": 33094,
+          "outputTokens": 1173,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "title-only",
+          "repetition": 1,
+          "elapsedMs": 15758,
+          "firstReplyMs": 5165,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 2,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 3,
+          "inputTokens": 33210,
+          "outputTokens": 326,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "title-only",
+          "repetition": 2,
+          "elapsedMs": 14458,
+          "firstReplyMs": 10253,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 1,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 3,
+          "inputTokens": 32907,
+          "outputTokens": 209,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "two-stations",
+          "repetition": 1,
+          "elapsedMs": 49716,
+          "firstReplyMs": 31736,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 1,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 6,
+          "inputTokens": 71549,
+          "outputTokens": 1657,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "two-stations",
+          "repetition": 2,
+          "elapsedMs": 10871,
+          "firstReplyMs": 4060,
+          "turnStatuses": [
+            "completed",
+            "failed"
+          ],
+          "workRevision": 0,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 2,
+          "inputTokens": 22122,
+          "outputTokens": 65,
+          "models": [
+            "gpt-6-luna"
+          ]
+        }
+      ],
+      "completeProviderCalls": 19,
+      "modelCalls": 19,
+      "inputTokens": 226388,
+      "outputTokens": 3940,
+      "trialsChoosingReview": 0,
+      "trialsWithAcceptedReview": 0,
+      "quickStarts": 0,
+      "reviewNoticesPresented": 0,
+      "draftSavedTrials": 4,
+      "twoVersionTrials": 1,
+      "medianTrialMs": 17067.0,
+      "medianFirstReplyMs": 10253
+    },
+    {
+      "round": 4,
+      "trials": 6,
+      "breakdown": [
+        {
+          "case": "handoff",
+          "repetition": 1,
+          "elapsedMs": 25205,
+          "firstReplyMs": 12302,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 1,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 2,
+          "inputTokens": 38627,
+          "outputTokens": 629,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "handoff",
+          "repetition": 2,
+          "elapsedMs": 20018,
+          "firstReplyMs": 6134,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 0,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 2,
+          "inputTokens": 25556,
+          "outputTokens": 448,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "title-only",
+          "repetition": 1,
+          "elapsedMs": 20662,
+          "firstReplyMs": 5812,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 0,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 3,
+          "inputTokens": 38791,
+          "outputTokens": 631,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "title-only",
+          "repetition": 2,
+          "elapsedMs": 11542,
+          "firstReplyMs": null,
+          "turnStatuses": [
+            "failed"
+          ],
+          "workRevision": 0,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 2,
+          "inputTokens": 25662,
+          "outputTokens": 342,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "two-stations",
+          "repetition": 1,
+          "elapsedMs": 35864,
+          "firstReplyMs": 5030,
+          "turnStatuses": [
+            "completed",
+            "failed"
+          ],
+          "workRevision": 0,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 3,
+          "inputTokens": 39919,
+          "outputTokens": 1336,
+          "models": [
+            "gpt-6-luna"
+          ]
+        },
+        {
+          "case": "two-stations",
+          "repetition": 2,
+          "elapsedMs": 25006,
+          "firstReplyMs": 4042,
+          "turnStatuses": [
+            "completed",
+            "completed"
+          ],
+          "workRevision": 0,
+          "reviewChoices": 0,
+          "reviewRequestsAccepted": 0,
+          "reviewVersionsStarted": [],
+          "presentedReviewVersions": [],
+          "timerExecutionRequests": 0,
+          "modelCalls": 2,
+          "inputTokens": 25657,
+          "outputTokens": 845,
+          "models": [
+            "gpt-6-luna"
+          ]
+        }
+      ],
+      "completeProviderCalls": 14,
+      "modelCalls": 14,
+      "inputTokens": 194212,
+      "outputTokens": 4231,
+      "trialsChoosingReview": 0,
+      "trialsWithAcceptedReview": 0,
+      "quickStarts": 0,
+      "reviewNoticesPresented": 0,
+      "draftSavedTrials": 1,
+      "twoVersionTrials": 0,
+      "medianTrialMs": 22834.0,
+      "medianFirstReplyMs": 5812
+    }
+  ]
+}
