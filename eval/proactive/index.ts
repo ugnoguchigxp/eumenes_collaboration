@@ -43,6 +43,26 @@ export function checkInventory(development: unknown, holdout: unknown) {
 	return { development: dev, holdout: evaluation };
 }
 
+export function checkFreshEvaluation(fresh: unknown, previous: Task[]) {
+	const tasks = z.array(taskSchema).min(groups.length).parse(fresh);
+	const all = [...previous, ...tasks];
+	if (
+		new Set(all.map((task) => task.id)).size !== all.length ||
+		tasks.some((task) =>
+			previous.some(
+				(old) => old.opening === task.opening || old.update === task.update,
+			),
+		) ||
+		groups.some(
+			(group) =>
+				tasks.filter((task) => task.group === group).length * groups.length !==
+				tasks.length,
+		)
+	)
+		throw new Error("proactive_fresh_evaluation_invalid");
+	return tasks;
+}
+
 const runSchema = z.strictObject({
 	taskId: z.string(),
 	mode: z.enum(["A", "A+", "B", "C"]),

@@ -1,0 +1,296 @@
+{
+  "kind": "registration",
+  "status": "registered_holdout",
+  "split": "holdout",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "route": "codex-subscription",
+  "hostCommit": "4ed26d7fff7aca65e00892cb3b50f8f101ff7e05",
+  "hostArchiveSha256": "411b053014c52106112eb9906b9922bf03a91076a03a00830878faf2beb513da",
+  "binding": "binding:ui.studio@5",
+  "fixtureAgency": "default F settings; toolchain fixture with fixed UI routing",
+  "holdoutSha256": "c94242ee8589cca8b728fee2eff0745275eddccfdfdc9fbc193edb1a6f00c290",
+  "protocolSha256": "98814d47ee5840edc5951f65fd41c5a2fc7bf4ad0f2b8ffa14bb89195d3a17ae",
+  "openingArchiveSha256": "16639776f3db1543a50ba7649d6c7432a8198e81bd5db121905d73e989c2cc9e",
+  "runnerSha256": "2fa3f8986523b5a196304e260e8e38c9b10b802a7406bf4a99bf2aeb6554b9c8",
+  "judgeRunnerSha256": "322540ac75324df8dee614c770445fd2f099caa177bffadfc69f11f1b007f2cf",
+  "fixtureRunnerSha256": "d398cb48c886b4c26cffdbc39ff14ab271135ea4cbadfa8dac0d9d6efb8e4547",
+  "modelRunnerSha256": "2d88fbd5a73eef344522f9d75b68aa887f2a0a05ec50bb2d888473fc1087bbc0",
+  "observationRunnerSha256": "6e801c52c8a3715c549f672e04dc9bfc2a888c71a0596cd882f0f56e792a04db",
+  "variants": [
+    {
+      "name": "before",
+      "rulesSha256": "2724522c86694110bce1259cc07ccf78b4122827c48bf1bf0b9fde96c5082cdb",
+      "catalogSha256": "5888458c11ffda324a24482eefa759248ec60f116a945678e8959db4968c9f06",
+      "lockSha256": "f4ad0c46c480ed739d7e25d33df1000698d1a5d1aa7ba92388288d0a590a0bdb",
+      "fixtureSha256": "68aa14e71bf27118dd71078432ed4eb803bc069ad4f5416355e04152fec12614"
+    },
+    {
+      "name": "after",
+      "rulesSha256": "43fd520aa183ee0d31b0e68394e73154e0d2554d04cda94339c7cf30c8b6ba3b",
+      "catalogSha256": "0b4245a370a98aa9a7d0557d0275666d8cbfb4c53ca7b4830f4d34829f7b6b90",
+      "lockSha256": "f4ad0c46c480ed739d7e25d33df1000698d1a5d1aa7ba92388288d0a590a0bdb",
+      "fixtureSha256": "68aa14e71bf27118dd71078432ed4eb803bc069ad4f5416355e04152fec12614"
+    }
+  ],
+  "plannedTrials": 96,
+  "repetitions": 2,
+  "maxModelCallsPerVariant": 220,
+  "maxExtraApiUsd": 0,
+  "maxDurationMs": 1500000,
+  "parallelPairs": 6,
+  "observationWindowMs": 30000,
+  "openings": [
+    {
+      "taskId": "bike-return",
+      "repetition": 1,
+      "openingKey": "bike-return:1"
+    },
+    {
+      "taskId": "bike-return",
+      "repetition": 2,
+      "openingKey": "bike-return:2"
+    },
+    {
+      "taskId": "library-pickup",
+      "repetition": 1,
+      "openingKey": "library-pickup:1"
+    },
+    {
+      "taskId": "library-pickup",
+      "repetition": 2,
+      "openingKey": "library-pickup:2"
+    },
+    {
+      "taskId": "event-checkin",
+      "repetition": 1,
+      "openingKey": "event-checkin:1"
+    },
+    {
+      "taskId": "event-checkin",
+      "repetition": 2,
+      "openingKey": "event-checkin:2"
+    },
+    {
+      "taskId": "estimate-review",
+      "repetition": 1,
+      "openingKey": "estimate-review:1"
+    },
+    {
+      "taskId": "estimate-review",
+      "repetition": 2,
+      "openingKey": "estimate-review:2"
+    },
+    {
+      "taskId": "garden-map",
+      "repetition": 1,
+      "openingKey": "garden-map:1"
+    },
+    {
+      "taskId": "garden-map",
+      "repetition": 2,
+      "openingKey": "garden-map:2"
+    },
+    {
+      "taskId": "inventory-print",
+      "repetition": 1,
+      "openingKey": "inventory-print:2"
+    },
+    {
+      "taskId": "inventory-print",
+      "repetition": 2,
+      "openingKey": "inventory-print:2"
+    },
+    {
+      "taskId": "recycling-area",
+      "repetition": 1,
+      "openingKey": "recycling-area:1"
+    },
+    {
+      "taskId": "recycling-area",
+      "repetition": 2,
+      "openingKey": "recycling-area:2"
+    },
+    {
+      "taskId": "permit-evidence",
+      "repetition": 1,
+      "openingKey": "permit-evidence:1"
+    },
+    {
+      "taskId": "permit-evidence",
+      "repetition": 2,
+      "openingKey": "permit-evidence:2"
+    },
+    {
+      "taskId": "waitlist-contact",
+      "repetition": 1,
+      "openingKey": "waitlist-contact:1"
+    },
+    {
+      "taskId": "waitlist-contact",
+      "repetition": 2,
+      "openingKey": "waitlist-contact:2"
+    },
+    {
+      "taskId": "accessibility-floor",
+      "repetition": 1,
+      "openingKey": "accessibility-floor:1"
+    },
+    {
+      "taskId": "accessibility-floor",
+      "repetition": 2,
+      "openingKey": "accessibility-floor:2"
+    },
+    {
+      "taskId": "sports-eligibility",
+      "repetition": 1,
+      "openingKey": "sports-eligibility:1"
+    },
+    {
+      "taskId": "sports-eligibility",
+      "repetition": 2,
+      "openingKey": "sports-eligibility:2"
+    },
+    {
+      "taskId": "return-window",
+      "repetition": 1,
+      "openingKey": "return-window:1"
+    },
+    {
+      "taskId": "return-window",
+      "repetition": 2,
+      "openingKey": "return-window:2"
+    },
+    {
+      "taskId": "club-approval",
+      "repetition": 1,
+      "openingKey": "club-approval:1"
+    },
+    {
+      "taskId": "club-approval",
+      "repetition": 2,
+      "openingKey": "club-approval:2"
+    },
+    {
+      "taskId": "menu-wait",
+      "repetition": 1,
+      "openingKey": "menu-wait:1"
+    },
+    {
+      "taskId": "menu-wait",
+      "repetition": 2,
+      "openingKey": "menu-wait:2"
+    },
+    {
+      "taskId": "tax-form-review",
+      "repetition": 1,
+      "openingKey": "tax-form-review:1"
+    },
+    {
+      "taskId": "tax-form-review",
+      "repetition": 2,
+      "openingKey": "tax-form-review:2"
+    },
+    {
+      "taskId": "tour-delay",
+      "repetition": 1,
+      "openingKey": "tour-delay:1"
+    },
+    {
+      "taskId": "tour-delay",
+      "repetition": 2,
+      "openingKey": "tour-delay:2"
+    },
+    {
+      "taskId": "cafe-switch",
+      "repetition": 1,
+      "openingKey": "cafe-switch:1"
+    },
+    {
+      "taskId": "cafe-switch",
+      "repetition": 2,
+      "openingKey": "cafe-switch:2"
+    },
+    {
+      "taskId": "gallery-declined",
+      "repetition": 1,
+      "openingKey": "gallery-declined:1"
+    },
+    {
+      "taskId": "gallery-declined",
+      "repetition": 2,
+      "openingKey": "gallery-declined:2"
+    },
+    {
+      "taskId": "pool-heading",
+      "repetition": 1,
+      "openingKey": "pool-heading:1"
+    },
+    {
+      "taskId": "pool-heading",
+      "repetition": 2,
+      "openingKey": "pool-heading:2"
+    },
+    {
+      "taskId": "piano-reorder",
+      "repetition": 1,
+      "openingKey": "piano-reorder:1"
+    },
+    {
+      "taskId": "piano-reorder",
+      "repetition": 2,
+      "openingKey": "piano-reorder:2"
+    },
+    {
+      "taskId": "archive-note",
+      "repetition": 1,
+      "openingKey": "archive-note:1"
+    },
+    {
+      "taskId": "archive-note",
+      "repetition": 2,
+      "openingKey": "archive-note:2"
+    },
+    {
+      "taskId": "bus-label",
+      "repetition": 1,
+      "openingKey": "bus-label:1"
+    },
+    {
+      "taskId": "bus-label",
+      "repetition": 2,
+      "openingKey": "bus-label:2"
+    },
+    {
+      "taskId": "flower-footer",
+      "repetition": 1,
+      "openingKey": "flower-footer:1"
+    },
+    {
+      "taskId": "flower-footer",
+      "repetition": 2,
+      "openingKey": "flower-footer:2"
+    },
+    {
+      "taskId": "market-metadata",
+      "repetition": 1,
+      "openingKey": "market-metadata:1"
+    },
+    {
+      "taskId": "market-metadata",
+      "repetition": 2,
+      "openingKey": "market-metadata:2"
+    }
+  ],
+  "assessment": "Same mode-blind user role and one prewritten follow-up. Audit first replies and protected work separately.",
+  "adoption": {
+    "paired": "Preparation/blockage improvements must outnumber regressions. Maintain main outcome and conditions. No new regression in any wait/quiet repetition.",
+    "initialAlternative": "In blockage cases count a concrete feasible alternative or interim handling plus an actionable confirmation condition in the first ordinary reply. Grade alternatives and conditions independently.",
+    "followUpsAndProposals": "Require a decrease in at least one and no increase in the other. Keep the registered zero tolerance for unnecessary proposals on protected cases.",
+    "latency": {
+      "maxUnnecessaryProposalsInHoldout": 0,
+      "maxRelativeForegroundP95Increase": 0.1,
+      "maxAbsoluteForegroundP95IncreaseMs": 1000
+    }
+  }
+}

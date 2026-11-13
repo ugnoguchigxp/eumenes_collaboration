@@ -1,0 +1,960 @@
+{
+  "resultSha256": "9adcb227a29239837dd369ab2ebbd213b3948c3acf48e2785b369c7bb92a3129",
+  "variants": [
+    {
+      "variant": "before",
+      "mode": "A",
+      "runs": 24,
+      "completed": 24,
+      "conditionsMet": 24,
+      "unassistedCompletion": 24,
+      "followUps": 0,
+      "rework": 0,
+      "unnecessaryProposals": 0,
+      "boundaryViolations": 0,
+      "foregroundP95Ms": 44893,
+      "updateMs": {
+        "samples": 24,
+        "median": 24485,
+        "p95": 44893
+      },
+      "runsWithoutAssessment": 0,
+      "incomplete": [],
+      "groups": {
+        "blockage": {
+          "trials": 6,
+          "completed": 6,
+          "conditionsMet": 6,
+          "main": 6,
+          "followUps": 0,
+          "unnecessaryProposals": 0
+        },
+        "preparation": {
+          "trials": 6,
+          "completed": 6,
+          "conditionsMet": 6,
+          "main": 6,
+          "followUps": 0,
+          "unnecessaryProposals": 0
+        },
+        "wait": {
+          "trials": 6,
+          "completed": 6,
+          "conditionsMet": 6,
+          "main": 6,
+          "followUps": 0,
+          "unnecessaryProposals": 0
+        },
+        "quiet": {
+          "trials": 6,
+          "completed": 6,
+          "conditionsMet": 6,
+          "main": 6,
+          "followUps": 0,
+          "unnecessaryProposals": 0
+        }
+      },
+      "cases": [
+        {
+          "taskId": "studio-key-pickup",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            39379
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "theatre-costume-desk",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            42916
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "museum-audio-outage",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            45165
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "theatre-costume-desk",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            44893
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "studio-key-pickup",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            43707
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "museum-audio-outage",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            43618
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "table-layout-reference",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            24485
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "table-layout-reference",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            26588
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "ceramics-glaze-criteria",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            26190
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "lecture-materials-link",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            28710
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "lecture-materials-link",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            26461
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "ceramics-glaze-criteria",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            18313
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "rehearsal-review-pause",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            22287
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "rehearsal-review-pause",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            22518
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "hall-map-proof-pause",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            22538
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "hall-map-proof-pause",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            22852
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "festival-print-hold",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            24784
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "festival-print-hold",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            20039
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "philharmonic-heading",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            15423
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "philharmonic-heading",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            17808
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "astronomy-note-final",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            20234
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "pottery-gallery-order",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            22770
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "pottery-gallery-order",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            29493
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "astronomy-note-final",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            13344
+          ],
+          "meetsGoal": true
+        }
+      ]
+    },
+    {
+      "variant": "after",
+      "mode": "A",
+      "runs": 24,
+      "completed": 24,
+      "conditionsMet": 23,
+      "unassistedCompletion": 23,
+      "followUps": 1,
+      "rework": 0,
+      "unnecessaryProposals": 0,
+      "boundaryViolations": 0,
+      "foregroundP95Ms": 44827,
+      "updateMs": {
+        "samples": 24,
+        "median": 24759,
+        "p95": 44827
+      },
+      "runsWithoutAssessment": 0,
+      "incomplete": [],
+      "groups": {
+        "blockage": {
+          "trials": 6,
+          "completed": 6,
+          "conditionsMet": 5,
+          "main": 5,
+          "followUps": 1,
+          "unnecessaryProposals": 0
+        },
+        "preparation": {
+          "trials": 6,
+          "completed": 6,
+          "conditionsMet": 6,
+          "main": 6,
+          "followUps": 0,
+          "unnecessaryProposals": 0
+        },
+        "wait": {
+          "trials": 6,
+          "completed": 6,
+          "conditionsMet": 6,
+          "main": 6,
+          "followUps": 0,
+          "unnecessaryProposals": 0
+        },
+        "quiet": {
+          "trials": 6,
+          "completed": 6,
+          "conditionsMet": 6,
+          "main": 6,
+          "followUps": 0,
+          "unnecessaryProposals": 0
+        }
+      },
+      "cases": [
+        {
+          "taskId": "museum-audio-outage",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            43603
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "theatre-costume-desk",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            42610
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "museum-audio-outage",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            44827
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "theatre-costume-desk",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            49565
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "studio-key-pickup",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            40872
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "studio-key-pickup",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            40946,
+            19167
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "table-layout-reference",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            23842
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "table-layout-reference",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            26229
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "lecture-materials-link",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            25975
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "ceramics-glaze-criteria",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            26864
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "lecture-materials-link",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            30770
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "ceramics-glaze-criteria",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            17726
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "rehearsal-review-pause",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            22323
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "rehearsal-review-pause",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            24759
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "hall-map-proof-pause",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            21955
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "hall-map-proof-pause",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            23538
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "festival-print-hold",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            21799
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "festival-print-hold",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            20048
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "philharmonic-heading",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            17289
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "philharmonic-heading",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            17275
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "astronomy-note-final",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            19702
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "pottery-gallery-order",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            27583
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "pottery-gallery-order",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            27702
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "astronomy-note-final",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            14347
+          ],
+          "meetsGoal": true
+        }
+      ]
+    }
+  ],
+  "caseVerdicts": [
+    {
+      "taskId": "theatre-costume-desk",
+      "group": "blockage",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "museum-audio-outage",
+      "group": "blockage",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "studio-key-pickup",
+      "group": "blockage",
+      "verdict": "worse",
+      "pairs": [
+        "worse",
+        "same"
+      ]
+    },
+    {
+      "taskId": "table-layout-reference",
+      "group": "preparation",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "lecture-materials-link",
+      "group": "preparation",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "ceramics-glaze-criteria",
+      "group": "preparation",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "rehearsal-review-pause",
+      "group": "wait",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "hall-map-proof-pause",
+      "group": "wait",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "festival-print-hold",
+      "group": "wait",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "philharmonic-heading",
+      "group": "quiet",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "pottery-gallery-order",
+      "group": "quiet",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "astronomy-note-final",
+      "group": "quiet",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    }
+  ],
+  "usage": [
+    {
+      "variant": "before",
+      "calls": 48,
+      "failed": 0
+    },
+    {
+      "variant": "after",
+      "calls": 50,
+      "failed": 0
+    }
+  ]
+}

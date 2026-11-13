@@ -1,0 +1,17 @@
+{
+  "status": "registered_development_only",
+  "productCommit": "4ed26d7fff7aca65e00892cb3b50f8f101ff7e05",
+  "productArchiveSha256": "411b053014c52106112eb9906b9922bf03a91076a03a00830878faf2beb513da",
+  "binding": "binding:ui.studio@5",
+  "caseIds": ["meal-choice", "public-directory", "class-survey", "museum-copy", "parking-flow", "workshop-level"],
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "route": "codex-subscription",
+  "aPlus": "Unmodified opening; supplement on the same native model response during update, attached only after the ordinary reply commits.",
+  "background": "One offline candidate with the committed A+ work and conditions, without the A+ supplement.",
+  "presentationMaxChars": 300,
+  "minIndependentTasksWithNewEvidence": 3,
+  "countOnly": "A useful specific fact or check confirmed by the same artifact or source-backed conditions, absent from both the ordinary A+ answer and its supplement, expressed within the shared display limit. Count each task once.",
+  "exclude": ["wording or citation-only differences", "hypothetical or unverified facts", "unconfirmed outputs", "hold without a proposed next step"],
+  "maxModelCalls": {"aPlus": 48, "background": 6}
+}

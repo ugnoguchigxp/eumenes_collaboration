@@ -1,0 +1,344 @@
+[
+  {
+    "taskId": "meal-choice",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      22674
+    ]
+  },
+  {
+    "taskId": "meal-choice",
+    "mode": "A+",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 1,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      22494
+    ]
+  },
+  {
+    "taskId": "meal-choice",
+    "mode": "A+",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      23844
+    ]
+  },
+  {
+    "taskId": "meal-choice",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      22024
+    ]
+  },
+  {
+    "taskId": "public-directory",
+    "mode": "A+",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 1,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      23250,
+      16658
+    ]
+  },
+  {
+    "taskId": "public-directory",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 1,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      31315,
+      14479
+    ]
+  },
+  {
+    "taskId": "public-directory",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 1,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      29736,
+      15554
+    ]
+  },
+  {
+    "taskId": "public-directory",
+    "mode": "A+",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 1,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      28205,
+      13435
+    ]
+  },
+  {
+    "taskId": "class-survey",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      21138
+    ]
+  },
+  {
+    "taskId": "class-survey",
+    "mode": "A+",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      18830
+    ]
+  },
+  {
+    "taskId": "class-survey",
+    "mode": "A+",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      19201
+    ]
+  },
+  {
+    "taskId": "class-survey",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      20021
+    ]
+  },
+  {
+    "taskId": "museum-copy",
+    "mode": "A+",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": false,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      20487
+    ]
+  },
+  {
+    "taskId": "museum-copy",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": false,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 1,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      22608
+    ]
+  },
+  {
+    "taskId": "museum-copy",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": false,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 1,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      20616
+    ]
+  },
+  {
+    "taskId": "museum-copy",
+    "mode": "A+",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      21137
+    ]
+  },
+  {
+    "taskId": "parking-flow",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 1,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      27128,
+      16223
+    ]
+  },
+  {
+    "taskId": "parking-flow",
+    "mode": "A+",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      27014
+    ]
+  },
+  {
+    "taskId": "parking-flow",
+    "mode": "A+",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      28033
+    ]
+  },
+  {
+    "taskId": "parking-flow",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      28014
+    ]
+  },
+  {
+    "taskId": "workshop-level",
+    "mode": "A+",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      20130
+    ]
+  },
+  {
+    "taskId": "workshop-level",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 1,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      22847,
+      10552
+    ]
+  },
+  {
+    "taskId": "workshop-level",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      23434
+    ]
+  },
+  {
+    "taskId": "workshop-level",
+    "mode": "A+",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      25114
+    ]
+  }
+]

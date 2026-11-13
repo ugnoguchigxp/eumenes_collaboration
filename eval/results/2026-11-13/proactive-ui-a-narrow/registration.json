@@ -1,0 +1,176 @@
+{
+  "kind": "registration",
+  "status": "registered_holdout",
+  "split": "fresh-holdout",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "route": "codex-subscription",
+  "hostCommit": "4ed26d7fff7aca65e00892cb3b50f8f101ff7e05",
+  "hostArchiveSha256": "411b053014c52106112eb9906b9922bf03a91076a03a00830878faf2beb513da",
+  "binding": "binding:ui.studio@5",
+  "fixtureAgency": "default F settings; toolchain fixture with fixed UI routing",
+  "holdoutSha256": "e49ae2c722be439c5837395a22a067af7a7b252735cee9247f550b54433b9c02",
+  "protocolSha256": "98814d47ee5840edc5951f65fd41c5a2fc7bf4ad0f2b8ffa14bb89195d3a17ae",
+  "openingArchiveSha256": "962afc9f54c59c2e109a3ef3ffb0bc23f4759a1e02b867e51fd892b2f01677d7",
+  "runnerSha256": "83963373ac5d6b8c8a8bab01b95b857ebab1e8698f06bb5ef4608b6f0d4db75b",
+  "judgeRunnerSha256": "322540ac75324df8dee614c770445fd2f099caa177bffadfc69f11f1b007f2cf",
+  "fixtureRunnerSha256": "d398cb48c886b4c26cffdbc39ff14ab271135ea4cbadfa8dac0d9d6efb8e4547",
+  "modelRunnerSha256": "2d88fbd5a73eef344522f9d75b68aa887f2a0a05ec50bb2d888473fc1087bbc0",
+  "observationRunnerSha256": "6e801c52c8a3715c549f672e04dc9bfc2a888c71a0596cd882f0f56e792a04db",
+  "variants": [
+    {
+      "name": "before",
+      "rulesSha256": "43fd520aa183ee0d31b0e68394e73154e0d2554d04cda94339c7cf30c8b6ba3b",
+      "catalogSha256": "0b4245a370a98aa9a7d0557d0275666d8cbfb4c53ca7b4830f4d34829f7b6b90",
+      "lockSha256": "f4ad0c46c480ed739d7e25d33df1000698d1a5d1aa7ba92388288d0a590a0bdb",
+      "fixtureSha256": "68aa14e71bf27118dd71078432ed4eb803bc069ad4f5416355e04152fec12614"
+    },
+    {
+      "name": "after",
+      "rulesSha256": "1c3764aa4271d317511e04322398d818fb5367150bec1674517d3a5f3d43aadc",
+      "catalogSha256": "88b05be0b1c52f1928f47373e84a0f5cae50a76376a9442d6d6e15ad9035fb09",
+      "lockSha256": "f4ad0c46c480ed739d7e25d33df1000698d1a5d1aa7ba92388288d0a590a0bdb",
+      "fixtureSha256": "68aa14e71bf27118dd71078432ed4eb803bc069ad4f5416355e04152fec12614"
+    }
+  ],
+  "plannedTrials": 48,
+  "repetitions": 2,
+  "maxModelCallsPerVariant": 220,
+  "maxExtraApiUsd": 0,
+  "maxDurationMs": 1500000,
+  "parallelPairs": 6,
+  "observationWindowMs": 30000,
+  "openings": [
+    {
+      "taskId": "theatre-costume-desk",
+      "repetition": 1,
+      "openingKey": "theatre-costume-desk:1"
+    },
+    {
+      "taskId": "theatre-costume-desk",
+      "repetition": 2,
+      "openingKey": "theatre-costume-desk:2"
+    },
+    {
+      "taskId": "museum-audio-outage",
+      "repetition": 1,
+      "openingKey": "museum-audio-outage:1"
+    },
+    {
+      "taskId": "museum-audio-outage",
+      "repetition": 2,
+      "openingKey": "museum-audio-outage:2"
+    },
+    {
+      "taskId": "studio-key-pickup",
+      "repetition": 1,
+      "openingKey": "studio-key-pickup:1"
+    },
+    {
+      "taskId": "studio-key-pickup",
+      "repetition": 2,
+      "openingKey": "studio-key-pickup:2"
+    },
+    {
+      "taskId": "table-layout-reference",
+      "repetition": 1,
+      "openingKey": "table-layout-reference:1"
+    },
+    {
+      "taskId": "table-layout-reference",
+      "repetition": 2,
+      "openingKey": "table-layout-reference:2"
+    },
+    {
+      "taskId": "lecture-materials-link",
+      "repetition": 1,
+      "openingKey": "lecture-materials-link:1"
+    },
+    {
+      "taskId": "lecture-materials-link",
+      "repetition": 2,
+      "openingKey": "lecture-materials-link:2"
+    },
+    {
+      "taskId": "ceramics-glaze-criteria",
+      "repetition": 1,
+      "openingKey": "ceramics-glaze-criteria:1"
+    },
+    {
+      "taskId": "ceramics-glaze-criteria",
+      "repetition": 2,
+      "openingKey": "ceramics-glaze-criteria:2"
+    },
+    {
+      "taskId": "rehearsal-review-pause",
+      "repetition": 1,
+      "openingKey": "rehearsal-review-pause:1"
+    },
+    {
+      "taskId": "rehearsal-review-pause",
+      "repetition": 2,
+      "openingKey": "rehearsal-review-pause:2"
+    },
+    {
+      "taskId": "hall-map-proof-pause",
+      "repetition": 1,
+      "openingKey": "hall-map-proof-pause:1"
+    },
+    {
+      "taskId": "hall-map-proof-pause",
+      "repetition": 2,
+      "openingKey": "hall-map-proof-pause:2"
+    },
+    {
+      "taskId": "festival-print-hold",
+      "repetition": 1,
+      "openingKey": "festival-print-hold:1"
+    },
+    {
+      "taskId": "festival-print-hold",
+      "repetition": 2,
+      "openingKey": "festival-print-hold:2"
+    },
+    {
+      "taskId": "philharmonic-heading",
+      "repetition": 1,
+      "openingKey": "philharmonic-heading:1"
+    },
+    {
+      "taskId": "philharmonic-heading",
+      "repetition": 2,
+      "openingKey": "philharmonic-heading:2"
+    },
+    {
+      "taskId": "pottery-gallery-order",
+      "repetition": 1,
+      "openingKey": "pottery-gallery-order:1"
+    },
+    {
+      "taskId": "pottery-gallery-order",
+      "repetition": 2,
+      "openingKey": "pottery-gallery-order:2"
+    },
+    {
+      "taskId": "astronomy-note-final",
+      "repetition": 1,
+      "openingKey": "astronomy-note-final:1"
+    },
+    {
+      "taskId": "astronomy-note-final",
+      "repetition": 2,
+      "openingKey": "astronomy-note-final:2"
+    }
+  ],
+  "assessment": "Same mode-blind user role and one prewritten follow-up. Audit first replies and protected work separately.",
+  "adoption": {
+    "paired": "Preparation/blockage improvements must outnumber regressions. Maintain main outcome and conditions. No new regression in any wait/quiet repetition.",
+    "initialAlternative": "In blocked current requests count an independent practical alternative that reaches the current result plus its own check or implementation conditions in the first ordinary reply. Audit unwanted alternatives outside that scope.",
+    "followUpsAndProposals": "Require a decrease in at least one and no increase in the other. Keep the registered zero tolerance for unnecessary proposals on protected cases.",
+    "latency": {
+      "maxUnnecessaryProposalsInHoldout": 0,
+      "maxRelativeForegroundP95Increase": 0.1,
+      "maxAbsoluteForegroundP95IncreaseMs": 1000
+    }
+  }
+}

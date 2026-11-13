@@ -1,0 +1,173 @@
+[
+  {
+    "taskId": "meal-choice",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      25070
+    ]
+  },
+  {
+    "taskId": "meal-choice",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      26184
+    ]
+  },
+  {
+    "taskId": "public-directory",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 1,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      30762,
+      14198
+    ]
+  },
+  {
+    "taskId": "public-directory",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 1,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      30247,
+      13785
+    ]
+  },
+  {
+    "taskId": "class-survey",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      21363
+    ]
+  },
+  {
+    "taskId": "class-survey",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      21379
+    ]
+  },
+  {
+    "taskId": "museum-copy",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      20648
+    ]
+  },
+  {
+    "taskId": "museum-copy",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      20790
+    ]
+  },
+  {
+    "taskId": "parking-flow",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      26539
+    ]
+  },
+  {
+    "taskId": "parking-flow",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      29070
+    ]
+  },
+  {
+    "taskId": "workshop-level",
+    "mode": "A",
+    "repetition": 1,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 0,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      23451
+    ]
+  },
+  {
+    "taskId": "workshop-level",
+    "mode": "A",
+    "repetition": 2,
+    "status": "completed",
+    "conditionsMet": true,
+    "followUps": 1,
+    "rework": 0,
+    "unnecessaryProposals": 0,
+    "boundaryViolations": 0,
+    "foregroundMs": [
+      24625,
+      10059
+    ]
+  }
+]

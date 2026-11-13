@@ -10,13 +10,30 @@
 		"eumenesBaseCommit": "4ed26d7fff7aca65e00892cb3b50f8f101ff7e05",
 		"collaborationArchiveSha256": "ce0d56eedc6ada0e67e8aff39daba2ae29caddb4e328c1041620135d2a12450c",
 		"binding": "binding:ui.studio@5",
-		"modelRoute": null,
-		"productSnapshotSha256": null
+		"modelRoute": "codex-subscription",
+		"model": "gpt-6.1-sol",
+		"reasoningEffort": "low",
+		"productSnapshotSha256": "411b053014c52106112eb9906b9922bf03a91076a03a00830878faf2beb513da"
 	},
-	"liveBudgetUsd": null,
+	"agencyRuntime": "F",
+	"liveBudgetUsd": 0,
+	"maxModelCallsByMode": { "A": 220, "A+": 220, "B": 320, "C": 320 },
+	"observation": {
+		"anchor": "committed_update_reply",
+		"decisionCutoff": "first_later_user_message_or_window_end",
+		"includeStandalone": true,
+		"recordLaterStandaloneSeparately": true,
+		"maxFollowUpsPerTrial": 1
+	},
+	"adoption": {
+		"minImprovedBvsA": 3,
+		"minImprovedBvsSupplement": 2,
+		"minEarlyImprovementsCvsB": 2,
+		"humanDevelopmentCasesPerGroup": 1
+	},
 	"limits": {
 		"maxUnnecessaryProposalsInHoldout": 0,
 		"maxRelativeForegroundP95Increase": 0.1,
-		"maxAbsoluteForegroundP95IncreaseMs": null
+		"maxAbsoluteForegroundP95IncreaseMs": 1000
 	}
 }

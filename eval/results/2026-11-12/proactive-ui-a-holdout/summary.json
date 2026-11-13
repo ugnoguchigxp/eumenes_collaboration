@@ -1,0 +1,1847 @@
+{
+  "resultSha256": "689d33c05f9031bc942687cfe435fb16d08a9adc7135ddc59b90d9be4e9cb215",
+  "variants": [
+    {
+      "variant": "before",
+      "mode": "A",
+      "runs": 48,
+      "completed": 45,
+      "conditionsMet": 36,
+      "unassistedCompletion": 25,
+      "followUps": 14,
+      "rework": 0,
+      "unnecessaryProposals": 2,
+      "boundaryViolations": 0,
+      "foregroundP95Ms": 41172,
+      "updateMs": {
+        "samples": 48,
+        "median": 24395,
+        "p95": 42201
+      },
+      "runsWithoutAssessment": 3,
+      "incomplete": [
+        {
+          "taskId": "cafe-switch",
+          "repetition": 1,
+          "status": "reply_unconfirmed",
+          "error": "permission_revoked"
+        },
+        {
+          "taskId": "cafe-switch",
+          "repetition": 2,
+          "status": "reply_unconfirmed",
+          "error": "permission_revoked"
+        },
+        {
+          "taskId": "flower-footer",
+          "repetition": 2,
+          "status": "reply_unconfirmed",
+          "error": "inference_failed"
+        }
+      ],
+      "groups": {
+        "preparation": {
+          "trials": 12,
+          "completed": 12,
+          "conditionsMet": 10,
+          "main": 0,
+          "followUps": 10,
+          "unnecessaryProposals": 0
+        },
+        "blockage": {
+          "trials": 12,
+          "completed": 12,
+          "conditionsMet": 9,
+          "main": 8,
+          "followUps": 4,
+          "unnecessaryProposals": 0
+        },
+        "wait": {
+          "trials": 12,
+          "completed": 10,
+          "conditionsMet": 10,
+          "main": 10,
+          "followUps": 0,
+          "unnecessaryProposals": 0
+        },
+        "quiet": {
+          "trials": 12,
+          "completed": 11,
+          "conditionsMet": 7,
+          "main": 7,
+          "followUps": 0,
+          "unnecessaryProposals": 2
+        }
+      },
+      "cases": [
+        {
+          "taskId": "library-pickup",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            41172,
+            28164
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "library-pickup",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            39594,
+            25584
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "bike-return",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            38064,
+            24280
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "bike-return",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            39090,
+            28305
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "event-checkin",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            39231,
+            28935
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "event-checkin",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            41099,
+            27003
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "inventory-print",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            39601
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "inventory-print",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            42201
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "garden-map",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            38691,
+            17912
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "garden-map",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            34613,
+            21818
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "estimate-review",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            45112,
+            29013
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "estimate-review",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            50963,
+            29545
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "permit-evidence",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            26576
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "permit-evidence",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            27695
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "recycling-area",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            21800,
+            9420
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "recycling-area",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            29669,
+            11094
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "waitlist-contact",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            28070,
+            18949
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "waitlist-contact",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            27735,
+            17855
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "accessibility-floor",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            21729
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "sports-eligibility",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            27627
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "accessibility-floor",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            26136
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "return-window",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            12273
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "sports-eligibility",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            18293
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "return-window",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            12833
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "club-approval",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            24395
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "club-approval",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            21559
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "menu-wait",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            16187
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "menu-wait",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            18731
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "tax-form-review",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            15659
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "cafe-switch",
+          "mode": "A",
+          "repetition": 1,
+          "status": "incomplete",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            12883
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "cafe-switch",
+          "mode": "A",
+          "repetition": 2,
+          "status": "incomplete",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            16188
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "tour-delay",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            15928
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "tax-form-review",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            20522
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "tour-delay",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            17836
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "gallery-declined",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            18586
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "pool-heading",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            17503
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "pool-heading",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            16141
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "gallery-declined",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            23001
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "piano-reorder",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            14872
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "piano-reorder",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            19411
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "flower-footer",
+          "mode": "A",
+          "repetition": 2,
+          "status": "incomplete",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            17512
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "archive-note",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            30723
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "bus-label",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            25972
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "archive-note",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            30443
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "flower-footer",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            28314
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "bus-label",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            27906
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "market-metadata",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            16451
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "market-metadata",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            16877
+          ],
+          "meetsGoal": false
+        }
+      ]
+    },
+    {
+      "variant": "after",
+      "mode": "A",
+      "runs": 48,
+      "completed": 46,
+      "conditionsMet": 38,
+      "unassistedCompletion": 28,
+      "followUps": 14,
+      "rework": 0,
+      "unnecessaryProposals": 13,
+      "boundaryViolations": 0,
+      "foregroundP95Ms": 45433,
+      "updateMs": {
+        "samples": 48,
+        "median": 26971,
+        "p95": 48351
+      },
+      "runsWithoutAssessment": 2,
+      "incomplete": [
+        {
+          "taskId": "cafe-switch",
+          "repetition": 1,
+          "status": "reply_unconfirmed",
+          "error": "permission_revoked"
+        },
+        {
+          "taskId": "cafe-switch",
+          "repetition": 2,
+          "status": "reply_unconfirmed",
+          "error": "permission_revoked"
+        }
+      ],
+      "groups": {
+        "preparation": {
+          "trials": 12,
+          "completed": 12,
+          "conditionsMet": 9,
+          "main": 1,
+          "followUps": 10,
+          "unnecessaryProposals": 8
+        },
+        "blockage": {
+          "trials": 12,
+          "completed": 12,
+          "conditionsMet": 10,
+          "main": 8,
+          "followUps": 4,
+          "unnecessaryProposals": 4
+        },
+        "wait": {
+          "trials": 12,
+          "completed": 10,
+          "conditionsMet": 10,
+          "main": 10,
+          "followUps": 0,
+          "unnecessaryProposals": 0
+        },
+        "quiet": {
+          "trials": 12,
+          "completed": 12,
+          "conditionsMet": 9,
+          "main": 9,
+          "followUps": 0,
+          "unnecessaryProposals": 1
+        }
+      },
+      "cases": [
+        {
+          "taskId": "bike-return",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            42908
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "bike-return",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            39551,
+            31299
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "event-checkin",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            44576,
+            31508
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "library-pickup",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 2,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            41943,
+            28907
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "event-checkin",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            41407,
+            29379
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "library-pickup",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            37374,
+            28574
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "inventory-print",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            45433
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "garden-map",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            32435,
+            31097
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "garden-map",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            39850,
+            20366
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "inventory-print",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            35604,
+            27156
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "estimate-review",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            51066,
+            31221
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "estimate-review",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            48355,
+            34498
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "recycling-area",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            29404
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "recycling-area",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            40522
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "permit-evidence",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            48351
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "permit-evidence",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            44479,
+            13084
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "waitlist-contact",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            24208,
+            19796
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "waitlist-contact",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            26971,
+            24281
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "accessibility-floor",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            29235
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "accessibility-floor",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            34954
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "return-window",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            16172
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "sports-eligibility",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            32463
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "return-window",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            23190
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "sports-eligibility",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 1,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            32375,
+            28703
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "club-approval",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            22876
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "club-approval",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            18838
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "menu-wait",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            18490
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "menu-wait",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            19292
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "tax-form-review",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            15637
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "cafe-switch",
+          "mode": "A",
+          "repetition": 1,
+          "status": "incomplete",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            15231
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "cafe-switch",
+          "mode": "A",
+          "repetition": 2,
+          "status": "incomplete",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            15249
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "tax-form-review",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            19398
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "tour-delay",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            13974
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "tour-delay",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            17941
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "pool-heading",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            16542
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "pool-heading",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            16170
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "gallery-declined",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            21438
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "gallery-declined",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            23288
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "piano-reorder",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            15600
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "piano-reorder",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            14621
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "flower-footer",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            15920
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "bus-label",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            26127
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "archive-note",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            31168
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "archive-note",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            29452
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "flower-footer",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 1,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            31304
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "bus-label",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": false,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            29457
+          ],
+          "meetsGoal": false
+        },
+        {
+          "taskId": "market-metadata",
+          "mode": "A",
+          "repetition": 2,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            17855
+          ],
+          "meetsGoal": true
+        },
+        {
+          "taskId": "market-metadata",
+          "mode": "A",
+          "repetition": 1,
+          "status": "completed",
+          "conditionsMet": true,
+          "followUps": 0,
+          "rework": 0,
+          "unnecessaryProposals": 0,
+          "boundaryViolations": 0,
+          "foregroundMs": [
+            18129
+          ],
+          "meetsGoal": true
+        }
+      ]
+    }
+  ],
+  "caseVerdicts": [
+    {
+      "taskId": "bike-return",
+      "group": "preparation",
+      "verdict": "improved",
+      "pairs": [
+        "same",
+        "improved"
+      ]
+    },
+    {
+      "taskId": "library-pickup",
+      "group": "preparation",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "event-checkin",
+      "group": "preparation",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "estimate-review",
+      "group": "preparation",
+      "verdict": "worse",
+      "pairs": [
+        "worse",
+        "same"
+      ]
+    },
+    {
+      "taskId": "garden-map",
+      "group": "preparation",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "inventory-print",
+      "group": "preparation",
+      "verdict": "worse",
+      "pairs": [
+        "same",
+        "worse"
+      ]
+    },
+    {
+      "taskId": "recycling-area",
+      "group": "blockage",
+      "verdict": "improved",
+      "pairs": [
+        "improved",
+        "improved"
+      ]
+    },
+    {
+      "taskId": "permit-evidence",
+      "group": "blockage",
+      "verdict": "worse",
+      "pairs": [
+        "same",
+        "worse"
+      ]
+    },
+    {
+      "taskId": "waitlist-contact",
+      "group": "blockage",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "accessibility-floor",
+      "group": "blockage",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "sports-eligibility",
+      "group": "blockage",
+      "verdict": "worse",
+      "pairs": [
+        "worse",
+        "same"
+      ]
+    },
+    {
+      "taskId": "return-window",
+      "group": "blockage",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "club-approval",
+      "group": "wait",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "menu-wait",
+      "group": "wait",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "tax-form-review",
+      "group": "wait",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "tour-delay",
+      "group": "wait",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "cafe-switch",
+      "group": "wait",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "gallery-declined",
+      "group": "wait",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "pool-heading",
+      "group": "quiet",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "piano-reorder",
+      "group": "quiet",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "archive-note",
+      "group": "quiet",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    },
+    {
+      "taskId": "bus-label",
+      "group": "quiet",
+      "verdict": "worse",
+      "pairs": [
+        "worse",
+        "same"
+      ]
+    },
+    {
+      "taskId": "flower-footer",
+      "group": "quiet",
+      "verdict": "worse",
+      "pairs": [
+        "worse",
+        "same"
+      ]
+    },
+    {
+      "taskId": "market-metadata",
+      "group": "quiet",
+      "verdict": "same",
+      "pairs": [
+        "same",
+        "same"
+      ]
+    }
+  ],
+  "usage": [
+    {
+      "variant": "before",
+      "calls": 121,
+      "failed": 1
+    },
+    {
+      "variant": "after",
+      "calls": 122,
+      "failed": 0
+    }
+  ]
+}

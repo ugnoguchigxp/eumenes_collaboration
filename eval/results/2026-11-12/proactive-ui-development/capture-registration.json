@@ -1,0 +1,23 @@
+{
+  "status": "registered_development_snapshot_capture",
+  "split": "development",
+  "caseIds": [
+    "meal-choice",
+    "public-directory",
+    "class-survey",
+    "museum-copy",
+    "parking-flow",
+    "workshop-level"
+  ],
+  "developmentSha256": "4dfc08b18b1e6ac9fa197e1de2ea67a850efae754e9823b5c681361690be78db",
+  "runnerSha256": "f13f88c40d2e8567869bd3e60be87959299ec19ac4c371bba89d117bb7627c76",
+  "productCommit": "4ed26d7fff7aca65e00892cb3b50f8f101ff7e05",
+  "productArchiveSha256": "411b053014c52106112eb9906b9922bf03a91076a03a00830878faf2beb513da",
+  "model": "gpt-6.1-sol",
+  "reasoningEffort": "low",
+  "route": "Codex subscription; no API credential",
+  "maxModelCalls": 48,
+  "parallel": 2,
+  "repetitions": 1,
+  "observer": "retained mode-A capture, two foreground turns; no follow-up or assessment"
+}
